@@ -1,0 +1,17 @@
+{
+  "btn": {
+    "done": "done",
+    "next": "next",
+    "prev": "back",
+    "skip": "skip"
+  },
+  "ratePage": {
+    "step1": {
+      "title": "select sales to get business trip application percentage per month in this year."
+    },
+    "step2": {
+      "content": "table row has percentage not in consonance with target percentage will get pink background color",
+      "title": "select time to get every sales's business trip application percentage in this week."
+    }
+  }
+}
