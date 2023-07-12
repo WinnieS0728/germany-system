@@ -1,0 +1,27 @@
+{
+  "cus type": {
+    "exist cus": "Existing customer",
+    "new cus": "New customer"
+  },
+  "pageTitle": "Business Trip Application Breakdown",
+  "sales table": {
+    "filter default": "select sales",
+    "filter label": "sales",
+    "title": "Monthly Business Trip Application Breakdown",
+    "type": {
+      "title": "type"
+    }
+  },
+  "week table": {
+    "filter label": "Business Trip Application Date",
+    "thead": {
+      "atu number": "Number of ATU",
+      "rate": "Percentage",
+      "sales": "sales",
+      "threshold": "Target percentage",
+      "tire number": "Number of tire shop",
+      "total": "Estimated Total Shops Visited"
+    },
+    "title": "Sales Business Trip Application"
+  }
+}
