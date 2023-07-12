@@ -1,0 +1,13 @@
+{
+    "i18nJsonEditor.forceKeyUPPERCASE": false,
+    "i18nJsonEditor.supportedFolders": [
+        "locales"
+    ],
+    "i18nJsonEditor.workspaceFolders": [
+        {"name":"translation","path":"public/locales/translation"},
+        {"name":"common","path":"public/locales/common"},
+        {"name":"joyride","path":"public/locales/joyride"},
+        {"name":"custom rate page","path":"public/locales/customRatePage"},
+        {"name":"setting page","path":"public/locales/settingPage"}
+    ]
+}
