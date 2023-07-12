@@ -18,7 +18,7 @@ function App() {
 
   const EmpID = nowUser.body.EmpId || search.get("userID");
 
-  const usingLanguage = nowUser.body.Language;
+  const usingLanguage = nowUser.body.Language?.split("-")[0];  
 
   useEffect(() => {
     dispatch(setSalesList());
