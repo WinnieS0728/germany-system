@@ -1,5 +1,5 @@
-import { styled } from "styled-components";
-import { TfiHarddrive } from "react-icons/tfi";
+import { styled, useTheme } from "styled-components";
+import * as Icons from "@components/UI/icons";
 
 interface propType {
   text: string;
@@ -12,7 +12,7 @@ const SubmitBtn = ({ text, className }: propType) => {
       form='threshold'
       className={className}
     >
-      <TfiHarddrive />
+      <Icons.Save />
       {text}
     </button>
   );
@@ -32,3 +32,28 @@ const styled_submitBtn = styled(SubmitBtn)`
 `;
 
 export { styled_submitBtn as SubmitBtn };
+
+interface topBtnProp {
+  children: JSX.Element | string;
+  icon: JSX.Element;
+  primary?: boolean;
+}
+export const TopBtn = ({ children, icon, primary }: topBtnProp) => {
+  const color = useTheme()?.color;
+
+  const css = {
+    padding: ".5em 3em",
+    backgroundColor: primary ? color?.navActive : color?.white,
+    color: primary ? color?.white : color?.black,
+  };
+
+  return (
+    <span
+      className='top-btn flex items-center justify-center gap-2'
+      style={css}
+    >
+      {icon}
+      {children}
+    </span>
+  );
+};

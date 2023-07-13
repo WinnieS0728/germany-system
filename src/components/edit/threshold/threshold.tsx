@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 export const ThresholdSettingTable = () => {
-  const { t } = useTranslation(["common", "validation"]);
+  const { t } = useTranslation(["common"]);
   const timeData = useAppSelector((state) => state.time);
   const nowUser = useAppSelector((state) => state.nowUser);
   const nowUser_id = nowUser.body.EmpId;
@@ -49,14 +49,8 @@ export const ThresholdSettingTable = () => {
   const initData = dataSet;
 
   const percentSchema = yup.object({
-    existCus: yup
-      .number()
-      .min(0, t("threshold.min0", { ns: "validation" }))
-      .max(100, t("threshold.max100", { ns: "validation" })),
-    newCus: yup
-      .number()
-      .min(0, t("threshold.min0", { ns: "validation" }))
-      .max(100, t("threshold.max100", { ns: "validation" })),
+    existCus: yup.number().min(0, "最小0").max(100, "最大100"),
+    newCus: yup.number().min(0, "最小0").max(100, "最大100"),
   });
 
   const monthSchema = yup.object({

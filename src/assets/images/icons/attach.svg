@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="192px" height="192px" viewBox="0 0 192 192" enable-background="new 0 0 192 192" xml:space="preserve">
+<g>
+	<defs>
+		<rect id="SVGID_3_" y="1.467" width="192" height="192"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_3_"  overflow="visible"/>
+	</clipPath>
+	<path clip-path="url(#SVGID_2_)" fill="#040000" d="M163.999,46.467h-68L79,29.467H27.999c-9.428,0-16.917,7.566-16.917,17
+		l-0.082,102c0,9.43,7.571,17,16.999,17h136c9.43,0,17.001-7.57,17.001-17v-85C181,54.033,173.429,46.467,163.999,46.467z
+		 M155.499,114.467h-25.5v25.5H113v-25.5H87.5v-17H113v-25.5h16.999v25.5h25.5V114.467z"/>
+</g>
+</svg>

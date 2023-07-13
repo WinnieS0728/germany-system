@@ -12,5 +12,6 @@ export default {
     error_table: "#FFE3E4",
     submitBtn: "#FB8626",
     threshold_bgc: "#D6EAFB",
+    headForm_bgc: "#E6E5E5",
   },
 };
