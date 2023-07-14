@@ -3,7 +3,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import colorReducer from "@reducers/color";
 import timeReducer from "@reducers/time";
-import memberReducer from "@reducers/member/salesList";
+import salesListReducer from "@reducers/member/salesList";
 import personVisitSlice from "@reducers/visit data/person visit";
 import weekVisitSlice from "@reducers/visit data/week visit";
 import thresholdSlice from "@reducers/kpi threshold/threshold";
@@ -14,7 +14,7 @@ const store = configureStore({
     color: colorReducer,
     time: timeReducer,
     nowUser: userSlice,
-    member: memberReducer,
+    salesList: salesListReducer,
     personVisit: personVisitSlice,
     weekVisit: weekVisitSlice,
     threshold: thresholdSlice,

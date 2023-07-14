@@ -1,7 +1,7 @@
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { MySelect } from "@components/form/select";
 import api from "@api";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTheme } from "styled-components";
 import { DayPicker } from "react-day-picker";
 import { useAppSelector } from "@/hooks/redux";
@@ -15,6 +15,7 @@ interface propsType {
 export const HeaderForm = ({ className }: propsType) => {
   const color = useTheme()?.color;
   const timeData = useAppSelector((state) => state.time);
+  const [EmpOptions, setEmpOptions] = useState();
   const { register, handleSubmit, control, setValue } = useForm({
     shouldUnregister: true,
     criteriaMode: "all",
@@ -50,18 +51,19 @@ export const HeaderForm = ({ className }: propsType) => {
     });
   }
 
-  async function getMemberOptions() {
-    // console.log({ dept });
-
-    const res = await api.getMember("", dept);
-
-    return res.map((i: { EmpName: string; EmpId: string }) => {
-      return {
-        label: i.EmpName,
-        value: i.EmpId,
-      };
-    });
-  }
+  useEffect(() => {
+    async function set() {
+      const res = await api.getMember("", dept);
+      const options = res.map((i: { EmpName: string; EmpId: string }) => {
+        return {
+          label: i.EmpName,
+          value: i.EmpId,
+        };
+      });
+      setEmpOptions(options);
+    }
+    set();
+  }, [dept]);
 
   const formStatusOptions = [
     { label: "已簽核", value: "succeeded" },
@@ -126,7 +128,7 @@ export const HeaderForm = ({ className }: propsType) => {
       setShow(false);
     }
   }
-
+  
   return (
     <>
       <form
@@ -155,8 +157,8 @@ export const HeaderForm = ({ className }: propsType) => {
               control={control}
               name='EmpId'
               render={({ field: { onChange } }) => (
-                <MySelect.Async
-                  options={getMemberOptions}
+                <MySelect.Normal
+                  options={EmpOptions}
                   onChange={onChange}
                   placeholder='選擇業務'
                 />
