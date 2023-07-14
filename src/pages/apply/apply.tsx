@@ -1,4 +1,5 @@
-import { ListTable } from "@/components/apply/list table";
+import { NewForm } from "@/components/apply/add/new form";
+import { ListPage } from "@/components/apply/list table";
 import { Header } from "@/layouts/header";
 import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -11,11 +12,11 @@ const ApplyPage = () => {
         <Routes>
           <Route
             index
-            element={<ListTable />}
+            element={<ListPage />}
           />
           <Route
             path='add'
-            element={<h1>新表單</h1>}
+            element={<NewForm />}
           />
           <Route
             path='sign'

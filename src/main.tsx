@@ -1,5 +1,6 @@
 import "react-day-picker/dist/style.css";
 import "react-toastify/ReactToastify.css";
+import "@styles/tailwind.scss";
 import "@styles/index.scss";
 import "./i18n.ts";
 

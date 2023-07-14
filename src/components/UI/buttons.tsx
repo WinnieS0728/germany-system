@@ -35,21 +35,20 @@ export { styled_submitBtn as SubmitBtn };
 
 interface topBtnProp {
   children: JSX.Element | string;
-  icon: JSX.Element;
+  icon?: JSX.Element;
   primary?: boolean;
 }
 export const TopBtn = ({ children, icon, primary }: topBtnProp) => {
   const color = useTheme()?.color;
 
   const css = {
-    padding: ".5em 3em",
     backgroundColor: primary ? color?.navActive : color?.white,
     color: primary ? color?.white : color?.black,
   };
 
   return (
     <span
-      className='top-btn flex items-center justify-center gap-2'
+      className='top-btn flex items-center justify-center gap-2 rounded-md px-10 py-2'
       style={css}
     >
       {icon}

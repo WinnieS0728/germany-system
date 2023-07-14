@@ -13,7 +13,7 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-  @media (prefers-color-scheme:light){
+  @media (prefers-color-scheme: light) {
     color: #213547;
     background-color: #ffffff;
   }
@@ -92,6 +92,8 @@ input {
 }
 
 select,
-input {
+input:not([type="submit"]) {
   padding: 0.3em 0.5em;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.25rem;
 }

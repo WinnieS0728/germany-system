@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .top-btn-list {
+        @apply flex gap-2
+    }
+
+    .label-input {
+        @apply flex justify-center items-center gap-4
+    }
+
+    .main-section-gap {
+        @apply flex flex-col gap-4
+    }
+}

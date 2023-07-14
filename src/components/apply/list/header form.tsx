@@ -7,6 +7,7 @@ import { DayPicker } from "react-day-picker";
 import { useAppSelector } from "@/hooks/redux";
 import { isValid } from "date-fns";
 import { timeFormat } from "d3";
+import * as Icons from "@components/UI/icons";
 
 interface propsType {
   className?: string;
@@ -15,7 +16,7 @@ export const HeaderForm = ({ className }: propsType) => {
   const color = useTheme()?.color;
   const timeData = useAppSelector((state) => state.time);
   const { register, handleSubmit, control, setValue } = useForm({
-    // shouldUnregister: true,
+    shouldUnregister: true,
     criteriaMode: "all",
     mode: "onChange",
     defaultValues: {
@@ -29,7 +30,7 @@ export const HeaderForm = ({ className }: propsType) => {
     },
   });
 
-  function onSubmit(d: any) {
+  function onSubmit<T>(d: T) {
     console.log(d);
   }
 
@@ -37,8 +38,6 @@ export const HeaderForm = ({ className }: propsType) => {
     name: "dept",
     control,
   });
-
-  console.count("rendered");
 
   async function getDeptOptions() {
     const res = await api.getDept();
@@ -52,16 +51,16 @@ export const HeaderForm = ({ className }: propsType) => {
   }
 
   async function getMemberOptions() {
+    // console.log({ dept });
+
     const res = await api.getMember("", dept);
 
-    // sb(
     return res.map((i: { EmpName: string; EmpId: string }) => {
       return {
         label: i.EmpName,
         value: i.EmpId,
       };
     });
-    // );
   }
 
   const formStatusOptions = [
@@ -116,7 +115,7 @@ export const HeaderForm = ({ className }: propsType) => {
   };
 
   function handleSelect(d: dateType) {
-    console.log(d);
+    // console.log(d);
     setRange(d);
 
     if (isValid(d?.from) && isValid(d?.to)) {
@@ -133,11 +132,14 @@ export const HeaderForm = ({ className }: propsType) => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{ backgroundColor: color.headForm_bgc }}
-        className={`${className} flex rounded-xl px-16 py-4`}
+        className={`${className} flex items-center gap-4 rounded-xl px-16 py-4`}
       >
-        <div className='form-body w-full'>
-          <div>
-            <label>申請人員</label>
+        <div
+          className='form-body grid w-full gap-4'
+          style={{ gridTemplateColumns: "4fr 2fr" }}
+        >
+          <div className='member flex items-center gap-4'>
+            <label className='min-w-fit'>申請人員</label>
             <Controller
               control={control}
               name='dept'
@@ -161,8 +163,8 @@ export const HeaderForm = ({ className }: propsType) => {
               )}
             />
           </div>
-          <div>
-            <label>表單狀態</label>
+          <div className='status flex items-center gap-4'>
+            <label className='min-w-fit'>表單狀態</label>
             <Controller
               control={control}
               name='formStatus'
@@ -176,10 +178,11 @@ export const HeaderForm = ({ className }: propsType) => {
               )}
             />
           </div>
-          <div>
-            <label>出差日期</label>
-            <span className='relative'>
+          <div className='date flex items-center gap-4'>
+            <label className='min-w-fit'>出差日期</label>
+            <span className='relative flex w-full gap-2'>
               <input
+                className='w-full'
                 style={{
                   cursor: "pointer",
                   backgroundColor: color?.white,
@@ -195,6 +198,7 @@ export const HeaderForm = ({ className }: propsType) => {
               />
               <span>~</span>
               <input
+                className='w-full'
                 style={{
                   cursor: "pointer",
                   backgroundColor: color?.white,
@@ -238,8 +242,10 @@ export const HeaderForm = ({ className }: propsType) => {
 
         <button
           type='submit'
-          className='w-20 p-0'
+          className='flex min-w-fit items-center justify-center px-8'
+          style={{ backgroundColor: color.sectionHeader, color: color.white }}
         >
+          <Icons.Search />
           查詢表單
         </button>
       </form>
