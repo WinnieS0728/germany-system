@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 export function GetData() {
   const visitData = useAppSelector((state) => state.weekVisit);
-  const salesData = useAppSelector((state) => state.member);
+  const salesData = useAppSelector((state) => state.salesList);
   const timeData = useAppSelector((state) => state.time);
   const threshold = useAppSelector((state) => state.threshold);
 

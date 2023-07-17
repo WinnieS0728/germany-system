@@ -2,8 +2,8 @@ import { MySelect } from "@components/form/select";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 
-export const TrafficForm = () => {
-  const trafficOptions = [
+export const TransportationForm = () => {
+  const transportationOptions = [
     { label: "飛機", value: "1" },
     { label: "高鐵", value: "2" },
     { label: "火車", value: "3" },
@@ -43,14 +43,14 @@ export const TrafficForm = () => {
 
   return (
     <fieldset className='space-y-2'>
-      <div className='traffic label-input'>
-        <label className='min-w-fit'>交通工具 :</label>
+      <div className='transportation label-input'>
+        <label>交通工具 :</label>
         <Controller
           control={control}
-          name='traffic'
+          name='transportation'
           render={({ field: { onChange } }) => (
             <MySelect.Normal
-              options={trafficOptions}
+              options={transportationOptions}
               onChange={onChange}
             />
           )}
@@ -77,7 +77,7 @@ export const TrafficForm = () => {
           </label>
         </div>
         <div className='stayDay label-input'>
-          <label className='min-w-fit'>住宿總天數</label>
+          <label>住宿總天數 :</label>
           <input
             type='text'
             {...register("stayDay", {
@@ -93,7 +93,7 @@ export const TrafficForm = () => {
           />
         </div>
         <div className='totalDay label-input'>
-          <label>出差總天數</label>
+          <label>出差總天數 :</label>
           <p>0</p>
         </div>
       </div>

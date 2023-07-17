@@ -10,6 +10,7 @@ interface selectProp {
   autoClose?: boolean;
   disable?: boolean;
   placeholder?: string;
+  name?: string;
 }
 
 const animateComponents = makeAnimated();
@@ -42,7 +43,7 @@ const Normal = ({
         closeMenuOnSelect={autoClose}
         isDisabled={disable}
         placeholder={placeholder}
-        className="w-full"
+        className='w-full'
       />
     </>
   );
@@ -56,7 +57,6 @@ const Async = ({
   disable,
   placeholder,
 }: selectProp) => {
-
   function handleChange(e: any) {
     if (e) {
       onChange(e.value);
@@ -76,7 +76,7 @@ const Async = ({
       closeMenuOnSelect={autoClose}
       isDisabled={disable}
       placeholder={placeholder}
-      className="w-full"
+      className='w-full'
     />
   );
 };

@@ -1,7 +1,7 @@
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { MySelect } from "@components/form/select";
 import api from "@api";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 import { DayPicker } from "react-day-picker";
 import { useAppSelector } from "@/hooks/redux";
@@ -141,7 +141,7 @@ export const HeaderForm = ({ className }: propsType) => {
           style={{ gridTemplateColumns: "4fr 2fr" }}
         >
           <div className='member flex items-center gap-4'>
-            <label className='min-w-fit'>申請人員</label>
+            <label>申請人員</label>
             <Controller
               control={control}
               name='dept'
@@ -166,7 +166,7 @@ export const HeaderForm = ({ className }: propsType) => {
             />
           </div>
           <div className='status flex items-center gap-4'>
-            <label className='min-w-fit'>表單狀態</label>
+            <label>表單狀態</label>
             <Controller
               control={control}
               name='formStatus'
@@ -181,7 +181,7 @@ export const HeaderForm = ({ className }: propsType) => {
             />
           </div>
           <div className='date flex items-center gap-4'>
-            <label className='min-w-fit'>出差日期</label>
+            <label>出差日期</label>
             <span className='relative flex w-full gap-2'>
               <input
                 className='w-full'
@@ -244,7 +244,7 @@ export const HeaderForm = ({ className }: propsType) => {
 
         <button
           type='submit'
-          className='flex min-w-fit items-center justify-center px-8'
+          className='flex items-center justify-center px-8'
           style={{ backgroundColor: color.sectionHeader, color: color.white }}
         >
           <Icons.Search />

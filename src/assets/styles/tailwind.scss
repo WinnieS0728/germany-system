@@ -8,7 +8,11 @@
     }
 
     .label-input {
-        @apply flex justify-center items-center gap-4
+        @apply flex justify-center items-center gap-4;
+        
+        label {
+            @apply min-w-fit
+        }
     }
 
     .main-section-gap {

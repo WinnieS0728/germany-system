@@ -5,7 +5,7 @@ import { Controller, useFormContext } from "react-hook-form";
 export const MoneyForm = () => {
   const { register, control } = useFormContext();
 
-  const moneyTyoeOptions = [
+  const moneyTypeOptions = [
     { label: "台幣", value: "TW" },
     { label: "美金", value: "US" },
     { label: "歐元", value: "EU" },
@@ -25,11 +25,11 @@ export const MoneyForm = () => {
   return (
     <div className='flex gap-4'>
       <div className='label-input'>
-        <label className='min-w-fit'>預支差旅費 :</label>
+        <label>預支差旅費 :</label>
         <input
           type='text'
           {...register("money", {
-            setValueAs: (d) => {
+            setValueAs: (d: string) => {
               return parseInt(d.replace(/,/g, ""));
             },
           })}
@@ -42,13 +42,13 @@ export const MoneyForm = () => {
         />
       </div>
       <div className='label-input'>
-        <label className='min-w-fit'>幣別 :</label>
+        <label>幣別 :</label>
         <Controller
           control={control}
           name='moneyType'
           render={({ field: { onChange } }) => (
             <MySelect.Normal
-              options={moneyTyoeOptions}
+              options={moneyTypeOptions}
               onChange={onChange}
               placeholder='請選擇'
             />

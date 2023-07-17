@@ -8,6 +8,7 @@ import personVisitSlice from "@reducers/visit data/person visit";
 import weekVisitSlice from "@reducers/visit data/week visit";
 import thresholdSlice from "@reducers/kpi threshold/threshold";
 import userSlice from "@reducers/nowUser";
+import tripDetailSlice from "@reducers/trip detail/trip detail";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     personVisit: personVisitSlice,
     weekVisit: weekVisitSlice,
     threshold: thresholdSlice,
+    tripDetail: tripDetailSlice,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({

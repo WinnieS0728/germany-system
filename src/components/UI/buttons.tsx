@@ -37,13 +37,17 @@ interface topBtnProp {
   children: JSX.Element | string;
   icon?: JSX.Element;
   primary?: boolean;
+  style?: {
+    [key: string]: string | number;
+  };
 }
-export const TopBtn = ({ children, icon, primary }: topBtnProp) => {
+export const TopBtn = ({ children, icon, primary, style }: topBtnProp) => {
   const color = useTheme()?.color;
 
   const css = {
     backgroundColor: primary ? color?.navActive : color?.white,
     color: primary ? color?.white : color?.black,
+    ...style,
   };
 
   return (
@@ -54,5 +58,47 @@ export const TopBtn = ({ children, icon, primary }: topBtnProp) => {
       {icon}
       {children}
     </span>
+  );
+};
+
+export const LongBtn = ({
+  type,
+  closeModel,
+}: {
+  type: "reset" | "submit";
+  closeModel?: any;
+}) => {
+  const color = useTheme()?.color;
+
+  const className = "px-16 rounded-md";
+
+  const Cancel = () => {
+    return (
+      <button
+        type='reset'
+        className={className}
+        style={{ backgroundColor: color.red, color: color.white }}
+      >
+        取消
+      </button>
+    );
+  };
+  const Submit = () => {
+    return (
+      <button
+        type='submit'
+        className={className}
+        style={{ backgroundColor: color.sectionHeader, color: color.white }}
+      >
+        確認
+      </button>
+    );
+  };
+
+  return (
+    <>
+      {type === "reset" && <Cancel />}
+      {type === "submit" && <Submit />}
+    </>
   );
 };

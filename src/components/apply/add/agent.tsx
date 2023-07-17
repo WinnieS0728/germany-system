@@ -21,7 +21,7 @@ export const AgentForm = () => {
 
   return (
     <div className='label-input'>
-      <label className='min-w-fit'>代理人 :</label>
+      <label>代理人 :</label>
       <Controller
         control={control}
         name='agent'

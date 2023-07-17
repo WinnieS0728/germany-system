@@ -13,5 +13,6 @@ export default {
     submitBtn: "#FB8626",
     threshold_bgc: "#D6EAFB",
     headForm_bgc: "#E6E5E5",
+    createCus: "#FB5D00",
   },
 };

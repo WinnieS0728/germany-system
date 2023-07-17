@@ -3,12 +3,16 @@ import { Main } from "@/layouts/main";
 import * as Icons from "@components/UI/icons";
 import { Link } from "react-router-dom";
 import { InfoForm } from "./header";
-import { TrafficForm } from "./trafic";
+import { TransportationForm } from "./trafic";
 import { FormProvider, useForm } from "react-hook-form";
 import { MoneyForm } from "./money";
 import { AgentForm } from "./agent";
 import { AttachForm } from "./attach";
-import { useAppSelector } from "@/hooks/redux";
+import { NewDetailForm } from "./new detail";
+import { useTheme } from "styled-components";
+import { useEffect, useState } from "react";
+import { Model } from "@/layouts/model";
+import { TripDetailForm } from "./trip detail";
 
 interface blockProp {
   children: JSX.Element;
@@ -22,23 +26,41 @@ const Block = ({ children }: blockProp) => {
   );
 };
 export const NewForm = () => {
+  const color = useTheme()?.color;
   const methods = useForm({
     shouldUnregister: true,
     criteriaMode: "all",
     mode: "onChange",
     defaultValues: {
-      traffic: "",
+      transportation: "",
       isStay: "false",
       stayDay: 0,
       money: "0",
       moneyType: "",
+      agent: "",
     },
   });
+
+  const [showModel, setModelShow] = useState<boolean>(false);
 
   function onSubmit<T>(d: T) {
     console.log(d);
   }
+
   
+  //  TODO 預防重新整理
+  // function alertUser(e: any) {
+  //   e.preventDefault();
+  //   e.returnValue = "";
+  // }
+  // useEffect(() => {
+  //   window.addEventListener("beforeunload", alertUser);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", alertUser);
+  //   };
+  // }, []);
+
   return (
     <Main className='main-section-gap'>
       <>
@@ -71,6 +93,12 @@ export const NewForm = () => {
             <TopBtn icon={<Icons.Send />}>返回列表</TopBtn>
           </Link>
         </div>
+        <Model
+          show={showModel}
+          setShow={setModelShow}
+        >
+          <NewDetailForm />
+        </Model>
         <FormProvider {...methods}>
           <form
             id='business apply'
@@ -81,7 +109,29 @@ export const NewForm = () => {
               <InfoForm />
             </Block>
             <Block>
-              <TrafficForm />
+              <TransportationForm />
+            </Block>
+            <div>
+              <button
+                type='button'
+                className='p-0'
+                onClick={() => {
+                  setModelShow(true);
+                }}
+              >
+                <TopBtn
+                  style={{
+                    backgroundColor: color.sectionHeader,
+                    color: color.white,
+                  }}
+                  icon={<Icons.NewDetail />}
+                >
+                  新增出差計畫
+                </TopBtn>
+              </button>
+            </div>
+            <Block>
+              <TripDetailForm />
             </Block>
             <Block>
               <MoneyForm />
