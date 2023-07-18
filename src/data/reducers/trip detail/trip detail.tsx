@@ -16,6 +16,21 @@ export interface detailDataType {
   }[];
 }
 
+export const initData = {
+  startDate: "",
+  endDate: "",
+  data: [
+    {
+      district: "",
+      city: "",
+      purpose: "",
+      cus: "",
+      hotel: "",
+      PS: "",
+    },
+  ],
+};
+
 const data: detailDataType[] = [
   {
     startDate: "",
@@ -27,6 +42,28 @@ const data: detailDataType[] = [
         purpose: "123",
         cus: "",
         hotel: "123",
+        PS: "",
+      },
+      {
+        district: "",
+        city: "123",
+        purpose: "123",
+        cus: "123",
+        hotel: "123",
+        PS: "",
+      },
+    ],
+  },
+  {
+    startDate: "",
+    endDate: "",
+    data: [
+      {
+        district: "456",
+        city: "",
+        purpose: "456",
+        cus: "",
+        hotel: "456",
         PS: "",
       },
       {

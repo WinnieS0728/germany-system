@@ -18,7 +18,7 @@ export const MoneyForm = () => {
       setValue("0");
       return;
     }
-    const value = e.target.value.replace(/[^\d]/g, "");
+    const value = e.target.value.replace(/[^\d]/g, "") || "0";
     setValue(parseInt(value).toLocaleString());
   }
 
@@ -28,7 +28,7 @@ export const MoneyForm = () => {
         <label>預支差旅費 :</label>
         <input
           type='text'
-          {...register("money", {
+          {...register("Advance_Amount", {
             setValueAs: (d: string) => {
               return parseInt(d.replace(/,/g, ""));
             },
@@ -45,7 +45,7 @@ export const MoneyForm = () => {
         <label>幣別 :</label>
         <Controller
           control={control}
-          name='moneyType'
+          name='Curr'
           render={({ field: { onChange } }) => (
             <MySelect.Normal
               options={moneyTypeOptions}

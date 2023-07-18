@@ -1,23 +1,158 @@
-import * as Icons from "@components/UI/icons";
+import { addDisabledDays } from "@/data/reducers/day picker/dayPickerControl";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { timeFormat } from "d3";
+import { isValid } from "date-fns";
+import { useEffect, useState } from "react";
+import { DayPicker } from "react-day-picker";
+import { useTheme } from "styled-components";
 
-export const DetailHeader = () => {
+interface dateType {
+  from: Date | string | undefined;
+  to: Date | string | undefined;
+}
+
+interface headerProps {
+  data: any;
+}
+
+export const DetailHeader = ({ data }: headerProps) => {
+  const color = useTheme()?.color;
+  const timeData = useAppSelector((state) => state.time);
+  const [isShow, setShow] = useState(false);
+  const [month, setMonth] = useState<Date>();
+  const [range, setRange] = useState<dateType | undefined>({
+    from: data.startDate || "",
+    to: data.endDate || "",
+  });
+
+  const Footer = () => {
+    const goToday = () => {
+      setMonth(new Date(timeData.today));
+    };
+    return (
+      <span
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <p style={{ margin: 0, display: "flex", alignItems: "center" }}>
+          select 2 day
+        </p>
+        <button
+          type='button'
+          onClick={goToday}
+        >
+          Today
+        </button>
+      </span>
+    );
+  };
+
+  function getTime(d: Date | undefined) {
+    if (!isValid(d)) {
+      return "";
+    }
+    const date = timeFormat("%Y-%m-%d")(d as Date);
+
+    return date;
+  }
+
+  const dispatch = useAppDispatch();
+  const disabledDays = useAppSelector((state) => state.dayPicker);
+
+  const cantSelect = disabledDays.body.disabled.map((i) => {
+    return {
+      from: new Date(i.from),
+      to: new Date(i.to),
+    };
+  });
+
+  function handleSelect(d: dateType) {
+    // console.log(d);
+    setRange(d);
+    if (isValid(d?.from) && isValid(d?.to)) {
+      setShow(false);
+    }
+  }
+
+  useEffect(() => {
+    if (range?.from && range.to) {
+      dispatch(addDisabledDays(range));
+    }
+  }, [range, dispatch]);
+
   return (
     <div className='flex items-center justify-between'>
-      <div className='startDate space-x-2'>
-        <label>出差日期(起)</label>
-        <input type='text' />
+      <div className='relative flex gap-8'>
+        <div className='startDate label-input gap-1 space-x-2'>
+          <label>出差日期(起)</label>
+          <input
+            className='w-full'
+            style={{
+              cursor: "pointer",
+              backgroundColor: color?.white,
+              color: color?.black,
+            }}
+            autoComplete='off'
+            value={getTime(range?.from as Date)}
+            onClickCapture={() => {
+              setShow((prev) => !prev);
+            }}
+            readOnly
+            placeholder='開始日期'
+          />
+        </div>
+        <div className='endDate label-input gap-1 space-x-2'>
+          <label>出差日期(迄)</label>
+          <input
+            className='w-full'
+            style={{
+              cursor: "pointer",
+              backgroundColor: color?.white,
+              color: color?.black,
+            }}
+            autoComplete='off'
+            value={getTime(range?.to as Date)}
+            onClickCapture={() => {
+              setShow((prev) => !prev);
+            }}
+            readOnly
+            placeholder='結束日期'
+          />
+        </div>
+        <DayPicker
+          mode='range'
+          footer={<Footer />}
+          selected={range as any}
+          onSelect={handleSelect as any}
+          fromYear={2022}
+          toYear={+timeData.thisYear + 1}
+          month={month}
+          onMonthChange={setMonth}
+          captionLayout='dropdown-buttons'
+          disabled={cantSelect}
+          style={{
+            position: "absolute",
+            top: "100%",
+            right: 0,
+            zIndex: 99,
+            display: isShow ? "block" : "none",
+            color: color?.white,
+          }}
+          styles={{
+            months: { backgroundColor: color?.black },
+            cell: { border: 0 },
+          }}
+          modifiersStyles={{
+            selected: { backgroundColor: color.blue },
+            today: {
+              textDecoration: "underLine",
+              textUnderlineOffset: ".3rem",
+            },
+          }}
+        />
       </div>
-      <div className='endDate space-x-2'>
-        <label>出差日期(迄)</label>
-        <input type='text' />
-      </div>
-      <button
-        type='button'
-        className='flex items-center justify-center gap-1'
-      >
-        <Icons.ShowDetail />
-        詳細資料
-      </button>
     </div>
   );
 };

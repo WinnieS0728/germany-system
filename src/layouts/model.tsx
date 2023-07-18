@@ -1,43 +1,34 @@
-import { ModelControlContext } from "@/hooks/model control";
+import { useModelControl } from "@/hooks/model control";
 import { useScroll } from "@/hooks/scroll control";
-import { useContext } from "react";
 
 interface modelProps {
-  show: boolean;
-  setShow: (b: boolean) => void;
   children: JSX.Element;
 }
 
-export const Model = ({ show, setShow, children }: modelProps) => {
+export const Model = ({ children }: modelProps) => {
   const { canScroll } = useScroll();
+  const { isModelShow, closeModel } = useModelControl();
 
-  if (show) {
+  if (isModelShow) {
     canScroll(false);
   } else {
     canScroll(true);
   }
 
   function handleClick(e: React.SyntheticEvent) {
-    (e.target as HTMLElement)?.id === "background" && setShow(false);
+    (e.target as HTMLElement)?.id === "background" && closeModel();
   }
 
-  const model_ctx = {
-    isShow: show,
-    setShow: setShow,
-  };
-
   return (
-    <ModelControlContext.Provider value={model_ctx}>
-      <div
-        id='background'
-        className={`fixed inset-0 z-10 flex h-full w-full items-start justify-center overflow-auto bg-stone-800/75 pt-[15vh]`}
-        style={{
-          display: show ? "flex" : "none",
-        }}
-        onClick={handleClick}
-      >
-        {children}
-      </div>
-    </ModelControlContext.Provider>
+    <div
+      id='background'
+      className={`fixed inset-0 z-10 flex h-full w-full items-start justify-center overflow-auto bg-stone-800/75 pt-[15vh]`}
+      style={{
+        display: isModelShow ? "flex" : "none",
+      }}
+      onClick={handleClick}
+    >
+      <div className='w-2/3 lg:w-1/2'>{children}</div>
+    </div>
   );
 };

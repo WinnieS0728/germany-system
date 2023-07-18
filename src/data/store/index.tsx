@@ -9,6 +9,8 @@ import weekVisitSlice from "@reducers/visit data/week visit";
 import thresholdSlice from "@reducers/kpi threshold/threshold";
 import userSlice from "@reducers/nowUser";
 import tripDetailSlice from "@reducers/trip detail/trip detail";
+import dayPickerSlice from "@reducers/day picker/dayPickerControl";
+import modelControlSlice from "@reducers/model control/modelControl";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +22,8 @@ const store = configureStore({
     weekVisit: weekVisitSlice,
     threshold: thresholdSlice,
     tripDetail: tripDetailSlice,
+    dayPicker: dayPickerSlice,
+    modelControl: modelControlSlice,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({

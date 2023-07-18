@@ -1,13 +1,19 @@
 import { detailDataType } from "@/data/reducers/trip detail/trip detail";
+import { useModelControl } from "@/hooks/model control";
 import { useTheme } from "styled-components";
 
 type detailTableProps = {
-  data: detailDataType;
+  data: detailDataType | any;
   index: number;
 };
 
 export const DetailTable = ({ data, index }: detailTableProps) => {
   const color = useTheme()?.color;
+
+  const { openModel } = useModelControl();
+
+  //  FIXME  刪掉
+  const dontShowError = [data, index];
 
   return (
     <>
@@ -20,6 +26,9 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
           type='button'
           className='px-4 py-1 ring-1'
           style={{ borderColor: color.white }}
+          onClick={() => {
+            openModel();
+          }}
         >
           +新增
         </button>
@@ -36,21 +45,7 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
             <td>備註</td>
           </tr>
         </thead>
-        <tbody>
-          {data.data.map((d, index) => {
-            return (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{d.district}</td>
-                <td>{d.city}</td>
-                <td>{d.purpose}</td>
-                <td>{d.cus}</td>
-                <td>{d.hotel}</td>
-                <td>{d.PS}</td>
-              </tr>
-            );
-          })}
-        </tbody>
+        <tbody></tbody>
       </table>
     </>
   );

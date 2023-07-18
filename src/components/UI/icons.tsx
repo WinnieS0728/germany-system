@@ -4,8 +4,7 @@ import { MdCreateNewFolder } from "react-icons/md";
 import { PiNotePencilFill } from "react-icons/pi";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { AiFillPlusCircle } from "react-icons/ai";
-import { BsFillArrowDownCircleFill } from "react-icons/bs";
-
+import { BiSolidChevronDownCircle } from "react-icons/bi";
 
 export const Save = () => <TfiHarddrive />;
 
@@ -21,4 +20,4 @@ export const Search = () => <BiSearchAlt2 />;
 
 export const NewDetail = () => <AiFillPlusCircle />;
 
-export const ShowDetail = () => <BsFillArrowDownCircleFill />;
+export const ShowDetail = () => <BiSolidChevronDownCircle />;

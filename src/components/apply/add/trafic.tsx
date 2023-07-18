@@ -4,14 +4,14 @@ import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 export const TransportationForm = () => {
   const transportationOptions = [
-    { label: "飛機", value: "1" },
-    { label: "高鐵", value: "2" },
-    { label: "火車", value: "3" },
-    { label: "郵輪", value: "4" },
-    { label: "計程車", value: "5" },
-    { label: "自用車", value: "6" },
-    { label: "公務車", value: "7" },
-    { label: "其他", value: "8" },
+    { label: "飛機", value: "airplane" },
+    { label: "高鐵", value: "HS rail" },
+    { label: "火車", value: "train" },
+    { label: "郵輪", value: "ship" },
+    { label: "計程車", value: "taxi" },
+    { label: "自用車", value: "private car" },
+    { label: "公務車", value: "business car" },
+    { label: "其他", value: "other" },
   ];
 
   const { register, control } = useFormContext();
@@ -25,18 +25,18 @@ export const TransportationForm = () => {
   }
 
   const isStay = useWatch({
-    name: "isStay",
+    name: "IsLodging",
     control,
   });
 
-  if (isStay === "true") {
+  if (isStay === "Y") {
     disable.current = false;
   } else {
     disable.current = true;
   }
 
   useEffect(() => {
-    if (isStay !== "true") {
+    if (isStay !== "Y") {
       setValue("0");
     }
   }, [isStay]);
@@ -47,7 +47,7 @@ export const TransportationForm = () => {
         <label>交通工具 :</label>
         <Controller
           control={control}
-          name='transportation'
+          name='Transport'
           render={({ field: { onChange } }) => (
             <MySelect.Normal
               options={transportationOptions}
@@ -62,16 +62,16 @@ export const TransportationForm = () => {
           <label className='space-x-2'>
             <input
               type='radio'
-              {...register("isStay")}
-              value={"true"}
+              {...register("IsLodging")}
+              value={"Y"}
             />
             <span>Yes</span>
           </label>
           <label className='space-x-2'>
             <input
               type='radio'
-              {...register("isStay")}
-              value={"false"}
+              {...register("IsLodging")}
+              value={"N"}
             />
             <span>No</span>
           </label>
@@ -80,7 +80,7 @@ export const TransportationForm = () => {
           <label>住宿總天數 :</label>
           <input
             type='text'
-            {...register("stayDay", {
+            {...register("StayDays", {
               valueAsNumber: true,
             })}
             onClickCapture={(e) => {

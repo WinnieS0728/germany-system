@@ -24,7 +24,7 @@ export const AgentForm = () => {
       <label>代理人 :</label>
       <Controller
         control={control}
-        name='agent'
+        name='Deputy'
         render={({ field: { onChange } }) => (
           <MySelect.Async
             options={getMemberOptions}

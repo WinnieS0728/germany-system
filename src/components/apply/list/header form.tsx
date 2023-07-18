@@ -128,7 +128,7 @@ export const HeaderForm = ({ className }: propsType) => {
       setShow(false);
     }
   }
-  
+
   return (
     <>
       <form
@@ -140,7 +140,7 @@ export const HeaderForm = ({ className }: propsType) => {
           className='form-body grid w-full gap-4'
           style={{ gridTemplateColumns: "4fr 2fr" }}
         >
-          <div className='member flex items-center gap-4'>
+          <div className='member label-input'>
             <label>申請人員</label>
             <Controller
               control={control}
@@ -165,7 +165,7 @@ export const HeaderForm = ({ className }: propsType) => {
               )}
             />
           </div>
-          <div className='status flex items-center gap-4'>
+          <div className='status label-input'>
             <label>表單狀態</label>
             <Controller
               control={control}
@@ -180,9 +180,9 @@ export const HeaderForm = ({ className }: propsType) => {
               )}
             />
           </div>
-          <div className='date flex items-center gap-4'>
+          <div className='date label-input'>
             <label>出差日期</label>
-            <span className='relative flex w-full gap-2'>
+            <span className='relative flex w-full items-center gap-2'>
               <input
                 className='w-full'
                 style={{
@@ -237,6 +237,9 @@ export const HeaderForm = ({ className }: propsType) => {
                   months: { backgroundColor: color?.black },
                   cell: { border: 0 },
                 }}
+                modifiersStyles={{
+                  selected: { backgroundColor: color.blue },
+                }}
               />
             </span>
           </div>
@@ -244,7 +247,7 @@ export const HeaderForm = ({ className }: propsType) => {
 
         <button
           type='submit'
-          className='flex items-center justify-center px-8'
+          className='flex min-w-fit items-center justify-center px-8'
           style={{ backgroundColor: color.sectionHeader, color: color.white }}
         >
           <Icons.Search />
