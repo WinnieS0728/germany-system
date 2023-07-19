@@ -1,5 +1,5 @@
 import { MySelect } from "@/components/form/select";
-import { toggleModel } from "@/data/reducers/model control/modelControl";
+import { addData } from "@/data/reducers/trip detail/trip detail";
 import { useModelControl } from "@/hooks/model control";
 import { useAppDispatch } from "@/hooks/redux";
 import api from "@/lib/api";
@@ -41,6 +41,15 @@ export const NewDetailForm = () => {
     },
   });
 
+  const dd = {
+    purpose: "",
+    district: "",
+    city: "",
+    postalCode: "",
+    cus: "",
+    hotel: "",
+    PS: "",
+  };
   const { closeModel } = useModelControl();
 
   interface optionsType {
@@ -60,7 +69,7 @@ export const NewDetailForm = () => {
       (i: { ResourcesName: string; ResourcesId: string }) => {
         return {
           label: i.ResourcesName,
-          value: i.ResourcesId,
+          value: i.ResourcesName,
         };
       }
     );
@@ -73,13 +82,12 @@ export const NewDetailForm = () => {
     const options = res.map((i: { Country: string; CountryId: string }) => {
       return {
         label: i.Country,
-        value: i.CountryId,
+        value: i.Country,
       };
     });
 
     return filterOptions(input, options);
   }
-
   async function getPostalCodeOptions(input: string) {
     const res = await api.getCus("DEU");
 
@@ -116,7 +124,7 @@ export const NewDetailForm = () => {
         (i: { CustName: string; CustId: string }) => {
           return {
             label: i.CustName,
-            value: i.CustId,
+            value: i.CustName,
           };
         }
       );
@@ -130,9 +138,11 @@ export const NewDetailForm = () => {
     getCusOptions();
   }, [getCusOptions]);
 
+  const dispatch = useAppDispatch();
   function onSubmit<T>(d: T) {
     console.log(d);
     reset();
+    dispatch(addData(d));
     closeModel();
   }
 
@@ -140,7 +150,8 @@ export const NewDetailForm = () => {
     <form
       onSubmit={handleSubmit(onSubmit)}
       onReset={() => {
-        closeModel();
+        reset()
+        // closeModel();
       }}
       className={`w-full space-y-4 rounded-xl px-8 py-6`}
       style={{ backgroundColor: color.white }}

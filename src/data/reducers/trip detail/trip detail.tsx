@@ -2,10 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { statusType } from "@/types/api";
 
 export interface detailDataType {
-  startDate: string;
-  endDate: string;
-}
-export interface detailDataType {
+  id: number;
   data: {
     district: string;
     city: string;
@@ -17,8 +14,7 @@ export interface detailDataType {
 }
 
 export const initData = {
-  startDate: "",
-  endDate: "",
+  id: 0,
   data: [
     {
       district: "",
@@ -31,60 +27,39 @@ export const initData = {
   ],
 };
 
-const data: detailDataType[] = [
-  {
-    startDate: "",
-    endDate: "",
-    data: [
-      {
-        district: "123",
-        city: "",
-        purpose: "123",
-        cus: "",
-        hotel: "123",
-        PS: "",
-      },
-      {
-        district: "",
-        city: "123",
-        purpose: "123",
-        cus: "123",
-        hotel: "123",
-        PS: "",
-      },
-    ],
-  },
-  {
-    startDate: "",
-    endDate: "",
-    data: [
-      {
-        district: "456",
-        city: "",
-        purpose: "456",
-        cus: "",
-        hotel: "456",
-        PS: "",
-      },
-      {
-        district: "",
-        city: "456",
-        purpose: "456",
-        cus: "456",
-        hotel: "456",
-        PS: "",
-      },
-    ],
-  },
-];
+const data: detailDataType[] = [];
 
 const tripDetailSlice = createSlice({
   name: "tripDetail",
   initialState: {
     body: data,
     status: statusType.idle,
+    target: 0,
   },
-  reducers: {},
+  reducers: {
+    setTarget: (state, action) => {
+      state.target = action.payload;
+    },
+    addData: (state, action) => {
+      const targetItem = state.body.find((i) => i.id === state.target);
+
+      if (!targetItem) {
+        const newItem = {
+          id: state.body.length + 1,
+          data: [action.payload],
+        };
+        state.body.push(newItem);
+      }else{
+        targetItem?.data.push(action.payload);
+      }
+    },
+    deleteData: (state) => {
+      const targetItem = state.body.find((i) => i.id === state.target);
+      targetItem?.data.splice(-1);
+    },
+  },
 });
 
 export default tripDetailSlice.reducer;
+
+export const { setTarget, addData, deleteData } = tripDetailSlice.actions;

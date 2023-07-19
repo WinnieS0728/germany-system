@@ -35,8 +35,9 @@ export const Collapse = ({ main, sub }: collapseProp) => {
       <div
         className='bottom'
         style={{
-          height: open ? "100vh" : 0,
+          height: open ? "auto" : 0,
           overflowY: "hidden",
+          transition:'height 1s ease'
         }}
       >
         <div className='mt-2 border-t-4 pt-4'>{sub}</div>

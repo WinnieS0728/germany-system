@@ -4,7 +4,7 @@ import AsyncSelect from "react-select/async";
 import makeAnimated from "react-select/animated";
 
 interface selectProp {
-  options: any;
+  options: any | any[];
   onChange: (event: any) => void;
   clear?: boolean;
   autoClose?: boolean;

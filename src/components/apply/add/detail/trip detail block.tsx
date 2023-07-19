@@ -1,8 +1,8 @@
-import { useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { Collapse } from "@/layouts/collapse";
 import { DetailTable } from "./detail table";
 import { DetailHeader } from "./detail header";
-import { Block } from "./new form";
+import { Block } from "../new form";
 import * as Icons from "@components/UI/icons";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { TopBtn } from "@/components/UI/buttons";
@@ -15,6 +15,7 @@ export const TripDetailForm = () => {
     name: "tripData",
     control,
   });
+  const tripDetail = useAppSelector((state) => state.tripDetail);
 
   return (
     <>
@@ -47,7 +48,7 @@ export const TripDetailForm = () => {
               main={<DetailHeader data={field} />}
               sub={
                 <DetailTable
-                  data={field}
+                  data={tripDetail.body[index]}
                   index={index}
                 />
               }

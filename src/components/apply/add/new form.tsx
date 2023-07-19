@@ -11,7 +11,7 @@ import { AttachForm } from "./attach";
 import { NewDetailForm } from "./new detail";
 import { useEffect } from "react";
 import { Model } from "@/layouts/model";
-import { TripDetailForm } from "./trip detail";
+import { TripDetailForm } from "./detail/trip detail block";
 import { DevTool } from "@hookform/devtools";
 
 interface blockProp {

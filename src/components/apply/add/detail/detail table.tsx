@@ -1,9 +1,10 @@
-import { detailDataType } from "@/data/reducers/trip detail/trip detail";
+import { setTarget } from "@/data/reducers/trip detail/trip detail";
 import { useModelControl } from "@/hooks/model control";
+import { useAppDispatch } from "@/hooks/redux";
 import { useTheme } from "styled-components";
 
 type detailTableProps = {
-  data: detailDataType | any;
+  data: any;
   index: number;
 };
 
@@ -12,8 +13,9 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
 
   const { openModel } = useModelControl();
 
-  //  FIXME  刪掉
-  const dontShowError = [data, index];
+  const dataSet = data?.data;  
+
+  const dispatch = useAppDispatch();
 
   return (
     <>
@@ -27,6 +29,7 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
           className='px-4 py-1 ring-1'
           style={{ borderColor: color.white }}
           onClick={() => {
+            dispatch(setTarget(index + 1));
             openModel();
           }}
         >
@@ -45,7 +48,21 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
             <td>備註</td>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          {dataSet?.map((d: any, index: number) => {
+            return (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{d.district}</td>
+                <td>{d.city}</td>
+                <td>{d.purpose}</td>
+                <td>{d.cus}</td>
+                <td>{d.hotel}</td>
+                <td>{d.PS}</td>
+              </tr>
+            );
+          })}
+        </tbody>
       </table>
     </>
   );
