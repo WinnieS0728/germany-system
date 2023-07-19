@@ -2,12 +2,13 @@ import { useModelControl } from "@/hooks/model control";
 import { useScroll } from "@/hooks/scroll control";
 
 interface modelProps {
+  name: string;
   children: JSX.Element;
 }
 
-export const Model = ({ children }: modelProps) => {
+export const Model = ({ name, children }: modelProps) => {
   const { canScroll } = useScroll();
-  const { isModelShow, closeModel } = useModelControl();
+  const { isModelShow, closeModel } = useModelControl(name);
 
   if (isModelShow) {
     canScroll(false);

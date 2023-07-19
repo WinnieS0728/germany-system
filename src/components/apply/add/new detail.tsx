@@ -26,7 +26,7 @@ const Tr = ({ label, children }: trProps) => {
 
 export const NewDetailForm = () => {
   const color = useTheme()?.color;
-  const { register, handleSubmit, control, reset } = useForm({
+  const { register, handleSubmit, control, reset, setValue } = useForm({
     shouldUnregister: true,
     criteriaMode: "all",
     mode: "onChange",
@@ -50,7 +50,7 @@ export const NewDetailForm = () => {
     hotel: "",
     PS: "",
   };
-  const { closeModel } = useModelControl();
+  const { closeModel } = useModelControl("newDetail");
 
   interface optionsType {
     label: string;
@@ -89,13 +89,13 @@ export const NewDetailForm = () => {
     return filterOptions(input, options);
   }
   async function getPostalCodeOptions(input: string) {
-    const res = await api.getCus("DEU");
+    const res = await api.getPostCode();
 
-    const postalCodeList = res.map((i: { PostalCode: string }) => i.PostalCode);
+    const noRepeatData = [
+      ...new Set(res.map((i: { zipcode: string }) => i.zipcode)),
+    ];
 
-    const noRepeatPostalCode = [...new Set(postalCodeList)];
-
-    const options = noRepeatPostalCode.map((code) => {
+    const options = noRepeatData.map((code) => {
       return {
         label: code,
         value: code,
@@ -133,10 +133,25 @@ export const NewDetailForm = () => {
     },
     [watch_postcode]
   );
+  const getCity = useCallback(
+    async function () {
+      const res = await api.getPostCode();
+
+      const city = res.find(
+        (i: { zipcode: string }) => i.zipcode === watch_postcode
+      );
+
+      if (city) { 
+        setValue("city", city.place);
+      }
+    },
+    [watch_postcode, setValue]
+  );
 
   useEffect(() => {
     getCusOptions();
-  }, [getCusOptions]);
+    getCity();
+  }, [getCusOptions, getCity]);
 
   const dispatch = useAppDispatch();
   function onSubmit<T>(d: T) {
@@ -150,7 +165,7 @@ export const NewDetailForm = () => {
     <form
       onSubmit={handleSubmit(onSubmit)}
       onReset={() => {
-        reset()
+        reset();
         // closeModel();
       }}
       className={`w-full space-y-4 rounded-xl px-8 py-6`}
@@ -218,6 +233,7 @@ export const NewDetailForm = () => {
               className='w-full'
               autoComplete='off'
               placeholder='輸入城市...'
+              readOnly
             />
           </Tr>
           <Tr label='客戶名稱'>

@@ -4,6 +4,7 @@ import { timeFormat } from "d3";
 import { isValid } from "date-fns";
 import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
+import { useFormContext } from "react-hook-form";
 import { useTheme } from "styled-components";
 
 interface dateType {
@@ -13,9 +14,10 @@ interface dateType {
 
 interface headerProps {
   data: any;
+  index: number;
 }
 
-export const DetailHeader = ({ data }: headerProps) => {
+export const DetailHeader = ({ data, index }: headerProps) => {
   const color = useTheme()?.color;
   const timeData = useAppSelector((state) => state.time);
   const [isShow, setShow] = useState(false);
@@ -24,6 +26,8 @@ export const DetailHeader = ({ data }: headerProps) => {
     from: data.startDate || "",
     to: data.endDate || "",
   });
+
+  const { register, setValue } = useFormContext();
 
   const Footer = () => {
     const goToday = () => {
@@ -73,6 +77,10 @@ export const DetailHeader = ({ data }: headerProps) => {
     setRange(d);
     if (isValid(d?.from) && isValid(d?.to)) {
       setShow(false);
+      setValue(`tripDate.${index}`, {
+        startDate: getTime(d.from as Date),
+        endDate: getTime(d.to as Date),
+      });
     }
   }
 
@@ -88,6 +96,7 @@ export const DetailHeader = ({ data }: headerProps) => {
         <div className='startDate label-input gap-1 space-x-2'>
           <label>出差日期(起)</label>
           <input
+            {...register(`tripDate.${index}.startDate`)}
             className='w-full'
             style={{
               cursor: "pointer",
@@ -106,6 +115,7 @@ export const DetailHeader = ({ data }: headerProps) => {
         <div className='endDate label-input gap-1 space-x-2'>
           <label>出差日期(迄)</label>
           <input
+            {...register(`tripDate.${index}.endDate`)}
             className='w-full'
             style={{
               cursor: "pointer",

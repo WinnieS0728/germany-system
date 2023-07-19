@@ -1,18 +1,28 @@
 import { useAppDispatch, useAppSelector } from "./redux";
 import { toggleModel } from "@/data/reducers/model control/modelControl";
 
-export const useModelControl = () => {
+export const useModelControl = (name: string) => {
   const modelState = useAppSelector((state) => state.modelControl);
 
-  const isShow = modelState.isOpen;
+  const isShow = modelState[name].isOpen;
 
   const dispatch = useAppDispatch();
   function open() {
-    dispatch(toggleModel(true));
+    dispatch(
+      toggleModel({
+        name: name,
+        status: true,
+      })
+    );
   }
 
   function close() {
-    dispatch(toggleModel(false));
+    dispatch(
+      toggleModel({
+        name: name,
+        status: false,
+      })
+    );
   }
 
   return {

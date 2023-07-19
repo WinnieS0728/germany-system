@@ -13,6 +13,10 @@ import { useEffect } from "react";
 import { Model } from "@/layouts/model";
 import { TripDetailForm } from "./detail/trip detail block";
 import { DevTool } from "@hookform/devtools";
+import { useModelControl } from "@/hooks/model control";
+import { useAppSelector } from "@/hooks/redux";
+import axios from "axios";
+import api from "@/lib/api";
 
 interface blockProp {
   children: JSX.Element;
@@ -40,8 +44,15 @@ export const NewForm = () => {
     },
   });
 
+  const { openModel } = useModelControl("review");
+
+  const a = useAppSelector((state) => state.tripDetail);
+
   function onSubmit<T>(d: T) {
     console.log(d);
+    console.log(a.body);
+
+    openModel();
   }
 
   //  TODO 預防重新整理
@@ -90,8 +101,11 @@ export const NewForm = () => {
             <TopBtn icon={<Icons.Send />}>返回列表</TopBtn>
           </Link>
         </div>
-        <Model>
+        <Model name='newDetail'>
           <NewDetailForm />
+        </Model>
+        <Model name='review'>
+          <h1>123</h1>
         </Model>
         <FormProvider {...methods}>
           <form

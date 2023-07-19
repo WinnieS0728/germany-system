@@ -1,4 +1,5 @@
-import { setTarget } from "@/data/reducers/trip detail/trip detail";
+import { Table } from "@/components/table/table";
+import { deleteData, setTarget } from "@/data/reducers/trip detail/trip detail";
 import { useModelControl } from "@/hooks/model control";
 import { useAppDispatch } from "@/hooks/redux";
 import { useTheme } from "styled-components";
@@ -11,9 +12,9 @@ type detailTableProps = {
 export const DetailTable = ({ data, index }: detailTableProps) => {
   const color = useTheme()?.color;
 
-  const { openModel } = useModelControl();
+  const { openModel } = useModelControl("newDetail");
 
-  const dataSet = data?.data;  
+  const dataSet = data?.data;
 
   const dispatch = useAppDispatch();
 
@@ -36,34 +37,45 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
           +新增
         </button>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <td>項次</td>
-            <td>行政區</td>
-            <td>城市</td>
-            <td>出差事由</td>
-            <td>客戶名稱</td>
-            <td>住宿飯店 or 地點</td>
-            <td>備註</td>
-          </tr>
-        </thead>
-        <tbody>
-          {dataSet?.map((d: any, index: number) => {
-            return (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{d.district}</td>
-                <td>{d.city}</td>
-                <td>{d.purpose}</td>
-                <td>{d.cus}</td>
-                <td>{d.hotel}</td>
-                <td>{d.PS}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <Table>
+        <table>
+          <thead>
+            <tr>
+              <td>項次</td>
+              <td>行政區</td>
+              <td>城市</td>
+              <td>出差事由</td>
+              <td>客戶名稱</td>
+              <td>住宿飯店 or 地點</td>
+              <td>備註</td>
+              <td>刪除</td>
+            </tr>
+          </thead>
+          <tbody>
+            {dataSet?.map((d: any, id: number) => {
+              return (
+                <tr key={id}>
+                  <td>{id + 1}</td>
+                  <td>{d.district}</td>
+                  <td>{d.city}</td>
+                  <td>{d.purpose}</td>
+                  <td>{d.cus}</td>
+                  <td>{d.hotel}</td>
+                  <td>{d.PS}</td>
+                  <td
+                    className='cursor-pointer'
+                    onClick={() => {
+                      dispatch(deleteData(index + 1));
+                    }}
+                  >
+                    delete
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </Table>
     </>
   );
 };

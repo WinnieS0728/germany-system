@@ -5,6 +5,7 @@ import { PiNotePencilFill } from "react-icons/pi";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { BiSolidChevronDownCircle } from "react-icons/bi";
+import { TiDeleteOutline } from "react-icons/ti";
 
 export const Save = () => <TfiHarddrive />;
 
@@ -21,3 +22,5 @@ export const Search = () => <BiSearchAlt2 />;
 export const NewDetail = () => <AiFillPlusCircle />;
 
 export const ShowDetail = () => <BiSolidChevronDownCircle />;
+
+export const Delete = () => <TiDeleteOutline />;

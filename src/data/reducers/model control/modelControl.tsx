@@ -1,13 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const modelControlSlice = createSlice({
-  name: "modelControl",
-  initialState: {
+interface dataType {
+  [key: string]: { isOpen: boolean };
+}
+const initData: dataType = {
+  newDetail: {
     isOpen: false,
   },
+  review: {
+    isOpen: false,
+  },
+};
+const modelControlSlice = createSlice({
+  name: "modelControl",
+  initialState: initData,
   reducers: {
     toggleModel: (state, action) => {
-      state.isOpen = action.payload;
+      state[action.payload.name].isOpen = action.payload.status;
     },
   },
 });

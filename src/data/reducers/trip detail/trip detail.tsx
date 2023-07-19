@@ -3,6 +3,10 @@ import { statusType } from "@/types/api";
 
 export interface detailDataType {
   id: number;
+  date: {
+    start: "";
+    end: "";
+  };
   data: {
     district: string;
     city: string;
@@ -13,8 +17,12 @@ export interface detailDataType {
   }[];
 }
 
-export const initData = {
+export const initData: detailDataType = {
   id: 0,
+  date: {
+    start: "",
+    end: "",
+  },
   data: [
     {
       district: "",
@@ -46,15 +54,16 @@ const tripDetailSlice = createSlice({
       if (!targetItem) {
         const newItem = {
           id: state.body.length + 1,
+          date: initData.date,
           data: [action.payload],
         };
         state.body.push(newItem);
-      }else{
+      } else {
         targetItem?.data.push(action.payload);
       }
     },
-    deleteData: (state) => {
-      const targetItem = state.body.find((i) => i.id === state.target);
+    deleteData: (state, action) => {
+      const targetItem = state.body.find((i) => i.id === action.payload);
       targetItem?.data.splice(-1);
     },
   },

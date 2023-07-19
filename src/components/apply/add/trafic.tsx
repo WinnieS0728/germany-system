@@ -1,3 +1,4 @@
+import { Required } from "@/components/form/required";
 import { MySelect } from "@components/form/select";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
@@ -44,7 +45,9 @@ export const TransportationForm = () => {
   return (
     <fieldset className='space-y-2'>
       <div className='transportation label-input'>
-        <label>交通工具 :</label>
+        <label>
+          交通工具 :
+        </label>
         <Controller
           control={control}
           name='Transport'

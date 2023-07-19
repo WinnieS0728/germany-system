@@ -12,7 +12,7 @@ export const TripDetailForm = () => {
   const color = useTheme()?.color;
   const { control } = useFormContext();
   const { fields, append } = useFieldArray({
-    name: "tripData",
+    name: "tripDate",
     control,
   });
   const tripDetail = useAppSelector((state) => state.tripDetail);
@@ -45,7 +45,12 @@ export const TripDetailForm = () => {
         return (
           <Block key={field.id}>
             <Collapse
-              main={<DetailHeader data={field} />}
+              main={
+                <DetailHeader
+                  data={field}
+                  index={index}
+                />
+              }
               sub={
                 <DetailTable
                   data={tripDetail.body[index]}
