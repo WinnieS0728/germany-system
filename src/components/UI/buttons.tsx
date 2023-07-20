@@ -61,13 +61,7 @@ export const TopBtn = ({ children, icon, primary, style }: topBtnProp) => {
   );
 };
 
-export const LongBtn = ({
-  type,
-  closeModel,
-}: {
-  type: "reset" | "submit";
-  closeModel?: any;
-}) => {
+export const LongBtn = ({ type }: { type: "reset" | "submit" | "button" }) => {
   const color = useTheme()?.color;
 
   const className = "px-16 rounded-md";

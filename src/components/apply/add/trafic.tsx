@@ -1,9 +1,18 @@
-import { Required } from "@/components/form/required";
+import { useAppSelector } from "@/hooks/redux";
 import { MySelect } from "@components/form/select";
-import { useEffect, useRef, useState } from "react";
+import { timeDay } from "d3-time";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 
-export const TransportationForm = () => {
+interface date {
+  startDate: string;
+  endDate: string;
+}
+interface formProp {
+  date: date[];
+}
+
+export const TransportationForm = ({ date }: formProp) => {
   const transportationOptions = [
     { label: "飛機", value: "airplane" },
     { label: "高鐵", value: "HS rail" },
@@ -15,39 +24,69 @@ export const TransportationForm = () => {
     { label: "其他", value: "other" },
   ];
 
-  const { register, control } = useFormContext();
-  const disable = useRef(true);
-
-  const [value, setValue] = useState("0");
-
-  function inputFilter(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value.replace(/[^\d]/g, "");
-    setValue(value);
-  }
-
-  const isStay = useWatch({
-    name: "IsLodging",
-    control,
+  const { register, control, setValue } = useFormContext();
+  const detailData = useAppSelector((state) => state.tripDetail);
+  const stayList = detailData.body.map((d) => {
+    return d.data.map((i) => i.hotel);
   });
 
-  if (isStay === "Y") {
-    disable.current = false;
-  } else {
-    disable.current = true;
-  }
+  const stayDays = useMemo(() => {
+    const isStayList = stayList.map((d) => {
+      if (d.some((i) => i !== "")) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+    let isStay;
+    if (isStayList.some((i) => i)) {
+      isStay = "Y";
+    } else {
+      isStay = "N";
+    }
+
+    const stayDayList = isStayList.map((i, index) => {
+      if (i) {
+        return getDays(date[index]) - 1;
+      } else {
+        return 0;
+      }
+    });
+    const stayDay = stayDayList.reduce((a, b) => a + b, 0);
+
+    return {
+      isStay: isStay,
+      day: stayDay,
+    };
+  }, [date, stayList]);
 
   useEffect(() => {
-    if (isStay !== "Y") {
-      setValue("0");
-    }
-  }, [isStay]);
+    setValue("IsLodging", stayDays.isStay);
+    setValue("StayDays", stayDays.day);
+  }, [stayDays, setValue]);
+
+  function getDays(date: { startDate: string; endDate: string }): number {
+    const start = new Date(`${date.startDate}:00:00:00`);
+    const end = new Date(`${date.endDate}:00:00:00`);
+
+    const days = timeDay.count(start, end);
+    return days + 1 || 0;
+  }
+  const outDays = date
+    .map((d) => {
+      return getDays(d);
+    })
+    .reduce((a, b) => a + b, 0);
+
+  useEffect(() => {
+    setValue("Days", outDays);
+  }, [outDays, setValue]);
 
   return (
     <fieldset className='space-y-2'>
       <div className='transportation label-input'>
-        <label>
-          交通工具 :
-        </label>
+        <label>交通工具 :</label>
         <Controller
           control={control}
           name='Transport'
@@ -86,18 +125,22 @@ export const TransportationForm = () => {
             {...register("StayDays", {
               valueAsNumber: true,
             })}
-            onClickCapture={(e) => {
-              (e.target as HTMLInputElement).value = "";
-            }}
-            onChangeCapture={inputFilter}
-            disabled={disable.current}
-            value={value}
             autoComplete='off'
+            readOnly
+            className='w-[5em]'
           />
         </div>
         <div className='totalDay label-input'>
           <label>出差總天數 :</label>
-          <p>0</p>
+          <input
+            type='text'
+            {...register("Days", {
+              valueAsNumber: true,
+            })}
+            autoComplete='off'
+            readOnly
+            className='w-[5em]'
+          />
         </div>
       </div>
     </fieldset>

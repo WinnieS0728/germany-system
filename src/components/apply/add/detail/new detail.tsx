@@ -4,7 +4,7 @@ import { useModelControl } from "@/hooks/model control";
 import { useAppDispatch } from "@/hooks/redux";
 import api from "@/lib/api";
 import * as Btns from "@components/UI/buttons";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useTheme } from "styled-components";
 
@@ -41,15 +41,6 @@ export const NewDetailForm = () => {
     },
   });
 
-  const dd = {
-    purpose: "",
-    district: "",
-    city: "",
-    postalCode: "",
-    cus: "",
-    hotel: "",
-    PS: "",
-  };
   const { closeModel } = useModelControl("newDetail");
 
   interface optionsType {
@@ -88,22 +79,37 @@ export const NewDetailForm = () => {
 
     return filterOptions(input, options);
   }
-  async function getPostalCodeOptions(input: string) {
-    const res = await api.getPostCode();
 
-    const noRepeatData = [
-      ...new Set(res.map((i: { zipcode: string }) => i.zipcode)),
-    ];
+  const watch_area = useWatch({
+    name: "district",
+    control,
+  });
 
-    const options = noRepeatData.map((code) => {
-      return {
-        label: code,
-        value: code,
-      };
-    });
+  const [postOptions, setPostOptions] = useState();
 
-    return filterOptions(input, options as any);
-  }
+  useEffect(() => {
+    async function a() {
+      const res = await api.getPostCode();
+
+      const codeInThisState = res.filter(
+        (c: { state: string }) => c.state === watch_area
+      );
+
+      const noRepeatData = [
+        ...new Set(codeInThisState.map((i: { zipcode: string }) => i.zipcode)),
+      ];
+
+      const options = noRepeatData.map((code) => {
+        return {
+          label: code,
+          value: code,
+        };
+      });
+
+      setPostOptions(options as any);
+    }
+    a();
+  }, [watch_area]);
 
   const watch_postcode = useWatch({
     name: "postalCode",
@@ -133,7 +139,7 @@ export const NewDetailForm = () => {
     },
     [watch_postcode]
   );
-  const getCity = useCallback(
+  const getCity = useMemo(
     async function () {
       const res = await api.getPostCode();
 
@@ -141,21 +147,24 @@ export const NewDetailForm = () => {
         (i: { zipcode: string }) => i.zipcode === watch_postcode
       );
 
-      if (city) { 
-        setValue("city", city.place);
+      if (city) {
+        return city.place;
       }
     },
-    [watch_postcode, setValue]
+    [watch_postcode]
   );
 
   useEffect(() => {
     getCusOptions();
-    getCity();
-  }, [getCusOptions, getCity]);
+    async function setCity() {
+      setValue("city", await getCity);
+    }
+    setCity();
+  }, [getCusOptions, getCity, setValue]);
 
   const dispatch = useAppDispatch();
   function onSubmit<T>(d: T) {
-    console.log(d);
+    // console.log(d);
     reset();
     dispatch(addData(d));
     closeModel();
@@ -166,7 +175,7 @@ export const NewDetailForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       onReset={() => {
         reset();
-        // closeModel();
+        closeModel();
       }}
       className={`w-full space-y-4 rounded-xl px-8 py-6`}
       style={{ backgroundColor: color.white }}
@@ -218,8 +227,8 @@ export const NewDetailForm = () => {
               control={control}
               name='postalCode'
               render={({ field: { onChange } }) => (
-                <MySelect.Async
-                  options={getPostalCodeOptions}
+                <MySelect.Normal
+                  options={postOptions}
                   onChange={onChange}
                   placeholder='選擇郵遞區號...'
                 />
@@ -232,34 +241,39 @@ export const NewDetailForm = () => {
               {...register("city")}
               className='w-full'
               autoComplete='off'
-              placeholder='輸入城市...'
               readOnly
             />
           </Tr>
           <Tr label='客戶名稱'>
-            <div className='space-y-2'>
-              <Controller
-                control={control}
-                name='cus'
-                render={({ field: { onChange } }) => (
-                  <MySelect.Normal
-                    options={cusOptions}
-                    onChange={onChange}
-                    placeholder='選擇客戶...'
-                  />
-                )}
-              />
-              <button
-                type='button'
-                className='w-full'
-                style={{
-                  color: color.white,
-                  backgroundColor: color.createCus,
-                }}
-              >
-                查無資料，請建立客戶資訊
-              </button>
-            </div>
+            <Controller
+              control={control}
+              name='cus'
+              render={({ field: { onChange } }) => (
+                <MySelect.Normal
+                  options={cusOptions}
+                  onChange={onChange}
+                  placeholder='選擇客戶...'
+                  noOptionComponent={
+                    <a
+                      href='https://esys.orange-electronic.com/Customer/CustomerList'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                    >
+                      <button
+                        type='button'
+                        className='w-full'
+                        style={{
+                          color: color.white,
+                          backgroundColor: color.createCus,
+                        }}
+                      >
+                        查無資料，請建立客戶資訊
+                      </button>
+                    </a>
+                  }
+                />
+              )}
+            />
           </Tr>
           <Tr label='住宿飯店 or 地點'>
             <input

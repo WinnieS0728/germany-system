@@ -77,7 +77,7 @@ export const DetailHeader = ({ data, index }: headerProps) => {
     setRange(d);
     if (isValid(d?.from) && isValid(d?.to)) {
       setShow(false);
-      setValue(`tripDate.${index}`, {
+      setValue(`tripData.${index}`, {
         startDate: getTime(d.from as Date),
         endDate: getTime(d.to as Date),
       });
@@ -96,8 +96,8 @@ export const DetailHeader = ({ data, index }: headerProps) => {
         <div className='startDate label-input gap-1 space-x-2'>
           <label>出差日期(起)</label>
           <input
-            {...register(`tripDate.${index}.startDate`)}
-            className='w-full'
+            {...register(`tripData.${index}.startDate`)}
+            className='date w-full'
             style={{
               cursor: "pointer",
               backgroundColor: color?.white,
@@ -115,8 +115,8 @@ export const DetailHeader = ({ data, index }: headerProps) => {
         <div className='endDate label-input gap-1 space-x-2'>
           <label>出差日期(迄)</label>
           <input
-            {...register(`tripDate.${index}.endDate`)}
-            className='w-full'
+            {...register(`tripData.${index}.endDate`)}
+            className='date w-full'
             style={{
               cursor: "pointer",
               backgroundColor: color?.white,

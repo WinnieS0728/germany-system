@@ -98,7 +98,16 @@ input:not([type="submit"]) {
   border-radius: 0.25rem;
 }
 
-
 .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
-  color: black
+  color: black;
+}
+
+input[readonly]:not(.date) {
+  border: 0;
+  cursor: default;
+  background-color: transparent;
+
+  &:focus {
+    outline: 0;
+  }
 }

@@ -4,19 +4,17 @@ import * as Icons from "@components/UI/icons";
 import { Link } from "react-router-dom";
 import { InfoForm } from "./header";
 import { TransportationForm } from "./trafic";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { MoneyForm } from "./money";
 import { AgentForm } from "./agent";
 import { AttachForm } from "./attach";
-import { NewDetailForm } from "./new detail";
+import { NewDetailForm } from "./detail/new detail";
 import { useEffect } from "react";
 import { Model } from "@/layouts/model";
 import { TripDetailForm } from "./detail/trip detail block";
 import { DevTool } from "@hookform/devtools";
 import { useModelControl } from "@/hooks/model control";
 import { useAppSelector } from "@/hooks/redux";
-import axios from "axios";
-import api from "@/lib/api";
 
 interface blockProp {
   children: JSX.Element;
@@ -38,9 +36,11 @@ export const NewForm = () => {
       Transport: "",
       IsLodging: "N",
       StayDays: 0,
+      Days: 0,
       Advance_Amount: "0",
       Curr: "",
       Deputy: "",
+      tripData: [],
     },
   });
 
@@ -54,6 +54,13 @@ export const NewForm = () => {
 
     openModel();
   }
+
+  const control = methods.control;
+
+  const watch_date = useWatch({
+    name: "tripData",
+    control,
+  });
 
   //  TODO 預防重新整理
   function alertUser(e: any) {
@@ -117,7 +124,7 @@ export const NewForm = () => {
               <InfoForm />
             </Block>
             <Block>
-              <TransportationForm />
+              <TransportationForm date={watch_date} />
             </Block>
             <TripDetailForm />
             <Block>

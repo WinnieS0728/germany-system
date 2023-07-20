@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux";
 import { Collapse } from "@/layouts/collapse";
 import { DetailTable } from "./detail table";
 import { DetailHeader } from "./detail header";
@@ -12,7 +12,7 @@ export const TripDetailForm = () => {
   const color = useTheme()?.color;
   const { control } = useFormContext();
   const { fields, append } = useFieldArray({
-    name: "tripDate",
+    name: "tripData",
     control,
   });
   const tripDetail = useAppSelector((state) => state.tripDetail);

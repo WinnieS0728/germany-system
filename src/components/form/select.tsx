@@ -11,6 +11,7 @@ interface selectProp {
   disable?: boolean;
   placeholder?: string;
   name?: string;
+  noOptionComponent?: string | JSX.Element;
 }
 
 const animateComponents = makeAnimated();
@@ -22,6 +23,7 @@ const Normal = ({
   autoClose,
   disable,
   placeholder,
+  noOptionComponent,
 }: selectProp) => {
   function handleChange(e: any) {
     // console.log(e);
@@ -44,6 +46,7 @@ const Normal = ({
         isDisabled={disable}
         placeholder={placeholder}
         className='w-full'
+        noOptionsMessage={() => noOptionComponent}
       />
     </>
   );
@@ -56,6 +59,7 @@ const Async = ({
   autoClose,
   disable,
   placeholder,
+  noOptionComponent
 }: selectProp) => {
   function handleChange(e: any) {
     if (e) {
@@ -77,6 +81,7 @@ const Async = ({
       isDisabled={disable}
       placeholder={placeholder}
       className='w-full'
+      noOptionsMessage={() => noOptionComponent}
     />
   );
 };
