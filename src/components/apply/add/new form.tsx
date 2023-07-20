@@ -34,7 +34,7 @@ export const NewForm = () => {
     mode: "onChange",
     defaultValues: {
       Transport: "",
-      IsLodging: "N",
+      IsLodging: "No",
       StayDays: 0,
       Days: 0,
       Advance_Amount: "0",

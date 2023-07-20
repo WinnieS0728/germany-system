@@ -1,7 +1,7 @@
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { MySelect } from "@components/form/select";
 import api from "@api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTheme } from "styled-components";
 import { DayPicker } from "react-day-picker";
 import { useAppSelector } from "@/hooks/redux";
@@ -15,7 +15,6 @@ interface propsType {
 export const HeaderForm = ({ className }: propsType) => {
   const color = useTheme()?.color;
   const timeData = useAppSelector((state) => state.time);
-  const [EmpOptions, setEmpOptions] = useState();
   const { register, handleSubmit, control, setValue } = useForm({
     shouldUnregister: true,
     criteriaMode: "all",
@@ -35,35 +34,42 @@ export const HeaderForm = ({ className }: propsType) => {
     console.log(d);
   }
 
-  const dept = useWatch({
-    name: "dept",
-    control,
-  });
-
   async function getDeptOptions() {
     const res = await api.getDept();
 
-    return res.map((i: { DeptName: string; DeptId: string }) => {
-      return {
-        label: i.DeptName,
-        value: i.DeptId,
-      };
-    });
+    const memberList = Promise.all(
+      res.map(async (d: { DeptId: string }) => {
+        const m = await api.getMember("", d.DeptId);
+        return {
+          id: d.DeptId,
+          member: m,
+        };
+      })
+    );
+
+    const deptHasMember = (await memberList).filter(
+      (i) => i.member.length !== 0
+    );
+
+    const options = deptHasMember.map((i) =>
+      res.find((d: { DeptId: string }) => d.DeptId === i.id)
+    );
+
+    return options;
   }
 
-  useEffect(() => {
-    async function set() {
-      const res = await api.getMember("", dept);
-      const options = res.map((i: { EmpName: string; EmpId: string }) => {
-        return {
-          label: i.EmpName,
-          value: i.EmpId,
-        };
-      });
-      setEmpOptions(options);
-    }
-    set();
-  }, [dept]);
+  async function getMemberList(input: string) {
+    const res = await api.getMember();
+
+    return res.filter((i: { EmpName: string }) =>
+      i.EmpName.toLowerCase().includes(input.toLowerCase())
+    );
+  }
+
+  const watch_dept = useWatch({
+    name: "dept",
+    control,
+  });
 
   const formStatusOptions = [
     { label: "已簽核", value: "succeeded" },
@@ -150,6 +156,9 @@ export const HeaderForm = ({ className }: propsType) => {
                   options={getDeptOptions}
                   onChange={onChange}
                   placeholder='選擇部門'
+                  getLabelFunction={(option: any) => option.DeptName}
+                  getValueFunction={(option: any) => option.DeptId}
+                  value='DeptId'
                 />
               )}
             />
@@ -157,10 +166,19 @@ export const HeaderForm = ({ className }: propsType) => {
               control={control}
               name='EmpId'
               render={({ field: { onChange } }) => (
-                <MySelect.Normal
-                  options={EmpOptions}
+                <MySelect.Async
+                  options={getMemberList}
                   onChange={onChange}
                   placeholder='選擇業務'
+                  getLabelFunction={(option: any) => option.EmpName}
+                  getValueFunction={(option: any) => option.EmpId}
+                  value='EmpId'
+                  filterFunction={(candidate) => {
+                    if (candidate.data.DeptId === watch_dept) {
+                      return true;
+                    }
+                    return false;
+                  }}
                 />
               )}
             />
@@ -175,7 +193,6 @@ export const HeaderForm = ({ className }: propsType) => {
                   options={formStatusOptions}
                   onChange={onChange}
                   placeholder='選擇狀態'
-                  clear
                 />
               )}
             />

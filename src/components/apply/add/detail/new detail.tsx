@@ -7,6 +7,7 @@ import * as Btns from "@components/UI/buttons";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useTheme } from "styled-components";
+import { useOptions } from "./options";
 
 interface trProps {
   label: string;
@@ -43,102 +44,18 @@ export const NewDetailForm = () => {
 
   const { closeModel } = useModelControl("newDetail");
 
-  interface optionsType {
-    label: string;
-    value: string;
-  }
-  function filterOptions(input: string, options: optionsType[]) {
-    return options.filter((o) =>
-      o.label.toLowerCase().includes(input.toLowerCase())
-    );
-  }
-
-  async function getEventOptions(input: string) {
-    const res = await api.getTripEvent();
-
-    const options = res.map(
-      (i: { ResourcesName: string; ResourcesId: string }) => {
-        return {
-          label: i.ResourcesName,
-          value: i.ResourcesName,
-        };
-      }
-    );
-
-    return filterOptions(input, options);
-  }
-  async function getAreaOptions(input: string) {
-    const res = await api.getArea("DEU");
-
-    const options = res.map((i: { Country: string; CountryId: string }) => {
-      return {
-        label: i.Country,
-        value: i.Country,
-      };
-    });
-
-    return filterOptions(input, options);
-  }
+  const { options } = useOptions();
 
   const watch_area = useWatch({
     name: "district",
     control,
   });
 
-  const [postOptions, setPostOptions] = useState();
-
-  useEffect(() => {
-    async function a() {
-      const res = await api.getPostCode();
-
-      const codeInThisState = res.filter(
-        (c: { state: string }) => c.state === watch_area
-      );
-
-      const noRepeatData = [
-        ...new Set(codeInThisState.map((i: { zipcode: string }) => i.zipcode)),
-      ];
-
-      const options = noRepeatData.map((code) => {
-        return {
-          label: code,
-          value: code,
-        };
-      });
-
-      setPostOptions(options as any);
-    }
-    a();
-  }, [watch_area]);
-
   const watch_postcode = useWatch({
     name: "postalCode",
     control,
   });
 
-  const [cusOptions, setCusOptions] = useState();
-
-  const getCusOptions = useCallback(
-    async function () {
-      const res = await api.getCus("DEU");
-
-      const cusInThisCity = res.filter(
-        (c: { PostalCode: string }) => c.PostalCode === watch_postcode
-      );
-
-      const cusOptions = cusInThisCity.map(
-        (i: { CustName: string; CustId: string }) => {
-          return {
-            label: i.CustName,
-            value: i.CustName,
-          };
-        }
-      );
-
-      setCusOptions(cusOptions);
-    },
-    [watch_postcode]
-  );
   const getCity = useMemo(
     async function () {
       const res = await api.getPostCode();
@@ -155,16 +72,15 @@ export const NewDetailForm = () => {
   );
 
   useEffect(() => {
-    getCusOptions();
     async function setCity() {
       setValue("city", await getCity);
     }
     setCity();
-  }, [getCusOptions, getCity, setValue]);
+  }, [getCity, setValue]);
 
   const dispatch = useAppDispatch();
   function onSubmit<T>(d: T) {
-    // console.log(d);
+    console.log(d);
     reset();
     dispatch(addData(d));
     closeModel();
@@ -175,7 +91,7 @@ export const NewDetailForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       onReset={() => {
         reset();
-        closeModel();
+        // closeModel();
       }}
       className={`w-full space-y-4 rounded-xl px-8 py-6`}
       style={{ backgroundColor: color.white }}
@@ -202,9 +118,12 @@ export const NewDetailForm = () => {
               name='purpose'
               render={({ field: { onChange } }) => (
                 <MySelect.Async
-                  options={getEventOptions}
+                  options={options.event}
                   onChange={onChange}
+                  value='ResourcesName'
                   placeholder='選擇出差事由...'
+                  getLabelFunction={(option: any) => option.ResourcesName}
+                  getValueFunction={(option: any) => option.ResourcesName}
                 />
               )}
             />
@@ -215,9 +134,12 @@ export const NewDetailForm = () => {
               name='district'
               render={({ field: { onChange } }) => (
                 <MySelect.Async
-                  options={getAreaOptions}
+                  options={options.area}
                   onChange={onChange}
+                  value='Country'
                   placeholder='選擇行政區...'
+                  getLabelFunction={(option: any) => option.Country}
+                  getValueFunction={(option: any) => option.Country}
                 />
               )}
             />
@@ -227,10 +149,22 @@ export const NewDetailForm = () => {
               control={control}
               name='postalCode'
               render={({ field: { onChange } }) => (
-                <MySelect.Normal
-                  options={postOptions}
+                <MySelect.Async
+                  options={options.postalCode}
                   onChange={onChange}
                   placeholder='選擇郵遞區號...'
+                  getLabelFunction={(option: any) =>
+                    `${option.zipcode} / ${option.place}`
+                  }
+                  getValueFunction={(option: any) => option.zipcode}
+                  filterFunction={(candidate) => {
+                    if (candidate.data.state === watch_area) {
+                      return true;
+                    }
+
+                    return false;
+                  }}
+                  value='zipcode'
                 />
               )}
             />
@@ -249,8 +183,8 @@ export const NewDetailForm = () => {
               control={control}
               name='cus'
               render={({ field: { onChange } }) => (
-                <MySelect.Normal
-                  options={cusOptions}
+                <MySelect.Async
+                  options={options.cus}
                   onChange={onChange}
                   placeholder='選擇客戶...'
                   noOptionComponent={
@@ -271,6 +205,15 @@ export const NewDetailForm = () => {
                       </button>
                     </a>
                   }
+                  getLabelFunction={(option: any) => option.CustName}
+                  getValueFunction={(option: any) => option.CustName}
+                  value='CustName'
+                  filterFunction={(candidate) => {
+                    if (candidate.data.PostalCode === watch_postcode) {
+                      return true;
+                    }
+                    return false;
+                  }}
                 />
               )}
             />

@@ -41,16 +41,17 @@ export const TransportationForm = ({ date }: formProp) => {
 
     let isStay;
     if (isStayList.some((i) => i)) {
-      isStay = "Y";
+      isStay = "Yes";
     } else {
-      isStay = "N";
+      isStay = "No";
     }
 
     const stayDayList = isStayList.map((i, index) => {
-      if (i) {
-        return getDays(date[index]) - 1;
-      } else {
+      if (!i) {
         return 0;
+      } else {
+        const days = getDays(date[index]) - 1;
+        return days > 0 ? days : 0;
       }
     });
     const stayDay = stayDayList.reduce((a, b) => a + b, 0);
@@ -101,7 +102,14 @@ export const TransportationForm = ({ date }: formProp) => {
       <div className='grid grid-cols-3'>
         <div className='stay label-input justify-start'>
           <label>是否住宿 :</label>
-          <label className='space-x-2'>
+          <input
+            type='text'
+            {...register("IsLodging")}
+            autoComplete='off'
+            className='w-[5em]'
+            readOnly
+          />
+          {/* <label className='space-x-2'>
             <input
               type='radio'
               {...register("IsLodging")}
@@ -116,7 +124,7 @@ export const TransportationForm = ({ date }: formProp) => {
               value={"N"}
             />
             <span>No</span>
-          </label>
+          </label> */}
         </div>
         <div className='stayDay label-input'>
           <label>住宿總天數 :</label>

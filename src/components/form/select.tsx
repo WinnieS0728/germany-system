@@ -1,4 +1,4 @@
-import Select from "react-select";
+import Select, { GetOptionLabel, GetOptionValue } from "react-select";
 import AsyncSelect from "react-select/async";
 
 import makeAnimated from "react-select/animated";
@@ -12,6 +12,10 @@ interface selectProp {
   placeholder?: string;
   name?: string;
   noOptionComponent?: string | JSX.Element;
+  getLabelFunction?: GetOptionLabel<any[]>;
+  getValueFunction?: GetOptionValue<any[]>;
+  filterFunction?: (candidate: any) => boolean;
+  value?: string;
 }
 
 const animateComponents = makeAnimated();
@@ -59,11 +63,16 @@ const Async = ({
   autoClose,
   disable,
   placeholder,
-  noOptionComponent
+  noOptionComponent,
+  getLabelFunction,
+  getValueFunction,
+  filterFunction,
+  value,
 }: selectProp) => {
   function handleChange(e: any) {
     if (e) {
-      onChange(e.value);
+      // console.log(e);
+      onChange(e[value as string]);
     } else {
       onChange("");
     }
@@ -75,6 +84,9 @@ const Async = ({
       cacheOptions
       defaultOptions
       loadOptions={options}
+      getOptionLabel={getLabelFunction}
+      getOptionValue={getValueFunction}
+      filterOption={filterFunction}
       onChange={handleChange}
       isClearable={clear}
       closeMenuOnSelect={autoClose}
