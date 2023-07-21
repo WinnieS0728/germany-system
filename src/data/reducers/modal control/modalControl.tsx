@@ -11,16 +11,16 @@ const initData: dataType = {
     isOpen: false,
   },
 };
-const modelControlSlice = createSlice({
-  name: "modelControl",
+const modalControlSlice = createSlice({
+  name: "modalControl",
   initialState: initData,
   reducers: {
-    toggleModel: (state, action) => {
+    toggleModal: (state, action) => {
       state[action.payload.name].isOpen = action.payload.status;
     },
   },
 });
 
-export default modelControlSlice.reducer;
+export default modalControlSlice.reducer;
 
-export const { toggleModel } = modelControlSlice.actions;
+export const { toggleModal } = modalControlSlice.actions;

@@ -10,10 +10,10 @@ import { AgentForm } from "./agent";
 import { AttachForm } from "./attach";
 import { NewDetailForm } from "./detail/new detail";
 import { useEffect } from "react";
-import { Model } from "@/layouts/model";
+import { Modal } from "@/layouts/modal";
 import { TripDetailForm } from "./detail/trip detail block";
 import { DevTool } from "@hookform/devtools";
-import { useModelControl } from "@/hooks/model control";
+import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { Confirm } from "./confirm/confirm";
 import { setDate } from "@/data/reducers/trip detail/trip detail";
@@ -46,14 +46,14 @@ export const NewForm = () => {
     },
   });
 
-  const { openModel } = useModelControl("review");
+  const { openModal } = useModalControl("review");
 
   const a = useAppSelector((state) => state.tripDetail);
 
   function onSubmit<T>(d: T) {
     // console.log(d);
     // console.log(a.body);
-    openModel();
+    openModal();
   }
 
   const control = methods.control;
@@ -114,12 +114,12 @@ export const NewForm = () => {
             <TopBtn icon={<Icons.Send />}>返回列表</TopBtn>
           </Link>
         </div>
-        <Model name='newDetail'>
+        <Modal name='newDetail'>
           <NewDetailForm />
-        </Model>
-        <Model name='review'>
+        </Modal>
+        <Modal name='review'>
           <Confirm />
-        </Model>
+        </Modal>
         <FormProvider {...methods}>
           <form
             id='business apply'

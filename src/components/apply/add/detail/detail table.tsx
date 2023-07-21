@@ -1,6 +1,6 @@
 import { Table } from "@/components/table/table";
 import { deleteData, setTarget } from "@/data/reducers/trip detail/trip detail";
-import { useModelControl } from "@/hooks/model control";
+import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch } from "@/hooks/redux";
 import { useEffect, useState } from "react";
 import { useTheme } from "styled-components";
@@ -13,7 +13,7 @@ type detailTableProps = {
 export const DetailTable = ({ data, index }: detailTableProps) => {
   const color = useTheme()?.color;
 
-  const { openModel } = useModelControl("newDetail");
+  const { openModal } = useModalControl("newDetail");
 
   const [hasData, setData] = useState<boolean>(false);
   const dataSet = data?.data;
@@ -41,7 +41,7 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
           style={{ borderColor: color.white }}
           onClick={() => {
             dispatch(setTarget(index + 1));
-            openModel();
+            openModal();
           }}
         >
           +新增

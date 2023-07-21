@@ -14,7 +14,12 @@ export default {
     threshold_bgc: "#D6EAFB",
     headForm_bgc: "#E6E5E5",
     createCus: "#FB5D00",
-    confirmTable_header:'#FFD9BE',
-    confirmTable_header_holiday:'#FF4401',
+    confirmTable: {
+      header: "#FFD9BE",
+      header_weekend: "#FF4401",
+      atu: "#f6f6f6",
+      old: "#DDEFFA",
+      new: "#CDFDCE",
+    },
   },
 };

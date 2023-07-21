@@ -1,23 +1,23 @@
-import { useModelControl } from "@/hooks/model control";
+import { useModalControl } from "@/hooks/modal control";
 import { useScroll } from "@/hooks/scroll control";
 
-interface modelProps {
+interface modalProps {
   name: string;
   children: JSX.Element;
 }
 
-export const Model = ({ name, children }: modelProps) => {
+export const Modal = ({ name, children }: modalProps) => {
   const { canScroll } = useScroll();
-  const { isModelShow, closeModel } = useModelControl(name);
+  const { isModalShow, closeModal } = useModalControl(name);
 
-  if (isModelShow) {
+  if (isModalShow) {
     canScroll(false);
   } else {
     canScroll(true);
   }
 
   function handleClick(e: React.SyntheticEvent) {
-    (e.target as HTMLElement)?.id === "background" && closeModel();
+    (e.target as HTMLElement)?.id === "background" && closeModal();
   }
 
   return (
@@ -25,7 +25,7 @@ export const Model = ({ name, children }: modelProps) => {
       id='background'
       className={`fixed inset-0 z-10 flex h-full w-full items-start justify-center overflow-auto bg-stone-800/75 pt-[15vh]`}
       style={{
-        display: isModelShow ? "flex" : "none",
+        display: isModalShow ? "flex" : "none",
       }}
       onClick={handleClick}
     >

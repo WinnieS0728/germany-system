@@ -10,7 +10,7 @@ import thresholdSlice from "@reducers/kpi threshold/threshold";
 import userSlice from "@reducers/nowUser";
 import tripDetailSlice from "@reducers/trip detail/trip detail";
 import dayPickerSlice from "@reducers/day picker/dayPickerControl";
-import modelControlSlice from "@reducers/model control/modelControl";
+import modalControlSlice from "@reducers/modal control/modalControl";
 
 const store = configureStore({
   reducer: {
@@ -23,7 +23,7 @@ const store = configureStore({
     threshold: thresholdSlice,
     tripDetail: tripDetailSlice,
     dayPicker: dayPickerSlice,
-    modelControl: modelControlSlice,
+    modalControl: modalControlSlice,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({

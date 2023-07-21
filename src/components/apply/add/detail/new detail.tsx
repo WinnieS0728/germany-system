@@ -1,6 +1,6 @@
 import { MySelect } from "@/components/form/select";
 import { pushData } from "@/data/reducers/trip detail/trip detail";
-import { useModelControl } from "@/hooks/model control";
+import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch } from "@/hooks/redux";
 import api from "@/lib/api";
 import * as Btns from "@components/UI/buttons";
@@ -55,7 +55,7 @@ export const NewDetailForm = () => {
     cusRef.current?.clearValue();
   }
 
-  const { closeModel } = useModelControl("newDetail");
+  const { closeModal } = useModalControl("newDetail");
 
   const { options } = useOptions();
 
@@ -96,7 +96,7 @@ export const NewDetailForm = () => {
     // console.log(d);
     reset();
     dispatch(pushData(d));
-    closeModel();
+    closeModal();
   }
 
   return (
@@ -105,7 +105,7 @@ export const NewDetailForm = () => {
       onReset={() => {
         reset();
         clearSelect();
-        // closeModel();
+        // closeModal();
       }}
       className={`w-full space-y-4 rounded-xl px-8 py-6`}
       style={{ backgroundColor: color.white }}
