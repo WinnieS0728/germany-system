@@ -2,6 +2,7 @@ import { Table } from "@/components/table/table";
 import { deleteData, setTarget } from "@/data/reducers/trip detail/trip detail";
 import { useModelControl } from "@/hooks/model control";
 import { useAppDispatch } from "@/hooks/redux";
+import { useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 
 type detailTableProps = {
@@ -14,7 +15,16 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
 
   const { openModel } = useModelControl("newDetail");
 
+  const [hasData, setData] = useState<boolean>(false);
   const dataSet = data?.data;
+  
+  useEffect(() => {
+    if (dataSet && dataSet.length !== 0) {
+      setData(true);
+    } else {
+      setData(false);
+    }
+  }, [dataSet]);
 
   const dispatch = useAppDispatch();
 
@@ -52,27 +62,33 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
             </tr>
           </thead>
           <tbody>
-            {dataSet?.map((d: any, id: number) => {
-              return (
-                <tr key={id}>
-                  <td>{id + 1}</td>
-                  <td>{d.district}</td>
-                  <td>{d.city}</td>
-                  <td>{d.purpose}</td>
-                  <td>{d.cus}</td>
-                  <td>{d.hotel}</td>
-                  <td>{d.PS}</td>
-                  <td
-                    className='cursor-pointer'
-                    onClick={() => {
-                      dispatch(deleteData(index + 1));
-                    }}
-                  >
-                    delete
-                  </td>
-                </tr>
-              );
-            })}
+            {hasData ? (
+              dataSet.map((d: any, id: number) => {
+                return (
+                  <tr key={id}>
+                    <td>{id + 1}</td>
+                    <td>{d.district}</td>
+                    <td>{d.city}</td>
+                    <td>{d.purpose}</td>
+                    <td>{d.cus}</td>
+                    <td>{d.hotel}</td>
+                    <td>{d.PS}</td>
+                    <td
+                      className='cursor-pointer'
+                      onClick={() => {
+                        dispatch(deleteData(index + 1));
+                      }}
+                    >
+                      delete
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan={8}>no data</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </Table>

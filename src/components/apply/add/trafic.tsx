@@ -68,6 +68,9 @@ export const TransportationForm = ({ date }: formProp) => {
   }, [stayDays, setValue]);
 
   function getDays(date: { startDate: string; endDate: string }): number {
+    if (!date) {
+      return 0;
+    }
     const start = new Date(`${date.startDate}:00:00:00`);
     const end = new Date(`${date.endDate}:00:00:00`);
 
@@ -75,7 +78,7 @@ export const TransportationForm = ({ date }: formProp) => {
     return days + 1 || 0;
   }
   const outDays = date
-    .map((d) => {
+    ?.map((d) => {
       return getDays(d);
     })
     .reduce((a, b) => a + b, 0);

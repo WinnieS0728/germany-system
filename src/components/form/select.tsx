@@ -16,6 +16,7 @@ interface selectProp {
   getValueFunction?: GetOptionValue<any[]>;
   filterFunction?: (candidate: any) => boolean;
   value?: string;
+  forwardRef?: any;
 }
 
 const animateComponents = makeAnimated();
@@ -68,6 +69,7 @@ const Async = ({
   getValueFunction,
   filterFunction,
   value,
+  forwardRef,
 }: selectProp) => {
   function handleChange(e: any) {
     if (e) {
@@ -80,6 +82,7 @@ const Async = ({
 
   return (
     <AsyncSelect
+      ref={forwardRef}
       components={animateComponents}
       cacheOptions
       defaultOptions

@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { statusType } from "@/types/api";
 
-export interface detailDataType {
+interface detailData_date {
+  startDate: "";
+  endDate: "";
+}
+interface detailDataType {
   id: number;
-  date: {
-    start: "";
-    end: "";
-  };
+  date: detailData_date;
   data: {
     district: string;
     city: string;
@@ -17,11 +18,11 @@ export interface detailDataType {
   }[];
 }
 
-export const initData: detailDataType = {
+const initData: detailDataType = {
   id: 0,
   date: {
-    start: "",
-    end: "",
+    startDate: "",
+    endDate: "",
   },
   data: [
     {
@@ -48,19 +49,26 @@ const tripDetailSlice = createSlice({
     setTarget: (state, action) => {
       state.target = action.payload;
     },
-    addData: (state, action) => {
+    addData: (state) => {
+      const newItem = {
+        id: state.body.length + 1,
+        date: initData.date,
+        data: [],
+      };
+      state.body.push(newItem);
+    },
+    setDate: (state, action) => {
+      if (!action.payload || action.payload.length === 0) {
+        return;
+      }
+      action.payload.forEach((i:detailData_date, index:number) => {
+        state.body[index].date = i;
+      });
+    },
+    pushData: (state, action) => {
       const targetItem = state.body.find((i) => i.id === state.target);
 
-      if (!targetItem) {
-        const newItem = {
-          id: state.body.length + 1,
-          date: initData.date,
-          data: [action.payload],
-        };
-        state.body.push(newItem);
-      } else {
-        targetItem?.data.push(action.payload);
-      }
+      targetItem?.data.push(action.payload);
     },
     deleteData: (state, action) => {
       const targetItem = state.body.find((i) => i.id === action.payload);
@@ -71,4 +79,5 @@ const tripDetailSlice = createSlice({
 
 export default tripDetailSlice.reducer;
 
-export const { setTarget, addData, deleteData } = tripDetailSlice.actions;
+export const { setTarget, addData, pushData, deleteData, setDate } =
+  tripDetailSlice.actions;

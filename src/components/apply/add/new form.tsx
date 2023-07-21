@@ -14,7 +14,9 @@ import { Model } from "@/layouts/model";
 import { TripDetailForm } from "./detail/trip detail block";
 import { DevTool } from "@hookform/devtools";
 import { useModelControl } from "@/hooks/model control";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { Confirm } from "./confirm/confirm";
+import { setDate } from "@/data/reducers/trip detail/trip detail";
 
 interface blockProp {
   children: JSX.Element;
@@ -49,9 +51,8 @@ export const NewForm = () => {
   const a = useAppSelector((state) => state.tripDetail);
 
   function onSubmit<T>(d: T) {
-    console.log(d);
-    console.log(a.body);
-
+    // console.log(d);
+    // console.log(a.body);
     openModel();
   }
 
@@ -61,6 +62,11 @@ export const NewForm = () => {
     name: "tripData",
     control,
   });
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(setDate(watch_date));
+  }, [watch_date, dispatch]);
 
   //  TODO 預防重新整理
   function alertUser(e: any) {
@@ -112,7 +118,7 @@ export const NewForm = () => {
           <NewDetailForm />
         </Model>
         <Model name='review'>
-          <h1>123</h1>
+          <Confirm />
         </Model>
         <FormProvider {...methods}>
           <form

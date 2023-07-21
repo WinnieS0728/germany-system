@@ -1,7 +1,8 @@
-import Select from "react-select";
+import Select, { SelectInstance } from "react-select";
 import AsyncSelect from "react-select/async";
 import { Controller, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
 
 const MySelect = (props: any) => {
   const { options, onChange, label, value, filter } = props;
@@ -108,6 +109,9 @@ export const QAQ = () => {
     { label: "a", name: "j", id: "010", group: "z" },
   ];
 
+  const asyncRef = useRef<SelectInstance<[]> | null>(null);
+  console.log(asyncRef.current);
+
   function onSubmit<T>(d: T) {
     console.log(d);
   }
@@ -133,16 +137,22 @@ export const QAQ = () => {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(asyncFilterOption(input, o));
-      }, 3000);
+      }, 500);
     });
+  }
+
+  function QQ() {
+    asyncRef.current?.clearValue();
   }
 
   const [gg, setGG] = useState("a");
   return (
     <>
       <form
+        id='a'
         onSubmit={handleSubmit(onSubmit)}
         onResetCapture={() => {
+          QQ();
           reset();
         }}
       >
@@ -197,11 +207,12 @@ export const QAQ = () => {
         <Controller
           control={control}
           name='select_E'
-          render={({ field: { onChange } }) => (
+          render={({ field: { onChange, ref } }) => (
             <AsyncSelect
               onChange={(e: any) => onChange(e)}
               defaultOptions
               cacheOptions
+              ref={asyncRef}
               loadOptions={getAsyncOptions as any}
               getOptionLabel={(option: { name: string }) => option.name}
               getOptionValue={(option: any) => option.id}

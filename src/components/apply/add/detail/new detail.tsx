@@ -1,13 +1,14 @@
 import { MySelect } from "@/components/form/select";
-import { addData } from "@/data/reducers/trip detail/trip detail";
+import { pushData } from "@/data/reducers/trip detail/trip detail";
 import { useModelControl } from "@/hooks/model control";
 import { useAppDispatch } from "@/hooks/redux";
 import api from "@/lib/api";
 import * as Btns from "@components/UI/buttons";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useTheme } from "styled-components";
 import { useOptions } from "./options";
+import { SelectInstance } from "react-select";
 
 interface trProps {
   label: string;
@@ -41,6 +42,18 @@ export const NewDetailForm = () => {
       PS: "",
     },
   });
+
+  const purposeRef = useRef<SelectInstance>(null);
+  const countryRef = useRef<SelectInstance>(null);
+  const postalCodeRef = useRef<SelectInstance>(null);
+  const cusRef = useRef<SelectInstance>(null);
+
+  function clearSelect() {
+    purposeRef.current?.clearValue();
+    countryRef.current?.clearValue();
+    postalCodeRef.current?.clearValue();
+    cusRef.current?.clearValue();
+  }
 
   const { closeModel } = useModelControl("newDetail");
 
@@ -80,9 +93,9 @@ export const NewDetailForm = () => {
 
   const dispatch = useAppDispatch();
   function onSubmit<T>(d: T) {
-    console.log(d);
+    // console.log(d);
     reset();
-    dispatch(addData(d));
+    dispatch(pushData(d));
     closeModel();
   }
 
@@ -91,6 +104,7 @@ export const NewDetailForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       onReset={() => {
         reset();
+        clearSelect();
         // closeModel();
       }}
       className={`w-full space-y-4 rounded-xl px-8 py-6`}
@@ -118,6 +132,7 @@ export const NewDetailForm = () => {
               name='purpose'
               render={({ field: { onChange } }) => (
                 <MySelect.Async
+                  forwardRef={purposeRef}
                   options={options.event}
                   onChange={onChange}
                   value='ResourcesName'
@@ -134,6 +149,7 @@ export const NewDetailForm = () => {
               name='district'
               render={({ field: { onChange } }) => (
                 <MySelect.Async
+                  forwardRef={countryRef}
                   options={options.area}
                   onChange={onChange}
                   value='Country'
@@ -150,6 +166,7 @@ export const NewDetailForm = () => {
               name='postalCode'
               render={({ field: { onChange } }) => (
                 <MySelect.Async
+                  forwardRef={postalCodeRef}
                   options={options.postalCode}
                   onChange={onChange}
                   placeholder='選擇郵遞區號...'
@@ -184,6 +201,7 @@ export const NewDetailForm = () => {
               name='cus'
               render={({ field: { onChange } }) => (
                 <MySelect.Async
+                  forwardRef={cusRef}
                   options={options.cus}
                   onChange={onChange}
                   placeholder='選擇客戶...'
