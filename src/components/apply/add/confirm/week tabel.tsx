@@ -1,14 +1,12 @@
 import { Table } from "@/components/table/table";
-import { useAppSelector } from "@/hooks/redux";
-import { timeFormat } from "d3";
-import { timeDay, timeMonday } from "d3-time";
 import { useTheme } from "styled-components";
 import { useData } from "./data";
 
-const Td = ({ data }: any) => {
+const Td = ({ data }: { data: any }) => {
   const color = useTheme()?.color;
+  const type = data?.data.purpose;
   let bgc;
-  switch (data.type) {
+  switch (type) {
     case "拜訪A.T.U.":
       bgc = color.confirmTable.atu;
       break;
@@ -20,26 +18,21 @@ const Td = ({ data }: any) => {
       break;
     default:
       bgc = color.white;
-      break;
   }
-  return <td style={{ backgroundColor: bgc }}>{data.cus}</td>;
+
+  return (
+    <td
+      style={{ backgroundColor: bgc }}
+    >
+      {data?.data.cus}
+    </td>
+  );
 };
 
 export const WeekTable = () => {
   const color = useTheme()?.color;
-  const timeData = useAppSelector((state) => state.time);
-  const nextMonday = timeDay.offset(timeMonday(new Date(timeData.today)), 7);
-  function getTime(date: Date): string {
-    return timeFormat("%Y-%m-%d")(date);
-  }
-  const nextWeekDays = [];
-  for (let t = 0; t < 7; t++) {
-    const day = getTime(timeDay.offset(nextMonday, t));
-    nextWeekDays.push(day);
-  }
-  //   console.log(nextWeekDays);
 
-  const dataSet = useData();
+  const { rows, nextWeekDays } = useData();
 
   return (
     <>
@@ -75,17 +68,18 @@ export const WeekTable = () => {
             </tr>
           </thead>
           <tbody>
-            {dataSet.map((data, index) => (
-              <tr key={index}>
-                <Td data={data.mon} />
-                <Td data={data.tue} />
-                <Td data={data.wed} />
-                <Td data={data.thu} />
-                <Td data={data.fri} />
-                <Td data={data.sat} />
-                <Td data={data.sun} />
-              </tr>
-            ))}
+            {rows.map((row, index) => {
+              return (
+                <tr key={index}>
+                  {row.map((r, i) => (
+                    <Td
+                      key={i}
+                      data={r}
+                    />
+                  ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </Table>

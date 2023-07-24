@@ -93,6 +93,7 @@ export const LongBtn = ({ type }: { type: "reset" | "submit" | "button" }) => {
     <>
       {type === "reset" && <Cancel />}
       {type === "submit" && <Submit />}
+      {type === "button" && <Submit />}
     </>
   );
 };

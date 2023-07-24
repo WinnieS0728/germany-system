@@ -1,113 +1,89 @@
 import { useAppSelector } from "@/hooks/redux";
+import { timeFormat } from "d3";
 import { timeDay } from "d3-time";
 
 export const useData = () => {
   const tripData = useAppSelector((state) => state.tripDetail);
+  const timeData = useAppSelector((state) => state.time);
 
-  function getWeekDay(date: Date): string {
-    let day = "";
-    const weekIndex = date.getDay();
-    switch (weekIndex) {
-      case 0:
-        day = "sun";
-        break;
-      case 1:
-        day = "mon";
-        break;
-      case 2:
-        day = "tue";
-        break;
-      case 3:
-        day = "wed";
-        break;
-      case 4:
-        day = "thu";
-        break;
-      case 5:
-        day = "fri";
-        break;
-      case 6:
-        day = "sat";
-        break;
-
-      default:
-        break;
-    }
-    return day;
+  function getTime(d: Date) {
+    return timeFormat("%Y-%m-%d")(d);
   }
 
-  function listAllDays(date: { startDate: string; endDate: string }) {
-    if (!date) {
-      return [];
+  const getNextWeekDays = () => {
+    const nextWeekDate = [];
+    for (let d = 0; d < 7; d++) {
+      nextWeekDate.push(
+        getTime(timeDay.offset(new Date(timeData.today), d + 7))
+      );
     }
-    const startDay = date.startDate;
+    return nextWeekDate;
+  };
+
+  const totalData = tripData.body
+    .map((i) => spread(i))
+    .reduce((a, b) => a.concat(b), []);
+
+  function dateFormatter(d: Date | string): string {
+    if (typeof d === "string") {
+      return d;
+    } else {
+      return timeFormat("%Y-%m-%d")(d as Date);
+    }
+  }
+
+  function getDayList(date: { startDate: string; endDate: string }) {
+    const dayList = [];
     const days =
       timeDay.count(new Date(date.startDate), new Date(date.endDate)) + 1;
-    const dayList = [];
-    for (let d = 0; d < days; d++) {
-      dayList.push(getWeekDay(timeDay.offset(new Date(startDay), d)));
+    for (let n = 0; n < days; n++) {
+      dayList.push(dateFormatter(timeDay.offset(new Date(date.startDate), n)));
     }
     return dayList;
   }
 
-  const data = tripData.body.map((i) => {
-    const data = i.data.map((i) => {
-      return {
-        type: i.purpose,
-        cus: i.cus,
-      };
-    });
-    return {
-      date: listAllDays(i.date),
-      data: data,
-    };
+  function spread(obj: any) {
+    const index = obj.data.length;
+    const data = [];
+    for (let i = 0; i < index; i++) {
+      data.push({
+        ...obj,
+        date: getDayList(obj.date),
+        data: obj.data[i],
+      });
+    }
+    return data;
+  }
+
+  const dataInThisWeek = getNextWeekDays().map((day) => {
+    return totalData.filter((data) => data.date.some((i: string) => i === day));
+    // .sort((a, b) => b.date.length - a.date.length);
   });
 
-  function getThisDaysData(dayName: string) {
-    const targetData = data.find((d) => d.date.some((w) => w === dayName));
+  // console.log(dataInThisWeek);
 
-    return targetData ? targetData.data : [];
-  }
-
-  const weekData = {
-    mon: getThisDaysData("mon"),
-    tue: getThisDaysData("tue"),
-    wed: getThisDaysData("wed"),
-    thu: getThisDaysData("thu"),
-    fri: getThisDaysData("fri"),
-    sat: getThisDaysData("sat"),
-    sun: getThisDaysData("sun"),
-  };
-  //   console.log(weekData);
-
-  const max = Math.max(
-    weekData.mon.length,
-    weekData.tue.length,
-    weekData.wed.length,
-    weekData.thu.length,
-    weekData.fri.length,
-    weekData.sat.length,
-    weekData.sun.length
+  const maxRow = Math.max(
+    dataInThisWeek[0].length,
+    dataInThisWeek[1].length,
+    dataInThisWeek[2].length,
+    dataInThisWeek[3].length,
+    dataInThisWeek[4].length,
+    dataInThisWeek[5].length,
+    dataInThisWeek[6].length
   );
 
-  const tableRows = [];
+  function newRow(n: number) {
+    const data = dataInThisWeek.map((data) => data[n]);
 
-  function newRow(index:number) {
-    return {
-        mon: weekData.mon[index] || {},
-        tue: weekData.tue[index] || {},
-        wed: weekData.wed[index] || {},
-        thu: weekData.thu[index] || {},
-        fri: weekData.fri[index] || {},
-        sat: weekData.sat[index] || {},
-        sun: weekData.sun[index] || {},
-    };
+    return data;
   }
-  for (let i = 0; i < max; i++) {
-    tableRows.push(newRow(i));
+
+  const tableRows = [];
+  for (let num = 0; num < maxRow; num++) {
+    tableRows.push(newRow(num));
   }
 
   console.log(tableRows);
 
-  return tableRows;
+  return { nextWeekDays: getNextWeekDays(), rows: tableRows, data: totalData };
 };

@@ -105,7 +105,7 @@ export const NewDetailForm = () => {
       onReset={() => {
         reset();
         clearSelect();
-        // closeModal();
+        closeModal();
       }}
       className={`w-full space-y-4 rounded-xl px-8 py-6`}
       style={{ backgroundColor: color.white }}

@@ -30,25 +30,16 @@ export const DetailHeader = ({ data, index }: headerProps) => {
   const { register, setValue } = useFormContext();
 
   const Footer = () => {
-    const goToday = () => {
-      setMonth(new Date(timeData.today));
-    };
     return (
       <span
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "center",
         }}
       >
         <p style={{ margin: 0, display: "flex", alignItems: "center" }}>
-          select 2 day
+          select 2 days
         </p>
-        <button
-          type='button'
-          onClick={goToday}
-        >
-          Today
-        </button>
       </span>
     );
   };
@@ -76,16 +67,16 @@ export const DetailHeader = ({ data, index }: headerProps) => {
     // console.log(d);
     setRange(d);
     if (isValid(d?.from) && isValid(d?.to)) {
-      setShow(false);
       setValue(`tripData.${index}`, {
         startDate: getTime(d.from as Date),
         endDate: getTime(d.to as Date),
       });
+      setShow(false);
     }
   }
 
   useEffect(() => {
-    if (range?.from && range.to) {
+    if (range && range.from && range.to) {
       dispatch(addDisabledDays(range));
     }
   }, [range, dispatch]);
@@ -141,7 +132,7 @@ export const DetailHeader = ({ data, index }: headerProps) => {
           month={month}
           onMonthChange={setMonth}
           captionLayout='dropdown-buttons'
-          disabled={cantSelect}
+          // disabled={cantSelect}
           style={{
             position: "absolute",
             top: "100%",
