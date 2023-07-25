@@ -1,25 +1,28 @@
 import { MySelect } from "@/components/form/select";
+import { useSelectRef } from "@/hooks/select ref";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 export const MoneyForm = () => {
-  const { register, control } = useFormContext();
+  const { register, control, setValue } = useFormContext();
 
   const moneyTypeOptions = [
-    { label: "台幣", value: "TW" },
-    { label: "美金", value: "US" },
-    { label: "歐元", value: "EU" },
+    { label: "歐元", value: "EUR" },
+    { label: "台幣", value: "TWD" },
+    { label: "人民幣", value: "RMB" },
+    { label: "美金", value: "USD" },
   ];
 
-  const [value, setValue] = useState<string>("0");
+  const [inputValue, setInputValue] = useState<string>("0");
+  const { newFormRef } = useSelectRef();
 
   function inputFilter(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.value) {
-      setValue("0");
+      setInputValue("0");
       return;
     }
     const value = e.target.value.replace(/[^\d]/g, "") || "0";
-    setValue(parseInt(value).toLocaleString());
+    setInputValue(parseInt(value).toLocaleString());
   }
 
   return (
@@ -35,9 +38,17 @@ export const MoneyForm = () => {
           })}
           onChangeCapture={inputFilter}
           autoComplete='off'
-          value={value}
+          value={inputValue}
           onFocusCapture={() => {
-            setValue("");
+            setInputValue("");
+          }}
+          onBlur={() => {
+            if (inputValue === "") {
+              setInputValue("0");
+              setValue("Advance_Amount", "0");
+              setValue("Curr", "");
+              newFormRef.curr.current?.clearValue();
+            }
           }}
         />
       </div>
@@ -48,6 +59,7 @@ export const MoneyForm = () => {
           name='Curr'
           render={({ field: { onChange } }) => (
             <MySelect.Normal
+              forwardRef={newFormRef.curr}
               options={moneyTypeOptions}
               onChange={onChange}
               placeholder='請選擇'

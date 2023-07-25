@@ -1,23 +1,14 @@
 import { MySelect } from "@/components/form/select";
-import { useAppSelector } from "@/hooks/redux";
-import api from "@/lib/api";
+import { useOptions } from "@/hooks/options";
+import { useSelectRef } from "@/hooks/select ref";
 import { Controller, useFormContext } from "react-hook-form";
 
 export const AgentForm = () => {
   const { control } = useFormContext();
-  const nowUser = useAppSelector((state) => state.nowUser);
 
-  async function getMemberOptions() {
-    const res = await api.getMember("", nowUser.body.DeptId);
-    return res
-      .filter((i: { EmpId: string }) => i.EmpId !== nowUser.body.EmpId)
-      .map((i: { EmpName: string; EmpId: string }) => {
-        return {
-          label: i.EmpName,
-          value: i.EmpId,
-        };
-      });
-  }
+  const { newFormRef } = useSelectRef();
+
+  const { options } = useOptions();
 
   return (
     <div className='label-input'>
@@ -27,8 +18,13 @@ export const AgentForm = () => {
         name='Deputy'
         render={({ field: { onChange } }) => (
           <MySelect.Async
-            options={getMemberOptions}
+            forwardRef={newFormRef.deputy}
             onChange={onChange}
+            options={options.agent}
+            getLabelFunction={(option: any) => option.EmpName}
+            getValueFunction={(option: any) => option.EmpId}
+            value='EmpId'
+            placeholder='選擇代理人...'
           />
         )}
       />

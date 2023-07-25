@@ -13,7 +13,7 @@ type detailTableProps = {
 export const DetailTable = ({ data, index }: detailTableProps) => {
   const color = useTheme()?.color;
 
-  const { openModal } = useModalControl("newDetail");
+  const [isOpen,toggleModal] = useModalControl("newDetail");
 
   const [hasData, setData] = useState<boolean>(false);
   const dataSet = data?.data;
@@ -41,7 +41,7 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
           style={{ borderColor: color.white }}
           onClick={() => {
             dispatch(setTarget(index + 1));
-            openModal();
+            toggleModal('on');
           }}
         >
           +新增

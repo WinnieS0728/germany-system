@@ -61,39 +61,53 @@ export const TopBtn = ({ children, icon, primary, style }: topBtnProp) => {
   );
 };
 
-export const LongBtn = ({ type }: { type: "reset" | "submit" | "button" }) => {
+type longBtn =
+  | {
+      type: "reset" | "submit";
+      style: "cancel" | "confirm";
+      form: string;
+    }
+  | {
+      type: "button";
+      style: "cancel" | "confirm";
+      onClick: () => void;
+    };
+export const LongBtn = (props: longBtn) => {
   const color = useTheme()?.color;
 
-  const className = "px-16 rounded-md";
-
-  const Cancel = () => {
-    return (
-      <button
-        type='reset'
-        className={className}
-        style={{ backgroundColor: color.red, color: color.white }}
-      >
-        取消
-      </button>
-    );
-  };
-  const Submit = () => {
-    return (
-      <button
-        type='submit'
-        className={className}
-        style={{ backgroundColor: color.sectionHeader, color: color.white }}
-      >
-        確認
-      </button>
-    );
-  };
+  let css;
+  let content;
+  switch (props.style) {
+    case "cancel":
+      css = { backgroundColor: color.red, color: color.white };
+      content = "取消";
+      break;
+    case "confirm":
+      css = {
+        backgroundColor: color.sectionHeader,
+        color: color.white,
+      };
+      content = "確認";
+      break;
+    default:
+      css = props.style;
+      break;
+  }
 
   return (
-    <>
-      {type === "reset" && <Cancel />}
-      {type === "submit" && <Submit />}
-      {type === "button" && <Submit />}
-    </>
+    <button
+      type={props.type}
+      form={props.type !== "button" ? props.form : ""}
+      className={"rounded-md px-16"}
+      style={css}
+      onClick={() => {
+        if (props.type !== "button") {
+          return;
+        }
+        props.onClick();
+      }}
+    >
+      {content}
+    </button>
   );
 };

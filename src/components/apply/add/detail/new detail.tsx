@@ -4,11 +4,11 @@ import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch } from "@/hooks/redux";
 import api from "@/lib/api";
 import * as Btns from "@components/UI/buttons";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useTheme } from "styled-components";
-import { useOptions } from "./options";
-import { SelectInstance } from "react-select";
+import { useOptions } from "../../../../hooks/options";
+import { useSelectRef } from "@/hooks/select ref";
 
 interface trProps {
   label: string;
@@ -43,19 +43,9 @@ export const NewDetailForm = () => {
     },
   });
 
-  const purposeRef = useRef<SelectInstance>(null);
-  const countryRef = useRef<SelectInstance>(null);
-  const postalCodeRef = useRef<SelectInstance>(null);
-  const cusRef = useRef<SelectInstance>(null);
+  const { newDetailRef, clearDetailSelect } = useSelectRef();
 
-  function clearSelect() {
-    purposeRef.current?.clearValue();
-    countryRef.current?.clearValue();
-    postalCodeRef.current?.clearValue();
-    cusRef.current?.clearValue();
-  }
-
-  const { closeModal } = useModalControl("newDetail");
+  const [isOpen, toggleModal] = useModalControl("newDetail");
 
   const { options } = useOptions();
 
@@ -96,16 +86,17 @@ export const NewDetailForm = () => {
     // console.log(d);
     reset();
     dispatch(pushData(d));
-    closeModal();
+    toggleModal("off");
   }
 
   return (
     <form
+      id='new detail'
       onSubmit={handleSubmit(onSubmit)}
       onReset={() => {
         reset();
-        clearSelect();
-        closeModal();
+        clearDetailSelect();
+        toggleModal("off");
       }}
       className={`w-full space-y-4 rounded-xl px-8 py-6`}
       style={{ backgroundColor: color.white }}
@@ -132,7 +123,7 @@ export const NewDetailForm = () => {
               name='purpose'
               render={({ field: { onChange } }) => (
                 <MySelect.Async
-                  forwardRef={purposeRef}
+                  forwardRef={newDetailRef.purpose}
                   options={options.event}
                   onChange={onChange}
                   value='ResourcesName'
@@ -149,7 +140,7 @@ export const NewDetailForm = () => {
               name='district'
               render={({ field: { onChange } }) => (
                 <MySelect.Async
-                  forwardRef={countryRef}
+                  forwardRef={newDetailRef.country}
                   options={options.area}
                   onChange={onChange}
                   value='Country'
@@ -166,7 +157,7 @@ export const NewDetailForm = () => {
               name='postalCode'
               render={({ field: { onChange } }) => (
                 <MySelect.Async
-                  forwardRef={postalCodeRef}
+                  forwardRef={newDetailRef.postalCode}
                   options={options.postalCode}
                   onChange={onChange}
                   placeholder='選擇郵遞區號...'
@@ -190,7 +181,7 @@ export const NewDetailForm = () => {
             <input
               type='text'
               {...register("city")}
-              className='w-full'
+              className='noBorder w-full'
               autoComplete='off'
               readOnly
             />
@@ -201,7 +192,7 @@ export const NewDetailForm = () => {
               name='cus'
               render={({ field: { onChange } }) => (
                 <MySelect.Async
-                  forwardRef={cusRef}
+                  forwardRef={newDetailRef.cus}
                   options={options.cus}
                   onChange={onChange}
                   placeholder='選擇客戶...'
@@ -257,8 +248,16 @@ export const NewDetailForm = () => {
         </tbody>
       </table>
       <div className='flex items-center justify-center gap-4'>
-        <Btns.LongBtn type='reset' />
-        <Btns.LongBtn type='submit' />
+        <Btns.LongBtn
+          type='reset'
+          style='cancel'
+          form='new detail'
+        />
+        <Btns.LongBtn
+          type='submit'
+          style='confirm'
+          form='new detail'
+        />
       </div>
     </form>
   );

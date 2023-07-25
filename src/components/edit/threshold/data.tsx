@@ -1,7 +1,7 @@
 import { useAppSelector } from "@/hooks/redux";
 
 export function GetData() {
-  const salesList = useAppSelector((state) => state.member);
+  const salesList = useAppSelector((state) => state.salesList);
   const threshold = useAppSelector((state) => state.threshold);
 
   const data = salesList.body.map((p) => {

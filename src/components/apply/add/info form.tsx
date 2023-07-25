@@ -1,5 +1,7 @@
 import { useAppSelector } from "@/hooks/redux";
 import { timeFormat } from "d3";
+import { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 
 interface infoPropType {
   title: string;
@@ -21,6 +23,12 @@ export const InfoForm = () => {
   function getDate(d: Date) {
     return timeFormat("%Y-%m-%d")(d);
   }
+  const { setValue } = useFormContext();
+
+  useEffect(() => {
+    setValue("DeptId", nowUser.body.DeptId);
+    setValue("CreateId", nowUser.body.EmpId);
+  }, [nowUser, setValue]);
 
   return (
     <div className='grid grid-cols-3 gap-2'>

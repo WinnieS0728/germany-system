@@ -1,8 +1,10 @@
+import { useOptions } from "@/hooks/options";
 import { useAppSelector } from "@/hooks/redux";
+import { useSelectRef } from "@/hooks/select ref";
 import { MySelect } from "@components/form/select";
 import { timeDay } from "d3-time";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Controller, useFormContext, useWatch } from "react-hook-form";
+import { useEffect, useMemo } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 
 interface date {
   startDate: string;
@@ -24,11 +26,25 @@ export const TransportationForm = ({ date }: formProp) => {
     { label: "其他", value: "other" },
   ];
 
+  const { options } = useOptions();
+
   const { register, control, setValue } = useFormContext();
+  const { newFormRef } = useSelectRef();
   const detailData = useAppSelector((state) => state.tripDetail);
   const stayList = detailData.body.map((d) => {
     return d.data.map((i) => i.hotel);
   });
+
+  function getDays(date: { startDate: string; endDate: string }): number {
+    if (!date || !date.startDate || !date.endDate) {
+      return 0;
+    }
+    const start = new Date(`${date.startDate}:00:00:00`);
+    const end = new Date(`${date.endDate}:00:00:00`);
+
+    const days = timeDay.count(start, end);
+    return days + 1 || 0;
+  }
 
   const stayDays = useMemo(() => {
     const isStayList = stayList.map((d) => {
@@ -67,21 +83,22 @@ export const TransportationForm = ({ date }: formProp) => {
     setValue("StayDays", stayDays.day);
   }, [stayDays, setValue]);
 
-  function getDays(date: { startDate: string; endDate: string }): number {
+  const outDays = useMemo(() => {
     if (!date) {
-      return 0;
+      return;
     }
-    const start = new Date(`${date.startDate}:00:00:00`);
-    const end = new Date(`${date.endDate}:00:00:00`);
-
-    const days = timeDay.count(start, end);
-    return days + 1 || 0;
-  }
-  const outDays = date
-    ?.map((d) => {
-      return getDays(d);
-    })
-    .reduce((a, b) => a + b, 0);
+    const dayList = date
+      .map((day) => [day.startDate, day.endDate])
+      .reduce((a, b) => a.concat(b), [])
+      .map((day) => new Date(day).getTime())
+      .sort((a, b) => a - b);
+    return (
+      timeDay.count(
+        new Date(dayList[0]),
+        new Date(dayList[dayList.length - 1])
+      ) + 1 || 0
+    );
+  }, [date]);
 
   useEffect(() => {
     setValue("Days", outDays);
@@ -95,9 +112,14 @@ export const TransportationForm = ({ date }: formProp) => {
           control={control}
           name='Transport'
           render={({ field: { onChange } }) => (
-            <MySelect.Normal
-              options={transportationOptions}
+            <MySelect.Async
+              forwardRef={newFormRef.transport}
+              options={options.transport}
               onChange={onChange}
+              getLabelFunction={(option: any) => option.ResourcesName}
+              getValueFunction={(option: any) => option.ResourcesId}
+              value='ResourcesId'
+              placeholder='選擇交通工具'
             />
           )}
         />
@@ -109,25 +131,9 @@ export const TransportationForm = ({ date }: formProp) => {
             type='text'
             {...register("IsLodging")}
             autoComplete='off'
-            className='w-[5em]'
+            className='noBorder w-[5em]'
             readOnly
           />
-          {/* <label className='space-x-2'>
-            <input
-              type='radio'
-              {...register("IsLodging")}
-              value={"Y"}
-            />
-            <span>Yes</span>
-          </label>
-          <label className='space-x-2'>
-            <input
-              type='radio'
-              {...register("IsLodging")}
-              value={"N"}
-            />
-            <span>No</span>
-          </label> */}
         </div>
         <div className='stayDay label-input'>
           <label>住宿總天數 :</label>
@@ -138,7 +144,7 @@ export const TransportationForm = ({ date }: formProp) => {
             })}
             autoComplete='off'
             readOnly
-            className='w-[5em]'
+            className='noBorder w-[5em]'
           />
         </div>
         <div className='totalDay label-input'>
@@ -150,7 +156,7 @@ export const TransportationForm = ({ date }: formProp) => {
             })}
             autoComplete='off'
             readOnly
-            className='w-[5em]'
+            className='noBorder w-[5em]'
           />
         </div>
       </div>

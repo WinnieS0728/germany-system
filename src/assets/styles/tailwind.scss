@@ -3,19 +3,23 @@
 @tailwind utilities;
 
 @layer components {
-    .top-btn-list {
-        @apply flex gap-2
-    }
+  .top-btn-list {
+    @apply flex gap-2;
 
-    .label-input {
-        @apply flex justify-center items-center gap-4;
-        
-        label {
-            @apply min-w-fit
-        }
+    button {
+      @apply p-0;
     }
+  }
 
-    .main-section-gap {
-        @apply flex flex-col gap-4
+  .label-input {
+    @apply flex items-center justify-center gap-4;
+
+    label {
+      @apply min-w-fit;
     }
+  }
+
+  .main-section-gap {
+    @apply flex flex-col gap-4;
+  }
 }

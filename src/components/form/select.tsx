@@ -17,6 +17,7 @@ interface selectProp {
   filterFunction?: (candidate: any) => boolean;
   value?: string;
   forwardRef?: any;
+  multi?: boolean;
 }
 
 const animateComponents = makeAnimated();
@@ -29,6 +30,8 @@ const Normal = ({
   disable,
   placeholder,
   noOptionComponent,
+  forwardRef,
+  multi,
 }: selectProp) => {
   function handleChange(e: any) {
     // console.log(e);
@@ -42,11 +45,12 @@ const Normal = ({
   return (
     <>
       <Select
+        ref={forwardRef}
         components={animateComponents}
         options={options}
         onChange={handleChange}
         isClearable={clear}
-        isMulti={false}
+        isMulti={multi}
         closeMenuOnSelect={autoClose}
         isDisabled={disable}
         placeholder={placeholder}
@@ -70,6 +74,7 @@ const Async = ({
   filterFunction,
   value,
   forwardRef,
+  multi,
 }: selectProp) => {
   function handleChange(e: any) {
     if (e) {
@@ -92,6 +97,7 @@ const Async = ({
       filterOption={filterFunction}
       onChange={handleChange}
       isClearable={clear}
+      isMulti={multi}
       closeMenuOnSelect={autoClose}
       isDisabled={disable}
       placeholder={placeholder}

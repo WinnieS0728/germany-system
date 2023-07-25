@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/hooks/redux";
 import { timeFormat } from "d3";
-import { timeDay } from "d3-time";
+import { timeDay, timeMonday } from "d3-time";
 
 export const useData = () => {
   const tripData = useAppSelector((state) => state.tripDetail);
@@ -13,16 +13,15 @@ export const useData = () => {
   const getNextWeekDays = () => {
     const nextWeekDate = [];
     for (let d = 0; d < 7; d++) {
-      nextWeekDate.push(
-        getTime(timeDay.offset(new Date(timeData.today), d + 7))
-      );
+      nextWeekDate.push(getTime(timeDay.offset(timeMonday(new Date()), d + 7)));
     }
     return nextWeekDate;
   };
 
   const totalData = tripData.body
     .map((i) => spread(i))
-    .reduce((a, b) => a.concat(b), []);
+    .reduce((a, b) => a.concat(b), [])
+    .sort((a, b) => new Date(a.date[0]).getTime() - new Date(b.date[0]).getTime());
 
   function dateFormatter(d: Date | string): string {
     if (typeof d === "string") {
@@ -83,7 +82,11 @@ export const useData = () => {
     tableRows.push(newRow(num));
   }
 
-  console.log(tableRows);
+  // console.log(tableRows);
 
-  return { nextWeekDays: getNextWeekDays(), rows: tableRows, data: totalData };
+  return {
+    nextWeekDays: getNextWeekDays(),
+    rows: tableRows,
+    spreadData: totalData,
+  };
 };

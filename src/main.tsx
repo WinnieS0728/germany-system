@@ -13,16 +13,12 @@ import theme from "@styles/theme.ts";
 import { Provider } from "react-redux";
 import store from "@/data/store";
 import { ToastContainer } from "react-toastify";
-import { QAQ } from "./qq2.tsx";
-import { Styled_MySection } from "./sc.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
   <Provider store={store}>
     <ThemeProvider theme={theme}>
       <HashRouter>
-        {/* <QAQ/> */}
-        {/* <Styled_MySection /> */}
         <App />
         <ToastContainer
           position='top-center'

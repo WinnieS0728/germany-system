@@ -102,7 +102,7 @@ input:not([type="submit"]) {
   color: black;
 }
 
-input[readonly]:not(.date) {
+input.noBorder {
   border: 0;
   cursor: default;
   background-color: transparent;

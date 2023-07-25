@@ -1,13 +1,13 @@
 import axios from "axios";
 
-export function getTripEvent(apiPath: string) {
-  return async function () {
+export function getEvent(apiPath: string) {
+  return async function (type: string) {
     const res = await axios({
       method: "POST",
       url: `${apiPath}/GetResource`,
       data: {
-        "type":"TripEvent"
-    }
+        type: type,
+      },
     });
     return res.data;
   };

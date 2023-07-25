@@ -1,6 +1,7 @@
 import { Table } from "@/components/table/table";
 import { useTheme } from "styled-components";
 import { useData } from "./data";
+import { useEffect, useState } from "react";
 
 const Td = ({ data }: { data: any }) => {
   const color = useTheme()?.color;
@@ -20,19 +21,21 @@ const Td = ({ data }: { data: any }) => {
       bgc = color.white;
   }
 
-  return (
-    <td
-      style={{ backgroundColor: bgc }}
-    >
-      {data?.data.cus}
-    </td>
-  );
+  return <td style={{ backgroundColor: bgc }}>{data?.data.cus}</td>;
 };
 
 export const WeekTable = () => {
   const color = useTheme()?.color;
 
   const { rows, nextWeekDays } = useData();
+  const [hasData, setHasData] = useState<boolean>(false);
+  useEffect(() => {
+    if (rows.length === 0) {
+      setHasData(false);
+    } else {
+      setHasData(true);
+    }
+  }, [rows]);
 
   return (
     <>
@@ -68,18 +71,22 @@ export const WeekTable = () => {
             </tr>
           </thead>
           <tbody>
-            {rows.map((row, index) => {
-              return (
-                <tr key={index}>
-                  {row.map((r, i) => (
-                    <Td
-                      key={i}
-                      data={r}
-                    />
-                  ))}
-                </tr>
-              );
-            })}
+            {hasData ? (
+              rows.map((row, index) => {
+                return (
+                  <tr key={index}>
+                    {row.map((r, i) => (
+                      <Td
+                        key={i}
+                        data={r}
+                      />
+                    ))}
+                  </tr>
+                );
+              })
+            ) : (
+              <tr><td colSpan={7}>no data</td></tr>
+            )}
           </tbody>
         </table>
       </Table>

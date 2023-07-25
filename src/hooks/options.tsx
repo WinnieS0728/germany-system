@@ -1,8 +1,10 @@
 import api from "@/lib/api";
+import { useAppSelector } from "./redux";
 
 export const useOptions = () => {
+  const nowUser = useAppSelector((state) => state.nowUser);
   async function getEventOptions(input: string) {
-    const res = await api.getTripEvent();
+    const res = await api.getEvent("TripEvent");
 
     return res.filter((o: { ResourcesName: string }) =>
       o.ResourcesName.toLowerCase().includes(input.toLowerCase())
@@ -34,10 +36,31 @@ export const useOptions = () => {
   }
 
   async function getCusOptions(input: string) {
-    const res = await api.getCus("DEU");
+    const res = await api.getCus('',"DEU");
 
     return res.filter((o: { CustName: string }) =>
       o.CustName.toLowerCase().includes(input.toLowerCase())
+    );
+  }
+
+  async function getTransportOptions(input: string) {
+    const res = await api.getEvent("Traffic");
+
+    return res.filter((o: { ResourcesName: string }) =>
+      o.ResourcesName.toLowerCase().includes(input.toLowerCase())
+    );
+  }
+
+  async function getAgentOptions(input: string) {
+    const res = await api.getMember("", nowUser.body.DeptId);
+    const notMe = res.filter(
+      (i: { EmpId: string }) => i.EmpId !== nowUser.body.EmpId
+    );
+
+    return notMe.filter(
+      (o: { EmpName: string; EmpId: string }) =>
+        o.EmpName.toLowerCase().includes(input.toLowerCase()) ||
+        o.EmpId.toLowerCase().includes(input.toLowerCase())
     );
   }
 
@@ -47,6 +70,8 @@ export const useOptions = () => {
       area: getAreaOptions,
       postalCode: getPostalCodeOptions,
       cus: getCusOptions,
+      transport: getTransportOptions,
+      agent: getAgentOptions,
     },
   };
 };

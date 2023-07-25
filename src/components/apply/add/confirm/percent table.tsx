@@ -1,15 +1,16 @@
 import { Table } from "@/components/table/table";
 import { useData } from "./data";
-import * as Btns from "@components/UI/buttons";
 import { useAppSelector } from "@/hooks/redux";
 import api from "@/lib/api";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useTheme } from "styled-components";
 
 export const PerCentTable = () => {
-  const { data } = useData();
-  const atuCus = data.filter((i) => i.data.purpose === "拜訪A.T.U.");
-  const oldCus = data.filter((i) => i.data.purpose === "拜訪現有客戶");
-  const newCus = data.filter((i) => i.data.purpose === "拜訪新客戶");
+  const color = useTheme()?.color;
+  const { spreadData } = useData();
+  const atuCus = spreadData.filter((i) => i.data.purpose === "拜訪A.T.U.");
+  const oldCus = spreadData.filter((i) => i.data.purpose === "拜訪現有客戶");
+  const newCus = spreadData.filter((i) => i.data.purpose === "拜訪新客戶");
   const allCus = atuCus.length + oldCus.length + newCus.length;
 
   function getPercent(n: number): string {
@@ -20,30 +21,46 @@ export const PerCentTable = () => {
   }
 
   const nowUser = useAppSelector((state) => state.nowUser);
-  console.log(nowUser.body.EmpId);
 
   const timeData = useAppSelector((state) => state.time);
-  const [thresHold, setThreshold] = useState(0);
+  const monthArray = useMemo(
+    () => [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+    []
+  );
+  const [threshold, setThreshold] = useState(0);
   useEffect(() => {
     async function getThreshold() {
       const res = await api.threshold.fetch(
         timeData.thisYear,
         nowUser.body.EmpId
       );
-      console.log(res[0]);
-      //   TODO setThreshold
+      const thisMonth = monthArray[new Date().getMonth()];
+      setThreshold(parseInt(res[0]?.[thisMonth]));
     }
     getThreshold();
-  }, [nowUser, timeData]);
+  }, [monthArray, nowUser, timeData]);
   return (
     <>
       <Table title='拜訪評估分析'>
         <table>
-          <thead>
+          <thead style={{backgroundColor:color.confirmTable.header}}>
             <tr>
               <th>目標值</th>
-              <th colSpan={2}>75</th>
-              <th>25</th>
+              <th colSpan={2}>{`≥ ${100 - threshold}`}</th>
+              <th>{`≤ ${threshold}`}</th>
             </tr>
           </thead>
           <tbody>
@@ -68,10 +85,6 @@ export const PerCentTable = () => {
           </tbody>
         </table>
       </Table>
-      <div className='flex items-center justify-center gap-4 py-4'>
-        <Btns.LongBtn type='reset' />
-        <Btns.LongBtn type='submit' />
-      </div>
     </>
   );
 };
