@@ -1,7 +1,6 @@
 // import logger from "redux-logger";
 
 import { configureStore } from "@reduxjs/toolkit";
-import colorReducer from "@reducers/color";
 import timeReducer from "@reducers/time";
 import salesListReducer from "@reducers/member/salesList";
 import personVisitSlice from "@reducers/visit data/person visit";
@@ -11,10 +10,10 @@ import userSlice from "@reducers/nowUser";
 import tripDetailSlice from "@reducers/trip detail/trip detail";
 import dayPickerSlice from "@reducers/day picker/dayPickerControl";
 import modalControlSlice from "@reducers/modal control/modalControl";
+import listFormStateSlice from "@reducers/apply list/apply list";
 
 const store = configureStore({
   reducer: {
-    color: colorReducer,
     time: timeReducer,
     nowUser: userSlice,
     salesList: salesListReducer,
@@ -24,6 +23,7 @@ const store = configureStore({
     tripDetail: tripDetailSlice,
     dayPicker: dayPickerSlice,
     modalControl: modalControlSlice,
+    listFormState: listFormStateSlice,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({

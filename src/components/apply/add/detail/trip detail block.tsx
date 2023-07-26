@@ -12,13 +12,13 @@ import { addData } from "@/data/reducers/trip detail/trip detail";
 export const TripDetailForm = () => {
   const color = useTheme()?.color;
   const { control } = useFormContext();
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: "tripData",
     control,
   });
   const tripDetail = useAppSelector((state) => state.tripDetail);
 
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   return (
     <>
@@ -31,7 +31,7 @@ export const TripDetailForm = () => {
               startDate: "",
               endDate: "",
             });
-            dispatch(addData())
+            dispatch(addData());
           }}
         >
           <TopBtn
@@ -47,22 +47,25 @@ export const TripDetailForm = () => {
       </div>
       {fields.map((field, index) => {
         return (
-          <Block key={field.id}>
-            <Collapse
-              main={
-                <DetailHeader
-                  data={field}
-                  index={index}
-                />
-              }
-              sub={
-                <DetailTable
-                  data={tripDetail.body[index]}
-                  index={index}
-                />
-              }
-            />
-          </Block>
+          // TODO 做個刪除吧
+          <>
+            <Block key={field.id}>
+              <Collapse
+                main={
+                  <DetailHeader
+                    data={field}
+                    index={index}
+                  />
+                }
+                sub={
+                  <DetailTable
+                    data={tripDetail.body[index]}
+                    index={index}
+                  />
+                }
+              />
+            </Block>
+          </>
         );
       })}
     </>

@@ -6,7 +6,7 @@ import { useModalControl } from "@/hooks/modal control";
 
 export const Confirm = () => {
   const color = useTheme()?.color;
-  const [isOpen,toggleModal] = useModalControl("review");
+  const [isOpen, toggleModal] = useModalControl("review");
   return (
     <article
       className='flex flex-col gap-4 px-6 py-4'
@@ -21,13 +21,13 @@ export const Confirm = () => {
           type='button'
           style='cancel'
           onClick={() => {
-            toggleModal('off');
+            toggleModal("off");
           }}
         />
         <Btns.LongBtn
           type='submit'
           style='confirm'
-          form="business apply"
+          form='business apply'
         />
       </div>
     </article>

@@ -36,7 +36,7 @@ export const useOptions = () => {
   }
 
   async function getCusOptions(input: string) {
-    const res = await api.getCus('',"DEU");
+    const res = await api.getCus("", "DEU");
 
     return res.filter((o: { CustName: string }) =>
       o.CustName.toLowerCase().includes(input.toLowerCase())
@@ -64,6 +64,44 @@ export const useOptions = () => {
     );
   }
 
+  async function getDeptOptions(input: string) {
+    const res = await api.getDept();
+
+    const memberList = Promise.all(
+      res.map(async (d: { DeptId: string }) => {
+        const m = await api.getMember("", d.DeptId);
+        return {
+          id: d.DeptId,
+          member: m,
+        };
+      })
+    );
+
+    const deptHasMember = (await memberList).filter(
+      (i) => i.member.length !== 0
+    );
+
+    const options = deptHasMember.map((i) =>
+      res.find((d: { DeptId: string }) => d.DeptId === i.id)
+    );
+
+    return options.filter(
+      (o: { DeptName: string; DeptId: string }) =>
+        o.DeptName.toLowerCase().includes(input.toLowerCase()) ||
+        o.DeptId.includes(input)
+    );
+  }
+
+  async function getMemberOptions(input: string) {
+    const res = await api.getMember();
+
+    return res.filter(
+      (i: { EmpName: string; EmpId: string }) =>
+        i.EmpName.toLowerCase().includes(input.toLowerCase()) ||
+        i.EmpId.includes(input)
+    );
+  }
+
   return {
     options: {
       event: getEventOptions,
@@ -72,6 +110,8 @@ export const useOptions = () => {
       cus: getCusOptions,
       transport: getTransportOptions,
       agent: getAgentOptions,
+      dept: getDeptOptions,
+      member: getMemberOptions,
     },
   };
 };

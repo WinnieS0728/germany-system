@@ -61,17 +61,17 @@ export const TopBtn = ({ children, icon, primary, style }: topBtnProp) => {
   );
 };
 
-type longBtn =
+type longBtn = { style: "cancel" | "confirm" } & (
   | {
       type: "reset" | "submit";
-      style: "cancel" | "confirm";
       form: string;
     }
   | {
       type: "button";
-      style: "cancel" | "confirm";
       onClick: () => void;
-    };
+    }
+);
+
 export const LongBtn = (props: longBtn) => {
   const color = useTheme()?.color;
 
@@ -105,6 +105,38 @@ export const LongBtn = (props: longBtn) => {
           return;
         }
         props.onClick();
+      }}
+    >
+      {content}
+    </button>
+  );
+};
+
+interface PageControlBtnProps {
+  type: "prev" | "next";
+  onClick: () => void;
+  disabled: boolean;
+}
+export const PageControlBtn = (props: PageControlBtnProps) => {
+  const { type, onClick, disabled } = props;
+  const color = useTheme()?.color;
+  let content;
+  if (type === "prev") {
+    content = "上一頁";
+  } else if (type === "next") {
+    content = "下一頁";
+  }
+  return (
+    <button
+      type='button'
+      onClick={() => {
+        onClick();
+      }}
+      disabled={disabled}
+      style={{
+        backgroundColor: color.sectionHeader,
+        color: color.white,
+        cursor: disabled ? "not-allowed" : "pointer",
       }}
     >
       {content}

@@ -4,10 +4,13 @@ import api from "@api";
 import { useState } from "react";
 import { useTheme } from "styled-components";
 import { DayPicker } from "react-day-picker";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { isValid } from "date-fns";
 import { timeFormat } from "d3";
 import * as Icons from "@components/UI/icons";
+import { useOptions } from "@/hooks/options";
+import { setProps } from "@/data/reducers/apply list/apply list";
+import { setListData } from "@/data/actions/apply list/set data";
 
 interface propsType {
   className?: string;
@@ -30,41 +33,14 @@ export const HeaderForm = ({ className }: propsType) => {
     },
   });
 
+  const dispatch = useAppDispatch();
   function onSubmit<T>(d: T) {
-    console.log(d);
+    // console.log(d);
+    dispatch(setProps(d));
+    dispatch(setListData(d));
   }
 
-  async function getDeptOptions() {
-    const res = await api.getDept();
-
-    const memberList = Promise.all(
-      res.map(async (d: { DeptId: string }) => {
-        const m = await api.getMember("", d.DeptId);
-        return {
-          id: d.DeptId,
-          member: m,
-        };
-      })
-    );
-
-    const deptHasMember = (await memberList).filter(
-      (i) => i.member.length !== 0
-    );
-
-    const options = deptHasMember.map((i) =>
-      res.find((d: { DeptId: string }) => d.DeptId === i.id)
-    );
-
-    return options;
-  }
-
-  async function getMemberList(input: string) {
-    const res = await api.getMember();
-
-    return res.filter((i: { EmpName: string }) =>
-      i.EmpName.toLowerCase().includes(input.toLowerCase())
-    );
-  }
+  const { options } = useOptions();
 
   const watch_dept = useWatch({
     name: "dept",
@@ -72,9 +48,10 @@ export const HeaderForm = ({ className }: propsType) => {
   });
 
   const formStatusOptions = [
-    { label: "已簽核", value: "succeeded" },
-    { label: "未簽核", value: "pending" },
-    { label: "作廢", value: "failed" },
+    { label: "未簽核", value: "1" },
+    { label: "已簽核", value: "2" },
+    { label: "退簽", value: "3" },
+    { label: "作廢", value: "4" },
   ];
 
   function getTime(d: Date | undefined) {
@@ -153,7 +130,7 @@ export const HeaderForm = ({ className }: propsType) => {
               name='dept'
               render={({ field: { onChange } }) => (
                 <MySelect.Async
-                  options={getDeptOptions}
+                  options={options.dept}
                   onChange={onChange}
                   placeholder='選擇部門'
                   getLabelFunction={(option: any) => option.DeptName}
@@ -167,7 +144,7 @@ export const HeaderForm = ({ className }: propsType) => {
               name='EmpId'
               render={({ field: { onChange } }) => (
                 <MySelect.Async
-                  options={getMemberList}
+                  options={options.member}
                   onChange={onChange}
                   placeholder='選擇業務'
                   getLabelFunction={(option: any) => option.EmpName}
