@@ -1,4 +1,4 @@
-import { TopBtn } from "@/components/UI/buttons";
+import { IconBtn } from "@/components/UI/buttons";
 import { Main } from "@/layouts/main";
 import * as Icons from "@components/UI/icons";
 import { Link } from "react-router-dom";
@@ -9,7 +9,7 @@ import { MoneyForm } from "./money";
 import { AgentForm } from "./agent";
 import { AttachForm } from "./attach";
 import { NewDetailForm } from "./detail/new detail";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Modal } from "@/layouts/modal";
 import { TripDetailForm } from "./detail/trip detail block";
 import { DevTool } from "@hookform/devtools";
@@ -22,6 +22,11 @@ import { timeDay, timeMonday } from "d3-time";
 import { timeFormat } from "d3";
 import api from "@/lib/api";
 import { useData } from "./confirm/data";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { dontShowError } from "@/hooks/no error plz";
+import { toast } from "react-toastify";
+import { ErrorsModal } from "./errors";
 
 interface blockProp {
   children: JSX.Element;
@@ -34,6 +39,29 @@ export const Block = ({ children }: blockProp) => {
     </div>
   );
 };
+
+const schema = yup.object().shape({
+  DeptId: yup.string(),
+  CreateId: yup.string(),
+  Transport: yup.string().required("不寫交通工具是要用跑的嗎"),
+  IsLodging: yup.string(),
+  StayDays: yup.number(),
+  Days: yup.number(),
+  Advance_Amount: yup.mixed(),
+  Curr: yup.string().when("Advance_Amount", {
+    is: (money: string) => money !== "0",
+    then: () => yup.string().required("幣別不寫給你玩具鈔票"),
+    otherwise: () => yup.string(),
+  }),
+  Deputy: yup.string().required("沒有代理人你要開分身回來做嗎"),
+  tripData: yup.array().of(
+    yup.object().shape({
+      startDate: yup.string().required("日期為必填"),
+      endDate: yup.string().required("日期為必填"),
+    })
+  ),
+});
+
 export const NewForm = () => {
   const timeData = useAppSelector((state) => state.time);
   function getNextWeekStartEnd() {
@@ -53,6 +81,7 @@ export const NewForm = () => {
     shouldUnregister: true,
     criteriaMode: "all",
     mode: "onChange",
+    resolver: yupResolver(schema),
     defaultValues: {
       DeptId: "",
       CreateId: "",
@@ -70,6 +99,8 @@ export const NewForm = () => {
   const { clearNewFormSelect } = useSelectRef();
 
   const [isOpen, toggleModal] = useModalControl("review");
+  const [isErrorModalOpen, toggleErrorModal] = useModalControl("errors");
+  dontShowError([isOpen, isErrorModalOpen]);
 
   const dateRange = getNextWeekStartEnd();
 
@@ -116,10 +147,9 @@ export const NewForm = () => {
     console.log(res);
   }
 
-  const control = methods.control;
   const watch_date = useWatch({
     name: "tripData",
-    control,
+    control: methods.control,
   });
 
   const dispatch = useAppDispatch();
@@ -128,16 +158,31 @@ export const NewForm = () => {
   }, [watch_date, dispatch]);
 
   //  TODO 預防重新整理
+  // useEffect(() => {
+  //   function alertUser(event: any) {
+  //     event.preventDefault();
+  //     event.returnValue = "";
+  //   }
+  //   window.addEventListener("beforeunload", alertUser);
+  //   return () => window.removeEventListener("beforeunload", alertUser);
+  // }, []);
 
-  useEffect(() => {
-    function alertUser(event: any) {
-      event.preventDefault();
-      event.returnValue = "";
+  const [myError, setMyError] = useState(methods.formState.errors);
+  function done() {
+    if (spreadData.length === 0) {
+      methods.setError("tripData", {
+        type: "custom",
+        message: "沒出差還想送單啊",
+      });
     }
-
-    // window.addEventListener("beforeunload", alertUser);
-    // return () => window.removeEventListener("beforeunload", alertUser);
-  }, []);
+    setMyError(methods.formState.errors);
+    methods.trigger();
+    if (methods.formState.isValid) {
+      toggleModal("on");
+    } else {
+      toggleErrorModal("on");
+    }
+  }
 
   return (
     <Main className='main-section-gap'>
@@ -145,29 +190,30 @@ export const NewForm = () => {
         <div className='top-btn-list'>
           <button
             type='button'
-            onClick={() => {
-              toggleModal("on");
-            }}
+            onClick={done}
           >
-            <TopBtn
+            <IconBtn
               icon={<Icons.Send />}
               primary
             >
               送簽表單
-            </TopBtn>
+            </IconBtn>
           </button>
           <button type='button'>
-            <TopBtn icon={<Icons.Send />}>暫存檔案</TopBtn>
+            <IconBtn icon={<Icons.Save />}>暫存檔案</IconBtn>
           </button>
           <button type='button'>
-            <TopBtn icon={<Icons.Send />}>附加文件</TopBtn>
+            <IconBtn icon={<Icons.AddFiles />}>附加文件</IconBtn>
           </button>
           <button type='button'>
             <Link to={"../"}>
-              <TopBtn icon={<Icons.Send />}>返回列表</TopBtn>
+              <IconBtn icon={<Icons.Back />}>返回列表</IconBtn>
             </Link>
           </button>
         </div>
+        <Modal name='errors'>
+          <ErrorsModal errors={myError} />
+        </Modal>
         <Modal name='newDetail'>
           <NewDetailForm />
         </Modal>
@@ -184,7 +230,7 @@ export const NewForm = () => {
               <InfoForm />
             </Block>
             <Block>
-              <TransportationForm date={watch_date} />
+              <TransportationForm />
             </Block>
             <TripDetailForm />
             <Block>

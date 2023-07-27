@@ -1,3 +1,4 @@
+import { Required } from "@/components/form/required";
 import { addDisabledDays } from "@/data/reducers/day picker/dayPickerControl";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { timeFormat } from "d3";
@@ -54,14 +55,14 @@ export const DetailHeader = ({ data, index }: headerProps) => {
   }
 
   const dispatch = useAppDispatch();
-  const disabledDays = useAppSelector((state) => state.dayPicker);
+  // const disabledDays = useAppSelector((state) => state.dayPicker);
 
-  const cantSelect = disabledDays.body.disabled.map((i) => {
-    return {
-      from: new Date(i.from),
-      to: new Date(i.to),
-    };
-  });
+  // const cantSelect = disabledDays.body.disabled.map((i) => {
+  //   return {
+  //     from: new Date(i.from),
+  //     to: new Date(i.to),
+  //   };
+  // });
 
   function handleSelect(d: dateType) {
     // console.log(d);
@@ -85,7 +86,7 @@ export const DetailHeader = ({ data, index }: headerProps) => {
     <div className='flex items-center justify-between'>
       <div className='relative flex gap-8'>
         <div className='startDate label-input gap-1 space-x-2'>
-          <label>出差日期(起)</label>
+          <label><Required />出差日期(起)</label>
           <input
             {...register(`tripData.${index}.startDate`)}
             className='date w-full'
@@ -104,7 +105,7 @@ export const DetailHeader = ({ data, index }: headerProps) => {
           />
         </div>
         <div className='endDate label-input gap-1 space-x-2'>
-          <label>出差日期(迄)</label>
+          <label><Required />出差日期(迄)</label>
           <input
             {...register(`tripData.${index}.endDate`)}
             className='date w-full'

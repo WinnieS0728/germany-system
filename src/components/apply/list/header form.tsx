@@ -1,6 +1,5 @@
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { MySelect } from "@components/form/select";
-import api from "@api";
 import { useState } from "react";
 import { useTheme } from "styled-components";
 import { DayPicker } from "react-day-picker";

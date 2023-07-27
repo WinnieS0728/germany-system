@@ -10,6 +10,9 @@ const initData: dataType = {
   review: {
     isOpen: false,
   },
+  errors: {
+    isOpen: false,
+  },
 };
 const modalControlSlice = createSlice({
   name: "modalControl",

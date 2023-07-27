@@ -15,11 +15,17 @@
     @apply flex items-center justify-center gap-4;
 
     label {
-      @apply min-w-fit;
+      @apply min-w-fit relative;
     }
   }
 
   .main-section-gap {
     @apply flex flex-col gap-4;
+  }
+
+  .error-ul {
+    li {
+      @apply leading-8
+    }
   }
 }

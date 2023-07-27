@@ -5,7 +5,7 @@ import { DetailHeader } from "./detail header";
 import { Block } from "../new form";
 import * as Icons from "@components/UI/icons";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { TopBtn } from "@/components/UI/buttons";
+import { IconBtn } from "@/components/UI/buttons";
 import { useTheme } from "styled-components";
 import { addData } from "@/data/reducers/trip detail/trip detail";
 
@@ -15,7 +15,7 @@ export const TripDetailForm = () => {
   const { fields, append, remove } = useFieldArray({
     name: "tripData",
     control,
-  });
+  });  
   const tripDetail = useAppSelector((state) => state.tripDetail);
 
   const dispatch = useAppDispatch();
@@ -34,7 +34,7 @@ export const TripDetailForm = () => {
             dispatch(addData());
           }}
         >
-          <TopBtn
+          <IconBtn
             style={{
               backgroundColor: color.sectionHeader,
               color: color.white,
@@ -42,14 +42,13 @@ export const TripDetailForm = () => {
             icon={<Icons.NewDetail />}
           >
             新增出差計畫
-          </TopBtn>
+          </IconBtn>
         </button>
       </div>
       {fields.map((field, index) => {
         return (
-          // TODO 做個刪除吧
-          <>
-            <Block key={field.id}>
+          <div key={field.id}>
+            <Block>
               <Collapse
                 main={
                   <DetailHeader
@@ -63,9 +62,13 @@ export const TripDetailForm = () => {
                     index={index}
                   />
                 }
+                remove={() => {
+                  remove(index);
+                }}
+                index={index}
               />
             </Block>
-          </>
+          </div>
         );
       })}
     </>

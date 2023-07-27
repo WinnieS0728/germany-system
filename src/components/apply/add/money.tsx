@@ -1,7 +1,8 @@
+import { Required } from "@/components/form/required";
 import { MySelect } from "@/components/form/select";
 import { useSelectRef } from "@/hooks/select ref";
 import { useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 export const MoneyForm = () => {
   const { register, control, setValue } = useFormContext();
@@ -12,6 +13,11 @@ export const MoneyForm = () => {
     { label: "人民幣", value: "RMB" },
     { label: "美金", value: "USD" },
   ];
+
+  const watch_money = useWatch({
+    name: "Advance_Amount",
+    control,
+  });
 
   const [inputValue, setInputValue] = useState<string>("0");
   const { newFormRef } = useSelectRef();
@@ -26,14 +32,14 @@ export const MoneyForm = () => {
   }
 
   return (
-    <div className='flex gap-4'>
+    <div className='flex gap-8'>
       <div className='label-input'>
         <label>預支差旅費 :</label>
         <input
           type='text'
           {...register("Advance_Amount", {
             setValueAs: (d: string) => {
-              return parseInt(d.replace(/,/g, ""));
+              return d.replace(/,/g, "");
             },
           })}
           onChangeCapture={inputFilter}
@@ -53,7 +59,7 @@ export const MoneyForm = () => {
         />
       </div>
       <div className='label-input'>
-        <label>幣別 :</label>
+        <label>{watch_money !== "0" && <Required />}幣別 :</label>
         <Controller
           control={control}
           name='Curr'

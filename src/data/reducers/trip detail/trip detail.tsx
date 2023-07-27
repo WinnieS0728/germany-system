@@ -61,7 +61,7 @@ const tripDetailSlice = createSlice({
       if (!action.payload || action.payload.length === 0) {
         return;
       }
-      action.payload.forEach((i:detailData_date, index:number) => {
+      action.payload.forEach((i: detailData_date, index: number) => {
         state.body[index].date = i;
       });
     },
@@ -69,6 +69,9 @@ const tripDetailSlice = createSlice({
       const targetItem = state.body.find((i) => i.id === state.target);
 
       targetItem?.data.push(action.payload);
+    },
+    deleteItem: (state, action) => {
+      state.body.splice(action.payload, 1);
     },
     deleteData: (state, action) => {
       const targetItem = state.body.find((i) => i.id === action.payload);
@@ -79,5 +82,5 @@ const tripDetailSlice = createSlice({
 
 export default tripDetailSlice.reducer;
 
-export const { setTarget, addData, pushData, deleteData, setDate } =
+export const { setTarget, addData, pushData, deleteData, setDate, deleteItem } =
   tripDetailSlice.actions;

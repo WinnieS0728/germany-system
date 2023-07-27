@@ -1,34 +1,26 @@
+import { Required } from "@/components/form/required";
 import { useOptions } from "@/hooks/options";
 import { useAppSelector } from "@/hooks/redux";
 import { useSelectRef } from "@/hooks/select ref";
 import { MySelect } from "@components/form/select";
 import { timeDay } from "d3-time";
 import { useEffect, useMemo } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 interface date {
   startDate: string;
   endDate: string;
 }
-interface formProp {
-  date: date[];
-}
-
-export const TransportationForm = ({ date }: formProp) => {
-  const transportationOptions = [
-    { label: "飛機", value: "airplane" },
-    { label: "高鐵", value: "HS rail" },
-    { label: "火車", value: "train" },
-    { label: "郵輪", value: "ship" },
-    { label: "計程車", value: "taxi" },
-    { label: "自用車", value: "private car" },
-    { label: "公務車", value: "business car" },
-    { label: "其他", value: "other" },
-  ];
-
+export const TransportationForm = () => {
   const { options } = useOptions();
 
   const { register, control, setValue } = useFormContext();
+  const watch_date: date[] = useWatch({
+    name: "tripData",
+    control,
+    defaultValue: [],
+  });
+
   const { newFormRef } = useSelectRef();
   const detailData = useAppSelector((state) => state.tripDetail);
   const stayList = detailData.body.map((d) => {
@@ -66,7 +58,7 @@ export const TransportationForm = ({ date }: formProp) => {
       if (!i) {
         return 0;
       } else {
-        const days = getDays(date[index]) - 1;
+        const days = getDays(watch_date[index]) - 1;
         return days > 0 ? days : 0;
       }
     });
@@ -76,7 +68,7 @@ export const TransportationForm = ({ date }: formProp) => {
       isStay: isStay,
       day: stayDay,
     };
-  }, [date, stayList]);
+  }, [watch_date, stayList]);
 
   useEffect(() => {
     setValue("IsLodging", stayDays.isStay);
@@ -84,10 +76,10 @@ export const TransportationForm = ({ date }: formProp) => {
   }, [stayDays, setValue]);
 
   const outDays = useMemo(() => {
-    if (!date) {
-      return;
+    if (watch_date.length === 0) {
+      return 0;
     }
-    const dayList = date
+    const dayList = watch_date
       .map((day) => [day.startDate, day.endDate])
       .reduce((a, b) => a.concat(b), [])
       .map((day) => new Date(day).getTime())
@@ -98,7 +90,7 @@ export const TransportationForm = ({ date }: formProp) => {
         new Date(dayList[dayList.length - 1])
       ) + 1 || 0
     );
-  }, [date]);
+  }, [watch_date]);
 
   useEffect(() => {
     setValue("Days", outDays);
@@ -107,7 +99,10 @@ export const TransportationForm = ({ date }: formProp) => {
   return (
     <fieldset className='space-y-2'>
       <div className='transportation label-input'>
-        <label>交通工具 :</label>
+        <label>
+          <Required />
+          交通工具 :
+        </label>
         <Controller
           control={control}
           name='Transport'

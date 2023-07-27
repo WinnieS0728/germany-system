@@ -3,10 +3,13 @@ import { WeekTable } from "./week tabel";
 import { PerCentTable } from "./percent table";
 import * as Btns from "@components/UI/buttons";
 import { useModalControl } from "@/hooks/modal control";
+import { dontShowError } from "@/hooks/no error plz";
 
 export const Confirm = () => {
   const color = useTheme()?.color;
   const [isOpen, toggleModal] = useModalControl("review");
+  dontShowError(isOpen)
+
   return (
     <article
       className='flex flex-col gap-4 px-6 py-4'

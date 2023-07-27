@@ -1,3 +1,4 @@
+import { Required } from "@/components/form/required";
 import { MySelect } from "@/components/form/select";
 import { useOptions } from "@/hooks/options";
 import { useSelectRef } from "@/hooks/select ref";
@@ -12,7 +13,7 @@ export const AgentForm = () => {
 
   return (
     <div className='label-input'>
-      <label>代理人 :</label>
+      <label><Required />代理人 :</label>
       <Controller
         control={control}
         name='Deputy'

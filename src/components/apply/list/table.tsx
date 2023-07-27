@@ -21,7 +21,6 @@ export const ListTable = () => {
     howManyDataShowInOnePage
   );
 
-  // TODO 把資料塞進表格
   return (
     <>
       <Table>

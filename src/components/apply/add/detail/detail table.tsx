@@ -4,6 +4,8 @@ import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch } from "@/hooks/redux";
 import { useEffect, useState } from "react";
 import { useTheme } from "styled-components";
+import * as Icons from "@components/UI/icons";
+import { dontShowError } from "@/hooks/no error plz";
 
 type detailTableProps = {
   data: any;
@@ -13,11 +15,13 @@ type detailTableProps = {
 export const DetailTable = ({ data, index }: detailTableProps) => {
   const color = useTheme()?.color;
 
-  const [isOpen,toggleModal] = useModalControl("newDetail");
+  const [isOpen, toggleModal] = useModalControl("newDetail");
+  dontShowError(isOpen)
+
 
   const [hasData, setData] = useState<boolean>(false);
   const dataSet = data?.data;
-  
+
   useEffect(() => {
     if (dataSet && dataSet.length !== 0) {
       setData(true);
@@ -41,7 +45,7 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
           style={{ borderColor: color.white }}
           onClick={() => {
             dispatch(setTarget(index + 1));
-            toggleModal('on');
+            toggleModal("on");
           }}
         >
           +新增
@@ -79,7 +83,9 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
                         dispatch(deleteData(index + 1));
                       }}
                     >
-                      delete
+                      <div className='flex items-center justify-center'>
+                        <Icons.Delete />
+                      </div>
                     </td>
                   </tr>
                 );

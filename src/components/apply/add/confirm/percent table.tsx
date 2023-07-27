@@ -48,7 +48,7 @@ export const PerCentTable = () => {
         nowUser.body.EmpId
       );
       const thisMonth = monthArray[new Date().getMonth()];
-      setThreshold(parseInt(res[0]?.[thisMonth]));
+      setThreshold(parseInt(res?.[0]?.[thisMonth]));
     }
     getThreshold();
   }, [monthArray, nowUser, timeData]);

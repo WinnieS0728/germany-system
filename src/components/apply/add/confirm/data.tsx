@@ -4,7 +4,6 @@ import { timeDay, timeMonday } from "d3-time";
 
 export const useData = () => {
   const tripData = useAppSelector((state) => state.tripDetail);
-  const timeData = useAppSelector((state) => state.time);
 
   function getTime(d: Date) {
     return timeFormat("%Y-%m-%d")(d);

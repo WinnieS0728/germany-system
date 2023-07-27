@@ -26,22 +26,19 @@ const styled_submitBtn = styled(SubmitBtn)`
     gap: .5rem;
     margin-block: .5rem;
     padding: .5rem 2rem;
-    svg{
-      transform: scale(1.5);
-    }
 `;
 
 export { styled_submitBtn as SubmitBtn };
 
-interface topBtnProp {
+interface IconBtnProp {
   children: JSX.Element | string;
-  icon?: JSX.Element;
+  icon: JSX.Element;
   primary?: boolean;
   style?: {
     [key: string]: string | number;
   };
 }
-export const TopBtn = ({ children, icon, primary, style }: topBtnProp) => {
+export const IconBtn = ({ children, icon, primary, style }: IconBtnProp) => {
   const color = useTheme()?.color;
 
   const css = {
