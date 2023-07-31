@@ -3,7 +3,7 @@ import { toggleModal } from "@/data/reducers/modal control/modalControl";
 
 export const useModalControl = (
   name: string
-): [boolean, (control: "on" | "off") => void] => {
+): [(control: "on" | "off") => void, boolean] => {
   const modalState = useAppSelector((state) => state.modalControl);
 
   const isShow = modalState[name].isOpen;
@@ -25,5 +25,5 @@ export const useModalControl = (
     );
   }
 
-  return [isShow, modalControl];
+  return [modalControl, isShow];
 };

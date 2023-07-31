@@ -5,7 +5,6 @@ import { useAppDispatch } from "@/hooks/redux";
 import { useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 import * as Icons from "@components/UI/icons";
-import { dontShowError } from "@/hooks/no error plz";
 
 type detailTableProps = {
   data: any;
@@ -15,8 +14,7 @@ type detailTableProps = {
 export const DetailTable = ({ data, index }: detailTableProps) => {
   const color = useTheme()?.color;
 
-  const [isOpen, toggleModal] = useModalControl("newDetail");
-  dontShowError(isOpen)
+  const [toggleModal] = useModalControl("newDetail");
 
 
   const [hasData, setData] = useState<boolean>(false);

@@ -48,7 +48,7 @@ export const PerCentTable = () => {
         nowUser.body.EmpId
       );
       const thisMonth = monthArray[new Date().getMonth()];
-      setThreshold(parseInt(res?.[0]?.[thisMonth]));
+      setThreshold(parseInt(res?.[0]?.[thisMonth]) || 0);
     }
     getThreshold();
   }, [monthArray, nowUser, timeData]);
@@ -56,7 +56,7 @@ export const PerCentTable = () => {
     <>
       <Table title='拜訪評估分析'>
         <table>
-          <thead style={{backgroundColor:color.confirmTable.header}}>
+          <thead style={{ backgroundColor: color.confirmTable.header }}>
             <tr>
               <th>目標值</th>
               <th colSpan={2}>{`≥ ${100 - threshold}`}</th>

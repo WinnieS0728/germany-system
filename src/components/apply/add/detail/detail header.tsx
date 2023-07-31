@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { timeFormat } from "d3";
 import { isValid } from "date-fns";
 import { useEffect, useState } from "react";
-import { DayPicker } from "react-day-picker";
+import { DateRange, DayPicker, SelectRangeEventHandler } from "react-day-picker";
 import { useFormContext } from "react-hook-form";
 import { useTheme } from "styled-components";
 
@@ -126,8 +126,8 @@ export const DetailHeader = ({ data, index }: headerProps) => {
         <DayPicker
           mode='range'
           footer={<Footer />}
-          selected={range as any}
-          onSelect={handleSelect as any}
+          selected={range as DateRange}
+          onSelect={handleSelect as SelectRangeEventHandler}
           fromYear={2022}
           toYear={+timeData.thisYear + 1}
           month={month}

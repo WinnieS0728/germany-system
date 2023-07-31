@@ -10,9 +10,10 @@ import { useTheme } from "styled-components";
 import { useOptions } from "../../../../hooks/options";
 import { useSelectRef } from "@/hooks/select ref";
 import { Required } from "@/components/form/required";
-import { dontShowError } from "@/hooks/no error plz";
 import { Modal } from "@/layouts/modal";
 import { ErrorsModal } from "../errors";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 interface trProps {
   label: string;
@@ -42,6 +43,7 @@ export const NewDetailForm = () => {
     control,
     reset,
     setValue,
+    trigger,
     formState: { errors, isValid },
   } = useForm({
     shouldUnregister: true,
@@ -60,9 +62,8 @@ export const NewDetailForm = () => {
 
   const { newDetailRef, clearDetailSelect } = useSelectRef();
 
-  const [isOpen, toggleModal] = useModalControl("newDetail");
-  const [is2Open, toggleErrorModal] = useModalControl("errors");
-  dontShowError([isOpen, is2Open]);
+  const [toggleModal] = useModalControl("newDetail");
+  const [toggleErrorModal] = useModalControl("errors");
 
   const { options } = useOptions();
 
@@ -98,15 +99,24 @@ export const NewDetailForm = () => {
     setCity();
   }, [getCity, setValue]);
 
-  console.log(errors);
+  useEffect(() => {
+    trigger();
+  }, [trigger]);
 
-  // TODO 用不出來
   const dispatch = useAppDispatch();
+  function validate() {
+    if (Object.keys(errors).length === 0) {
+      return;
+    } else {
+      toggleErrorModal("on");
+    }
+  }
+
   function onSubmit<T>(d: T) {
     // console.log(d);
-    // reset();
-    // dispatch(pushData(d));
-    // toggleModal("off");
+    reset();
+    dispatch(pushData(d));
+    toggleModal("off");
   }
 
   return (
@@ -148,7 +158,7 @@ export const NewDetailForm = () => {
               <Controller
                 control={control}
                 name='purpose'
-                rules={{ required: "出差事由為必填項目" }}
+                rules={{required:'出差事由必填'}}
                 render={({ field: { onChange } }) => (
                   <MySelect.Async
                     forwardRef={newDetailRef.purpose}
@@ -169,7 +179,7 @@ export const NewDetailForm = () => {
               <Controller
                 control={control}
                 name='district'
-                rules={{ required: "行政區為必填項目" }}
+                rules={{required:'行政區必填'}}
                 render={({ field: { onChange } }) => (
                   <MySelect.Async
                     forwardRef={newDetailRef.country}
@@ -190,7 +200,7 @@ export const NewDetailForm = () => {
               <Controller
                 control={control}
                 name='postalCode'
-                rules={{ required: "郵遞區號為必填項目" }}
+                rules={{required:'郵遞區號必填'}}
                 render={({ field: { onChange } }) => (
                   <MySelect.Async
                     forwardRef={newDetailRef.postalCode}
@@ -229,7 +239,7 @@ export const NewDetailForm = () => {
               <Controller
                 control={control}
                 name='cus'
-                rules={{ required: "客戶名稱為必填項目" }}
+                rules={{required:'客戶必填'}}
                 render={({ field: { onChange } }) => (
                   <MySelect.Async
                     forwardRef={newDetailRef.cus}
@@ -297,6 +307,7 @@ export const NewDetailForm = () => {
             type='submit'
             style='confirm'
             form='new detail'
+            onClick={validate}
           />
         </div>
       </form>

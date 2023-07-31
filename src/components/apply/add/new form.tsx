@@ -9,7 +9,7 @@ import { MoneyForm } from "./money";
 import { AgentForm } from "./agent";
 import { AttachForm } from "./attach";
 import { NewDetailForm } from "./detail/new detail";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { Modal } from "@/layouts/modal";
 import { TripDetailForm } from "./detail/trip detail block";
 import { DevTool } from "@hookform/devtools";
@@ -24,9 +24,8 @@ import api from "@/lib/api";
 import { useData } from "./confirm/data";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { dontShowError } from "@/hooks/no error plz";
-import { toast } from "react-toastify";
 import { ErrorsModal } from "./errors";
+import { UploadFiles } from "./upload files";
 
 interface blockProp {
   children: JSX.Element;
@@ -56,8 +55,8 @@ const schema = yup.object().shape({
   Deputy: yup.string().required("沒有代理人你要開分身回來做嗎"),
   tripData: yup.array().of(
     yup.object().shape({
-      startDate: yup.string().required("日期為必填"),
-      endDate: yup.string().required("日期為必填"),
+      startDate: yup.string().required("出差日期為必填"),
+      endDate: yup.string().required("出差日期為必填"),
     })
   ),
 });
@@ -98,13 +97,14 @@ export const NewForm = () => {
 
   const { clearNewFormSelect } = useSelectRef();
 
-  const [isOpen, toggleModal] = useModalControl("review");
-  const [isErrorModalOpen, toggleErrorModal] = useModalControl("errors");
-  dontShowError([isOpen, isErrorModalOpen]);
+  const [toggleModal] = useModalControl("review");
+  const [toggleErrorModal] = useModalControl("errors");
+  const [toggleFilesModal] = useModalControl("files");
 
   const dateRange = getNextWeekStartEnd();
 
   const { spreadData } = useData();
+  const tripDetailData = useAppSelector((state) => state.tripDetail).body;
 
   async function getCusId(name: string) {
     const res = await api.getCus(name, "DEU");
@@ -114,11 +114,12 @@ export const NewForm = () => {
 
   function onSubmit<T>(d: T) {
     const newFormData = { ...d, ...dateRange };
-    createNewForm(newFormData);
+    const formId = createNewForm(newFormData);
     const newData = Promise.all(
       spreadData.map(async (item, index) => {
         return {
-          BTPId: "",
+          // TODO 帶入 formID
+          BTPId: formId || "no id",
           Item: index + 1,
           CustId: await getCusId(item.data.cus),
           TripEvent: item.data.purpose,
@@ -166,16 +167,28 @@ export const NewForm = () => {
   //   window.addEventListener("beforeunload", alertUser);
   //   return () => window.removeEventListener("beforeunload", alertUser);
   // }, []);
-
-  const [myError, setMyError] = useState(methods.formState.errors);
-  function done() {
+  useEffect(() => {
     if (spreadData.length === 0) {
+      if (methods.formState.errors.tripData) {
+        return;
+      }
       methods.setError("tripData", {
         type: "custom",
         message: "沒出差還想送單啊",
       });
     }
-    setMyError(methods.formState.errors);
+    if (tripDetailData.some((d) => d.data.length === 0)) {
+      if (methods.formState.errors.tripData) {
+        return;
+      }
+      methods.setError("tripData", {
+        type: "custom",
+        message: "有漏欸",
+      });
+    }
+  }, [methods, spreadData, tripDetailData]);
+
+  function done() {
     methods.trigger();
     if (methods.formState.isValid) {
       toggleModal("on");
@@ -202,7 +215,12 @@ export const NewForm = () => {
           <button type='button'>
             <IconBtn icon={<Icons.Save />}>暫存檔案</IconBtn>
           </button>
-          <button type='button'>
+          <button
+            type='button'
+            onClick={() => {
+              toggleFilesModal("on");
+            }}
+          >
             <IconBtn icon={<Icons.AddFiles />}>附加文件</IconBtn>
           </button>
           <button type='button'>
@@ -212,13 +230,16 @@ export const NewForm = () => {
           </button>
         </div>
         <Modal name='errors'>
-          <ErrorsModal errors={myError} />
+          <ErrorsModal errors={methods.formState.errors} />
         </Modal>
         <Modal name='newDetail'>
           <NewDetailForm />
         </Modal>
         <Modal name='review'>
           <Confirm />
+        </Modal>
+        <Modal name='files'>
+          <UploadFiles />
         </Modal>
         <FormProvider {...methods}>
           <form

@@ -30,8 +30,10 @@ export const useOptions = () => {
       res.find((i: { zipcode: string }) => i.zipcode === d)
     );
 
-    return options.filter((o: { zipcode: string }) =>
-      o.zipcode.includes(input)
+    return options.filter(
+      (o: { zipcode: string; place: string }) =>
+        o.place.toLowerCase().includes(input.toLowerCase()) ||
+        o.zipcode.includes(input)
     );
   }
 

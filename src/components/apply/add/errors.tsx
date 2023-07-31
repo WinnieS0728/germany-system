@@ -1,20 +1,21 @@
 import { useModalControl } from "@/hooks/modal control";
-import { dontShowError } from "@/hooks/no error plz";
 import * as Icons from "@components/UI/icons";
+import { FieldError, FieldErrors } from "react-hook-form";
 import { useTheme } from "styled-components";
-export const ErrorsModal = ({ errors }: { errors: any }) => {
+export const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
   // console.log(errors);
 
   const color = useTheme()?.color;
-  const errorMessage = Object.values(errors).map((err: any) => err.message);
+  const errorMessage = Object.values(errors).map(
+    (err: any) => err.message
+  );
   const tripError = getTripDataError();
-  const [isOpen, toggleModal] = useModalControl("errors");
-  dontShowError(isOpen);
+  const [toggleModal] = useModalControl("errors");
 
   function getTripDataError() {
     if (Array.isArray(errors.tripData)) {
       const error = errors.tripData
-        .map((i: any) => [i?.startDate.message, i?.endDate.message])
+        .map((i: any) => [i?.startDate?.message, i?.endDate?.message])
         .reduce((a: string[], b: string[]) => a.concat(b), [])
         .filter((i: string) => i !== undefined);
       return [...new Set(error)];
@@ -27,7 +28,7 @@ export const ErrorsModal = ({ errors }: { errors: any }) => {
       style={{ backgroundColor: color.white }}
       className='rounded-xl p-4'
     >
-      <h2 className='border-b-4 py-4 text-center text-3xl'>驗證失敗</h2>
+      <h2 className='border-b-4 py-4 text-center text-3xl'>表單送出失敗</h2>
       <div className='flex'>
         <span
           style={{ fontSize: "10rem" }}
@@ -40,7 +41,7 @@ export const ErrorsModal = ({ errors }: { errors: any }) => {
             {errorMessage?.map((m, index) => (
               <li key={index}>{m}</li>
             ))}
-            {tripError?.map((m: any, index) => (
+            {tripError?.map((m: string, index) => (
               <li key={index}>{m}</li>
             ))}
           </ul>

@@ -2,7 +2,7 @@ import { useForm, Controller, useWatch } from "react-hook-form";
 import { MySelect } from "@components/form/select";
 import { useState } from "react";
 import { useTheme } from "styled-components";
-import { DayPicker } from "react-day-picker";
+import { DateRange, DayPicker, SelectRangeEventHandler } from "react-day-picker";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { isValid } from "date-fns";
 import { timeFormat } from "d3";
@@ -211,8 +211,8 @@ export const HeaderForm = ({ className }: propsType) => {
               <DayPicker
                 mode='range'
                 footer={<Footer />}
-                selected={range as any}
-                onSelect={handleSelect as any}
+                selected={range as DateRange}
+                onSelect={handleSelect as SelectRangeEventHandler}
                 fromYear={2022}
                 toYear={+timeData.thisYear + 1}
                 month={month}

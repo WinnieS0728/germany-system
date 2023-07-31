@@ -62,6 +62,7 @@ type longBtn = { style: "cancel" | "confirm" } & (
   | {
       type: "reset" | "submit";
       form: string;
+      onClick?: () => void;
     }
   | {
       type: "button";
@@ -98,7 +99,7 @@ export const LongBtn = (props: longBtn) => {
       className={"rounded-md px-16"}
       style={css}
       onClick={() => {
-        if (props.type !== "button") {
+        if (!props.onClick) {
           return;
         }
         props.onClick();

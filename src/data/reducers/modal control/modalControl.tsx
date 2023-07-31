@@ -13,6 +13,9 @@ const initData: dataType = {
   errors: {
     isOpen: false,
   },
+  files: {
+    isOpen: false,
+  },
 };
 const modalControlSlice = createSlice({
   name: "modalControl",

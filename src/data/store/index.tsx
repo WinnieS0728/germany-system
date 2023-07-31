@@ -11,6 +11,7 @@ import tripDetailSlice from "@reducers/trip detail/trip detail";
 import dayPickerSlice from "@reducers/day picker/dayPickerControl";
 import modalControlSlice from "@reducers/modal control/modalControl";
 import listFormStateSlice from "@reducers/apply list/apply list";
+import fileSlice from "@reducers/files/attach";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     dayPicker: dayPickerSlice,
     modalControl: modalControlSlice,
     listFormState: listFormStateSlice,
+    files: fileSlice,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({

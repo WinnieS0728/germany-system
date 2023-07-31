@@ -8,7 +8,7 @@ interface modalProps {
 
 export const Modal = ({ name, children }: modalProps) => {
   const { canScroll } = useScroll();
-  const [isModalShow, toggleModal] = useModalControl(name);
+  const [toggleModal, isModalShow] = useModalControl(name);
 
   if (isModalShow) {
     canScroll(false);
@@ -17,12 +17,13 @@ export const Modal = ({ name, children }: modalProps) => {
   }
 
   function handleClick(e: React.SyntheticEvent) {
-    (e.target as HTMLElement)?.id === "background" && toggleModal("off");
+    (e.target as HTMLElement)?.id === `${name}-background` &&
+      toggleModal("off");
   }
 
   return (
     <div
-      id='background'
+      id={`${name}-background`}
       className={`fixed inset-0 z-10 flex h-full w-full items-start justify-center overflow-auto bg-stone-800/75 pt-[15vh]`}
       style={{
         display: isModalShow ? "flex" : "none",
