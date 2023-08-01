@@ -11,6 +11,7 @@ import { addForm } from "./travel apply/create new form";
 import { pushNewData } from "./travel apply/push details";
 import { getBusinessApplyList } from "./travel apply/get list";
 import { getBusinessApplyDetail } from "./travel apply/get detail";
+import { getBusinessApplyHeader } from "./travel apply/get header";
 
 const apiPath = import.meta.env.VITE_API_PATH;
 
@@ -27,6 +28,7 @@ const api = {
   pushNewData: pushNewData(apiPath),
   getBusinessApplyList: getBusinessApplyList(apiPath),
   getBusinessApplyDetail: getBusinessApplyDetail(apiPath),
+  getBusinessApplyHeader: getBusinessApplyHeader(apiPath),
 };
 
 export default api;

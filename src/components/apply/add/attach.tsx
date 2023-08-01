@@ -1,18 +1,25 @@
 import { IconBtn } from "@/components/UI/buttons";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import * as Icons from "@components/UI/icons";
 import pdf from "@img/files/pdf_icon.svg";
 import excel from "@img/files/excel_icon.svg";
 import word from "@img/files/word_icon.svg";
 import ppt from "@img/files/ppt_icon.svg";
+import img from "@img/files/img_icon.svg";
+import normal from "@img/files/file_icon.svg";
 import styled from "styled-components";
+import { deleteFile } from "@/data/reducers/files/attach";
 
 const FileItem_o = ({
   file,
   className,
+  index,
+  d,
 }: {
   file: File;
   className?: string;
+  index: number;
+  d: (n: number) => void;
 }) => {
   function getFileSize(num: number): string {
     if (num <= 1000) {
@@ -24,16 +31,18 @@ const FileItem_o = ({
     }
   }
   function getFileType(file: File): string {
-    if (file.name.match(/.ppt[x]\b/g)) {
+    if (file.type.match(/^image/i)) {
+      return img;
+    } else if (file.name.match(/.pp(t|tx)$/i)) {
       return ppt;
-    } else if (file.name.match(/.xls[x]\b/i)) {
+    } else if (file.name.match(/.xl(s|sx)$/i)) {
       return excel;
-    } else if (file.name.match(/.doc[x]\b/i)) {
+    } else if (file.name.match(/.do(c|cx)$/i)) {
       return word;
-    } else if (file.name.match(/.pdf\b/i)) {
+    } else if (file.name.match(/.pdf$/i)) {
       return pdf;
     } else {
-      return "";
+      return normal;
     }
   }
   return (
@@ -45,8 +54,13 @@ const FileItem_o = ({
       <div className='content'>
         <h3 className='title'>{file.name}</h3>
         <p className='size'>{`size: ${getFileSize(file.size)}`}</p>
-        <button type='button'>
-          <IconBtn icon={<Icons.Delete />}>刪除</IconBtn>
+        <button
+          type='button'
+          onClick={() => {
+            d(index);
+          }}
+        >
+          <IconBtn icon={<Icons.Delete size="1.25rem"/>}>刪除</IconBtn>
         </button>
       </div>
     </section>
@@ -63,6 +77,8 @@ const FileItem = styled(FileItem_o)`
     display: flex;
     flex-flow: column;
     justify-content: space-between;
+    gap: .5rem;
+    flex: 1;
   }
   .title {
     font-size: 1.25rem;
@@ -72,14 +88,19 @@ const FileItem = styled(FileItem_o)`
     padding-left: 0.5rem;
     color: ${(props) => props.theme.color.sectionHeader};
   }
+  button {
+    padding: 0;
+    width: 10rem;
+  }
 `;
 
 export const AttachForm = () => {
   const fileData = useAppSelector((state) => state.files).body;
   // console.log(fileData);
 
-  function deleteFile(index: number) {
-    console.log(index);
+  const dispatch = useAppDispatch();
+  function deleteFiles(index: number) {
+    dispatch(deleteFile(index));
   }
 
   return (
@@ -89,6 +110,8 @@ export const AttachForm = () => {
         {fileData.map((file, index) => (
           <FileItem
             file={file}
+            index={index}
+            d={deleteFiles}
             key={index}
           />
         ))}
@@ -96,3 +119,13 @@ export const AttachForm = () => {
     </div>
   );
 };
+
+// E-system 新增德國管理報表，德國主管更能掌握業務以及客戶的狀況
+// 1. 讓業務可以知道超過4個月沒下單的或是超過6個月沒拜訪的客戶名單，業務可以去拜訪這些客戶(各業務只能看到自己的客戶，Ismail/Marcus可以看到全部)
+// 2. 每月各業務的銷售分成舊客戶跟新客戶(列出list)
+// 3. 讓業務可以看到客戶accounts receivable, coupons, points的狀況
+// 4. 可以查看每個客戶前筆訂單的金額跟數量
+// 5. 可以看到每個客戶OSOM登入次數(show by ranking from high to low)
+// 6. 每個業務每月目標達成狀況
+// 7. 每個員工每個月拜訪次數跟訂單數
+// 詳情如附件

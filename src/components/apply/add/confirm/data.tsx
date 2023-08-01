@@ -1,3 +1,4 @@
+import { dateFormatter } from "@/hooks/dateFormatter";
 import { useAppSelector } from "@/hooks/redux";
 import { timeFormat } from "d3";
 import { timeDay, timeMonday } from "d3-time";
@@ -21,14 +22,6 @@ export const useData = () => {
     .map((i) => spread(i))
     .reduce((a, b) => a.concat(b), [])
     .sort((a, b) => new Date(a.date[0]).getTime() - new Date(b.date[0]).getTime());
-
-  function dateFormatter(d: Date | string): string {
-    if (typeof d === "string") {
-      return d;
-    } else {
-      return timeFormat("%Y-%m-%d")(d as Date);
-    }
-  }
 
   function getDayList(date: { startDate: string; endDate: string }) {
     const dayList = [];

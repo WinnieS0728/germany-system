@@ -26,18 +26,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ErrorsModal } from "./errors";
 import { UploadFiles } from "./upload files";
-
-interface blockProp {
-  children: JSX.Element;
-  className?: string;
-}
-export const Block = ({ children }: blockProp) => {
-  return (
-    <div className={`rounded-md px-8 py-4 ring-2 ring-gray-300`}>
-      {children}
-    </div>
-  );
-};
+import { useTheme } from "styled-components";
+import { Block } from "@/layouts/block";
 
 const schema = yup.object().shape({
   DeptId: yup.string(),
@@ -62,6 +52,7 @@ const schema = yup.object().shape({
 });
 
 export const NewForm = () => {
+  const color = useTheme()?.color;
   const timeData = useAppSelector((state) => state.time);
   function getNextWeekStartEnd() {
     const thisMonday = timeMonday(new Date(timeData.today));
@@ -206,14 +197,19 @@ export const NewForm = () => {
             onClick={done}
           >
             <IconBtn
-              icon={<Icons.Send />}
+              icon={
+                <Icons.Send
+                  size='1.5rem'
+                  color={color.white}
+                />
+              }
               primary
             >
               送簽表單
             </IconBtn>
           </button>
           <button type='button'>
-            <IconBtn icon={<Icons.Save />}>暫存檔案</IconBtn>
+            <IconBtn icon={<Icons.Save size='1.5rem' />}>暫存檔案</IconBtn>
           </button>
           <button
             type='button'
@@ -221,11 +217,11 @@ export const NewForm = () => {
               toggleFilesModal("on");
             }}
           >
-            <IconBtn icon={<Icons.AddFiles />}>附加文件</IconBtn>
+            <IconBtn icon={<Icons.AddFiles size='1.5rem' />}>附加文件</IconBtn>
           </button>
           <button type='button'>
             <Link to={"../"}>
-              <IconBtn icon={<Icons.Back />}>返回列表</IconBtn>
+              <IconBtn icon={<Icons.Back size='1.25rem' />}>返回列表</IconBtn>
             </Link>
           </button>
         </div>
@@ -248,7 +244,7 @@ export const NewForm = () => {
             className='main-section-gap'
           >
             <Block>
-              <InfoForm />
+              <InfoForm type='addForm' />
             </Block>
             <Block>
               <TransportationForm />

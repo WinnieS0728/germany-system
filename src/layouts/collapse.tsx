@@ -7,17 +7,18 @@ import { deleteItem } from "@/data/reducers/trip detail/trip detail";
 interface collapseProp {
   main: JSX.Element;
   sub: JSX.Element;
-  remove: () => void;
+  remove?: () => void;
   index: number;
+  type: "addForm" | "sign";
 }
-export const Collapse = ({ main, sub, remove, index }: collapseProp) => {
+export const Collapse = ({ type, main, sub, remove, index }: collapseProp) => {
   const color = useTheme()?.color;
   const [open, setOpen] = useState(true);
 
   const dispatch = useAppDispatch();
   function handleDelete() {
     dispatch(deleteItem(index));
-    remove();
+    remove && remove();
   }
 
   return (
@@ -35,19 +36,21 @@ export const Collapse = ({ main, sub, remove, index }: collapseProp) => {
           >
             <span
               style={{
-                rotate: open ? ".5turn" : "0deg",
+                rotate: open ? "0deg" : ".5turn",
               }}
             >
-              <Icons.ShowDetail />
+              <Icons.ShowDetail color={color.blue} />
             </span>
             詳細資料
           </button>
-          <button
-            type='button'
-            onClick={handleDelete}
-          >
-            <Icons.Delete />
-          </button>
+          {type === "addForm" && (
+            <button
+              type='button'
+              onClick={handleDelete}
+            >
+              <Icons.Delete size='1.25rem' />
+            </button>
+          )}
         </div>
       </div>
       <div

@@ -11,9 +11,14 @@ const fileSlice = createSlice({
       array.push(action.payload);
       state.body = array;
     },
+    deleteFile: (state, action) => {
+      const array = [...state.body];
+      array.splice(action.payload, 1);
+      state.body = array;
+    },
   },
 });
 
 export default fileSlice.reducer;
 
-export const { addFile } = fileSlice.actions;
+export const { addFile, deleteFile } = fileSlice.actions;

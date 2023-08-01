@@ -82,7 +82,7 @@ export const DetailTable = ({ data, index }: detailTableProps) => {
                       }}
                     >
                       <div className='flex items-center justify-center'>
-                        <Icons.Delete />
+                        <Icons.Delete size="1.25rem"/>
                       </div>
                     </td>
                   </tr>

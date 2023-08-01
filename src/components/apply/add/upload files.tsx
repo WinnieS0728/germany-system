@@ -5,8 +5,60 @@ import styled, { useTheme } from "styled-components";
 import * as Btns from "@components/UI/buttons";
 import * as Icons from "@components/UI/icons";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch } from "@/hooks/redux";
 import { addFile } from "@/data/reducers/files/attach";
+
+const mineObj = [
+  {
+    id: "word",
+    type: {
+      doc: "application/msword",
+      docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    },
+  },
+  {
+    id: "ppt",
+    type: {
+      ppt: "application/vnd.ms-powerpoint",
+      pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    },
+  },
+  {
+    id: "excel",
+    type: {
+      xls: "application/vnd.ms-excel",
+      xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    },
+  },
+  {
+    id: "pdf",
+    type: {
+      pdf: "application/pdf",
+    },
+  },
+  {
+    id: "img",
+    type: {
+      jpeg: "image/jpeg",
+      png: "image/png",
+    },
+  },
+];
+
+function getAccept(typeList: string[]) {
+  const typeObj: { [key: string]: string[] } = {};
+  for (const type of typeList) {
+    const target = mineObj.find((i) => i.id === type);
+    if (!target) {
+      return;
+    }
+    const a = Object.entries(target.type);
+    for (const s of a) {
+      typeObj[s[1]] = [`.${s[0]}`];
+    }
+  }
+  return typeObj;
+}
 
 const getColor = (props: any) => {
   if (props.$isDragAccept) {
@@ -52,6 +104,7 @@ export const UploadFiles = () => {
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
       onDrop,
+      accept: getAccept(["img", "word", "ppt", "excel"]),
     });
 
   function handleDeleteFile(index: number) {
@@ -141,7 +194,7 @@ export const UploadFiles = () => {
                         handleDeleteFile(index);
                       }}
                     >
-                      <Icons.Delete />
+                      <Icons.Delete size="1.25rem"/>
                     </div>
                   </td>
                 </tr>

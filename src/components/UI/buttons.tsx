@@ -12,7 +12,7 @@ const SubmitBtn = ({ text, className }: propType) => {
       form='threshold'
       className={className}
     >
-      <Icons.Save />
+      <Icons.Save size="1.5rem"/>
       {text}
     </button>
   );

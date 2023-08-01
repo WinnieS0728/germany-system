@@ -1,5 +1,6 @@
+import { dateFormatter } from "@/hooks/dateFormatter";
 import { useAppSelector } from "@/hooks/redux";
-import { timeFormat } from "d3";
+import { component } from "@/types";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -18,11 +19,9 @@ const Info = ({ title, content, className }: infoPropType) => {
     </div>
   );
 };
-export const InfoForm = () => {
+export const InfoForm = ({ type, data }: component) => {
   const nowUser = useAppSelector((state) => state.nowUser);
-  function getDate(d: Date) {
-    return timeFormat("%Y-%m-%d")(d);
-  }
+
   const { setValue } = useFormContext();
 
   useEffect(() => {
@@ -34,27 +33,39 @@ export const InfoForm = () => {
     <div className='grid grid-cols-3 gap-2'>
       <Info
         title='表單號碼'
-        content='auto'
+        content={type === "addForm" ? "auto" : (data?.id as string)}
       />
       <Info
         title='建立日期'
-        content={getDate(new Date())}
+        content={
+          type === "addForm"
+            ? dateFormatter(new Date())
+            : (data?.createDate as string)
+        }
       />
       <Info
         title='簽核狀態'
-        content='未簽核'
+        content={type === "addForm" ? "未簽核" : (data?.status as string)}
       />
       <Info
         title='公司別'
-        content={nowUser.body.ResourcesName}
+        content={
+          type === "addForm"
+            ? nowUser.body.ResourcesName
+            : (data?.company as string)
+        }
       />
       <Info
         title='部門'
-        content={nowUser.body.DeptName}
+        content={
+          type === "addForm" ? nowUser.body.DeptName : (data?.dept as string)
+        }
       />
       <Info
         title='建檔人員'
-        content={nowUser.body.EmpName}
+        content={
+          type === "addForm" ? nowUser.body.EmpName : (data?.EmpName as string)
+        }
       />
     </div>
   );
