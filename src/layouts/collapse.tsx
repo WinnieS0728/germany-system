@@ -8,7 +8,7 @@ interface collapseProp {
   main: JSX.Element;
   sub: JSX.Element;
   remove?: () => void;
-  index: number;
+  index?: number;
   type: "addForm" | "sign";
 }
 export const Collapse = ({ type, main, sub, remove, index }: collapseProp) => {

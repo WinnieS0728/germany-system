@@ -1,3 +1,5 @@
+import { detailDataType } from "@/data/reducers/trip detail/trip detail";
+
 export type monthType =
   | "Jan"
   | "Feb"
@@ -18,6 +20,7 @@ export interface signDataType {
   status: string;
   company: string;
   dept: string;
+  EmpId: string;
   EmpName: string;
   transportation: string;
   isLodging: string;

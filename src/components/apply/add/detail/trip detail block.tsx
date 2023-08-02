@@ -59,6 +59,7 @@ export const TripDetailForm = () => {
                 }
                 sub={
                   <DetailTable
+                    type='addForm'
                     data={tripDetail.body[index]}
                     index={index}
                   />

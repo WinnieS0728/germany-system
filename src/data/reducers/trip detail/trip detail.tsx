@@ -1,21 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { statusType } from "@/types/api";
 
-interface detailData_date {
+export interface detailData_date {
   startDate: "";
   endDate: "";
 }
-interface detailDataType {
+export interface detailData_data {
+  district: string;
+  city: string;
+  purpose: string;
+  cus: string;
+  hotel: string;
+  PS: string;
+}
+export interface detailDataType {
   id: number;
-  date: detailData_date;
-  data: {
-    district: string;
-    city: string;
-    purpose: string;
-    cus: string;
-    hotel: string;
-    PS: string;
-  }[];
+  date: detailData_date | string[];
+  data: detailData_data[];
+}
+export interface detailDataWithSingleData {
+  id: number;
+  date: string[];
+  data: detailData_data;
 }
 
 const initData: detailDataType = {

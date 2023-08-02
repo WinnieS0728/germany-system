@@ -10,15 +10,34 @@ import { useTheme } from "styled-components";
 import { useSignPageData } from "./data";
 import { TransportationBlock } from "@/components/apply/sign/transport";
 import { Collapse } from "@/layouts/collapse";
-import { DetailHeader } from "@/components/apply/add/detail/detail header";
 import { DetailTable } from "@/components/apply/add/detail/detail table";
+import { DetailHeaderBlock } from "@/components/apply/sign/detail header";
+import { PerCentTable } from "@/components/apply/add/confirm/percent table";
+import { useTableData } from "./table data";
+import { WeekTable } from "@/components/apply/add/confirm/week tabel";
 
 export const SignPage = () => {
   const { formId } = useParams();
   const color = useTheme()?.color;
   const methods = useForm();
 
-  const data = useSignPageData(formId as string);
+  const { headData, detailData } = useSignPageData(formId as string);
+  // console.log(detailData);
+
+  const tableData = useTableData(detailData, headData.createDate);
+
+  const totalData = detailData
+    .reduce((a, b) => a.concat(b), [])
+    .sort((a, b) => timeSort(a.date) - timeSort(b.date));
+
+  function timeSort(date: string[]): number {
+    return new Date(date[0]).getTime();
+  }
+
+  const tripTime = {
+    year: totalData[0]?.date[0].split("-")[0],
+    month: totalData[0]?.date[0].split("-")[1],
+  };
 
   return (
     <>
@@ -81,35 +100,42 @@ export const SignPage = () => {
             <Block>
               <InfoForm
                 type='sign'
-                data={data}
+                data={headData}
               />
             </Block>
             <Block>
-              <TransportationBlock data={data} />
+              <TransportationBlock data={headData} />
             </Block>
             <Block>
-              <Collapse
-                type='sign'
-                main={
-                  <DetailHeader
-                    data={[]}
-                    index={1}
-                  />
-                }
-                sub={
-                  <DetailTable
-                    data={[]}
-                    index={1}
-                  />
-                }
-                index={1}
-              />
+              <div className="space-y-4">
+                <WeekTable data={tableData} />
+                <PerCentTable
+                  data={detailData}
+                  EmpId={headData.EmpId}
+                  time={tripTime}
+                />
+              </div>
+            </Block>
+            {detailData.map((data, index) => (
+              <Block key={index}>
+                <Collapse
+                  type='sign'
+                  main={<DetailHeaderBlock data={data} />}
+                  sub={
+                    <DetailTable
+                      type='sign'
+                      data={data}
+                      index={index}
+                    />
+                  }
+                />
+              </Block>
+            ))}
+            <Block>
+              <p>預支差旅費 : {headData.money}</p>
             </Block>
             <Block>
-              <p>預支差旅費 : {data.money}</p>
-            </Block>
-            <Block>
-              <p>代理人 : {data.agent}</p>
+              <p>代理人 : {headData.agent}</p>
             </Block>
             <Block>
               <p>表單附件 : </p>

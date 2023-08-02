@@ -1,16 +1,29 @@
 import { Table } from "@/components/table/table";
-import { useData } from "./data";
-import { useAppSelector } from "@/hooks/redux";
+import {
+  detailDataType,
+  detailDataWithSingleData,
+} from "@/data/reducers/trip detail/trip detail";
 import api from "@/lib/api";
 import { useEffect, useMemo, useState } from "react";
 import { useTheme } from "styled-components";
 
-export const PerCentTable = () => {
+export const PerCentTable = ({
+  data,
+  EmpId,
+  time,
+}: {
+  data: detailDataWithSingleData[][];
+  EmpId: string;
+  time: {
+    year: string;
+    month: string;
+  };
+}) => {
   const color = useTheme()?.color;
-  const { spreadData } = useData();
-  const atuCus = spreadData.filter((i) => i.data.purpose === "拜訪A.T.U.");
-  const oldCus = spreadData.filter((i) => i.data.purpose === "拜訪現有客戶");
-  const newCus = spreadData.filter((i) => i.data.purpose === "拜訪新客戶");
+  const totalData = data.reduce((a, b) => a.concat(b), []);
+  const atuCus = totalData.filter((i) => i.data?.purpose === "拜訪A.T.U.");
+  const oldCus = totalData.filter((i) => i.data?.purpose === "拜訪現有客戶");
+  const newCus = totalData.filter((i) => i.data?.purpose === "拜訪新客戶");
   const allCus = atuCus.length + oldCus.length + newCus.length;
 
   function getPercent(n: number): string {
@@ -19,10 +32,6 @@ export const PerCentTable = () => {
     }
     return ((n / allCus) * 100).toFixed(1);
   }
-
-  const nowUser = useAppSelector((state) => state.nowUser);
-
-  const timeData = useAppSelector((state) => state.time);
   const monthArray = useMemo(
     () => [
       "Jan",
@@ -43,15 +52,13 @@ export const PerCentTable = () => {
   const [threshold, setThreshold] = useState(0);
   useEffect(() => {
     async function getThreshold() {
-      const res = await api.threshold.fetch(
-        timeData.thisYear,
-        nowUser.body.EmpId
-      );
-      const thisMonth = monthArray[new Date().getMonth()];
+      const res = await api.threshold.fetch(time.year, EmpId);
+      const thisMonth =
+        monthArray[new Date(`2023-${time.month}-01`).getMonth()];
       setThreshold(parseInt(res?.[0]?.[thisMonth]) || 0);
     }
     getThreshold();
-  }, [monthArray, nowUser, timeData]);
+  }, [EmpId, monthArray, time]);
   return (
     <>
       <Table title='拜訪評估分析'>

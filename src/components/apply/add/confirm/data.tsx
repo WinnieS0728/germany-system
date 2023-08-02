@@ -1,11 +1,18 @@
+import {
+  detailDataType,
+  detailDataWithSingleData,
+  detailData_date,
+} from "@/data/reducers/trip detail/trip detail";
 import { dateFormatter } from "@/hooks/dateFormatter";
-import { useAppSelector } from "@/hooks/redux";
 import { timeFormat } from "d3";
 import { timeDay, timeMonday } from "d3-time";
 
-export const useData = () => {
-  const tripData = useAppSelector((state) => state.tripDetail);
-
+export interface dataForTable {
+  nextWeekDays: string[];
+  rows: (detailDataWithSingleData | undefined)[][];
+  spreadData: detailDataWithSingleData[];
+}
+export const useData = (data: detailDataType[], date: string): dataForTable => {
   function getTime(d: Date) {
     return timeFormat("%Y-%m-%d")(d);
   }
@@ -13,15 +20,19 @@ export const useData = () => {
   const getNextWeekDays = () => {
     const nextWeekDate = [];
     for (let d = 0; d < 7; d++) {
-      nextWeekDate.push(getTime(timeDay.offset(timeMonday(new Date()), d + 7)));
+      nextWeekDate.push(
+        getTime(timeDay.offset(timeMonday(new Date(date)), d + 7))
+      );
     }
     return nextWeekDate;
   };
 
-  const totalData = tripData.body
+  const totalData = data
     .map((i) => spread(i))
     .reduce((a, b) => a.concat(b), [])
-    .sort((a, b) => new Date(a.date[0]).getTime() - new Date(b.date[0]).getTime());
+    .sort(
+      (a, b) => new Date(a.date[0]).getTime() - new Date(b.date[0]).getTime()
+    );
 
   function getDayList(date: { startDate: string; endDate: string }) {
     const dayList = [];
@@ -33,13 +44,13 @@ export const useData = () => {
     return dayList;
   }
 
-  function spread(obj: any) {
+  function spread(obj: detailDataType) {
     const index = obj.data.length;
     const data = [];
     for (let i = 0; i < index; i++) {
       data.push({
         ...obj,
-        date: getDayList(obj.date),
+        date: getDayList(obj.date as detailData_date),
         data: obj.data[i],
       });
     }
@@ -47,8 +58,9 @@ export const useData = () => {
   }
 
   const dataInThisWeek = getNextWeekDays().map((day) => {
-    return totalData.filter((data) => data.date.some((i: string) => i === day));
-    // .sort((a, b) => b.date.length - a.date.length);
+    return totalData
+      .filter((data) => data.date.some((i: string) => i === day))
+      .sort((a, b) => b.date.length - a.date.length);
   });
 
   // console.log(dataInThisWeek);
@@ -64,7 +76,20 @@ export const useData = () => {
   );
 
   function newRow(n: number) {
-    const data = dataInThisWeek.map((data) => data[n]);
+    const initData: detailDataWithSingleData = {
+      id: 0,
+      date: [],
+      data: {
+        district: "",
+        city: "",
+        purpose: "",
+        cus: "",
+        hotel: "",
+        PS: "",
+      },
+    };
+
+    const data = dataInThisWeek.map((data) => (data[n] ? data[n] : initData));
 
     return data;
   }
@@ -73,8 +98,6 @@ export const useData = () => {
   for (let num = 0; num < maxRow; num++) {
     tableRows.push(newRow(num));
   }
-
-  // console.log(tableRows);
 
   return {
     nextWeekDays: getNextWeekDays(),

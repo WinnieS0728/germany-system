@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import api from "@/lib/api";
 import { dateFormatter } from "@/hooks/dateFormatter";
 import { signDataType } from "@/types";
+import { timeDay } from "d3-time";
+import { detailDataType, detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
 
 const initData: signDataType = {
   id: "",
@@ -9,6 +11,7 @@ const initData: signDataType = {
   status: "",
   company: "",
   dept: "",
+  EmpId: "",
   EmpName: "",
   transportation: "",
   isLodging: "",
@@ -17,8 +20,10 @@ const initData: signDataType = {
   money: "",
   agent: "",
 };
+
 export const useSignPageData = (formId: string) => {
-  const [dataSet, setData] = useState(initData);
+  const [headData, setData] = useState<signDataType>(initData);
+  const [detailData, setData2] = useState<detailDataWithSingleData[][]>([]);
 
   const getHeaderData = useCallback(() => {
     async function getData(id: string) {
@@ -46,7 +51,6 @@ export const useSignPageData = (formId: string) => {
     async function a() {
       const headerData = await getHeaderData();
       const detailData = await getDetailData();
-      //   console.log(headerData, detailData);
 
       const memberInfo = await getMemberInfo(headerData[0].Createid);
 
@@ -67,6 +71,20 @@ export const useSignPageData = (formId: string) => {
           return `${m} (${c})`;
         }
       }
+      function getDayList(date: {
+        startDate: string;
+        endDate: string;
+      }): string[] {
+        const dayList = [];
+        const days =
+          timeDay.count(new Date(date.startDate), new Date(date.endDate)) + 1;
+        for (let n = 0; n < days; n++) {
+          dayList.push(
+            dateFormatter(timeDay.offset(new Date(date.startDate), n))
+          );
+        }
+        return dayList;
+      }
 
       const data: signDataType = {
         id: headerData[0].BTPId,
@@ -74,6 +92,7 @@ export const useSignPageData = (formId: string) => {
         status: headerData[0].status,
         company: memberInfo[0].ResourcesName,
         dept: memberInfo[0].DeptName,
+        EmpId: memberInfo[0].EmpId,
         EmpName: memberInfo[0].EmpName,
         transportation: headerData[0].ResourcesName,
         isLodging: Lodging(headerData[0].IsLodging),
@@ -83,9 +102,46 @@ export const useSignPageData = (formId: string) => {
         agent: headerData[0].DeputyEmpName || "無人回應",
       };
       setData(data);
+
+      const data2: detailDataWithSingleData[] = detailData.map(
+        (data: any, index: number) => {
+          return {
+            id: index + 1,
+            date: getDayList({
+              startDate: dateFormatter(data.StartDT.split(" ")[0]),
+              endDate: dateFormatter(data.EndDT.split(" ")[0]),
+            }),
+            data: {
+              district: data.Area,
+              city: data.City,
+              purpose: data.ResourcesName,
+              cus: data.CustName,
+              hotel: data.Hotel,
+              PS: data.Description,
+            },
+          };
+        }
+      );
+      const data3 = [
+        ...new Set(
+          data2
+            .map((d) => {
+              return data2.filter((d2) =>
+                (d2.date as string[]).every(
+                  (date, index) => date === (d.date as string[])[index]
+                )
+              );
+            })
+            .map((d) => d.map((d2) => d2.id).join(","))
+        ),
+      ].map((d) =>
+        d.split(",").map((s) => data2.find((d2) => d2.id === parseInt(s)))
+      ) as detailDataWithSingleData[][];
+      
+      setData2(data3);
     }
     a();
   }, [formId, getDetailData, getHeaderData, getMemberInfo]);
 
-  return dataSet;
+  return { headData, detailData };
 };

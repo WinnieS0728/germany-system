@@ -1,7 +1,7 @@
 import { Table } from "@/components/table/table";
 import { useTheme } from "styled-components";
-import { useData } from "./data";
 import { useEffect, useState } from "react";
+import { dataForTable } from "./data";
 
 const Td = ({ data }: { data: any }) => {
   const color = useTheme()?.color;
@@ -24,10 +24,10 @@ const Td = ({ data }: { data: any }) => {
   return <td style={{ backgroundColor: bgc }}>{data?.data.cus}</td>;
 };
 
-export const WeekTable = () => {
+export const WeekTable = ({ data }: { data: dataForTable }) => {
   const color = useTheme()?.color;
 
-  const { rows, nextWeekDays } = useData();
+  const { rows, nextWeekDays } = data;
   const [hasData, setHasData] = useState<boolean>(false);
   useEffect(() => {
     if (rows.length === 0) {
@@ -85,7 +85,9 @@ export const WeekTable = () => {
                 );
               })
             ) : (
-              <tr><td colSpan={7}>no data</td></tr>
+              <tr>
+                <td colSpan={7}>no data</td>
+              </tr>
             )}
           </tbody>
         </table>

@@ -54,6 +54,7 @@ const schema = yup.object().shape({
 export const NewForm = () => {
   const color = useTheme()?.color;
   const timeData = useAppSelector((state) => state.time);
+  const tripDetail = useAppSelector((state) => state.tripDetail);
   function getNextWeekStartEnd() {
     const thisMonday = timeMonday(new Date(timeData.today));
     const nextMonday = timeDay.offset(thisMonday, 7);
@@ -94,7 +95,7 @@ export const NewForm = () => {
 
   const dateRange = getNextWeekStartEnd();
 
-  const { spreadData } = useData();
+  const { spreadData } = useData(tripDetail.body, timeData.today);
   const tripDetailData = useAppSelector((state) => state.tripDetail).body;
 
   async function getCusId(name: string) {
@@ -167,8 +168,7 @@ export const NewForm = () => {
         type: "custom",
         message: "沒出差還想送單啊",
       });
-    }
-    if (tripDetailData.some((d) => d.data.length === 0)) {
+    } else if (tripDetailData.some((d) => d.data.length === 0)) {
       if (methods.formState.errors.tripData) {
         return;
       }
@@ -176,6 +176,8 @@ export const NewForm = () => {
         type: "custom",
         message: "有漏欸",
       });
+    } else {
+      methods.clearErrors("tripData");
     }
   }, [methods, spreadData, tripDetailData]);
 
