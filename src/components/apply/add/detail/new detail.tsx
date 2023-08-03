@@ -44,7 +44,7 @@ export const NewDetailForm = () => {
     reset,
     setValue,
     trigger,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm({
     shouldUnregister: true,
     criteriaMode: "all",
@@ -132,7 +132,7 @@ export const NewDetailForm = () => {
           clearDetailSelect();
           toggleModal("off");
         }}
-        className={`w-full space-y-4 rounded-xl px-8 py-6`}
+        className={`modal`}
         style={{ backgroundColor: color.white }}
       >
         <table>

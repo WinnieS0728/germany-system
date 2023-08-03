@@ -1,6 +1,6 @@
 import { useModalControl } from "@/hooks/modal control";
 import * as Icons from "@components/UI/icons";
-import { FieldError, FieldErrors } from "react-hook-form";
+import { FieldErrors } from "react-hook-form";
 import { useTheme } from "styled-components";
 export const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
   // console.log(errors);
@@ -26,7 +26,7 @@ export const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
   return (
     <div
       style={{ backgroundColor: color.white }}
-      className='rounded-xl p-4'
+      className='modal'
     >
       <h2 className='border-b-4 py-4 text-center text-3xl'>表單送出失敗</h2>
       <div className='flex'>

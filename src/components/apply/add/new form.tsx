@@ -72,7 +72,7 @@ export const NewForm = () => {
     shouldUnregister: true,
     criteriaMode: "all",
     mode: "onChange",
-    resolver: yupResolver(schema),
+    // resolver: yupResolver(schema),
     defaultValues: {
       DeptId: "",
       CreateId: "",
@@ -144,7 +144,6 @@ export const NewForm = () => {
     name: "tripData",
     control: methods.control,
   });
-
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(setDate(watch_date));
@@ -164,20 +163,21 @@ export const NewForm = () => {
       if (methods.formState.errors.tripData) {
         return;
       }
+      methods.clearErrors("tripData");
       methods.setError("tripData", {
         type: "custom",
         message: "沒出差還想送單啊",
       });
-    } else if (tripDetailData.some((d) => d.data.length === 0)) {
+    }
+    if (tripDetailData.some((d) => d.data.length === 0)) {
       if (methods.formState.errors.tripData) {
         return;
       }
+      methods.clearErrors("tripData");
       methods.setError("tripData", {
         type: "custom",
         message: "有漏欸",
       });
-    } else {
-      methods.clearErrors("tripData");
     }
   }, [methods, spreadData, tripDetailData]);
 
@@ -227,18 +227,18 @@ export const NewForm = () => {
             </Link>
           </button>
         </div>
-        <Modal name='errors'>
+        {/* <Modal name='errors'>
           <ErrorsModal errors={methods.formState.errors} />
-        </Modal>
+        </Modal> */}
         <Modal name='newDetail'>
           <NewDetailForm />
         </Modal>
-        <Modal name='review'>
+        {/* <Modal name='review'>
           <Confirm />
         </Modal>
         <Modal name='files'>
           <UploadFiles />
-        </Modal>
+        </Modal> */}
         <FormProvider {...methods}>
           <form
             id='business apply'

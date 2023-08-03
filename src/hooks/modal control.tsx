@@ -1,12 +1,15 @@
 import { useAppDispatch, useAppSelector } from "./redux";
-import { toggleModal } from "@/data/reducers/modal control/modalControl";
+import {
+  modalList,
+  toggleModal,
+} from "@/data/reducers/modal control/modalControl";
 
 export const useModalControl = (
-  name: string
+  name: keyof modalList
 ): [(control: "on" | "off") => void, boolean] => {
   const modalState = useAppSelector((state) => state.modalControl);
 
-  const isShow = modalState[name].isOpen;
+  const isShow = modalState.body[name as keyof modalList];
 
   const dispatch = useAppDispatch();
 

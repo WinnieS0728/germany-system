@@ -136,7 +136,7 @@ export const UploadFiles = () => {
 
   return (
     <article
-      className='space-y-4 rounded-xl p-4'
+      className='space-y-4 modal'
       style={{ backgroundColor: color.white }}
     >
       <h2 className='border-b-4 py-4 text-center text-3xl'>檔案檔案</h2>

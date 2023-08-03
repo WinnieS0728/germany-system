@@ -1,28 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface dataType {
-  [key: string]: { isOpen: boolean };
-}
-const initData: dataType = {
-  newDetail: {
-    isOpen: false,
-  },
-  review: {
-    isOpen: false,
-  },
-  errors: {
-    isOpen: false,
-  },
-  files: {
-    isOpen: false,
-  },
+export type modalList = {
+  newDetail: boolean;
+  review: boolean;
+  errors: boolean;
+  files: boolean;
+  sign: boolean;
+  otherSign: boolean;
+};
+
+const initData: modalList = {
+  newDetail: false,
+  review: false,
+  errors: false,
+  files: false,
+  sign: false,
+  otherSign: false,
 };
 const modalControlSlice = createSlice({
   name: "modalControl",
-  initialState: initData,
+  initialState: {
+    body: initData,
+  },
   reducers: {
     toggleModal: (state, action) => {
-      state[action.payload.name].isOpen = action.payload.status;
+      state.body[action.payload.name as keyof modalList] =
+        action.payload.status;
     },
   },
 });

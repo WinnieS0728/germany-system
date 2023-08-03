@@ -1,5 +1,6 @@
 import { BiErrorAlt } from "react-icons/bi";
 import { AiFillPlusCircle } from "react-icons/ai";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 type icon = {
   size?: string;
@@ -582,3 +583,6 @@ export const Print = ({ size, color }: icon) => (
     </svg>
   </>
 );
+
+export const Password_show = () => <FaEye />;
+export const Password_hide = () => <FaEyeSlash />;

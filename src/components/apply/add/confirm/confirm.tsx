@@ -20,14 +20,14 @@ export const Confirm = () => {
 
   return (
     <article
-      className='flex flex-col gap-4 px-6 py-4'
+      className='flex flex-col gap-4 modal'
       style={{ backgroundColor: color.white }}
     >
       <h2 className='text-xl'>表單送簽</h2>
       <p>表單送出後, 如要更改或作廢請洽MIS</p>
       <WeekTable data={tablaData} />
       <PerCentTable
-        data={spreadData}
+        data={[spreadData]}
         EmpId={nowUser.body.EmpId}
         time={{ year: timeData.thisYear, month: timeData.thisMonth }}
       />

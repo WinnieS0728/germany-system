@@ -15,6 +15,10 @@ import { DetailHeaderBlock } from "@/components/apply/sign/detail header";
 import { PerCentTable } from "@/components/apply/add/confirm/percent table";
 import { useTableData } from "./table data";
 import { WeekTable } from "@/components/apply/add/confirm/week tabel";
+import { Modal } from "@/layouts/modal";
+import { SignBlock } from "@/components/sign/sign box";
+import { useModalControl } from "@/hooks/modal control";
+import { OtherSignBlock } from "@/components/sign/other sign block";
 
 export const SignPage = () => {
   const { formId } = useParams();
@@ -39,13 +43,27 @@ export const SignPage = () => {
     month: totalData[0]?.date[0].split("-")[1],
   };
 
+  const [toggleSignModal] = useModalControl("sign");
+  const [toggleOtherSignModal] = useModalControl("otherSign");
+
   return (
     <>
       <Header title='國內外出差申請單' />
       <Main className='main-section-gap'>
         <>
+          <Modal name='sign'>
+            <SignBlock type='sign' />
+          </Modal>
+          <Modal name='otherSign'>
+            <OtherSignBlock />
+          </Modal>
           <div className='top-btn-list'>
-            <button type='button'>
+            <button
+              type='button'
+              onClick={() => {
+                toggleSignModal("on");
+              }}
+            >
               <Btns.IconBtn
                 icon={
                   <Icons.Sign
@@ -58,7 +76,12 @@ export const SignPage = () => {
                 簽核表單
               </Btns.IconBtn>
             </button>
-            <button type='button'>
+            <button
+              type='button'
+              onClick={() => {
+                toggleOtherSignModal("on");
+              }}
+            >
               <Btns.IconBtn
                 icon={
                   <Icons.OtherSign
@@ -107,7 +130,7 @@ export const SignPage = () => {
               <TransportationBlock data={headData} />
             </Block>
             <Block>
-              <div className="space-y-4">
+              <div className='space-y-4'>
                 <WeekTable data={tableData} />
                 <PerCentTable
                   data={detailData}

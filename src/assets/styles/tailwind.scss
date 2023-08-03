@@ -28,4 +28,8 @@
       @apply leading-8
     }
   }
+
+  .modal {
+    @apply w-full rounded-xl px-8 py-6
+  }
 }

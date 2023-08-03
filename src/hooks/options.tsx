@@ -98,10 +98,65 @@ export const useOptions = () => {
     const res = await api.getMember();
 
     return res.filter(
-      (i: { EmpName: string; EmpId: string }) =>
-        i.EmpName.toLowerCase().includes(input.toLowerCase()) ||
+      (i: { FullName: string; EmpId: string }) =>
+        i.FullName.toLowerCase().includes(input.toLowerCase()) ||
         i.EmpId.includes(input)
     );
+  }
+
+  async function getDeptList() {
+    const res = await api.getDept();
+
+    const memberList = Promise.all(
+      res.map(async (d: { DeptId: string }) => {
+        const m = await api.getMember("", d.DeptId);
+        return {
+          id: d.DeptId,
+          member: m,
+        };
+      })
+    );
+
+    const deptHasMember = (await memberList).filter(
+      (i) => i.member.length !== 0
+    );
+
+    const options = deptHasMember.map((i) =>
+      res.find((d: { DeptId: string }) => d.DeptId === i.id)
+    );
+
+    return options;
+  }
+
+  async function getDeptMemberOptions(input: string) {
+    const deptList = await getDeptList();
+    const bigData = Promise.all(
+      deptList.map(async (dept) => {
+        const memberInThisDept = await api.getMember("", dept.DeptId);
+        return {
+          label: dept.DeptName,
+          options: memberInThisDept,
+        };
+      })
+    );
+    // console.log("data", await bigData);
+
+    return (await bigData)?.filter((i) => {
+      if (input.startsWith("!")) {
+        return i.options.some(
+          (d: { DeptName: string; DeptId: string }) =>
+            d.DeptName.toLowerCase().includes(
+              input.toLowerCase().replace("!", "")
+            ) || d.DeptId.includes(input.replace("!", ""))
+        );
+      } else {
+        return i.options.some(
+          (d: { FullName: string; EmpId: string }) =>
+            d.FullName.toLowerCase().includes(input.toLowerCase()) ||
+            d.EmpId.includes(input)
+        );
+      }
+    });
   }
 
   return {
@@ -114,6 +169,7 @@ export const useOptions = () => {
       agent: getAgentOptions,
       dept: getDeptOptions,
       member: getMemberOptions,
+      a: getDeptMemberOptions,
     },
   };
 };

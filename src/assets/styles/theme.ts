@@ -7,7 +7,7 @@ export default {
     sectionHeader: "#3C474F",
     navBgc: "#1D2F3C",
     navActive: "#FF5600",
-    tableBgc: "##E8E8E8",
+    tableBgc: "#E8E8E8",
     tableBgc_darker: "#868686",
     error_table: "#FFE3E4",
     submitBtn: "#FB8626",
@@ -22,5 +22,8 @@ export default {
       old: "#DDEFFA",
       new: "#CDFDCE",
     },
+    sign_header: "#FFAB28",
+    sign_content: "#FFE2CB",
+    green: "#7cf29d",
   },
 };
