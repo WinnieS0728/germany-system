@@ -9,23 +9,9 @@ import { Required } from "../form/required";
 import { useModalControl } from "@/hooks/modal control";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { setErrors } from "@/data/reducers/error/errors";
-
-const signSchema = yup.object().shape({
-  agree: yup.string().required("沒決定"),
-  password: yup.string().required("沒密碼"),
-  opinion: yup.string().when("agree", {
-    is: (value: string) => value === "no",
-    then: () => yup.string().required("沒意見"),
-    otherwise: () => yup.string().notRequired(),
-  }),
-});
-const otherSignSchema = yup.object().shape({
-  agree: yup.string(),
-  password: yup.string().required("沒密碼"),
-  opinion: yup.string().required("沒意見"),
-});
+import api from "@/lib/api";
 
 const SignBlock = ({
   className,
@@ -34,18 +20,46 @@ const SignBlock = ({
   className?: string;
   type: "sign" | "otherSign";
 }) => {
+  const nowUser = useAppSelector((state) => state.nowUser);
+  const nowUser_id = nowUser.body.EmpId;
+
+  const signSchema = yup.object().shape({
+    agree: yup.string().required("沒決定"),
+    password: yup
+      .string()
+      .required("沒密碼")
+      .test("checkPassword", "密碼錯誤", async function (value) {
+        return await api.logIn(nowUser_id, value);
+      }),
+    opinion: yup.string().when("agree", {
+      is: (value: string) => value === "no",
+      then: () => yup.string().required("沒意見"),
+      otherwise: () => yup.string().notRequired(),
+    }),
+  });
+  const otherSignSchema = yup.object().shape({
+    agree: yup.string(),
+    password: yup
+      .string()
+      .required("沒密碼")
+      .test("checkPassword", "密碼錯誤", async function (value) {
+        return await api.logIn(nowUser_id, value);
+      }),
+    opinion: yup.string().required("沒意見"),
+  });
   const thisSchema = type === "sign" ? signSchema : otherSignSchema;
+
   const {
     handleSubmit,
     register,
     control,
+    trigger,
     reset,
     formState: { errors, isValid },
-    trigger,
   } = useForm({
     shouldUnregister: true,
-    mode: "onChange",
-    criteriaMode: "all",
+    mode: "onSubmit",
+    // criteriaMode: "all",
     resolver: yupResolver(thisSchema as any),
     defaultValues: {
       agree: "",
@@ -61,19 +75,20 @@ const SignBlock = ({
     reset();
   }
 
+  const dispatch = useAppDispatch();
+
   const watch_agree = useWatch({
     name: "agree",
     control,
   });
 
-  useEffect(() => {
-    trigger();
-  }, [trigger, watch_agree]);
-
   const [toggleModal] = useModalControl("sign");
   const [toggleErrorModal] = useModalControl("errors");
 
-  const dispatch = useAppDispatch();
+  useEffect(() => {    
+    trigger();
+  }, [trigger]);
+
   function validation() {
     dispatch(setErrors(errors));
     if (!isValid) {

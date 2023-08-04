@@ -32,3 +32,10 @@ export type component = {
   type: "addForm" | "sign";
   data?: signDataType;
 };
+
+export enum signStatus {
+  "未簽核" = 0,
+  "同意" = 1,
+  "退簽" = 3,
+  "作廢" = 4,
+}

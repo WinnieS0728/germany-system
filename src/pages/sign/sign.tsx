@@ -16,6 +16,7 @@ import { PerCentTable } from "@/components/apply/add/confirm/percent table";
 import { useTableData } from "./table data";
 import { WeekTable } from "@/components/apply/add/confirm/week tabel";
 import { useModalControl } from "@/hooks/modal control";
+import { SignTable } from "@/components/sign/sign table";
 
 const SignPage = () => {
   const { formId } = useParams();
@@ -155,10 +156,11 @@ const SignPage = () => {
               <p>表單附件 : </p>
             </Block>
           </FormProvider>
+          <SignTable formId={formId as string} />
         </>
       </Main>
     </>
   );
 };
 
-export default SignPage
+export default SignPage;

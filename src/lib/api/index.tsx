@@ -12,6 +12,8 @@ import { pushNewData } from "./travel apply/push details";
 import { getBusinessApplyList } from "./travel apply/get list";
 import { getBusinessApplyDetail } from "./travel apply/get detail";
 import { getBusinessApplyHeader } from "./travel apply/get header";
+import { getSignList } from "./sign/signList";
+import { LogIn } from "./common/log in";
 
 const apiPath = import.meta.env.VITE_API_PATH;
 
@@ -29,6 +31,8 @@ const api = {
   getBusinessApplyList: getBusinessApplyList(apiPath),
   getBusinessApplyDetail: getBusinessApplyDetail(apiPath),
   getBusinessApplyHeader: getBusinessApplyHeader(apiPath),
+  getSignList: getSignList(apiPath),
+  logIn: LogIn(apiPath),
 };
 
 export default api;
