@@ -1,6 +1,5 @@
 import { modalList } from "@/data/reducers/modal control/modalControl";
 import { useModalControl } from "@/hooks/modal control";
-import { useScroll } from "@/hooks/scroll control";
 
 interface modalProps {
   name: keyof modalList;
@@ -8,16 +7,7 @@ interface modalProps {
 }
 
 export const Modal = ({ name, children }: modalProps) => {
-  const { canScroll } = useScroll();
   const [toggleModal, isModalShow] = useModalControl(name);
-
-  console.log(isModalShow);
-
-  if (isModalShow) {
-    canScroll(false);
-  } else {
-    canScroll(true);
-  }
 
   function handleClick(e: React.SyntheticEvent) {
     (e.target as HTMLElement)?.id === `${name}-background` &&

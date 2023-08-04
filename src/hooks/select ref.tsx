@@ -36,10 +36,13 @@ export const useSelectRef = () => {
     currRef.current?.clearValue();
     deputyRef.current?.clearValue();
   }
+
+  const otherSignRef = useRef<SelectInstance>(null);
   return {
     newDetailRef,
     clearDetailSelect,
     newFormRef,
     clearNewFormSelect,
+    otherSignRef,
   };
 };

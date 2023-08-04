@@ -12,6 +12,7 @@ import dayPickerSlice from "@reducers/day picker/dayPickerControl";
 import modalControlSlice from "@reducers/modal control/modalControl";
 import listFormStateSlice from "@reducers/apply list/apply list";
 import fileSlice from "@reducers/files/attach";
+import errorSlice from "@reducers/error/errors";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     modalControl: modalControlSlice,
     listFormState: listFormStateSlice,
     files: fileSlice,
+    errors: errorSlice,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({

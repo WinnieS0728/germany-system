@@ -1,5 +1,3 @@
-import { detailDataType } from "@/data/reducers/trip detail/trip detail";
-
 export type monthType =
   | "Jan"
   | "Feb"

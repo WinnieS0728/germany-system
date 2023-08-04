@@ -1,12 +1,31 @@
 import { useForm, useWatch } from "react-hook-form";
 import { Table } from "../table/table";
-import styled, { useTheme } from "styled-components";
-import { useState } from "react";
+import styled from "styled-components";
+import { useEffect, useState } from "react";
 import TextAreaAutosize from "react-textarea-autosize";
 import * as Btns from "@components/UI/buttons";
 import * as Icons from "@components/UI/icons";
 import { Required } from "../form/required";
 import { useModalControl } from "@/hooks/modal control";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useAppDispatch } from "@/hooks/redux";
+import { setErrors } from "@/data/reducers/error/errors";
+
+const signSchema = yup.object().shape({
+  agree: yup.string().required("沒決定"),
+  password: yup.string().required("沒密碼"),
+  opinion: yup.string().when("agree", {
+    is: (value: string) => value === "no",
+    then: () => yup.string().required("沒意見"),
+    otherwise: () => yup.string().notRequired(),
+  }),
+});
+const otherSignSchema = yup.object().shape({
+  agree: yup.string(),
+  password: yup.string().required("沒密碼"),
+  opinion: yup.string().required("沒意見"),
+});
 
 const SignBlock = ({
   className,
@@ -15,10 +34,19 @@ const SignBlock = ({
   className?: string;
   type: "sign" | "otherSign";
 }) => {
-  const { handleSubmit, register, control } = useForm({
+  const thisSchema = type === "sign" ? signSchema : otherSignSchema;
+  const {
+    handleSubmit,
+    register,
+    control,
+    reset,
+    formState: { errors, isValid },
+    trigger,
+  } = useForm({
     shouldUnregister: true,
-    mode: "onSubmit",
+    mode: "onChange",
     criteriaMode: "all",
+    resolver: yupResolver(thisSchema as any),
     defaultValues: {
       agree: "",
       password: "",
@@ -30,6 +58,7 @@ const SignBlock = ({
   function onSubmit<T>(d: T) {
     console.log(d);
     toggleModal("off");
+    reset();
   }
 
   const watch_agree = useWatch({
@@ -37,7 +66,20 @@ const SignBlock = ({
     control,
   });
 
+  useEffect(() => {
+    trigger();
+  }, [trigger, watch_agree]);
+
   const [toggleModal] = useModalControl("sign");
+  const [toggleErrorModal] = useModalControl("errors");
+
+  const dispatch = useAppDispatch();
+  function validation() {
+    dispatch(setErrors(errors));
+    if (!isValid) {
+      toggleErrorModal("on");
+    }
+  }
 
   return (
     <article className={`modal ${className}`}>
@@ -157,6 +199,7 @@ const SignBlock = ({
             type='submit'
             style='confirm'
             form='sign'
+            onClick={validation}
           />
         </div>
       </form>

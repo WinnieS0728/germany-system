@@ -1,7 +1,6 @@
 import { Table } from "@/components/table/table";
 import {
   deleteData,
-  detailDataType,
   detailDataWithSingleData,
   setTarget,
 } from "@/data/reducers/trip detail/trip detail";

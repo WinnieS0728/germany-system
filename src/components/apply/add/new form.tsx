@@ -8,14 +8,10 @@ import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { MoneyForm } from "./money";
 import { AgentForm } from "./agent";
 import { AttachForm } from "./attach";
-import { NewDetailForm } from "./detail/new detail";
 import { useEffect } from "react";
-import { Modal } from "@/layouts/modal";
 import { TripDetailForm } from "./detail/trip detail block";
-import { DevTool } from "@hookform/devtools";
 import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { Confirm } from "./confirm/confirm";
 import { setDate } from "@/data/reducers/trip detail/trip detail";
 import { useSelectRef } from "@/hooks/select ref";
 import { timeDay, timeMonday } from "d3-time";
@@ -24,10 +20,9 @@ import api from "@/lib/api";
 import { useData } from "./confirm/data";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { ErrorsModal } from "./errors";
-import { UploadFiles } from "./upload files";
 import { useTheme } from "styled-components";
 import { Block } from "@/layouts/block";
+import { setErrors } from "@/data/reducers/error/errors";
 
 const schema = yup.object().shape({
   DeptId: yup.string(),
@@ -72,7 +67,7 @@ export const NewForm = () => {
     shouldUnregister: true,
     criteriaMode: "all",
     mode: "onChange",
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(schema),
     defaultValues: {
       DeptId: "",
       CreateId: "",
@@ -144,6 +139,10 @@ export const NewForm = () => {
     name: "tripData",
     control: methods.control,
   });
+  const watch_money = useWatch({
+    name: ["Advance_Amount", "Curr"],
+    control: methods.control,
+  });
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(setDate(watch_date));
@@ -163,7 +162,6 @@ export const NewForm = () => {
       if (methods.formState.errors.tripData) {
         return;
       }
-      methods.clearErrors("tripData");
       methods.setError("tripData", {
         type: "custom",
         message: "沒出差還想送單啊",
@@ -173,7 +171,6 @@ export const NewForm = () => {
       if (methods.formState.errors.tripData) {
         return;
       }
-      methods.clearErrors("tripData");
       methods.setError("tripData", {
         type: "custom",
         message: "有漏欸",
@@ -181,8 +178,13 @@ export const NewForm = () => {
     }
   }, [methods, spreadData, tripDetailData]);
 
+  useEffect(() => {
+    methods.trigger();
+  }, [methods, watch_date, tripDetailData, watch_money]);
+
   function done() {
     methods.trigger();
+    dispatch(setErrors(methods.formState.errors));
     if (methods.formState.isValid) {
       toggleModal("on");
     } else {
@@ -227,18 +229,6 @@ export const NewForm = () => {
             </Link>
           </button>
         </div>
-        {/* <Modal name='errors'>
-          <ErrorsModal errors={methods.formState.errors} />
-        </Modal> */}
-        <Modal name='newDetail'>
-          <NewDetailForm />
-        </Modal>
-        {/* <Modal name='review'>
-          <Confirm />
-        </Modal>
-        <Modal name='files'>
-          <UploadFiles />
-        </Modal> */}
         <FormProvider {...methods}>
           <form
             id='business apply'
@@ -263,7 +253,6 @@ export const NewForm = () => {
             </Block>
           </form>
         </FormProvider>
-        <DevTool control={methods.control} />
       </>
     </Main>
   );

@@ -10,8 +10,7 @@ import { useTheme } from "styled-components";
 import { useOptions } from "../../../../hooks/options";
 import { useSelectRef } from "@/hooks/select ref";
 import { Required } from "@/components/form/required";
-import { Modal } from "@/layouts/modal";
-import { ErrorsModal } from "../errors";
+import { setErrors } from "@/data/reducers/error/errors";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
@@ -35,6 +34,16 @@ const Tr = ({ label, children, required }: trProps) => {
   );
 };
 
+const schema = yup.object().shape({
+  purpose: yup.string().required("原因沒填"),
+  district: yup.string().required("地區沒填"),
+  postalCode: yup.string().required("郵遞區號沒填"),
+  city: yup.string(),
+  cus: yup.string().required("客戶沒填"),
+  hotel: yup.string(),
+  PS: yup.string(),
+});
+
 export const NewDetailForm = () => {
   const color = useTheme()?.color;
   const {
@@ -49,6 +58,7 @@ export const NewDetailForm = () => {
     shouldUnregister: true,
     criteriaMode: "all",
     mode: "onChange",
+    resolver: yupResolver(schema),
     defaultValues: {
       purpose: "",
       district: "",
@@ -108,6 +118,7 @@ export const NewDetailForm = () => {
     if (Object.keys(errors).length === 0) {
       return;
     } else {
+      dispatch(setErrors(errors));
       toggleErrorModal("on");
     }
   }
@@ -121,9 +132,6 @@ export const NewDetailForm = () => {
 
   return (
     <>
-      <Modal name='errors'>
-        <ErrorsModal errors={errors} />
-      </Modal>
       <form
         id='new detail'
         onSubmit={handleSubmit(onSubmit)}
@@ -132,7 +140,7 @@ export const NewDetailForm = () => {
           clearDetailSelect();
           toggleModal("off");
         }}
-        className={`modal`}
+        className={`modal space-y-4`}
         style={{ backgroundColor: color.white }}
       >
         <table>
@@ -158,7 +166,7 @@ export const NewDetailForm = () => {
               <Controller
                 control={control}
                 name='purpose'
-                rules={{required:'出差事由必填'}}
+                rules={{ required: "出差事由必填" }}
                 render={({ field: { onChange } }) => (
                   <MySelect.Async
                     forwardRef={newDetailRef.purpose}
@@ -179,7 +187,7 @@ export const NewDetailForm = () => {
               <Controller
                 control={control}
                 name='district'
-                rules={{required:'行政區必填'}}
+                rules={{ required: "行政區必填" }}
                 render={({ field: { onChange } }) => (
                   <MySelect.Async
                     forwardRef={newDetailRef.country}
@@ -200,7 +208,7 @@ export const NewDetailForm = () => {
               <Controller
                 control={control}
                 name='postalCode'
-                rules={{required:'郵遞區號必填'}}
+                rules={{ required: "郵遞區號必填" }}
                 render={({ field: { onChange } }) => (
                   <MySelect.Async
                     forwardRef={newDetailRef.postalCode}
@@ -239,7 +247,7 @@ export const NewDetailForm = () => {
               <Controller
                 control={control}
                 name='cus'
-                rules={{required:'客戶必填'}}
+                rules={{ required: "客戶必填" }}
                 render={({ field: { onChange } }) => (
                   <MySelect.Async
                     forwardRef={newDetailRef.cus}

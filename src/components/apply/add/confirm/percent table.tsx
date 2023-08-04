@@ -1,6 +1,5 @@
 import { Table } from "@/components/table/table";
 import {
-  detailDataType,
   detailDataWithSingleData,
 } from "@/data/reducers/trip detail/trip detail";
 import api from "@/lib/api";

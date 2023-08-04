@@ -5,11 +5,11 @@ import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { setSalesList } from "@actions/member/setSalesList";
 import { setUser } from "@actions/member/setUser";
 import { useTranslation } from "react-i18next";
-import { SignPage } from "./pages/sign/sign";
 
 const CustomRatePage = lazy(() => import("@pages/custom rate"));
 const EditPage = lazy(() => import("@pages/edit/edit"));
 const ApplyPage = lazy(() => import("@pages/apply/apply"));
+const SignPage = lazy(() => import("@pages/sign/sign"));
 
 function App() {
   const dispatch = useAppDispatch();

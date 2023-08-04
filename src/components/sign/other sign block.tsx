@@ -3,57 +3,83 @@ import AsyncSelect from "react-select/async";
 import { useOptions } from "@/hooks/options";
 import * as Btns from "@components/UI/buttons";
 import { Controller, useForm } from "react-hook-form";
-import { Modal } from "@/layouts/modal";
-import { ErrorsModal } from "../apply/add/errors";
 import { useModalControl } from "@/hooks/modal control";
+import { useAppDispatch } from "@/hooks/redux";
+import { setErrors } from "@/data/reducers/error/errors";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useEffect } from "react";
+import { useSelectRef } from "@/hooks/select ref";
+
+const schema = yup.object().shape({
+  member: yup.array().of(yup.string()).min(1, "沒人"),
+});
+
 const OtherSignBlock = ({ className }: { className?: string }) => {
   const color = useTheme()?.color;
   const { options } = useOptions();
 
   const [toggleErrorModal] = useModalControl("errors");
+  const [toggleOtherSignModal] = useModalControl("otherSign");
 
   const {
     handleSubmit,
     control,
+    trigger,
+    reset,
     formState: { errors, isValid },
   } = useForm({
     mode: "onSubmit",
     criteriaMode: "all",
+    resolver: yupResolver(schema),
     defaultValues: {
       member: [] as string[],
     },
   });
 
+  const dispatch = useAppDispatch();
+
   function onSubmit<T>(d: T) {
     console.log(d);
+    toggleOtherSignModal("off");
+    reset();
+    otherSignRef.current?.clearValue();
   }
+
+  useEffect(() => {
+    trigger();
+  }, [trigger]);
+
+  const { otherSignRef } = useSelectRef();
 
   return (
     <article className={`modal ${className} space-y-4`}>
-      <Modal name='errors'>
-        <ErrorsModal errors={errors} />
-      </Modal>
       <h3>會簽人員</h3>
       <form
         id='otherSign'
         onSubmit={handleSubmit(onSubmit)}
+        onReset={() => {
+          otherSignRef.current?.clearValue();
+          toggleOtherSignModal("off");
+        }}
       >
         <Controller
           control={control}
           name='member'
-          rules={{ required: "沒人" }}
           render={({ field: { onChange } }) => (
             <AsyncSelect
+              ref={otherSignRef}
               loadOptions={options.a}
               defaultOptions
               cacheOptions
               menuIsOpen
               onChange={(d) => {
-                const value: string[] = d.map((m) => m.EmpId);
+                const value: string[] = (d as any[]).map((m) => m.EmpId);
                 onChange(value);
               }}
               closeMenuOnSelect={false}
               isMulti
+              placeholder={"請選擇人員..."}
               hideSelectedOptions={false}
               getOptionLabel={(option: any) => option.EmpName}
               getOptionValue={(option: any) => option.EmpId}
@@ -97,6 +123,10 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
                     : undefined,
                   color: color.black,
                 }),
+                indicatorsContainer: (baseStyles) => ({
+                  ...baseStyles,
+                  display: "none",
+                }),
               }}
             />
           )}
@@ -114,6 +144,7 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
           form='otherSign'
           onClick={() => {
             if (!isValid) {
+              dispatch(setErrors(errors));
               toggleErrorModal("on");
             }
           }}

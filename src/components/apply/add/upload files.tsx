@@ -1,5 +1,5 @@
 import { Table } from "@/components/table/table";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styled, { useTheme } from "styled-components";
 import * as Btns from "@components/UI/buttons";
@@ -136,11 +136,11 @@ export const UploadFiles = () => {
 
   return (
     <article
-      className='space-y-4 modal'
+      className='modal space-y-4'
       style={{ backgroundColor: color.white }}
     >
       <h2 className='border-b-4 py-4 text-center text-3xl'>檔案檔案</h2>
-      <form id='files'>
+      <form>
         <FileInput
           {...getRootProps({
             $isFocused: isFocused,
@@ -194,7 +194,7 @@ export const UploadFiles = () => {
                         handleDeleteFile(index);
                       }}
                     >
-                      <Icons.Delete size="1.25rem"/>
+                      <Icons.Delete size='1.25rem' />
                     </div>
                   </td>
                 </tr>

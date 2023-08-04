@@ -1,7 +1,8 @@
-import axios from "axios";
+// import axios from "axios";
 
 export function addForm(apiPath: string) {
   return async function (data: any) {
+    console.log(apiPath);
     console.log(data);
     function setIsLodging() {
       if (data.IsLodging === "No") {
@@ -10,6 +11,7 @@ export function addForm(apiPath: string) {
         return "Y";
       }
     }
+    setIsLodging()
     // const res = await axios({
     //   method: "POST",
     //   url: `${apiPath}/假的`,

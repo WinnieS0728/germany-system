@@ -15,12 +15,9 @@ import { DetailHeaderBlock } from "@/components/apply/sign/detail header";
 import { PerCentTable } from "@/components/apply/add/confirm/percent table";
 import { useTableData } from "./table data";
 import { WeekTable } from "@/components/apply/add/confirm/week tabel";
-import { Modal } from "@/layouts/modal";
-import { SignBlock } from "@/components/sign/sign box";
 import { useModalControl } from "@/hooks/modal control";
-import { OtherSignBlock } from "@/components/sign/other sign block";
 
-export const SignPage = () => {
+const SignPage = () => {
   const { formId } = useParams();
   const color = useTheme()?.color;
   const methods = useForm();
@@ -51,12 +48,6 @@ export const SignPage = () => {
       <Header title='國內外出差申請單' />
       <Main className='main-section-gap'>
         <>
-          <Modal name='sign'>
-            <SignBlock type='sign' />
-          </Modal>
-          <Modal name='otherSign'>
-            <OtherSignBlock />
-          </Modal>
           <div className='top-btn-list'>
             <button
               type='button'
@@ -169,3 +160,5 @@ export const SignPage = () => {
     </>
   );
 };
+
+export default SignPage

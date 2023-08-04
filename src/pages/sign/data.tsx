@@ -3,7 +3,7 @@ import api from "@/lib/api";
 import { dateFormatter } from "@/hooks/dateFormatter";
 import { signDataType } from "@/types";
 import { timeDay } from "d3-time";
-import { detailDataType, detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
+import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
 
 const initData: signDataType = {
   id: "",
