@@ -13,6 +13,7 @@ import modalControlSlice from "@reducers/modal control/modalControl";
 import listFormStateSlice from "@reducers/apply list/apply list";
 import fileSlice from "@reducers/files/attach";
 import errorSlice from "@reducers/error/errors";
+import formInfoSlice from "../reducers/sign/form info";
 
 const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ const store = configureStore({
     listFormState: listFormStateSlice,
     files: fileSlice,
     errors: errorSlice,
+    formInfo:formInfoSlice
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({

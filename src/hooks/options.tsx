@@ -20,20 +20,16 @@ export const useOptions = () => {
   }
 
   async function getPostalCodeOptions(input: string) {
-    const res = await api.getPostCode();
+    const res: { zipcode: string; place: string }[] = await api.getPostCode();
 
-    const noRepeatData = [
-      ...new Set(res.map((i: { zipcode: string }) => i.zipcode)),
-    ];
+    const noRepeatData = [...new Set(res.map((i) => i.zipcode))];
 
-    const options = noRepeatData.map((d) =>
-      res.find((i: { zipcode: string }) => i.zipcode === d)
-    );
+    const options = noRepeatData.map((d) => res.find((i) => i.zipcode === d));
 
     return options.filter(
-      (o: { zipcode: string; place: string }) =>
-        o.place.toLowerCase().includes(input.toLowerCase()) ||
-        o.zipcode.includes(input)
+      (o) =>
+        o?.place.toLowerCase().includes(input.toLowerCase()) ||
+        o?.zipcode.includes(input)
     );
   }
 

@@ -249,7 +249,7 @@ export const NewForm = () => {
               <AgentForm />
             </Block>
             <Block>
-              <AttachForm />
+              <AttachForm type="addForm"/>
             </Block>
           </form>
         </FormProvider>

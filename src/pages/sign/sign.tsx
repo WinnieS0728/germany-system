@@ -17,11 +17,39 @@ import { useTableData } from "./table data";
 import { WeekTable } from "@/components/apply/add/confirm/week tabel";
 import { useModalControl } from "@/hooks/modal control";
 import { SignTable } from "@/components/sign/sign table";
+import { AttachForm } from "@/components/apply/add/attach";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useEffect, useRef } from "react";
+import api from "@/lib/api";
+import { setFormId } from "@/data/reducers/sign/form info";
+import { setSignList } from "@/data/actions/sign/set sign list";
+import { setNextSigner } from "@/data/actions/sign/set next sign";
 
 const SignPage = () => {
   const { formId } = useParams();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(setFormId(formId));
+    dispatch(setSignList(formId as string));
+    dispatch(setNextSigner(formId as string));
+  }, [dispatch, formId]);
+
   const color = useTheme()?.color;
   const methods = useForm();
+
+  // TODO 簽核功能開關
+  const isNextSigner = useRef<boolean>(true);
+  const nowUser = useAppSelector((state) => state.nowUser);
+  const nextSigner = useAppSelector((state) => state.formInfo);
+
+  useEffect(() => {
+    if (
+      (nextSigner.body.nextSign as { SIGNER: string }).SIGNER ===
+      nowUser.body.EmpId
+    ) {
+      isNextSigner.current = true;
+    }
+  }, [nextSigner, nowUser]);
 
   const { headData, detailData } = useSignPageData(formId as string);
   // console.log(detailData);
@@ -43,6 +71,7 @@ const SignPage = () => {
 
   const [toggleSignModal] = useModalControl("sign");
   const [toggleOtherSignModal] = useModalControl("otherSign");
+  const [toggleFileModal] = useModalControl("files");
 
   return (
     <>
@@ -50,47 +79,56 @@ const SignPage = () => {
       <Main className='main-section-gap'>
         <>
           <div className='top-btn-list'>
-            <button
-              type='button'
-              onClick={() => {
-                toggleSignModal("on");
-              }}
-            >
-              <Btns.IconBtn
-                icon={
-                  <Icons.Sign
-                    size='1.5rem'
-                    color={color.white}
-                  />
-                }
-                primary
-              >
-                簽核表單
-              </Btns.IconBtn>
-            </button>
-            <button
-              type='button'
-              onClick={() => {
-                toggleOtherSignModal("on");
-              }}
-            >
-              <Btns.IconBtn
-                icon={
-                  <Icons.OtherSign
-                    size='1.5rem'
-                    color={color.white}
-                  />
-                }
-                primary
-              >
-                會簽(意見徵詢)
-              </Btns.IconBtn>
-            </button>
-            <button type='button'>
-              <Btns.IconBtn icon={<Icons.AddFiles size='1.5rem' />}>
-                加入附件
-              </Btns.IconBtn>
-            </button>
+            {isNextSigner.current && (
+              <>
+                <button
+                  type='button'
+                  onClick={() => {
+                    toggleSignModal("on");
+                  }}
+                >
+                  <Btns.IconBtn
+                    icon={
+                      <Icons.Sign
+                        size='1.5rem'
+                        color={color.white}
+                      />
+                    }
+                    primary
+                  >
+                    簽核表單
+                  </Btns.IconBtn>
+                </button>
+                <button
+                  type='button'
+                  onClick={() => {
+                    toggleOtherSignModal("on");
+                  }}
+                >
+                  <Btns.IconBtn
+                    icon={
+                      <Icons.OtherSign
+                        size='1.5rem'
+                        color={color.white}
+                      />
+                    }
+                    primary
+                  >
+                    會簽(意見徵詢)
+                  </Btns.IconBtn>
+                </button>
+                <button
+                  type='button'
+                  onClick={() => {
+                    toggleFileModal("on");
+                  }}
+                >
+                  <Btns.IconBtn icon={<Icons.AddFiles size='1.5rem' />}>
+                    加入附件
+                  </Btns.IconBtn>
+                </button>
+              </>
+            )}
             <button type='button'>
               <Btns.IconBtn
                 icon={
@@ -153,7 +191,7 @@ const SignPage = () => {
               <p>代理人 : {headData.agent}</p>
             </Block>
             <Block>
-              <p>表單附件 : </p>
+              <AttachForm type='sign' />
             </Block>
           </FormProvider>
           <SignTable formId={formId as string} />

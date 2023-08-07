@@ -10,6 +10,7 @@ import { useModalControl } from "@/hooks/modal control";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { DevTool } from "@hookform/devtools";
 import { setErrors } from "@/data/reducers/error/errors";
 import api from "@/lib/api";
 
@@ -20,34 +21,34 @@ const SignBlock = ({
   className?: string;
   type: "sign" | "otherSign";
 }) => {
+  const formInfo = useAppSelector((state) => state.formInfo).body;
   const nowUser = useAppSelector((state) => state.nowUser);
   const nowUser_id = nowUser.body.EmpId;
 
   const signSchema = yup.object().shape({
-    agree: yup.string().required("沒決定"),
-    password: yup
-      .string()
-      .required("沒密碼")
-      .test("checkPassword", "密碼錯誤", async function (value) {
-        return await api.logIn(nowUser_id, value);
-      }),
-    opinion: yup.string().when("agree", {
-      is: (value: string) => value === "no",
-      then: () => yup.string().required("沒意見"),
-      otherwise: () => yup.string().notRequired(),
-    }),
+    agree:
+      type === "sign"
+        ? yup.string().oneOf(["yes", "no"], "沒決定欸")
+        : yup.string().notRequired(),
+    password: yup.string().required("沒密碼"),
+    // .test("checkPassword", "密碼錯誤", async function (value: string) {
+    //   return await api.logIn(nowUser_id, value);
+    // })
+    opinion:
+      type === "sign"
+        ? yup.string().when("agree", {
+            is: (value: string) => value === "no",
+            then: () => yup.string().trim().required("意見必填"),
+            otherwise: () => yup.string().notRequired(),
+          })
+        : yup.string().trim().required("意見必填"),
   });
-  const otherSignSchema = yup.object().shape({
-    agree: yup.string(),
-    password: yup
-      .string()
-      .required("沒密碼")
-      .test("checkPassword", "密碼錯誤", async function (value) {
-        return await api.logIn(nowUser_id, value);
-      }),
-    opinion: yup.string().required("沒意見"),
-  });
-  const thisSchema = type === "sign" ? signSchema : otherSignSchema;
+
+  type data = {
+    agree: "yes" | "no";
+    password: string;
+    opinion: string | undefined;
+  };
 
   const {
     handleSubmit,
@@ -58,9 +59,10 @@ const SignBlock = ({
     formState: { errors, isValid },
   } = useForm({
     shouldUnregister: true,
-    mode: "onSubmit",
-    // criteriaMode: "all",
-    resolver: yupResolver(thisSchema as any),
+    mode: "all",
+    criteriaMode: "all",
+    // resolver: yupResolver(signSchema),
+    reValidateMode: "onChange",
     defaultValues: {
       agree: "",
       password: "",
@@ -71,8 +73,36 @@ const SignBlock = ({
   const inputDisable = type === "sign" ? false : true;
   function onSubmit<T>(d: T) {
     console.log(d);
+    send(d as data);
     toggleModal("off");
     reset();
+  }
+
+  async function send(data: data) {
+    console.log(formInfo);
+    console.log(nowUser);
+    console.log(data);
+    const a = {
+      ...formInfo.nextSign,
+      ACTUALNAME: nowUser.body.EmpName,
+      ACTUALSIGNER: nowUser.body.EmpId,
+      SIGNRESULT: getSignNumber(data.agree),
+      OPINION: data.opinion,
+      SIGNTIME: "",
+      types: "1",
+      ExceId: nowUser.body.EmpId,
+    };
+    console.log(a);
+  }
+
+  function getSignNumber(value: string) {
+    if (value === "yes") {
+      return "1";
+    }
+    if (value === "no") {
+      return "3";
+    }
+    return "0";
   }
 
   const dispatch = useAppDispatch();
@@ -85,9 +115,9 @@ const SignBlock = ({
   const [toggleModal] = useModalControl("sign");
   const [toggleErrorModal] = useModalControl("errors");
 
-  useEffect(() => {    
+  useEffect(() => {
     trigger();
-  }, [trigger]);
+  }, [trigger, watch_agree]);
 
   function validation() {
     dispatch(setErrors(errors));
@@ -218,6 +248,7 @@ const SignBlock = ({
           />
         </div>
       </form>
+      <DevTool control={control} />
     </article>
   );
 };

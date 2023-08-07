@@ -4,12 +4,14 @@ import { useOptions } from "@/hooks/options";
 import * as Btns from "@components/UI/buttons";
 import { Controller, useForm } from "react-hook-form";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { setErrors } from "@/data/reducers/error/errors";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useEffect } from "react";
 import { useSelectRef } from "@/hooks/select ref";
+import api from "@/lib/api";
+import { otherSignFinalDataType } from "@/lib/api/sign/post otherSign";
 
 const schema = yup.object().shape({
   member: yup.array().of(yup.string()).min(1, "沒人"),
@@ -21,6 +23,8 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
 
   const [toggleErrorModal] = useModalControl("errors");
   const [toggleOtherSignModal] = useModalControl("otherSign");
+
+  const formInfo = useAppSelector((state) => state.formInfo);
 
   const {
     handleSubmit,
@@ -40,10 +44,32 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
   const dispatch = useAppDispatch();
 
   function onSubmit<T>(d: T) {
-    console.log(d);
+    // console.log(d);
+    send((d as { member: string[] }).member);
     toggleOtherSignModal("off");
     reset();
     otherSignRef.current?.clearValue();
+  }
+
+  async function send(list: string[]) {
+    const otherSignMember = await Promise.all(
+      list.map(async (id: string) => (await api.getMember(id))[0])
+    );
+    const otherSignMemberList = otherSignMember.map(
+      (member):otherSignFinalDataType => {
+        return {
+          FORMNO: formInfo.body.formId,
+          SIGNORDER: formInfo.body.nowOrder,
+          STEPNAME: member.DeptName,
+          SIGNER: member.EmpId,
+          SIGNERNAME: member.EmpName,
+          OPINION: "",
+          SignGroup: "會簽",
+        };
+      }
+    );
+
+    const res = api.postOtherSign(otherSignMemberList);
   }
 
   useEffect(() => {

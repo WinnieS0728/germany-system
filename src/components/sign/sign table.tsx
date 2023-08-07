@@ -16,7 +16,7 @@ export const SignTable = ({ formId }: { formId: string }) => {
       const notMe = res.slice(1)
       setSignList(notMe);
     })();
-  }, [formId]);
+  }, [formId]);  
 
   return (
     <section>
@@ -62,7 +62,7 @@ export const SignTable = ({ formId }: { formId: string }) => {
                 </td>
                 <td>{signStatus[parseInt(`${list.SIGNRESULT}`)]}</td>
                 <td style={{ whiteSpace: "nowrap" }}>
-                  {dateFormatter(list.SIGNTIME)}
+                  {list.SIGNTIME && dateFormatter(list.SIGNTIME)}
                 </td>
                 <td>{list.OPINION}</td>
                 <td></td>
