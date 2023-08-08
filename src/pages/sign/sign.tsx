@@ -20,10 +20,10 @@ import { SignTable } from "@/components/sign/sign table";
 import { AttachForm } from "@/components/apply/add/attach";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { useEffect, useRef } from "react";
-import api from "@/lib/api";
 import { setFormId } from "@/data/reducers/sign/form info";
 import { setSignList } from "@/data/actions/sign/set sign list";
 import { setNextSigner } from "@/data/actions/sign/set next sign";
+import { setFormAttach } from "@/data/actions/files/fetch form attach";
 
 const SignPage = () => {
   const { formId } = useParams();
@@ -32,6 +32,7 @@ const SignPage = () => {
     dispatch(setFormId(formId));
     dispatch(setSignList(formId as string));
     dispatch(setNextSigner(formId as string));
+    dispatch(setFormAttach(formId as string));
   }, [dispatch, formId]);
 
   const color = useTheme()?.color;
@@ -44,7 +45,7 @@ const SignPage = () => {
 
   useEffect(() => {
     if (
-      (nextSigner.body.nextSign as { SIGNER: string }).SIGNER ===
+      (nextSigner.body.nextSign as { SIGNER: string })?.SIGNER ===
       nowUser.body.EmpId
     ) {
       isNextSigner.current = true;

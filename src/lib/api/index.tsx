@@ -16,7 +16,11 @@ import { getSignList } from "./sign/signList";
 import { LogIn } from "./common/log in";
 import { getNextSigner } from "./sign/get next signer";
 import { postOtherSign } from "./sign/post otherSign";
-import { updateSignStatus } from "./sign/post sign";
+import { updateSignStatus } from "./sign/update sign";
+import { uploadFile } from "./common/upload file";
+import { uploadFileSign } from "./common/upload file sign";
+import { getFormAttach } from "./common/fetch sign attach";
+import { updateForm } from "./travel apply/update form";
 
 const apiPath = import.meta.env.VITE_API_PATH;
 
@@ -30,6 +34,7 @@ const api = {
   getCus: getCus(apiPath),
   getPostCode: getPostCalCode(apiPath),
   postNewForm: addForm(apiPath),
+  updateForm: updateForm(apiPath),
   pushNewData: pushNewData(apiPath),
   getBusinessApplyList: getBusinessApplyList(apiPath),
   getBusinessApplyDetail: getBusinessApplyDetail(apiPath),
@@ -39,6 +44,9 @@ const api = {
   logIn: LogIn(apiPath),
   postOtherSign: postOtherSign(apiPath),
   updateSignStatus: updateSignStatus(apiPath),
+  uploadFile: uploadFile(apiPath),
+  uploadFileSign: uploadFileSign(apiPath),
+  getFormAttach: getFormAttach(apiPath),
 };
 
 export default api;

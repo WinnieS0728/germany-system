@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { DevTool } from "@hookform/devtools";
 import { setErrors } from "@/data/reducers/error/errors";
 import api from "@/lib/api";
+import { signFinalDataType } from "@/lib/api/sign/update sign";
 
 const SignBlock = ({
   className,
@@ -23,7 +24,7 @@ const SignBlock = ({
 }) => {
   const formInfo = useAppSelector((state) => state.formInfo).body;
   const nowUser = useAppSelector((state) => state.nowUser);
-  const nowUser_id = nowUser.body.EmpId;
+  const fileData = useAppSelector((state) => state.files).body;
 
   const signSchema = yup.object().shape({
     agree:
@@ -32,7 +33,7 @@ const SignBlock = ({
         : yup.string().notRequired(),
     password: yup.string().required("沒密碼"),
     // .test("checkPassword", "密碼錯誤", async function (value: string) {
-    //   return await api.logIn(nowUser_id, value);
+    //   return await api.logIn(nowUser.body.EmpId, value);
     // })
     opinion:
       type === "sign"
@@ -72,37 +73,69 @@ const SignBlock = ({
   const [showPassword, setPasswordShow] = useState<boolean>(false);
   const inputDisable = type === "sign" ? false : true;
   function onSubmit<T>(d: T) {
-    console.log(d);
+    // console.log(d);
     send(d as data);
     toggleModal("off");
     reset();
   }
 
   async function send(data: data) {
-    console.log(formInfo);
-    console.log(nowUser);
-    console.log(data);
-    const a = {
-      ...formInfo.nextSign,
+    const a: signFinalDataType = {
+      ...(formInfo.nextSign as {
+        FORMNO: string;
+        SIGNORDER: number;
+        STEPNAME: string;
+        SIGNER: string;
+        SIGNERNAME: string;
+        ALLOWCUSTOM: boolean;
+        SignGroup: string;
+        ISEnable: string;
+        Status: string;
+      }),
       ACTUALNAME: nowUser.body.EmpName,
       ACTUALSIGNER: nowUser.body.EmpId,
       SIGNRESULT: getSignNumber(data.agree),
-      OPINION: data.opinion,
+      OPINION: data.opinion as string,
       SIGNTIME: "",
       types: "1",
       ExceId: nowUser.body.EmpId,
     };
-    console.log(a);
+    const res = await api.updateSignStatus(a);
+    console.log(res);
+    if (data.agree === "no") {
+      // ? 退簽更新
+      const data = {
+        BTPId: formInfo.formId,
+        Status: "3",
+        type: "1",
+      };
+      const res = api.updateForm(data);
+    }
+
+    postFile(formInfo.formId);
+  }
+
+  async function postFile(id: string) {
+    for (const file of fileData) {
+      const filePackage = new FormData();
+      filePackage.append("formId", id);
+      filePackage.append("EmpId", nowUser.body.EmpId);
+      filePackage.append("fileName", file.name);
+      filePackage.append("webName", "BusinessTrip");
+      filePackage.append("SIGNORDER", formInfo.nowOrder.toString());
+      filePackage.append("file", file);
+      const res = await api.uploadFileSign(filePackage);
+    }
   }
 
   function getSignNumber(value: string) {
     if (value === "yes") {
-      return "1";
+      return 1;
     }
     if (value === "no") {
-      return "3";
+      return 3;
     }
-    return "0";
+    return 0;
   }
 
   const dispatch = useAppDispatch();

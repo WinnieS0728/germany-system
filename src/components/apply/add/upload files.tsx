@@ -39,7 +39,7 @@ const mineObj = [
   {
     id: "img",
     type: {
-      jpeg: "image/jpeg",
+      jpg: "image/jpeg",
       png: "image/png",
     },
   },

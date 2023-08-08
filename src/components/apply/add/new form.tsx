@@ -79,9 +79,16 @@ export const NewForm = () => {
       Curr: "",
       Deputy: "",
       tripData: [],
-    },
+    }
   });
 
+  const {
+    control,
+    handleSubmit,
+    setError,
+    trigger,
+    formState: { errors, isValid },
+  } = methods;
   const { clearNewFormSelect } = useSelectRef();
 
   const [toggleModal] = useModalControl("review");
@@ -92,6 +99,8 @@ export const NewForm = () => {
 
   const { spreadData } = useData(tripDetail.body, timeData.today);
   const tripDetailData = useAppSelector((state) => state.tripDetail).body;
+  const fileData = useAppSelector((state) => state.files).body;
+  const nowUser = useAppSelector((state) => state.nowUser);
 
   async function getCusId(name: string) {
     const res = await api.getCus(name, "DEU");
@@ -99,14 +108,13 @@ export const NewForm = () => {
     return res?.[0].CustId;
   }
 
-  function onSubmit<T>(d: T) {
+  async function onSubmit<T>(d: T) {
     const newFormData = { ...d, ...dateRange };
-    const formId = createNewForm(newFormData);
+    const formId = await createNewForm(newFormData);
     const newData = Promise.all(
       spreadData.map(async (item, index) => {
         return {
-          // TODO 帶入 formID
-          BTPId: formId || "no id",
+          BTPId: formId,
           Item: index + 1,
           CustId: await getCusId(item.data.cus),
           TripEvent: item.data.purpose,
@@ -121,27 +129,41 @@ export const NewForm = () => {
       })
     );
     pushData(newData);
+    postFile(formId);
 
     clearNewFormSelect();
   }
 
+  async function postFile(id: string) {
+    console.log(fileData);
+    for (const file of fileData) {
+      const filePackage = new FormData();
+      filePackage.append("formId", id);
+      filePackage.append("EmpId", nowUser.body.EmpId);
+      filePackage.append("fileName", file.name);
+      filePackage.append("webName", "BusinessTrip");
+      filePackage.append("file", file);
+      const res = await api.uploadFile(filePackage);
+    }
+  }
+
   async function createNewForm(data: any) {
     const res = await api.postNewForm(data);
-    console.log(res);
+    return res;
   }
 
   async function pushData(data: any) {
     const res = await api.pushNewData(await data);
-    console.log(res);
+    // console.log(res);
   }
 
   const watch_date = useWatch({
     name: "tripData",
-    control: methods.control,
+    control: control,
   });
   const watch_money = useWatch({
     name: ["Advance_Amount", "Curr"],
-    control: methods.control,
+    control: control,
   });
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -159,33 +181,33 @@ export const NewForm = () => {
   // }, []);
   useEffect(() => {
     if (spreadData.length === 0) {
-      if (methods.formState.errors.tripData) {
+      if (errors.tripData) {
         return;
       }
-      methods.setError("tripData", {
+      setError("tripData", {
         type: "custom",
         message: "沒出差還想送單啊",
       });
     }
     if (tripDetailData.some((d) => d.data.length === 0)) {
-      if (methods.formState.errors.tripData) {
+      if (errors.tripData) {
         return;
       }
-      methods.setError("tripData", {
+      setError("tripData", {
         type: "custom",
         message: "有漏欸",
       });
     }
-  }, [methods, spreadData, tripDetailData]);
+  }, [errors, setError, spreadData, tripDetailData]);
 
   useEffect(() => {
-    methods.trigger();
-  }, [methods, watch_date, tripDetailData, watch_money]);
+    trigger();
+  }, [watch_date, tripDetailData, watch_money, trigger]);
 
   function done() {
-    methods.trigger();
-    dispatch(setErrors(methods.formState.errors));
-    if (methods.formState.isValid) {
+    trigger();
+    dispatch(setErrors(errors));
+    if (isValid) {
       toggleModal("on");
     } else {
       toggleErrorModal("on");
@@ -212,9 +234,14 @@ export const NewForm = () => {
               送簽表單
             </IconBtn>
           </button>
-          <button type='button'>
+          {/* <button
+            type='button'
+            onClick={() => {
+              console.log("fuck you store");
+            }}
+          >
             <IconBtn icon={<Icons.Save size='1.5rem' />}>暫存檔案</IconBtn>
-          </button>
+          </button> */}
           <button
             type='button'
             onClick={() => {
@@ -232,7 +259,7 @@ export const NewForm = () => {
         <FormProvider {...methods}>
           <form
             id='business apply'
-            onSubmit={methods.handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onSubmit)}
             className='main-section-gap'
           >
             <Block>
@@ -249,7 +276,7 @@ export const NewForm = () => {
               <AgentForm />
             </Block>
             <Block>
-              <AttachForm type="addForm"/>
+              <AttachForm type='addForm' />
             </Block>
           </form>
         </FormProvider>

@@ -2,7 +2,6 @@
 
 export function addForm(apiPath: string) {
   return async function (data: any) {
-    console.log(apiPath);
     console.log(data);
     function setIsLodging() {
       if (data.IsLodging === "No") {
@@ -12,6 +11,7 @@ export function addForm(apiPath: string) {
       }
     }
     setIsLodging()
+    return "BTP202308666"
     // const res = await axios({
     //   method: "POST",
     //   url: `${apiPath}/假的`,

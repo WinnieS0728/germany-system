@@ -3,10 +3,54 @@ import { setSignList } from "@/data/actions/sign/set sign list";
 import { createSlice } from "@reduxjs/toolkit";
 import { statusType } from "types/api";
 
-const data = {
+interface signList {
+  FORMNO: string;
+  SIGNORDER: number;
+  STEPNAME: string;
+  SIGNER: string;
+  SIGNERNAME: string;
+  ACTUALNAME: string;
+  ACTUALSIGNER: string;
+  SIGNRESULT: number & (0 | 1 | 2 | 3 | 4);
+  OPINION: string;
+  SIGNTIME: string;
+  ALLOWCUSTOM: false;
+  SignGroup: string;
+  ISEnable: string;
+  types: "0" | "1";
+  ExceId: null;
+  Status: null;
+}
+
+interface nextSign {
+  FORMNO: string;
+  SIGNORDER: number;
+  STEPNAME: string;
+  SIGNER: string;
+  SIGNERNAME: string;
+  ACTUALNAME: string;
+  ACTUALSIGNER: string;
+  SIGNRESULT: number & (0 | 1 | 2 | 3 | 4);
+  OPINION: string;
+  SIGNTIME: null;
+  ALLOWCUSTOM: false;
+  SignGroup: string;
+  ISEnable: string;
+  types: "0" | "1";
+  ExceId: null;
+  Status: null;
+}
+
+type data = {
+  formId: string;
+  nextSign: nextSign | object;
+  signList: signList[];
+  nowOrder: number;
+};
+const data: data = {
   formId: "",
   nextSign: {},
-  signList: [] as unknown[],
+  signList: [],
   nowOrder: -1,
 };
 
@@ -25,7 +69,7 @@ const formInfoSlice = createSlice({
     builder
       .addCase(setNextSigner.fulfilled, (state, action) => {
         state.status = statusType.succeeded;
-        state.body.nextSign = action.payload;
+        state.body.nextSign = action.payload[0] as object;
         state.body.nowOrder = (
           action.payload[0] as {
             SIGNORDER: number;
@@ -41,7 +85,7 @@ const formInfoSlice = createSlice({
       })
       .addCase(setSignList.fulfilled, (state, action) => {
         state.status = statusType.succeeded;
-        state.body.signList = action.payload;
+        state.body.signList = action.payload as signList[];
       })
       .addCase(setSignList.pending, (state) => {
         state.status = statusType.loading;

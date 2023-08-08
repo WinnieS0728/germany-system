@@ -4,20 +4,11 @@ import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import { signStatus } from "@/types";
 import { dateFormatter } from "@/hooks/dateFormatter";
+import { useAppSelector } from "@/hooks/redux";
 
 export const SignTable = ({ formId }: { formId: string }) => {
   const color = useTheme()?.color;
-
-  const [signList, setSignList] = useState<any[]>([]);
-
-  useEffect(() => {
-    (async function () {
-      const res = await api.getSignList(formId);
-      const notMe = res.slice(1)
-      setSignList(notMe);
-    })();
-  }, [formId]);  
-
+  const formInfo = useAppSelector((state) => state.formInfo).body;
   return (
     <section>
       <h3
@@ -45,9 +36,9 @@ export const SignTable = ({ formId }: { formId: string }) => {
             </tr>
           </thead>
           <tbody>
-            {signList?.map((list, index) => (
+            {formInfo.signList.slice(1)?.map((list, index) => (
               <tr key={index}>
-                <td>{index + 1}</td>
+                <td>{list.SIGNORDER}</td>
                 <td>{list.STEPNAME}</td>
                 <td>{list.SIGNERNAME}</td>
                 <td>

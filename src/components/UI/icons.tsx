@@ -1,6 +1,7 @@
 import { BiErrorAlt } from "react-icons/bi";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { IoCloudDownloadOutline } from "react-icons/io5";
 
 type icon = {
   size?: string;
@@ -586,3 +587,11 @@ export const Print = ({ size, color }: icon) => (
 
 export const Password_show = () => <FaEye />;
 export const Password_hide = () => <FaEyeSlash />;
+export const Download = ({ size, color }: icon) => (
+  <IoCloudDownloadOutline
+    style={{
+      fontSize: size,
+      color: color,
+    }}
+  />
+);

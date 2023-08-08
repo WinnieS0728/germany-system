@@ -10,18 +10,69 @@ import normal from "@img/files/file_icon.svg";
 import styled from "styled-components";
 import { deleteFile } from "@/data/reducers/files/attach";
 import { component } from "@/types";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+interface id {
+  id: string;
+}
+interface type {
+  type: Record<string, string>;
+}
+const mineObj: (id & type)[] = [
+  {
+    id: "word",
+    type: {
+      doc: "application/msword",
+      docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    },
+  },
+  {
+    id: "ppt",
+    type: {
+      ppt: "application/vnd.ms-powerpoint",
+      pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    },
+  },
+  {
+    id: "excel",
+    type: {
+      xls: "application/vnd.ms-excel",
+      xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    },
+  },
+  {
+    id: "pdf",
+    type: {
+      pdf: "application/pdf",
+    },
+  },
+  {
+    id: "img",
+    type: {
+      jpg: "image/jpeg",
+      png: "image/png",
+    },
+  },
+];
+
+function getAccept(type: string) {
+  const mine = mineObj.find((i) => Object.keys(i.type).some((t) => t === type));
+  return mine?.type[`${type}`];
+}
 
 const FileItem_o = ({
   file,
   className,
   index,
   d,
+  type,
 }: {
   file: File;
   className?: string;
   index: number;
-  d: (n: number) => void;
-}) => {
+  d?: (n: number) => void;
+} & component) => {
   function getFileSize(num: number): string {
     if (num <= 1000) {
       return `${num} Byte`;
@@ -46,6 +97,9 @@ const FileItem_o = ({
       return normal;
     }
   }
+
+  const url = URL.createObjectURL(file);
+
   return (
     <section className={className}>
       <img
@@ -55,14 +109,26 @@ const FileItem_o = ({
       <div className='content'>
         <h3 className='title'>{file.name}</h3>
         <p className='size'>{`size: ${getFileSize(file.size)}`}</p>
-        <button
-          type='button'
-          onClick={() => {
-            d(index);
-          }}
-        >
-          <IconBtn icon={<Icons.Delete size='1.25rem' />}>刪除</IconBtn>
-        </button>
+        {type === "addForm" && (
+          <button
+            type='button'
+            onClick={() => {
+              (d as (n: number) => void)(index);
+            }}
+          >
+            <IconBtn icon={<Icons.Delete size='1.25rem' />}>刪除</IconBtn>
+          </button>
+        )}
+        {type === "sign" && (
+          <a
+            href={url}
+            download
+          >
+            <button type='button'>
+              <IconBtn icon={<Icons.Download size='1.25rem' />}>下載</IconBtn>
+            </button>
+          </a>
+        )}
       </div>
     </section>
   );
@@ -96,8 +162,37 @@ const FileItem = styled(FileItem_o)`
 `;
 
 export const AttachForm = ({ type }: component) => {
-  const fileData = useAppSelector((state) => state.files).body;
-  // console.log(fileData);
+  const fileData = useAppSelector((state) => state.files);
+
+  const newFiles = fileData.body;
+  const formAttach = fileData.backend;
+
+  const [attachList, setAttachList] = useState<File[]>([]);
+
+  useEffect(() => {
+    const a = Promise.all(
+      formAttach.map(async (file, index) => {
+        const res = await axios({
+          method: "GET",
+          url: `https://orangeapi.orange-electronic.com/api/Download?file=${file.FilePath}`,
+          responseType: "blob",
+        });
+        const type =
+          file.FileName.split(".")[file.FileName.split(".").length - 1];
+
+        return new File([res.data], `${file.WebID} - ${index + 1}`, {
+          type: getAccept(type),
+        });
+      })
+    );
+    (async function () {
+      if ((await a).length === 0) {
+        return;
+      } else {
+        setAttachList(await a);
+      }
+    })();
+  }, [formAttach]);
 
   const dispatch = useAppDispatch();
   function deleteFiles(index: number) {
@@ -113,12 +208,13 @@ export const AttachForm = ({ type }: component) => {
             type === "addForm" ? "grid grid-cols-2" : "grid grid-cols-1"
           }
         >
-          {fileData.map((file, index) => (
+          {newFiles.map((file, index) => (
             <FileItem
               file={file}
               index={index}
               d={deleteFiles}
               key={index}
+              type='addForm'
             />
           ))}
         </article>
@@ -127,7 +223,14 @@ export const AttachForm = ({ type }: component) => {
         <div className='w-full'>
           <p>原有附件 : </p>
           <article className={"grid grid-cols-1"}>
-            <></>
+            {attachList.map((file, index) => (
+              <FileItem
+                file={file}
+                index={index}
+                key={index}
+                type='sign'
+              />
+            ))}
           </article>
         </div>
       )}

@@ -3,7 +3,7 @@ import axios from "axios";
 
 export type signFinalDataType = {
   FORMNO: string;
-  SIGNORDER: string | number; //簽核順序
+  SIGNORDER: number; //簽核順序
   STEPNAME: string;
   SIGNER: string; //簽核人員代號
   SIGNERNAME: string; //簽核人員名稱
@@ -12,21 +12,25 @@ export type signFinalDataType = {
   SIGNRESULT: signStatus;
   OPINION: string; //簽核意見
   SIGNTIME: string; //簽核時間
-  ALLOWCUSTOM: string; //是否自訂簽核
+  ALLOWCUSTOM: boolean; //是否自訂簽核
   SignGroup: string; //簽核群組
   ISEnable: string; //是否顯示
   types: "1"; //1修改
   ExceId: string; //建立人
   Status: string;
 };
+
+// TODO 解開 api
 export function updateSignStatus(apiPath: string) {
   return async function (data: signFinalDataType) {
     console.log(data);
-
+    return '結果'
     // const res = await axios({
     //   method: "POST",
-    //   url: `${apiPath}/CountersignAdd`,
+    //   url: `${apiPath}/SignStepupdate`,
+    //   data: data
     // });
+    // console.log(res.data)
     // return res.data
   };
 }

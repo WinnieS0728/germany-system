@@ -25,6 +25,8 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
   const [toggleOtherSignModal] = useModalControl("otherSign");
 
   const formInfo = useAppSelector((state) => state.formInfo);
+  const fileData = useAppSelector((state) => state.files).body;
+  const nowUser = useAppSelector((state) => state.nowUser);
 
   const {
     handleSubmit,
@@ -56,7 +58,7 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
       list.map(async (id: string) => (await api.getMember(id))[0])
     );
     const otherSignMemberList = otherSignMember.map(
-      (member):otherSignFinalDataType => {
+      (member): otherSignFinalDataType => {
         return {
           FORMNO: formInfo.body.formId,
           SIGNORDER: formInfo.body.nowOrder,
@@ -69,7 +71,23 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
       }
     );
 
-    const res = api.postOtherSign(otherSignMemberList);
+    const res = await api.postOtherSign(otherSignMemberList);
+    console.log(res);
+
+    postFile(formInfo.body.formId);
+  }
+
+  async function postFile(id: string) {
+    for (const file of fileData) {
+      const filePackage = new FormData();
+      filePackage.append("formId", id);
+      filePackage.append("EmpId", nowUser.body.EmpId);
+      filePackage.append("fileName", file.name);
+      filePackage.append("webName", "BusinessTrip");
+      filePackage.append("SIGNORDER", (formInfo.body.nowOrder).toString());
+      filePackage.append("file", file);
+      const res = await api.uploadFileSign(filePackage);
+    }
   }
 
   useEffect(() => {
