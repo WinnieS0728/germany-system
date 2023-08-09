@@ -6,7 +6,7 @@ import { signStatus } from "@/types";
 import { dateFormatter } from "@/hooks/dateFormatter";
 import { useAppSelector } from "@/hooks/redux";
 
-export const SignTable = ({ formId }: { formId: string }) => {
+export const SignTable = () => {
   const color = useTheme()?.color;
   const formInfo = useAppSelector((state) => state.formInfo).body;
   return (

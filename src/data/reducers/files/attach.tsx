@@ -18,34 +18,33 @@ const attachData: attachData[] = [];
 const fileSlice = createSlice({
   name: "files",
   initialState: {
-    body: initData,
-    backend: attachData,
+    body: { newFile: initData, formAttach: attachData },
     status: statusType.idle,
   },
   reducers: {
     addFile: (state, action) => {
-      const array = [...state.body];
+      const array = [...state.body.newFile];
       array.push(action.payload);
-      state.body = array;
+      state.body.newFile = array;
     },
     deleteFile: (state, action) => {
-      const array = [...state.body];
+      const array = [...state.body.newFile];
       array.splice(action.payload, 1);
-      state.body = array;
+      state.body.newFile = array;
     },
   },
   extraReducers: (builder) =>
     builder
       .addCase(setFormAttach.fulfilled, (state, action) => {
         state.status = statusType.succeeded;
-        state.backend = action.payload as attachData[];
+        state.body.formAttach = action.payload as attachData[];
       })
       .addCase(setFormAttach.pending, (state) => {
         state.status = statusType.loading;
       })
       .addCase(setFormAttach.rejected, (state) => {
         state.status = statusType.failed;
-        state.backend = attachData;
+        state.body.formAttach = attachData;
       }),
 });
 

@@ -1,5 +1,5 @@
-import { NewForm } from "@/components/apply/add/new form";
-import { ListPage } from "@/components/apply/list table";
+import { NewForm } from "@/pages/apply/new apply";
+import { ListPage } from "@/pages/apply/list page";
 import { Header } from "@/layouts/header";
 import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";

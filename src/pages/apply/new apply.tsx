@@ -2,14 +2,14 @@ import { IconBtn } from "@/components/UI/buttons";
 import { Main } from "@/layouts/main";
 import * as Icons from "@components/UI/icons";
 import { Link } from "react-router-dom";
-import { InfoForm } from "./info form";
-import { TransportationForm } from "./trafic";
+import { InfoForm } from "../../components/apply/add/info form";
+import { TransportationForm } from "../../components/apply/add/trafic";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { MoneyForm } from "./money";
-import { AgentForm } from "./agent";
-import { AttachForm } from "./attach";
+import { MoneyForm } from "../../components/apply/add/money";
+import { AgentForm } from "../../components/apply/add/agent";
+import { AttachForm } from "../../components/apply/add/attach";
 import { useEffect } from "react";
-import { TripDetailForm } from "./detail/trip detail block";
+import { TripDetailForm } from "../../components/apply/add/detail/trip detail block";
 import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { setDate } from "@/data/reducers/trip detail/trip detail";
@@ -17,12 +17,18 @@ import { useSelectRef } from "@/hooks/select ref";
 import { timeDay, timeMonday } from "d3-time";
 import { timeFormat } from "d3";
 import api from "@/lib/api";
-import { useData } from "./confirm/data";
+import { useData } from "../../components/apply/add/confirm/data";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useTheme } from "styled-components";
 import { Block } from "@/layouts/block";
 import { setErrors } from "@/data/reducers/error/errors";
+import { useFiles } from "@/hooks/file upload";
+import { Modal } from "@/layouts/modal";
+import { NewDetailForm } from "../../components/apply/add/detail/new detail";
+import { Confirm } from "../../components/apply/add/confirm/confirm";
+import { UploadFiles } from "../../components/apply/add/upload files";
+import { ErrorsModal } from "../../components/apply/add/errors";
 
 const schema = yup.object().shape({
   DeptId: yup.string(),
@@ -79,7 +85,7 @@ export const NewForm = () => {
       Curr: "",
       Deputy: "",
       tripData: [],
-    }
+    },
   });
 
   const {
@@ -108,6 +114,7 @@ export const NewForm = () => {
     return res?.[0].CustId;
   }
 
+  const { uploadFile } = useFiles();
   async function onSubmit<T>(d: T) {
     const newFormData = { ...d, ...dateRange };
     const formId = await createNewForm(newFormData);
@@ -129,22 +136,9 @@ export const NewForm = () => {
       })
     );
     pushData(newData);
-    postFile(formId);
+    uploadFile(formId);
 
     clearNewFormSelect();
-  }
-
-  async function postFile(id: string) {
-    console.log(fileData);
-    for (const file of fileData) {
-      const filePackage = new FormData();
-      filePackage.append("formId", id);
-      filePackage.append("EmpId", nowUser.body.EmpId);
-      filePackage.append("fileName", file.name);
-      filePackage.append("webName", "BusinessTrip");
-      filePackage.append("file", file);
-      const res = await api.uploadFile(filePackage);
-    }
   }
 
   async function createNewForm(data: any) {
@@ -214,27 +208,42 @@ export const NewForm = () => {
     }
   }
 
+  const myErrors = useAppSelector((state) => state.errors);
+
   return (
-    <Main className='main-section-gap'>
-      <>
-        <div className='top-btn-list'>
-          <button
-            type='button'
-            onClick={done}
-          >
-            <IconBtn
-              icon={
-                <Icons.Send
-                  size='1.5rem'
-                  color={color.white}
-                />
-              }
-              primary
+    <>
+      <Modal name='newDetail'>
+        <NewDetailForm />
+      </Modal>
+      <Modal name='review'>
+        <Confirm />
+      </Modal>
+      <Modal name='files'>
+        <UploadFiles />
+      </Modal>
+      <Modal name='errors'>
+        <ErrorsModal errors={myErrors.body} />
+      </Modal>
+      <Main className='main-section-gap'>
+        <>
+          <div className='top-btn-list'>
+            <button
+              type='button'
+              onClick={done}
             >
-              送簽表單
-            </IconBtn>
-          </button>
-          {/* <button
+              <IconBtn
+                icon={
+                  <Icons.Send
+                    size='1.5rem'
+                    color={color.white}
+                  />
+                }
+                primary
+              >
+                送簽表單
+              </IconBtn>
+            </button>
+            {/* <button
             type='button'
             onClick={() => {
               console.log("fuck you store");
@@ -242,45 +251,48 @@ export const NewForm = () => {
           >
             <IconBtn icon={<Icons.Save size='1.5rem' />}>暫存檔案</IconBtn>
           </button> */}
-          <button
-            type='button'
-            onClick={() => {
-              toggleFilesModal("on");
-            }}
-          >
-            <IconBtn icon={<Icons.AddFiles size='1.5rem' />}>附加文件</IconBtn>
-          </button>
-          <button type='button'>
-            <Link to={"../"}>
-              <IconBtn icon={<Icons.Back size='1.25rem' />}>返回列表</IconBtn>
-            </Link>
-          </button>
-        </div>
-        <FormProvider {...methods}>
-          <form
-            id='business apply'
-            onSubmit={handleSubmit(onSubmit)}
-            className='main-section-gap'
-          >
-            <Block>
-              <InfoForm type='addForm' />
-            </Block>
-            <Block>
-              <TransportationForm />
-            </Block>
-            <TripDetailForm />
-            <Block>
-              <MoneyForm />
-            </Block>
-            <Block>
-              <AgentForm />
-            </Block>
-            <Block>
-              <AttachForm type='addForm' />
-            </Block>
-          </form>
-        </FormProvider>
-      </>
-    </Main>
+            <button
+              type='button'
+              onClick={() => {
+                toggleFilesModal("on");
+              }}
+            >
+              <IconBtn icon={<Icons.AddFiles size='1.5rem' />}>
+                附加文件
+              </IconBtn>
+            </button>
+            <button type='button'>
+              <Link to={"../"}>
+                <IconBtn icon={<Icons.Back size='1.25rem' />}>返回列表</IconBtn>
+              </Link>
+            </button>
+          </div>
+          <FormProvider {...methods}>
+            <form
+              id='business apply'
+              onSubmit={handleSubmit(onSubmit)}
+              className='main-section-gap'
+            >
+              <Block>
+                <InfoForm type='addForm' />
+              </Block>
+              <Block>
+                <TransportationForm />
+              </Block>
+              <TripDetailForm />
+              <Block>
+                <MoneyForm />
+              </Block>
+              <Block>
+                <AgentForm />
+              </Block>
+              <Block>
+                <AttachForm type='addForm' />
+              </Block>
+            </form>
+          </FormProvider>
+        </>
+      </Main>
+    </>
   );
 };

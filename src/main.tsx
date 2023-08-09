@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <ThemeProvider theme={theme}>
       <HashRouter>
         <App />
-        <PopupLayer />
+        {/* <PopupLayer /> */}
         <ToastContainer
           position='top-center'
           autoClose={5000}

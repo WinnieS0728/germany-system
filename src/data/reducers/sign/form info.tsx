@@ -3,7 +3,7 @@ import { setSignList } from "@/data/actions/sign/set sign list";
 import { createSlice } from "@reduxjs/toolkit";
 import { statusType } from "types/api";
 
-interface signList {
+export interface signList {
   FORMNO: string;
   SIGNORDER: number;
   STEPNAME: string;
@@ -22,7 +22,7 @@ interface signList {
   Status: null;
 }
 
-interface nextSign {
+export interface nextSign {
   FORMNO: string;
   SIGNORDER: number;
   STEPNAME: string;

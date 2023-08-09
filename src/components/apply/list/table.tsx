@@ -63,7 +63,16 @@ export const ListTable = () => {
                         </div>
                       )}
                     </td>
-                    <td>{i.formId}</td>
+                    <td>
+                      <a
+                        href='http://'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        style={{ color: color.black, fontWeight: 400 }}
+                      >
+                        {i.formId}
+                      </a>
+                    </td>
                     <td>{i.atuNum}</td>
                     <td>{i.oldCusNum}</td>
                     <td>{i.newCusNum}</td>

@@ -1,65 +1,11 @@
 import { IconBtn } from "@/components/UI/buttons";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import * as Icons from "@components/UI/icons";
-import pdf from "@img/files/pdf_icon.svg";
-import excel from "@img/files/excel_icon.svg";
-import word from "@img/files/word_icon.svg";
-import ppt from "@img/files/ppt_icon.svg";
-import img from "@img/files/img_icon.svg";
-import normal from "@img/files/file_icon.svg";
 import styled from "styled-components";
 import { deleteFile } from "@/data/reducers/files/attach";
 import { component } from "@/types";
-import axios from "axios";
 import { useEffect, useState } from "react";
-
-interface id {
-  id: string;
-}
-interface type {
-  type: Record<string, string>;
-}
-const mineObj: (id & type)[] = [
-  {
-    id: "word",
-    type: {
-      doc: "application/msword",
-      docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    },
-  },
-  {
-    id: "ppt",
-    type: {
-      ppt: "application/vnd.ms-powerpoint",
-      pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    },
-  },
-  {
-    id: "excel",
-    type: {
-      xls: "application/vnd.ms-excel",
-      xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    },
-  },
-  {
-    id: "pdf",
-    type: {
-      pdf: "application/pdf",
-    },
-  },
-  {
-    id: "img",
-    type: {
-      jpg: "image/jpeg",
-      png: "image/png",
-    },
-  },
-];
-
-function getAccept(type: string) {
-  const mine = mineObj.find((i) => Object.keys(i.type).some((t) => t === type));
-  return mine?.type[`${type}`];
-}
+import { useFiles } from "@/hooks/file upload";
 
 const FileItem_o = ({
   file,
@@ -73,37 +19,14 @@ const FileItem_o = ({
   index: number;
   d?: (n: number) => void;
 } & component) => {
-  function getFileSize(num: number): string {
-    if (num <= 1000) {
-      return `${num} Byte`;
-    } else if (num <= 1000 * 1000) {
-      return `${(num / 1024).toFixed(1)} KB`;
-    } else {
-      return `${(num / 1024 / 1024).toFixed(1)} MB`;
-    }
-  }
-  function getFileType(file: File): string {
-    if (file.type.match(/^image/i)) {
-      return img;
-    } else if (file.name.match(/.pp(t|tx)$/i)) {
-      return ppt;
-    } else if (file.name.match(/.xl(s|sx)$/i)) {
-      return excel;
-    } else if (file.name.match(/.do(c|cx)$/i)) {
-      return word;
-    } else if (file.name.match(/.pdf$/i)) {
-      return pdf;
-    } else {
-      return normal;
-    }
-  }
+  const { getFileSize, getFileType } = useFiles();
 
   const url = URL.createObjectURL(file);
 
   return (
     <section className={className}>
       <img
-        src={getFileType(file)}
+        src={getFileType(file.type).src}
         alt='顯示圖案'
       />
       <div className='content'>
@@ -164,35 +87,31 @@ const FileItem = styled(FileItem_o)`
 export const AttachForm = ({ type }: component) => {
   const fileData = useAppSelector((state) => state.files);
 
-  const newFiles = fileData.body;
-  const formAttach = fileData.backend;
+  const newFiles = fileData.body.newFile;
+  const formAttach = fileData.body.formAttach;
 
   const [attachList, setAttachList] = useState<File[]>([]);
 
-  useEffect(() => {
-    const a = Promise.all(
-      formAttach.map(async (file, index) => {
-        const res = await axios({
-          method: "GET",
-          url: `https://orangeapi.orange-electronic.com/api/Download?file=${file.FilePath}`,
-          responseType: "blob",
-        });
-        const type =
-          file.FileName.split(".")[file.FileName.split(".").length - 1];
+  const { name2mine, path2blob } = useFiles();
 
-        return new File([res.data], `${file.WebID} - ${index + 1}`, {
-          type: getAccept(type),
+  useEffect(() => {
+    const fileList = Promise.all(
+      formAttach.map(async (file, index) => {
+        const blob = await path2blob(file.FilePath);
+
+        return new File([blob], `${file.WebID} - ${index + 1}`, {
+          type: name2mine(file.FileName),
         });
       })
     );
     (async function () {
-      if ((await a).length === 0) {
+      if ((await fileList).length === 0) {
         return;
       } else {
-        setAttachList(await a);
+        setAttachList(await fileList);
       }
     })();
-  }, [formAttach]);
+  }, [formAttach, name2mine, path2blob]);
 
   const dispatch = useAppDispatch();
   function deleteFiles(index: number) {

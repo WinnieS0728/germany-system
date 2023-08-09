@@ -21,6 +21,8 @@ import { uploadFile } from "./common/upload file";
 import { uploadFileSign } from "./common/upload file sign";
 import { getFormAttach } from "./common/fetch sign attach";
 import { updateForm } from "./travel apply/update form";
+import { downloadFile } from "./common/download file";
+import { getGroup } from "./common/get group";
 
 const apiPath = import.meta.env.VITE_API_PATH;
 
@@ -46,7 +48,9 @@ const api = {
   updateSignStatus: updateSignStatus(apiPath),
   uploadFile: uploadFile(apiPath),
   uploadFileSign: uploadFileSign(apiPath),
+  downloadFile: downloadFile(apiPath),
   getFormAttach: getFormAttach(apiPath),
+  getMemberGroup: getGroup(apiPath),
 };
 
 export default api;

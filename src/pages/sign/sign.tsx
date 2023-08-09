@@ -19,11 +19,17 @@ import { useModalControl } from "@/hooks/modal control";
 import { SignTable } from "@/components/sign/sign table";
 import { AttachForm } from "@/components/apply/add/attach";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { useEffect, useRef } from "react";
-import { setFormId } from "@/data/reducers/sign/form info";
+import { useEffect, useMemo, useState } from "react";
+import { nextSign, setFormId } from "@/data/reducers/sign/form info";
 import { setSignList } from "@/data/actions/sign/set sign list";
 import { setNextSigner } from "@/data/actions/sign/set next sign";
 import { setFormAttach } from "@/data/actions/files/fetch form attach";
+import api from "@/lib/api";
+import { Modal } from "@/layouts/modal";
+import { UploadFiles } from "@/components/apply/add/upload files";
+import { SignBlock } from "@/components/sign/sign box";
+import { OtherSignBlock } from "@/components/sign/other sign block";
+import { ErrorsModal } from "@/components/apply/add/errors";
 
 const SignPage = () => {
   const { formId } = useParams();
@@ -34,23 +40,28 @@ const SignPage = () => {
     dispatch(setNextSigner(formId as string));
     dispatch(setFormAttach(formId as string));
   }, [dispatch, formId]);
+  const formInfo = useAppSelector((state) => state.formInfo).body;
+  const nowUser = useAppSelector((state) => state.nowUser).body;
 
   const color = useTheme()?.color;
   const methods = useForm();
 
-  // TODO 簽核功能開關
-  const isNextSigner = useRef<boolean>(true);
-  const nowUser = useAppSelector((state) => state.nowUser);
-  const nextSigner = useAppSelector((state) => state.formInfo);
-
-  useEffect(() => {
-    if (
-      (nextSigner.body.nextSign as { SIGNER: string })?.SIGNER ===
-      nowUser.body.EmpId
-    ) {
-      isNextSigner.current = true;
+  const isNextSigner = useMemo(() => {
+    if ((formInfo.nextSign as nextSign)?.SIGNER === nowUser.EmpId) {
+      return true;
     }
-  }, [nextSigner, nowUser]);
+    return false;
+  }, [formInfo, nowUser]);
+
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  useEffect(() => {
+    (async function () {
+      const res = await api.getMemberGroup(nowUser.EmpId);
+      if (res.find((i: { GroupID: string }) => i.GroupID === "admin")) {
+        setIsAdmin(true);
+      }
+    })();
+  }, [nowUser]);
 
   const { headData, detailData } = useSignPageData(formId as string);
   // console.log(detailData);
@@ -74,13 +85,31 @@ const SignPage = () => {
   const [toggleOtherSignModal] = useModalControl("otherSign");
   const [toggleFileModal] = useModalControl("files");
 
+  const myErrors = useAppSelector((state) => state.errors);
+
   return (
     <>
+      {isNextSigner && (
+        <>
+          <Modal name='files'>
+            <UploadFiles />
+          </Modal>
+          <Modal name='sign'>
+            <SignBlock type='sign' />
+          </Modal>
+          <Modal name='otherSign'>
+            <OtherSignBlock />
+          </Modal>
+        </>
+      )}
+      <Modal name='errors'>
+        <ErrorsModal errors={myErrors.body} />
+      </Modal>
       <Header title='國內外出差申請單' />
       <Main className='main-section-gap'>
         <>
           <div className='top-btn-list'>
-            {isNextSigner.current && (
+            {isNextSigner && (
               <>
                 <button
                   type='button'
@@ -149,6 +178,13 @@ const SignPage = () => {
                 </Btns.IconBtn>
               </Link>
             </button>
+            {isAdmin && (
+              <button type='button'>
+                <Btns.IconBtn icon={<Icons.Void size='1.25rem' />}>
+                  作廢
+                </Btns.IconBtn>
+              </button>
+            )}
           </div>
           <FormProvider {...methods}>
             <Block>
@@ -195,7 +231,7 @@ const SignPage = () => {
               <AttachForm type='sign' />
             </Block>
           </FormProvider>
-          <SignTable formId={formId as string} />
+          <SignTable />
         </>
       </Main>
     </>

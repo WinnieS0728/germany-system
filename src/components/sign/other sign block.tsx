@@ -12,6 +12,8 @@ import { useEffect } from "react";
 import { useSelectRef } from "@/hooks/select ref";
 import api from "@/lib/api";
 import { otherSignFinalDataType } from "@/lib/api/sign/post otherSign";
+import { useFiles } from "@/hooks/file upload";
+import { useSign } from "@/hooks/sign";
 
 const schema = yup.object().shape({
   member: yup.array().of(yup.string()).min(1, "沒人"),
@@ -25,8 +27,6 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
   const [toggleOtherSignModal] = useModalControl("otherSign");
 
   const formInfo = useAppSelector((state) => state.formInfo);
-  const fileData = useAppSelector((state) => state.files).body;
-  const nowUser = useAppSelector((state) => state.nowUser);
 
   const {
     handleSubmit,
@@ -43,58 +43,27 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
     },
   });
 
+  const { otherSignRef } = useSelectRef();
   const dispatch = useAppDispatch();
 
   function onSubmit<T>(d: T) {
     // console.log(d);
     send((d as { member: string[] }).member);
     toggleOtherSignModal("off");
-    reset();
     otherSignRef.current?.clearValue();
+    reset();
   }
 
+  const { uploadFile } = useFiles();
+  const { otherSign } = useSign();
   async function send(list: string[]) {
-    const otherSignMember = await Promise.all(
-      list.map(async (id: string) => (await api.getMember(id))[0])
-    );
-    const otherSignMemberList = otherSignMember.map(
-      (member): otherSignFinalDataType => {
-        return {
-          FORMNO: formInfo.body.formId,
-          SIGNORDER: formInfo.body.nowOrder,
-          STEPNAME: member.DeptName,
-          SIGNER: member.EmpId,
-          SIGNERNAME: member.EmpName,
-          OPINION: "",
-          SignGroup: "會簽",
-        };
-      }
-    );
-
-    const res = await api.postOtherSign(otherSignMemberList);
-    console.log(res);
-
-    postFile(formInfo.body.formId);
-  }
-
-  async function postFile(id: string) {
-    for (const file of fileData) {
-      const filePackage = new FormData();
-      filePackage.append("formId", id);
-      filePackage.append("EmpId", nowUser.body.EmpId);
-      filePackage.append("fileName", file.name);
-      filePackage.append("webName", "BusinessTrip");
-      filePackage.append("SIGNORDER", (formInfo.body.nowOrder).toString());
-      filePackage.append("file", file);
-      const res = await api.uploadFileSign(filePackage);
-    }
+    otherSign(list);
+    uploadFile(formInfo.body.formId);
   }
 
   useEffect(() => {
     trigger();
   }, [trigger]);
-
-  const { otherSignRef } = useSelectRef();
 
   return (
     <article className={`modal ${className} space-y-4`}>

@@ -7,58 +7,7 @@ import * as Icons from "@components/UI/icons";
 import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch } from "@/hooks/redux";
 import { addFile } from "@/data/reducers/files/attach";
-
-const mineObj = [
-  {
-    id: "word",
-    type: {
-      doc: "application/msword",
-      docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    },
-  },
-  {
-    id: "ppt",
-    type: {
-      ppt: "application/vnd.ms-powerpoint",
-      pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    },
-  },
-  {
-    id: "excel",
-    type: {
-      xls: "application/vnd.ms-excel",
-      xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    },
-  },
-  {
-    id: "pdf",
-    type: {
-      pdf: "application/pdf",
-    },
-  },
-  {
-    id: "img",
-    type: {
-      jpg: "image/jpeg",
-      png: "image/png",
-    },
-  },
-];
-
-function getAccept(typeList: string[]) {
-  const typeObj: { [key: string]: string[] } = {};
-  for (const type of typeList) {
-    const target = mineObj.find((i) => i.id === type);
-    if (!target) {
-      return;
-    }
-    const a = Object.entries(target.type);
-    for (const s of a) {
-      typeObj[s[1]] = [`.${s[0]}`];
-    }
-  }
-  return typeObj;
-}
+import { useFiles } from "@/hooks/file upload";
 
 const getColor = (props: any) => {
   if (props.$isDragAccept) {
@@ -90,21 +39,23 @@ const FileInput = styled.div`
     cursor: pointer;
 `;
 
-export const UploadFiles = () => {
+export function UploadFiles() {
   const color = useTheme()?.color;
 
   const [fileList, setFileList] = useState<File[]>([]);
+
+  const { getFileSize, getDropzoneAccept } = useFiles();
+  
   const onDrop = useCallback((files: File[]) => {
     setFileList((prev) => {
       const array = prev.concat([...files]);
       return array;
     });
   }, []);
-
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
       onDrop,
-      accept: getAccept(["img", "word", "ppt", "excel"]),
+      accept: getDropzoneAccept(["img", "word", "ppt", "excel"]),
     });
 
   function handleDeleteFile(index: number) {
@@ -124,15 +75,6 @@ export const UploadFiles = () => {
 
   const [toggleFileModal] = useModalControl("files");
 
-  function getFileSize(num: number): string {
-    if (num <= 1000) {
-      return `${num} Byte`;
-    } else if (num <= 1000 * 1000) {
-      return `${(num / 1024).toFixed(1)} KB`;
-    } else {
-      return `${(num / 1024 / 1024).toFixed(1)} MB`;
-    }
-  }
 
   return (
     <article
@@ -220,4 +162,4 @@ export const UploadFiles = () => {
       </div>
     </article>
   );
-};
+}

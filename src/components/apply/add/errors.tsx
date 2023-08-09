@@ -6,9 +6,7 @@ export const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
   // console.log(errors);
 
   const color = useTheme()?.color;
-  const errorMessage = Object.values(errors).map(
-    (err: any) => err.message
-  );
+  const errorMessage = Object.values(errors).map((err: any) => err.message);
   const tripError = getTripDataError();
   const [toggleModal] = useModalControl("errors");
 

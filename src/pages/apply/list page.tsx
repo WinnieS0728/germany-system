@@ -1,8 +1,8 @@
 import { Main } from "@/layouts/main";
 import { NavLink } from "react-router-dom";
-import { IconBtn } from "../UI/buttons";
+import { IconBtn } from "../../components/UI/buttons";
 import * as Icons from "@components/UI/icons";
-import { HeaderForm } from "./list/header form";
+import { HeaderForm } from "../../components/apply/list/header form";
 import { ListTable } from "@/components/apply/list/table";
 import { useTheme } from "styled-components";
 

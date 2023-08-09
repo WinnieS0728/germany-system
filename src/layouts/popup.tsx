@@ -6,8 +6,8 @@ import { UploadFiles } from "@/components/apply/add/upload files";
 import { useAppSelector } from "@/hooks/redux";
 import { useModalControl } from "@/hooks/modal control";
 import { useScroll } from "@/hooks/scroll control";
-import { SignBlock } from "@/components/sign/sign box";
 import { OtherSignBlock } from "@/components/sign/other sign block";
+import { SignBlock } from "@/components/sign/sign box";
 
 export const PopupLayer = () => {
   const errors = useAppSelector((state) => state.errors);
@@ -17,10 +17,10 @@ export const PopupLayer = () => {
   const reviewState = useModalControl("review")[1];
   const filesState = useModalControl("files")[1];
 
-  const statusArray = [errorsState, detailState, reviewState, filesState];
+  const modalStatusArray = [errorsState, detailState, reviewState, filesState];
 
   const { canScroll } = useScroll();
-  if (statusArray.some((status) => status === true)) {
+  if (modalStatusArray.some((status) => status === true)) {
     canScroll(false);
   } else {
     canScroll(true);
