@@ -32,4 +32,8 @@
   .modal {
     @apply w-full rounded-xl px-8 py-6
   }
+
+  .submit-btns{
+    @apply flex items-center justify-center gap-4 flex-col-reverse sm:flex-row
+  }
 }

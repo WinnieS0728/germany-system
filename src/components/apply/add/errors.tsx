@@ -30,17 +30,25 @@ export const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
       <div className='flex'>
         <span
           style={{ fontSize: "10rem" }}
-          className='flex w-1/2 items-center justify-center'
+          className='hidden w-1/2 items-center justify-center sm:flex'
         >
           <Icons.Error />
         </span>
         <div className='flex w-full flex-col justify-center'>
           <ul className='error-ul py-4 ps-8 text-xl'>
             {errorMessage?.map((m, index) => (
-              <li key={index}>{m}</li>
+              <li
+                key={index}
+                className='flex items-center gap-2'
+              >
+                <span className='sm:hidden'>
+                  <Icons.Error />
+                </span>
+                {m}
+              </li>
             ))}
             {tripError?.map((m: string, index) => (
-              <li key={index}>{m}</li>
+              <li key={index}>🫠{m}</li>
             ))}
           </ul>
         </div>

@@ -13,6 +13,7 @@ import { Required } from "@/components/form/required";
 import { setErrors } from "@/data/reducers/error/errors";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { Table } from "@/components/table/table";
 
 interface trProps {
   label: string;
@@ -143,169 +144,171 @@ export const NewDetailForm = () => {
         className={`modal space-y-4`}
         style={{ backgroundColor: color.white }}
       >
-        <table>
-          <thead>
-            <tr>
-              <th
-                colSpan={2}
-                className='text-start'
-                style={{
-                  backgroundColor: color.sectionHeader,
-                  color: color.white,
-                }}
+        <Table>
+          <table>
+            <thead>
+              <tr>
+                <th
+                  colSpan={2}
+                  className='text-start'
+                  style={{
+                    backgroundColor: color.sectionHeader,
+                    color: color.white,
+                  }}
+                >
+                  出差地點明細
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <Tr
+                label='出差事由'
+                required
               >
-                出差地點明細
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <Tr
-              label='出差事由'
-              required
-            >
-              <Controller
-                control={control}
-                name='purpose'
-                rules={{ required: "出差事由必填" }}
-                render={({ field: { onChange } }) => (
-                  <MySelect.Async
-                    forwardRef={newDetailRef.purpose}
-                    options={options.event}
-                    onChange={onChange}
-                    value='ResourcesName'
-                    placeholder='選擇出差事由...'
-                    getLabelFunction={(option: any) => option.ResourcesName}
-                    getValueFunction={(option: any) => option.ResourcesName}
-                  />
-                )}
-              />
-            </Tr>
-            <Tr
-              label='行政區'
-              required
-            >
-              <Controller
-                control={control}
-                name='district'
-                rules={{ required: "行政區必填" }}
-                render={({ field: { onChange } }) => (
-                  <MySelect.Async
-                    forwardRef={newDetailRef.country}
-                    options={options.area}
-                    onChange={onChange}
-                    value='Country'
-                    placeholder='選擇行政區...'
-                    getLabelFunction={(option: any) => option.Country}
-                    getValueFunction={(option: any) => option.Country}
-                  />
-                )}
-              />
-            </Tr>
-            <Tr
-              label='郵遞區號'
-              required
-            >
-              <Controller
-                control={control}
-                name='postalCode'
-                rules={{ required: "郵遞區號必填" }}
-                render={({ field: { onChange } }) => (
-                  <MySelect.Async
-                    forwardRef={newDetailRef.postalCode}
-                    options={options.postalCode}
-                    onChange={onChange}
-                    placeholder='選擇郵遞區號...'
-                    getLabelFunction={(option: any) =>
-                      `${option.zipcode} / ${option.place}`
-                    }
-                    getValueFunction={(option: any) => option.zipcode}
-                    filterFunction={(candidate) => {
-                      if (candidate.data.state === watch_area) {
-                        return true;
+                <Controller
+                  control={control}
+                  name='purpose'
+                  rules={{ required: "出差事由必填" }}
+                  render={({ field: { onChange } }) => (
+                    <MySelect.Async
+                      forwardRef={newDetailRef.purpose}
+                      options={options.event}
+                      onChange={onChange}
+                      value='ResourcesName'
+                      placeholder='選擇出差事由...'
+                      getLabelFunction={(option: any) => option.ResourcesName}
+                      getValueFunction={(option: any) => option.ResourcesName}
+                    />
+                  )}
+                />
+              </Tr>
+              <Tr
+                label='行政區'
+                required
+              >
+                <Controller
+                  control={control}
+                  name='district'
+                  rules={{ required: "行政區必填" }}
+                  render={({ field: { onChange } }) => (
+                    <MySelect.Async
+                      forwardRef={newDetailRef.country}
+                      options={options.area}
+                      onChange={onChange}
+                      value='Country'
+                      placeholder='選擇行政區...'
+                      getLabelFunction={(option: any) => option.Country}
+                      getValueFunction={(option: any) => option.Country}
+                    />
+                  )}
+                />
+              </Tr>
+              <Tr
+                label='郵遞區號'
+                required
+              >
+                <Controller
+                  control={control}
+                  name='postalCode'
+                  rules={{ required: "郵遞區號必填" }}
+                  render={({ field: { onChange } }) => (
+                    <MySelect.Async
+                      forwardRef={newDetailRef.postalCode}
+                      options={options.postalCode}
+                      onChange={onChange}
+                      placeholder='選擇郵遞區號...'
+                      getLabelFunction={(option: any) =>
+                        `${option.zipcode} / ${option.place}`
                       }
+                      getValueFunction={(option: any) => option.zipcode}
+                      filterFunction={(candidate) => {
+                        if (candidate.data.state === watch_area) {
+                          return true;
+                        }
 
-                      return false;
-                    }}
-                    value='zipcode'
-                  />
-                )}
-              />
-            </Tr>
-            <Tr label='城市'>
-              <input
-                type='text'
-                {...register("city")}
-                className='noBorder w-full'
-                autoComplete='off'
-                readOnly
-              />
-            </Tr>
-            <Tr
-              label='客戶名稱'
-              required
-            >
-              <Controller
-                control={control}
-                name='cus'
-                rules={{ required: "客戶必填" }}
-                render={({ field: { onChange } }) => (
-                  <MySelect.Async
-                    forwardRef={newDetailRef.cus}
-                    options={options.cus}
-                    onChange={onChange}
-                    placeholder='選擇客戶...'
-                    noOptionComponent={
-                      <a
-                        href='https://esys.orange-electronic.com/Customer/CustomerList'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                      >
-                        <button
-                          type='button'
-                          className='w-full'
-                          style={{
-                            color: color.white,
-                            backgroundColor: color.createCus,
-                          }}
+                        return false;
+                      }}
+                      value='zipcode'
+                    />
+                  )}
+                />
+              </Tr>
+              <Tr label='城市'>
+                <input
+                  type='text'
+                  {...register("city")}
+                  className='noBorder w-full'
+                  autoComplete='off'
+                  readOnly
+                />
+              </Tr>
+              <Tr
+                label='客戶名稱'
+                required
+              >
+                <Controller
+                  control={control}
+                  name='cus'
+                  rules={{ required: "客戶必填" }}
+                  render={({ field: { onChange } }) => (
+                    <MySelect.Async
+                      forwardRef={newDetailRef.cus}
+                      options={options.cus}
+                      onChange={onChange}
+                      placeholder='選擇客戶...'
+                      noOptionComponent={
+                        <a
+                          href='https://esys.orange-electronic.com/Customer/CustomerList'
+                          target='_blank'
+                          rel='noopener noreferrer'
                         >
-                          查無資料，請建立客戶資訊
-                        </button>
-                      </a>
-                    }
-                    getLabelFunction={(option: any) => option.CustName}
-                    getValueFunction={(option: any) => option.CustName}
-                    value='CustName'
-                    filterFunction={(candidate) => {
-                      if (candidate.data.PostalCode === watch_postcode) {
-                        return true;
+                          <button
+                            type='button'
+                            className='w-full'
+                            style={{
+                              color: color.white,
+                              backgroundColor: color.createCus,
+                            }}
+                          >
+                            查無資料，請建立客戶資訊
+                          </button>
+                        </a>
                       }
-                      return false;
-                    }}
-                  />
-                )}
-              />
-            </Tr>
-            <Tr label='住宿飯店 or 地點'>
-              <input
-                type='text'
-                {...register("hotel")}
-                className='w-full'
-                autoComplete='off'
-                placeholder='輸入住宿飯店...'
-              />
-            </Tr>
-            <Tr label='備註'>
-              <input
-                type='text'
-                {...register("PS")}
-                className='w-full'
-                autoComplete='off'
-                placeholder='輸入出差目的...'
-              />
-            </Tr>
-          </tbody>
-        </table>
-        <div className='flex items-center justify-center gap-4'>
+                      getLabelFunction={(option: any) => option.CustName}
+                      getValueFunction={(option: any) => option.CustName}
+                      value='CustName'
+                      filterFunction={(candidate) => {
+                        if (candidate.data.PostalCode === watch_postcode) {
+                          return true;
+                        }
+                        return false;
+                      }}
+                    />
+                  )}
+                />
+              </Tr>
+              <Tr label='住宿飯店 or 地點'>
+                <input
+                  type='text'
+                  {...register("hotel")}
+                  className='w-full'
+                  autoComplete='off'
+                  placeholder='輸入住宿飯店...'
+                />
+              </Tr>
+              <Tr label='備註'>
+                <input
+                  type='text'
+                  {...register("PS")}
+                  className='w-full'
+                  autoComplete='off'
+                  placeholder='輸入出差目的...'
+                />
+              </Tr>
+            </tbody>
+          </table>
+        </Table>
+        <div className='submit-btns'>
           <Btns.LongBtn
             type='reset'
             style='cancel'

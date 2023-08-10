@@ -4,6 +4,8 @@ import { useFetchApplyList } from "./data";
 import { Tbody } from "@/components/table/tbody";
 import { usePageControl } from "./page control";
 import * as Btns from "@components/UI/buttons";
+import { Link } from "react-router-dom";
+import { useAppSelector } from "@/hooks/redux";
 
 const DateSpan = (props: { date: string }) => {
   const { date } = props;
@@ -12,13 +14,14 @@ const DateSpan = (props: { date: string }) => {
 
 export const ListTable = () => {
   const color = useTheme()?.color;
+  const nowUser = useAppSelector((state) => state.nowUser).body;
   const { data, status } = useFetchApplyList();
 
   const howManyDataShowInOnePage = 10;
 
   const { dataInThisPage, nextPage, prevPage, buttonStatus } = usePageControl(
     data,
-    howManyDataShowInOnePage
+    10
   );
 
   return (
@@ -64,14 +67,13 @@ export const ListTable = () => {
                       )}
                     </td>
                     <td>
-                      <a
-                        href='http://'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        style={{ color: color.black, fontWeight: 400 }}
+                      <Link
+                        to={`../sign/${i.formId}/?userID=${nowUser.EmpId}`}
+                        target='__blank'
+                        style={{ cursor: "pointer" }}
                       >
                         {i.formId}
-                      </a>
+                      </Link>
                     </td>
                     <td>{i.atuNum}</td>
                     <td>{i.oldCusNum}</td>

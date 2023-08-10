@@ -8,6 +8,6 @@
         {"name":"common","path":"public/locales/common"},
         {"name":"joyride","path":"public/locales/joyride"},
         {"name":"custom rate page","path":"public/locales/customRatePage"},
-        {"name":"setting page","path":"public/locales/settingPage"}
+        {"name":"setting page","path":"public/locales/settingPage"},
     ]
 }

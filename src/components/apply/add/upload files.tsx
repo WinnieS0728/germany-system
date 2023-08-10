@@ -7,7 +7,7 @@ import * as Icons from "@components/UI/icons";
 import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch } from "@/hooks/redux";
 import { addFile } from "@/data/reducers/files/attach";
-import { useFiles } from "@/hooks/file upload";
+import { useFiles } from "@/hooks/files";
 
 const getColor = (props: any) => {
   if (props.$isDragAccept) {
@@ -145,7 +145,7 @@ export function UploadFiles() {
           </tbody>
         </table>
       </Table>
-      <div className='flex items-center justify-center gap-4'>
+      <div className='submit-btns'>
         <Btns.LongBtn
           type='button'
           style='cancel'

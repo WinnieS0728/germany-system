@@ -14,7 +14,6 @@ import theme from "@styles/theme.ts";
 import { Provider } from "react-redux";
 import store from "@/data/store";
 import { ToastContainer } from "react-toastify";
-import { PopupLayer } from "./layouts/popup.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
@@ -22,7 +21,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <ThemeProvider theme={theme}>
       <HashRouter>
         <App />
-        {/* <PopupLayer /> */}
         <ToastContainer
           position='top-center'
           autoClose={5000}

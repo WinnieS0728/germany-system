@@ -1,7 +1,7 @@
 import { BiErrorAlt } from "react-icons/bi";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import { IoCloudDownloadOutline } from "react-icons/io5";
+import { IoCloudDownloadOutline, IoMenu } from "react-icons/io5";
 
 type icon = {
   size?: string;
@@ -665,6 +665,15 @@ export const Download = ({ size, color }: icon) => (
     style={{
       fontSize: size,
       color: color,
+    }}
+  />
+);
+
+export const Hamburger = ({ size, color }: icon) => (
+  <IoMenu
+    style={{
+      fontSize: size || "1rem",
+      color: color || "black",
     }}
   />
 );

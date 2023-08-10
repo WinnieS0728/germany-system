@@ -30,6 +30,7 @@ import { UploadFiles } from "@/components/apply/add/upload files";
 import { SignBlock } from "@/components/sign/sign box";
 import { OtherSignBlock } from "@/components/sign/other sign block";
 import { ErrorsModal } from "@/components/apply/add/errors";
+import { Hamburger } from "@/layouts/hamberger";
 
 const SignPage = () => {
   const { formId } = useParams();
@@ -111,66 +112,70 @@ const SignPage = () => {
           <div className='top-btn-list'>
             {isNextSigner && (
               <>
-                <button
-                  type='button'
-                  onClick={() => {
-                    toggleSignModal("on");
-                  }}
-                >
-                  <Btns.IconBtn
-                    icon={
-                      <Icons.Sign
-                        size='1.5rem'
-                        color={color.white}
-                      />
-                    }
-                    primary
-                  >
-                    簽核表單
-                  </Btns.IconBtn>
-                </button>
-                <button
-                  type='button'
-                  onClick={() => {
-                    toggleOtherSignModal("on");
-                  }}
-                >
-                  <Btns.IconBtn
-                    icon={
-                      <Icons.OtherSign
-                        size='1.5rem'
-                        color={color.white}
-                      />
-                    }
-                    primary
-                  >
-                    會簽(意見徵詢)
-                  </Btns.IconBtn>
-                </button>
-                <button
-                  type='button'
-                  onClick={() => {
-                    toggleFileModal("on");
-                  }}
-                >
-                  <Btns.IconBtn icon={<Icons.AddFiles size='1.5rem' />}>
-                    加入附件
-                  </Btns.IconBtn>
-                </button>
+                <Hamburger
+                  list={[
+                    <button
+                      type='button'
+                      onClick={() => {
+                        toggleSignModal("on");
+                      }}
+                    >
+                      <Btns.IconBtn
+                        icon={
+                          <Icons.Sign
+                            size='1.5rem'
+                            color={color.white}
+                          />
+                        }
+                        primary
+                      >
+                        簽核表單
+                      </Btns.IconBtn>
+                    </button>,
+                    <button
+                      type='button'
+                      onClick={() => {
+                        toggleOtherSignModal("on");
+                      }}
+                    >
+                      <Btns.IconBtn
+                        icon={
+                          <Icons.OtherSign
+                            size='1.5rem'
+                            color={color.white}
+                          />
+                        }
+                        primary
+                      >
+                        會簽(意見徵詢)
+                      </Btns.IconBtn>
+                    </button>,
+                    <button
+                      type='button'
+                      onClick={() => {
+                        toggleFileModal("on");
+                      }}
+                    >
+                      <Btns.IconBtn icon={<Icons.AddFiles size='1.5rem' />}>
+                        加入附件
+                      </Btns.IconBtn>
+                    </button>,
+                    <button type='button'>
+                      <Btns.IconBtn
+                        icon={
+                          <Icons.Print
+                            size='1.5rem'
+                            color={color.black}
+                          />
+                        }
+                      >
+                        列印
+                      </Btns.IconBtn>
+                    </button>,
+                  ]}
+                />
               </>
             )}
-            <button type='button'>
-              <Btns.IconBtn
-                icon={
-                  <Icons.Print
-                    size='1.5rem'
-                    color={color.black}
-                  />
-                }
-              >
-                列印
-              </Btns.IconBtn>
-            </button>
             <button type='button'>
               <Link to={"https://esys.orange-electronic.com/Eform/List"}>
                 <Btns.IconBtn icon={<Icons.Back size='1.25rem' />}>

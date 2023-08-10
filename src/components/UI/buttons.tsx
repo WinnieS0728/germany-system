@@ -12,7 +12,7 @@ const SubmitBtn = ({ text, className }: propType) => {
       form='threshold'
       className={className}
     >
-      <Icons.Save size="1.5rem"/>
+      <Icons.Save size='1.5rem' />
       {text}
     </button>
   );
@@ -53,7 +53,12 @@ export const IconBtn = ({ children, icon, primary, style }: IconBtnProp) => {
       style={css}
     >
       {icon}
-      {children}
+      <span
+        className='hidden lg:inline-block'
+        style={{ whiteSpace: "nowrap" }}
+      >
+        {children}
+      </span>
     </span>
   );
 };

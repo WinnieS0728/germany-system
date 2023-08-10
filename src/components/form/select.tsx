@@ -18,6 +18,7 @@ interface selectProp {
   value?: string;
   forwardRef?: any;
   multi?: boolean;
+  defaultValue?: any;
 }
 
 const animateComponents = makeAnimated();

@@ -12,7 +12,7 @@ import { useEffect } from "react";
 import { useSelectRef } from "@/hooks/select ref";
 import api from "@/lib/api";
 import { otherSignFinalDataType } from "@/lib/api/sign/post otherSign";
-import { useFiles } from "@/hooks/file upload";
+import { useFiles } from "@/hooks/files";
 import { useSign } from "@/hooks/sign";
 
 const schema = yup.object().shape({
@@ -145,7 +145,7 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
           )}
         />
       </form>
-      <div className='flex items-center justify-center gap-4'>
+      <div className='submit-btns'>
         <Btns.LongBtn
           type='reset'
           style='cancel'

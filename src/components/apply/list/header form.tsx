@@ -14,6 +14,7 @@ import * as Icons from "@components/UI/icons";
 import { useOptions } from "@/hooks/options";
 import { setProps } from "@/data/reducers/apply list/apply list";
 import { setListData } from "@/data/actions/apply list/set data";
+import * as Btns from "@components/UI/buttons";
 
 interface propsType {
   className?: string;
@@ -21,6 +22,7 @@ interface propsType {
 export const HeaderForm = ({ className }: propsType) => {
   const color = useTheme()?.color;
   const timeData = useAppSelector((state) => state.time);
+  const nowUser = useAppSelector((state) => state.nowUser).body;
   const { register, handleSubmit, control, setValue } = useForm({
     shouldUnregister: true,
     criteriaMode: "all",
@@ -120,48 +122,47 @@ export const HeaderForm = ({ className }: propsType) => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{ backgroundColor: color.headForm_bgc }}
-        className={`${className} flex items-center gap-4 rounded-xl px-16 py-4`}
+        className={`${className} flex flex-col items-center gap-4 rounded-xl px-16 py-4 md:flex-row`}
       >
-        <div
-          className='form-body grid w-full gap-4'
-          style={{ gridTemplateColumns: "4fr 2fr" }}
-        >
+        <div className='form-body grid w-full gap-4'>
           <div className='member label-input'>
             <label>申請人員</label>
-            <Controller
-              control={control}
-              name='dept'
-              render={({ field: { onChange } }) => (
-                <MySelect.Async
-                  options={options.dept}
-                  onChange={onChange}
-                  placeholder='選擇部門'
-                  getLabelFunction={(option: any) => option.DeptName}
-                  getValueFunction={(option: any) => option.DeptId}
-                  value='DeptId'
-                />
-              )}
-            />
-            <Controller
-              control={control}
-              name='EmpId'
-              render={({ field: { onChange } }) => (
-                <MySelect.Async
-                  options={options.member}
-                  onChange={onChange}
-                  placeholder='選擇業務'
-                  getLabelFunction={(option: any) => option.EmpName}
-                  getValueFunction={(option: any) => option.EmpId}
-                  value='EmpId'
-                  filterFunction={(candidate) => {
-                    if (candidate.data.DeptId === watch_dept) {
-                      return true;
-                    }
-                    return false;
-                  }}
-                />
-              )}
-            />
+            <div className='flex w-full flex-col gap-2 sm:flex-row'>
+              <Controller
+                control={control}
+                name='dept'
+                render={({ field: { onChange } }) => (
+                  <MySelect.Async
+                    options={options.dept}
+                    onChange={onChange}
+                    placeholder='選擇部門'
+                    getLabelFunction={(option: any) => option.DeptName}
+                    getValueFunction={(option: any) => option.DeptId}
+                    value='DeptId'
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name='EmpId'
+                render={({ field: { onChange } }) => (
+                  <MySelect.Async
+                    options={options.member}
+                    onChange={onChange}
+                    placeholder='選擇業務'
+                    getLabelFunction={(option: any) => option.EmpName}
+                    getValueFunction={(option: any) => option.EmpId}
+                    value='EmpId'
+                    filterFunction={(candidate) => {
+                      if (candidate.data.DeptId === watch_dept) {
+                        return true;
+                      }
+                      return false;
+                    }}
+                  />
+                )}
+              />
+            </div>
           </div>
           <div className='status label-input'>
             <label>表單狀態</label>
@@ -179,7 +180,7 @@ export const HeaderForm = ({ className }: propsType) => {
           </div>
           <div className='date label-input'>
             <label>出差日期</label>
-            <span className='relative flex w-full items-center gap-2'>
+            <span className='relative flex w-full flex-col items-center gap-2 sm:flex-row'>
               <input
                 className='w-full'
                 style={{
@@ -195,7 +196,7 @@ export const HeaderForm = ({ className }: propsType) => {
                 readOnly
                 placeholder='開始日期'
               />
-              <span>~</span>
+              <span className='hidden sm:inline-block'>~</span>
               <input
                 className='w-full'
                 style={{
@@ -241,17 +242,24 @@ export const HeaderForm = ({ className }: propsType) => {
             </span>
           </div>
         </div>
-
         <button
           type='submit'
-          className='flex min-w-fit items-center justify-center px-8'
-          style={{ backgroundColor: color.sectionHeader, color: color.white }}
+          className='p-0'
         >
-          <Icons.Search
-            size='1.5rem'
-            color={color.white}
-          />
-          查詢表單
+          <Btns.IconBtn
+            icon={
+              <Icons.Search
+                color={color.white}
+                size='1.5rem'
+              />
+            }
+            style={{
+              backgroundColor: color.sectionHeader,
+              color: color.white,
+            }}
+          >
+            查詢表單
+          </Btns.IconBtn>
         </button>
       </form>
     </>

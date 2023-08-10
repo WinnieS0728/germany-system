@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { deleteFile } from "@/data/reducers/files/attach";
 import { component } from "@/types";
 import { useEffect, useState } from "react";
-import { useFiles } from "@/hooks/file upload";
+import { useFiles } from "@/hooks/files";
 
 const FileItem_o = ({
   file,
@@ -119,13 +119,17 @@ export const AttachForm = ({ type }: component) => {
   }
 
   return (
-    <section className='flex'>
+    <section
+      className={`grid ${type === "addForm" ? "grid-cols-1" : "grid-cols-2"}`}
+    >
       <div className='w-full'>
         <p>表單附件 : </p>
         <article
-          className={
-            type === "addForm" ? "grid grid-cols-2" : "grid grid-cols-1"
-          }
+          className={`${
+            type === "addForm"
+              ? "grid grid-cols-1 sm:grid-cols-2"
+              : "grid grid-cols-1"
+          }`}
         >
           {newFiles.map((file, index) => (
             <FileItem

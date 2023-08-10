@@ -14,7 +14,7 @@ import { DevTool } from "@hookform/devtools";
 import { setErrors } from "@/data/reducers/error/errors";
 import api from "@/lib/api";
 import { useSign } from "@/hooks/sign";
-import { useFiles } from "@/hooks/file upload";
+import { useFiles } from "@/hooks/files";
 
 export type SignData = {
   agree: "yes" | "no";
@@ -218,7 +218,7 @@ const SignBlock = ({
             </tbody>
           </table>
         </Table>
-        <div className='flex items-center justify-center gap-4'>
+        <div className='submit-btns'>
           <Btns.LongBtn
             type='reset'
             style='cancel'

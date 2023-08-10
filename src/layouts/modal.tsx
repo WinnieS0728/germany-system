@@ -17,13 +17,13 @@ export const Modal = ({ name, children }: modalProps) => {
   return (
     <div
       id={`${name}-background`}
-      className={`fixed inset-0 z-10 flex h-full w-full items-start justify-center overflow-auto bg-stone-800/75 pt-[15vh]`}
+      className={`px-2 fixed inset-0 z-10 flex h-full w-full items-start justify-center overflow-auto bg-stone-800/75 pt-[15vh]`}
       style={{
         display: isModalShow ? "flex" : "none",
       }}
       onClick={handleClick}
     >
-      <div className='w-2/3 lg:w-1/2'>{children}</div>
+      <div className='w-full sm:w-2/3 lg:w-1/2'>{children}</div>
     </div>
   );
 };

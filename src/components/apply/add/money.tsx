@@ -32,11 +32,12 @@ export const MoneyForm = () => {
   }
 
   return (
-    <div className='flex gap-8'>
+    <div className='flex gap-4 flex-col sm:flex-row sm:gap-8'>
       <div className='label-input'>
         <label>預支差旅費 :</label>
         <input
           type='text'
+          className="w-full"
           {...register("Advance_Amount", {
             setValueAs: (d: string) => {
               return d.replace(/,/g, "");

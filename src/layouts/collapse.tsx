@@ -25,7 +25,15 @@ export const Collapse = ({ type, main, sub, remove, index }: collapseProp) => {
     <div className='flex flex-col'>
       <div className='header flex justify-between'>
         {main}
-        <div className='flex'>
+        <div className='flex flex-col sm:flex-row-reverse justify-center'>
+          {type === "addForm" && (
+            <button
+              type='button'
+              onClick={handleDelete}
+            >
+              <Icons.Delete size='1.25rem' />
+            </button>
+          )}
           <button
             type='button'
             className='flex items-center justify-center gap-1'
@@ -37,20 +45,14 @@ export const Collapse = ({ type, main, sub, remove, index }: collapseProp) => {
             <span
               style={{
                 rotate: open ? "0deg" : ".5turn",
+                transition:'rotate .5s ease'
               }}
+              className='scale-150 sm:scale-100'
             >
               <Icons.ShowDetail color={color.blue} />
             </span>
-            詳細資料
+            <span className='hidden sm:inline-block'>詳細資料</span>
           </button>
-          {type === "addForm" && (
-            <button
-              type='button'
-              onClick={handleDelete}
-            >
-              <Icons.Delete size='1.25rem' />
-            </button>
-          )}
         </div>
       </div>
       <div

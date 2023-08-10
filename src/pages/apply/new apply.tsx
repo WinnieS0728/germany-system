@@ -23,31 +23,32 @@ import * as yup from "yup";
 import { useTheme } from "styled-components";
 import { Block } from "@/layouts/block";
 import { setErrors } from "@/data/reducers/error/errors";
-import { useFiles } from "@/hooks/file upload";
+import { useFiles } from "@/hooks/files";
 import { Modal } from "@/layouts/modal";
 import { NewDetailForm } from "../../components/apply/add/detail/new detail";
 import { Confirm } from "../../components/apply/add/confirm/confirm";
 import { UploadFiles } from "../../components/apply/add/upload files";
 import { ErrorsModal } from "../../components/apply/add/errors";
+import { Hamburger } from "@/layouts/hamberger";
 
 const schema = yup.object().shape({
   DeptId: yup.string(),
   CreateId: yup.string(),
-  Transport: yup.string().required("不寫交通工具是要用跑的嗎"),
+  Transport: yup.string().required("交通工具必填"),
   IsLodging: yup.string(),
   StayDays: yup.number(),
   Days: yup.number(),
   Advance_Amount: yup.mixed(),
   Curr: yup.string().when("Advance_Amount", {
     is: (money: string) => money !== "0",
-    then: () => yup.string().required("幣別不寫給你玩具鈔票"),
+    then: () => yup.string().required("金額不為 0 時幣別必填"),
     otherwise: () => yup.string(),
   }),
-  Deputy: yup.string().required("沒有代理人你要開分身回來做嗎"),
+  Deputy: yup.string().required("代理人必填"),
   tripData: yup.array().of(
     yup.object().shape({
-      startDate: yup.string().required("出差日期為必填"),
-      endDate: yup.string().required("出差日期為必填"),
+      startDate: yup.string().required("出差日期必填"),
+      endDate: yup.string().required("出差日期必填"),
     })
   ),
 });
@@ -180,7 +181,7 @@ export const NewForm = () => {
       }
       setError("tripData", {
         type: "custom",
-        message: "沒出差還想送單啊",
+        message: "至少要有一筆出差資料",
       });
     }
     if (tripDetailData.some((d) => d.data.length === 0)) {
@@ -189,7 +190,7 @@ export const NewForm = () => {
       }
       setError("tripData", {
         type: "custom",
-        message: "有漏欸",
+        message: "出差資料填寫不完全",
       });
     }
   }, [errors, setError, spreadData, tripDetailData]);
@@ -227,40 +228,36 @@ export const NewForm = () => {
       <Main className='main-section-gap'>
         <>
           <div className='top-btn-list'>
-            <button
-              type='button'
-              onClick={done}
-            >
-              <IconBtn
-                icon={
-                  <Icons.Send
-                    size='1.5rem'
-                    color={color.white}
-                  />
-                }
-                primary
-              >
-                送簽表單
-              </IconBtn>
-            </button>
-            {/* <button
-            type='button'
-            onClick={() => {
-              console.log("fuck you store");
-            }}
-          >
-            <IconBtn icon={<Icons.Save size='1.5rem' />}>暫存檔案</IconBtn>
-          </button> */}
-            <button
-              type='button'
-              onClick={() => {
-                toggleFilesModal("on");
-              }}
-            >
-              <IconBtn icon={<Icons.AddFiles size='1.5rem' />}>
-                附加文件
-              </IconBtn>
-            </button>
+            <Hamburger
+              list={[
+                <button
+                  type='button'
+                  onClick={done}
+                >
+                  <IconBtn
+                    icon={
+                      <Icons.Send
+                        size='1.5rem'
+                        color={color.white}
+                      />
+                    }
+                    primary
+                  >
+                    送簽表單
+                  </IconBtn>
+                </button>,
+                <button
+                  type='button'
+                  onClick={() => {
+                    toggleFilesModal("on");
+                  }}
+                >
+                  <IconBtn icon={<Icons.AddFiles size='1.5rem' />}>
+                    附加文件
+                  </IconBtn>
+                </button>,
+              ]}
+            />
             <button type='button'>
               <Link to={"../"}>
                 <IconBtn icon={<Icons.Back size='1.25rem' />}>返回列表</IconBtn>

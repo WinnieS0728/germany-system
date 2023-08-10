@@ -119,7 +119,7 @@ export const TransportationForm = () => {
           )}
         />
       </div>
-      <div className='grid grid-cols-3'>
+      <div className='grid grid-cols-1 sm:grid-cols-3'>
         <div className='stay label-input justify-start'>
           <label>是否住宿 :</label>
           <input
@@ -130,7 +130,7 @@ export const TransportationForm = () => {
             readOnly
           />
         </div>
-        <div className='stayDay label-input'>
+        <div className='stayDay label-input justify-start'>
           <label>住宿總天數 :</label>
           <input
             type='text'
@@ -142,7 +142,7 @@ export const TransportationForm = () => {
             className='noBorder w-[5em]'
           />
         </div>
-        <div className='totalDay label-input'>
+        <div className='totalDay label-input justify-start'>
           <label>出差總天數 :</label>
           <input
             type='text'

@@ -38,7 +38,7 @@ export const useFetchApplyList = () => {
     async function fetchData() {
       const empFilter = empProcess(body);
       if (!empFilter) {
-        alert("查無資料");
+        console.log("查無資料");
         return [];
       }
       const detailList = await Promise.all(

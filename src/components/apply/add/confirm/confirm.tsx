@@ -31,7 +31,7 @@ export const Confirm = () => {
         EmpId={nowUser.body.EmpId}
         time={{ year: timeData.thisYear, month: timeData.thisMonth }}
       />
-      <div className='flex items-center justify-center gap-4 py-4'>
+      <div className='submit-btns'>
         <Btns.LongBtn
           type='button'
           style='cancel'

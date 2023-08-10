@@ -4,7 +4,11 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { timeFormat } from "d3";
 import { isValid } from "date-fns";
 import { useEffect, useState } from "react";
-import { DateRange, DayPicker, SelectRangeEventHandler } from "react-day-picker";
+import {
+  DateRange,
+  DayPicker,
+  SelectRangeEventHandler,
+} from "react-day-picker";
 import { useFormContext } from "react-hook-form";
 import { useTheme } from "styled-components";
 
@@ -84,9 +88,12 @@ export const DetailHeader = ({ data, index }: headerProps) => {
 
   return (
     <div className='flex items-center justify-between'>
-      <div className='relative flex gap-8'>
-        <div className='startDate label-input gap-1 space-x-2'>
-          <label><Required />出差日期(起)</label>
+      <div className='relative flex gap-4 flex-col lg:flex-row lg:gap-8'>
+        <div className='startDate label-input gap-1 space-x-2 flex-col items-start sm:flex-row sm:items-center'>
+          <label style={{ whiteSpace: "nowrap" }}>
+            <Required />
+            出差日期(起)
+          </label>
           <input
             {...register(`tripData.${index}.startDate`)}
             className='date w-full'
@@ -104,8 +111,11 @@ export const DetailHeader = ({ data, index }: headerProps) => {
             placeholder='開始日期'
           />
         </div>
-        <div className='endDate label-input gap-1 space-x-2'>
-          <label><Required />出差日期(迄)</label>
+        <div className='endDate label-input gap-1 space-x-2 flex-col items-start sm:flex-row sm:items-center'>
+          <label style={{ whiteSpace: "nowrap" }}>
+            <Required />
+            出差日期(迄)
+          </label>
           <input
             {...register(`tripData.${index}.endDate`)}
             className='date w-full'
