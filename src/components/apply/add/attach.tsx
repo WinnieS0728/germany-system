@@ -116,11 +116,11 @@ export const AttachForm = ({ type }: component) => {
   const dispatch = useAppDispatch();
   function deleteFiles(index: number) {
     dispatch(deleteFile(index));
-  }
+  }  
 
   return (
     <section
-      className={`grid ${type === "addForm" ? "grid-cols-1" : "grid-cols-2"}`}
+      className={`grid ${type === "addForm" ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"}`}
     >
       <div className='w-full'>
         <p>表單附件 : </p>

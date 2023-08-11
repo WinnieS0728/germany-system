@@ -20,17 +20,15 @@ export type signFinalDataType = {
   Status: string;
 };
 
-// TODO 解開 api
 export function updateSignStatus(apiPath: string) {
   return async function (data: signFinalDataType) {
-    console.log(data);
-    return '結果'
-    // const res = await axios({
-    //   method: "POST",
-    //   url: `${apiPath}/SignStepupdate`,
-    //   data: data
-    // });
-    // console.log(res.data)
-    // return res.data
+    const res = await axios({
+      method: "POST",
+      url: `${apiPath}/SignStepupdate`,
+      data: data
+    });
+    // TODO log簽核
+    console.log('簽核api回傳',res.data)
+    return res.data
   };
 }

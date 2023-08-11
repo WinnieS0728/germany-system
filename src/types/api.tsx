@@ -13,8 +13,4 @@ export enum statusType {
   failed = "failed",
 }
 
-export enum tripEventList {
-  atu = "TripEvent-5",
-  existCus = "TripEvent-6",
-  newCus = "TripEvent-7",
-}
+

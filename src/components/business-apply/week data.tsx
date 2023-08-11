@@ -1,4 +1,5 @@
 import { setThreshold } from "@/data/actions/kpi threshold/threshold";
+import { tripEvent } from "@/types";
 import { responseType } from "@/types/api";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { useEffect } from "react";
@@ -12,7 +13,7 @@ export function GetData() {
   function getStorNumber(data: responseType[], key: string): number {
     if (!data) return 0;
     const num = data
-      .filter((i) => i.ResourcesName === key)
+      .filter((i) => i.ResourcesId === key)
       .map((i) => +i.Vqty)
       .reduce((a, b) => a + b, 0);
     return num;
@@ -23,9 +24,9 @@ export function GetData() {
   } {
     const data = visitData.body?.filter((i) => i.empname === name);
 
-    const atu = getStorNumber(data, "拜訪A.T.U.") || 0;
-    const existCus = getStorNumber(data, "拜訪現有客戶") || 0;
-    const newCus = getStorNumber(data, "拜訪新客戶") || 0;
+    const atu = getStorNumber(data, tripEvent.atu) || 0;
+    const existCus = getStorNumber(data, tripEvent.oldCus) || 0;
+    const newCus = getStorNumber(data, tripEvent.newCus) || 0;
     const old = atu + existCus;
     const total = atu + existCus + newCus;
 

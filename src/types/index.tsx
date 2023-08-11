@@ -39,3 +39,9 @@ export enum signStatus {
   "退簽" = 3,
   "作廢" = 4,
 }
+
+export enum tripEvent {
+  "atu" = "TripEvent-5",
+  "oldCus" = "TripEvent-6",
+  "newCus" = "TripEvent-7",
+}

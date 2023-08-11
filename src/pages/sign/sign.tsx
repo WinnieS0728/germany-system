@@ -31,6 +31,7 @@ import { SignBlock } from "@/components/sign/sign box";
 import { OtherSignBlock } from "@/components/sign/other sign block";
 import { ErrorsModal } from "@/components/apply/add/errors";
 import { Hamburger } from "@/layouts/hamberger";
+import { useSign } from "@/hooks/sign";
 
 const SignPage = () => {
   const { formId } = useParams();
@@ -46,6 +47,8 @@ const SignPage = () => {
 
   const color = useTheme()?.color;
   const methods = useForm();
+
+  const { updateFormStatus } = useSign();
 
   const isNextSigner = useMemo(() => {
     if ((formInfo.nextSign as nextSign)?.SIGNER === nowUser.EmpId) {
@@ -184,7 +187,12 @@ const SignPage = () => {
               </Link>
             </button>
             {isAdmin && (
-              <button type='button'>
+              <button
+                type='button'
+                onClick={() => {
+                  updateFormStatus("delete");
+                }}
+              >
                 <Btns.IconBtn icon={<Icons.Void size='1.25rem' />}>
                   作廢
                 </Btns.IconBtn>

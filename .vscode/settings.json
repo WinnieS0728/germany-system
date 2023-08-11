@@ -1,13 +1,14 @@
 {
-    "i18nJsonEditor.forceKeyUPPERCASE": false,
-    "i18nJsonEditor.supportedFolders": [
-        "locales"
-    ],
-    "i18nJsonEditor.workspaceFolders": [
-        {"name":"translation","path":"public/locales/translation"},
-        {"name":"common","path":"public/locales/common"},
-        {"name":"joyride","path":"public/locales/joyride"},
-        {"name":"custom rate page","path":"public/locales/customRatePage"},
-        {"name":"setting page","path":"public/locales/settingPage"},
-    ]
+  "i18nJsonEditor.forceKeyUPPERCASE": false,
+  "i18nJsonEditor.supportedFolders": ["locales"],
+  "i18nJsonEditor.translationService": "MicrosoftTranslator",
+  "i18nJsonEditor.translationServiceApiKey": "df45b0b12e2343ddad45c4961f7d9398",
+  "i18nJsonEditor.workspaceFolders": [
+    { "name": "translation", "path": "./public/locales/translation" },
+    { "name": "common", "path": "./public/locales/common" },
+    { "name": "joyride", "path": "./public/locales/joyride" },
+    { "name": "custom rate page", "path": "./public/locales/customRatePage" },
+    { "name": "setting page", "path": "./public/locales/settingPage" },
+    { "name": "qq page", "path": "./public/locales/qq" },
+  ]
 }

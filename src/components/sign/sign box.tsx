@@ -39,10 +39,11 @@ const SignBlock = ({
         : yup.string().notRequired(),
     password: yup
       .string()
-      .required("沒密碼")
-      .test("checkPassword", "密碼錯誤", async function (value: string) {
-        return await api.logIn(nowUser.EmpId, value);
-      }),
+      .required("沒密碼"),
+      // TODO 密碼審核
+      // .test("checkPassword", "密碼錯誤", async function (value: string) {
+      //   return await api.logIn(nowUser.EmpId, value);
+      // }),
     opinion:
       type === "sign"
         ? yup.string().when("agree", {

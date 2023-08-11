@@ -2,19 +2,20 @@ import { Table } from "@/components/table/table";
 import { useTheme } from "styled-components";
 import { useEffect, useState } from "react";
 import { dataForTable } from "./data";
+import { tripEvent } from "@/types";
 
 const Td = ({ data }: { data: any }) => {
   const color = useTheme()?.color;
   const type = data?.data.purpose;
   let bgc;
   switch (type) {
-    case "拜訪A.T.U.":
+    case tripEvent.atu:
       bgc = color.confirmTable.atu;
       break;
-    case "拜訪現有客戶":
+    case tripEvent.oldCus:
       bgc = color.confirmTable.old;
       break;
-    case "拜訪新客戶":
+    case tripEvent.newCus:
       bgc = color.confirmTable.new;
       break;
     default:

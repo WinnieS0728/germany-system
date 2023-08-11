@@ -6,7 +6,7 @@ export function getBusinessApplyDetail(apiPath: string) {
       method: "POST",
       url: `${apiPath}/GetTraveAppD`,
       data: { formno: id },
-    });
+    });    
     return res.data;
   };
 }

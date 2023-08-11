@@ -9,6 +9,7 @@ import { useAppDispatch } from "@/hooks/redux";
 import { useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 import * as Icons from "@components/UI/icons";
+import api from "@/lib/api";
 
 type detailTableProps = {
   type: "addForm" | "sign";
@@ -18,13 +19,39 @@ type detailTableProps = {
 
 const TableWhenAddForm = ({ data, index }: { data: any; index: number }) => {
   const dispatch = useAppDispatch();
-  return data.map((d: any, id: number) => {
+
+  const [dataSet, setNewData] = useState<any[]>([]);
+  async function getEventName(code: string) {
+    const list: [] = await api.getEvent("TripEvent");
+    const target = list.find(
+      (i: { ResourcesId: string }) => i.ResourcesId === code
+    );
+    if (!target) {
+      return "";
+    }
+    return (target as { ResourcesName: string }).ResourcesName;
+  }
+  useEffect(() => {
+    (async function () {
+      const newArray = await Promise.all(
+        data.map(async (i: { purpose: string }) => {
+          return {
+            ...i,
+            purposeName: await getEventName(i.purpose),
+          };
+        })
+      );
+      setNewData(newArray);
+    })();
+  }, [data, index]);
+
+  return dataSet.map((d, id: number) => {
     return (
       <tr key={id}>
         <td>{id + 1}</td>
         <td>{d.district}</td>
         <td>{d.city}</td>
-        <td>{d.purpose}</td>
+        <td>{d.purposeName}</td>
         <td>{d.cus}</td>
         <td>{d.hotel}</td>
         <td>{d.PS}</td>
@@ -44,7 +71,6 @@ const TableWhenAddForm = ({ data, index }: { data: any; index: number }) => {
 };
 
 const TableWhenSign = ({ data }: { data: detailDataWithSingleData[] }) => {
-  
   return data.map((d, index) => (
     <tr key={index}>
       <td>{index + 1}</td>

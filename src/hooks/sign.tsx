@@ -4,6 +4,7 @@ import api from "@/lib/api";
 import { signFinalDataType } from "@/lib/api/sign/update sign";
 import { SignData } from "@/components/sign/sign box";
 import { otherSignFinalDataType } from "@/lib/api/sign/post otherSign";
+import { updateFormStatus } from "@/lib/api/travel apply/update form";
 
 export const useSign = () => {
   const formInfo = useAppSelector((state) => state.formInfo).body;
@@ -20,7 +21,7 @@ export const useSign = () => {
   }, [formInfo]);
 
   async function updateFormStatus(agree: "yes" | "no" | "delete") {
-    let data;
+    let data: updateFormStatus | undefined;
     if (agree === "delete") {
       data = {
         BTPId: formInfo.formId,
@@ -44,6 +45,8 @@ export const useSign = () => {
       return;
     }
     const res = await api.updateForm(data);
+    console.log('表單狀態',res);
+    
   }
   function getSignNumber(value: string) {
     if (value === "yes") {
@@ -55,12 +58,12 @@ export const useSign = () => {
     return 0;
   }
 
-  function afterSign (){
-    setTimeout(()=>{
-      location.reload()
-    },3000)
+  function afterSign() {
+    setTimeout(() => {
+      location.reload();
+    }, 3000);
   }
-  
+
   async function sign(data: SignData) {
     const signFinalData: signFinalDataType = {
       ...(formInfo.nextSign as {
@@ -83,7 +86,7 @@ export const useSign = () => {
       ExceId: nowUser.EmpId,
     };
     const res = await api.updateSignStatus(signFinalData);
-    console.log(res);
+    console.log("更新簽核狀態元件", res);
   }
 
   async function otherSign(list: string[]) {
@@ -102,14 +105,14 @@ export const useSign = () => {
           SignGroup: "會簽",
         };
       }
-    );    
+    );
 
     const res = await api.postOtherSign(otherSignMemberList);
-    console.log(res);
+    console.log("會簽元件", res);
   }
   return {
     sign,
     updateFormStatus,
-    otherSign
+    otherSign,
   };
 };

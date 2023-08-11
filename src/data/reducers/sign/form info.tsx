@@ -51,7 +51,7 @@ const data: data = {
   formId: "",
   nextSign: {},
   signList: [],
-  nowOrder: -1,
+  nowOrder: 0,
 };
 
 const formInfoSlice = createSlice({

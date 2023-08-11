@@ -3,6 +3,7 @@ import {
   detailDataWithSingleData,
 } from "@/data/reducers/trip detail/trip detail";
 import api from "@/lib/api";
+import { tripEvent } from "@/types";
 import { useEffect, useMemo, useState } from "react";
 import { useTheme } from "styled-components";
 
@@ -20,9 +21,9 @@ export const PerCentTable = ({
 }) => {
   const color = useTheme()?.color;
   const totalData = data.reduce((a, b) => a.concat(b), []);
-  const atuCus = totalData.filter((i) => i.data?.purpose === "拜訪A.T.U.");
-  const oldCus = totalData.filter((i) => i.data?.purpose === "拜訪現有客戶");
-  const newCus = totalData.filter((i) => i.data?.purpose === "拜訪新客戶");
+  const atuCus = totalData.filter((i) => i.data?.purpose === tripEvent.atu);
+  const oldCus = totalData.filter((i) => i.data?.purpose === tripEvent.oldCus);
+  const newCus = totalData.filter((i) => i.data?.purpose === tripEvent.newCus);
   const allCus = atuCus.length + oldCus.length + newCus.length;
 
   function getPercent(n: number): string {

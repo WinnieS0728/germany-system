@@ -1,5 +1,6 @@
 import { useAppSelector } from "@/hooks/redux";
 import api from "@/lib/api";
+import { tripEvent } from "@/types";
 import { timeFormat } from "d3";
 import { useCallback, useEffect, useState } from "react";
 
@@ -46,17 +47,17 @@ export const useFetchApplyList = () => {
       );
       const atuNumArray = detailList.map((list) => {
         return list.filter(
-          (i: { ResourcesName: string }) => i.ResourcesName === "拜訪A.T.U."
+          (i: { ResourcesId: string }) => i.ResourcesId === tripEvent.atu
         ).length;
       });
       const oldCusNumArray = detailList.map((list) => {
         return list.filter(
-          (i: { ResourcesName: string }) => i.ResourcesName === "拜訪現有客戶"
+          (i: { ResourcesId: string }) => i.ResourcesId === tripEvent.oldCus
         ).length;
       });
       const newCusNumArray = detailList.map((list) => {
         return list.filter(
-          (i: { ResourcesName: string }) => i.ResourcesName === "拜訪新客戶"
+          (i: { ResourcesId: string }) => i.ResourcesId === tripEvent.newCus
         ).length;
       });
       const dateArray = detailList.map((list) => {

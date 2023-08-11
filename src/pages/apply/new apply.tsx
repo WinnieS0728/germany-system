@@ -30,6 +30,7 @@ import { Confirm } from "../../components/apply/add/confirm/confirm";
 import { UploadFiles } from "../../components/apply/add/upload files";
 import { ErrorsModal } from "../../components/apply/add/errors";
 import { Hamburger } from "@/layouts/hamberger";
+import { tripDetailType } from "@/lib/api/travel apply/push details";
 
 const schema = yup.object().shape({
   DeptId: yup.string(),
@@ -106,8 +107,6 @@ export const NewForm = () => {
 
   const { spreadData } = useData(tripDetail.body, timeData.today);
   const tripDetailData = useAppSelector((state) => state.tripDetail).body;
-  const fileData = useAppSelector((state) => state.files).body;
-  const nowUser = useAppSelector((state) => state.nowUser);
 
   async function getCusId(name: string) {
     const res = await api.getCus(name, "DEU");
@@ -115,11 +114,19 @@ export const NewForm = () => {
     return res?.[0].CustId;
   }
 
+  type eventType = {
+    ResourcesId: string;
+    type: string;
+    ResourcesName: string;
+    ResourcesName_E: string;
+  };
+
   const { uploadFile } = useFiles();
   async function onSubmit<T>(d: T) {
     const newFormData = { ...d, ...dateRange };
     const formId = await createNewForm(newFormData);
-    const newData = Promise.all(
+
+    const newData: tripDetailType[] = await Promise.all(
       spreadData.map(async (item, index) => {
         return {
           BTPId: formId,
@@ -136,8 +143,10 @@ export const NewForm = () => {
         };
       })
     );
+    console.log('要送的明細',newData);
+    
     pushData(newData);
-    uploadFile(formId);
+    // uploadFile(formId);
 
     clearNewFormSelect();
   }
@@ -149,7 +158,8 @@ export const NewForm = () => {
 
   async function pushData(data: any) {
     const res = await api.pushNewData(await data);
-    // console.log(res);
+    console.log("建立出差明細元件", res);
+    // return 新增成功
   }
 
   const watch_date = useWatch({

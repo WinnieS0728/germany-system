@@ -45,7 +45,7 @@ export const useSignPageData = (formId: string) => {
       return res;
     }
     return getData();
-  }, []);
+  }, []);  
 
   useEffect(() => {
     async function a() {

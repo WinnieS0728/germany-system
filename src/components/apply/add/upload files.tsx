@@ -45,7 +45,7 @@ export function UploadFiles() {
   const [fileList, setFileList] = useState<File[]>([]);
 
   const { getFileSize, getDropzoneAccept } = useFiles();
-  
+
   const onDrop = useCallback((files: File[]) => {
     setFileList((prev) => {
       const array = prev.concat([...files]);
@@ -55,7 +55,7 @@ export function UploadFiles() {
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
       onDrop,
-      accept: getDropzoneAccept(["img", "word", "ppt", "excel"]),
+      accept: getDropzoneAccept(["img", "word", "ppt", "excel", "pdf"]),
     });
 
   function handleDeleteFile(index: number) {
@@ -74,7 +74,6 @@ export function UploadFiles() {
   }
 
   const [toggleFileModal] = useModalControl("files");
-
 
   return (
     <article

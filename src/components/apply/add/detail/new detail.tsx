@@ -174,10 +174,10 @@ export const NewDetailForm = () => {
                       forwardRef={newDetailRef.purpose}
                       options={options.event}
                       onChange={onChange}
-                      value='ResourcesName'
+                      value='ResourcesId'
                       placeholder='選擇出差事由...'
                       getLabelFunction={(option: any) => option.ResourcesName}
-                      getValueFunction={(option: any) => option.ResourcesName}
+                      getValueFunction={(option: any) => option.ResourcesId}
                     />
                   )}
                 />

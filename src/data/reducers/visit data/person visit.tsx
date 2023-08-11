@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { setPersonVisitData } from "@actions/visit data/set person visit";
 import { statusType } from "types/api";
+import { tripEvent } from "@/types";
 
 const data: (typeof object)[] = [];
 const object = {
@@ -27,14 +28,14 @@ const personVisitSlice = createSlice({
         if (action.payload !== null) {
           action.payload.map((i) => {
             const target = Number(i.MM) - 1;
-            switch (i.ResourcesName) {
-              case "拜訪A.T.U.":
+            switch (i.ResourcesId) {
+              case tripEvent.atu:
                 state.body[target].ATU = +i.Vqty;
                 break;
-              case "拜訪現有客戶":
+              case tripEvent.oldCus:
                 state.body[target].existCus = +i.Vqty;
                 break;
-              case "拜訪新客戶":
+              case tripEvent.newCus:
                 state.body[target].newCus = +i.Vqty;
                 break;
               default:

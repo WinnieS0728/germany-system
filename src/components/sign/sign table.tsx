@@ -1,14 +1,38 @@
 import { useTheme } from "styled-components";
 import { Table } from "../table/table";
-import { useEffect, useState } from "react";
-import api from "@/lib/api";
 import { signStatus } from "@/types";
 import { dateFormatter } from "@/hooks/dateFormatter";
 import { useAppSelector } from "@/hooks/redux";
 
+const FileList = ({ order }: { order: number }) => {
+  const data = useAppSelector((state) => state.files).body.formAttach;
+  const formData = useAppSelector((state) => state.formInfo).body;
+  const myFile = data
+    .map((d, i) => {
+      return {
+        ...d,
+        show: `${formData.formId}-${i + 1}`,
+      };
+    })
+    .filter((d) => parseInt(d.SIGNORDER) === order);
+  return (
+    <ul>
+      {myFile.map((d, i) => (
+        <li
+          key={i}
+          style={{ whiteSpace: "nowrap" }}
+        >
+          {d.show}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
 export const SignTable = () => {
   const color = useTheme()?.color;
   const formInfo = useAppSelector((state) => state.formInfo).body;
+
   return (
     <section>
       <h3
@@ -56,7 +80,9 @@ export const SignTable = () => {
                   {list.SIGNTIME && dateFormatter(list.SIGNTIME)}
                 </td>
                 <td>{list.OPINION}</td>
-                <td></td>
+                <td>
+                  <FileList order={list.SIGNORDER} />
+                </td>
               </tr>
             ))}
           </tbody>

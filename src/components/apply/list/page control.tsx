@@ -27,14 +27,14 @@ export const usePageControl = (data: any[], numberInOnePage: number) => {
 
   function nextPage() {
     if (!nextBtnEnable) {
-      console.log("cant next");
+      // console.log("cant next");
       return;
     }
     setPage((prev) => prev + 1);
   }
   function prevPage() {
     if (!prevBtnEnable) {
-      console.log("cant prev");
+      // console.log("cant prev");
       return;
     }
     setPage((prev) => prev - 1);
