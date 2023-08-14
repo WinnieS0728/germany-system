@@ -5,6 +5,9 @@
     { "name": "Common", "path": "./public/locales/common" },
     { "name": "custom rate page", "path": "./public/locales/customRatePage" },
     { "name": "joyride", "path": "./public/locales/joyride" },
-    { "name": "setting page", "path": "./public/locales/settingPage" }
+    { "name": "setting page", "path": "./public/locales/settingPage" },
+    { "name": "list page", "path": "./public/locales/list page" },
+    { "name": "new form", "path": "./public/locales/new form" },
+    { "name": "sign page", "path": "./public/locales/sign page" }
   ]
 }

@@ -1,8 +1,12 @@
 import api from "@/lib/api";
 import { useAppSelector } from "./redux";
+import { useTranslation } from "react-i18next";
 
 export const useOptions = () => {
   const nowUser = useAppSelector((state) => state.nowUser);
+  const { i18n } = useTranslation();
+  const nowLang = i18n.language;
+  
   async function getEventOptions(input: string) {
     const res = await api.getEvent("TripEvent");
 

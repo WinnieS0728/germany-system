@@ -8,6 +8,7 @@ import { useTheme } from "styled-components";
 
 export const ListPage = () => {
   const color = useTheme()?.color;
+
   return (
     <Main className='main-section-gap'>
       <>
