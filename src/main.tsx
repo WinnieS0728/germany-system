@@ -14,6 +14,7 @@ import theme from "@styles/theme.ts";
 import { Provider } from "react-redux";
 import store from "@/data/store";
 import { ToastContainer } from "react-toastify";
+import { AA } from "./test.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
@@ -21,9 +22,10 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <ThemeProvider theme={theme}>
       <HashRouter>
         <App />
+        {/* <AA/> */}
         <ToastContainer
           position='top-center'
-          autoClose={5000}
+          autoClose={2000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick

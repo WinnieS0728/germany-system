@@ -115,6 +115,7 @@ export const useSignPageData = (formId: string) => {
               district: data.Area,
               city: data.City,
               purpose: data.ResourcesName,
+              eventId: data.TripEvent,
               cus: data.CustName,
               hotel: data.Hotel,
               PS: data.Description,

@@ -4,8 +4,9 @@ import * as Icons from "@components/UI/icons";
 import styled from "styled-components";
 import { deleteFile } from "@/data/reducers/files/attach";
 import { component } from "@/types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useFiles } from "@/hooks/files";
+import api from "@/lib/api";
 
 const FileItem_o = ({
   file,
@@ -92,35 +93,37 @@ export const AttachForm = ({ type }: component) => {
 
   const [attachList, setAttachList] = useState<File[]>([]);
 
-  const { name2mine, path2blob } = useFiles();
+  const { name2mine, path2blob } = useFiles();  
 
   useEffect(() => {
-    const fileList = Promise.all(
-      formAttach.map(async (file, index) => {
-        const blob = await path2blob(file.FilePath);
-
-        return new File([blob], `${file.WebID} - ${index + 1}`, {
-          type: name2mine(file.FileName),
-        });
-      })
-    );
     (async function () {
-      if ((await fileList).length === 0) {
+      const fileList = await Promise.all(
+        formAttach.map(async (file, index) => {
+          const blob = await path2blob(file.FilePath);
+
+          return new File([blob], `${file.WebID} - ${index + 1}`, {
+            type: name2mine(file.FileName),
+          });
+        })
+      );
+
+      if (fileList.length === 0) {
         return;
-      } else {
-        setAttachList(await fileList);
       }
+      setAttachList(fileList);
     })();
   }, [formAttach, name2mine, path2blob]);
 
   const dispatch = useAppDispatch();
   function deleteFiles(index: number) {
     dispatch(deleteFile(index));
-  }  
+  }
 
   return (
     <section
-      className={`grid ${type === "addForm" ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"}`}
+      className={`grid ${
+        type === "addForm" ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
+      }`}
     >
       <div className='w-full'>
         <p>表單附件 : </p>

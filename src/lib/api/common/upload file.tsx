@@ -10,8 +10,6 @@ export function uploadFile(apiPath: string) {
         "Content-Type": "multipart/form-data",
       },
     });
-    // TODO log附件回傳
-    console.log("一般附件api回傳", res.data);
     return res.data;
   };
 }

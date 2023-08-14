@@ -93,9 +93,9 @@ export const ThresholdSettingTable = () => {
     control,
   });
 
-  if (Object.keys(errors).length !== 0) {
-    console.log(errors);
-  }
+  // if (Object.keys(errors).length !== 0) {
+  //   console.log(errors);
+  // }
 
   useEffect(() => {
     if (isDataSet.current) {

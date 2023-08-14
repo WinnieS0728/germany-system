@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 
 export const useFetchApplyList = () => {
   const [data, setData] = useState<any[]>([]);
-  const tableProps = useAppSelector((state) => state.listFormState);
+  const tableProps = useAppSelector((state) => state.listFormState);  
 
   const status = tableProps.status;
 
@@ -44,20 +44,20 @@ export const useFetchApplyList = () => {
       }
       const detailList = await Promise.all(
         empFilter.map(async (d) => await getDetail(d.BTPId))
-      );
+        );      
       const atuNumArray = detailList.map((list) => {
         return list.filter(
-          (i: { ResourcesId: string }) => i.ResourcesId === tripEvent.atu
+          (i: { TripEvent: string }) => i.TripEvent === tripEvent.atu
         ).length;
       });
       const oldCusNumArray = detailList.map((list) => {
         return list.filter(
-          (i: { ResourcesId: string }) => i.ResourcesId === tripEvent.oldCus
+          (i: { TripEvent: string }) => i.TripEvent === tripEvent.oldCus
         ).length;
       });
       const newCusNumArray = detailList.map((list) => {
         return list.filter(
-          (i: { ResourcesId: string }) => i.ResourcesId === tripEvent.newCus
+          (i: { TripEvent: string }) => i.TripEvent === tripEvent.newCus
         ).length;
       });
       const dateArray = detailList.map((list) => {

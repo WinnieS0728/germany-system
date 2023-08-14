@@ -5,7 +5,7 @@ import { Header } from "@/layouts/header";
 import { Main } from "@/layouts/main";
 import * as Icons from "@components/UI/icons";
 import { FormProvider, useForm } from "react-hook-form";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTheme } from "styled-components";
 import { useSignPageData } from "./data";
 import { TransportationBlock } from "@/components/apply/sign/transport";
@@ -32,6 +32,7 @@ import { OtherSignBlock } from "@/components/sign/other sign block";
 import { ErrorsModal } from "@/components/apply/add/errors";
 import { Hamburger } from "@/layouts/hamberger";
 import { useSign } from "@/hooks/sign";
+import { toast } from "react-toastify";
 
 const SignPage = () => {
   const { formId } = useParams();
@@ -90,6 +91,8 @@ const SignPage = () => {
   const [toggleFileModal] = useModalControl("files");
 
   const myErrors = useAppSelector((state) => state.errors);
+
+  const navigate = useNavigate()
 
   return (
     <>

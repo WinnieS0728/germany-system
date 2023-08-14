@@ -3,9 +3,11 @@ import { useAppSelector } from "./redux";
 import excel from "@img/files/excel_icon.svg";
 import word from "@img/files/word_icon.svg";
 import ppt from "@img/files/ppt_icon.svg";
+import pdf from "@img/files/pdf_icon.svg";
 import img from "@img/files/img_icon.svg";
 import normal from "@img/files/file_icon.svg";
 import axios from "axios";
+import { useCallback, useMemo } from "react";
 
 interface id {
   id: string;
@@ -107,6 +109,9 @@ export const useFiles = () => {
       case "excel":
         imgSrc = excel;
         break;
+      case "pdf":
+        imgSrc = pdf;
+        break;
       case "normal":
         imgSrc = normal;
         break;
@@ -132,22 +137,28 @@ export const useFiles = () => {
     return typeObj;
   }
 
-  function name2mine(name: string): string {
-    const nameType = name.split(".")[name.split(".").length - 1];
-    const target = mineObj.find((i) =>
-      Object.keys(i.type).some((type) => type === nameType)
-    );
-    if (!target) {
-      return "";
+  const name2mine = useCallback((name: string) => {
+    function name2mine(name: string): string {
+      const nameType = name.split(".")[name.split(".").length - 1];
+      const target = mineObj.find((i) =>
+        Object.keys(i.type).some((type) => type === nameType)
+      );
+      if (!target) {
+        return "";
+      }
+      const mine = target.type[nameType];
+      return mine;
     }
-    const mine = target.type[nameType];
-    return mine;
-  }
+    return name2mine(name);
+  }, []);
 
-  async function path2blob(path: string) {
-    const res = await api.downloadFile(path);
-    return res;
-  }
+  const path2blob = useCallback((path: string) => {
+    async function path2blob(path: string) {
+      const res = await api.downloadFile(path);
+      return res;
+    }
+    return path2blob(path);
+  }, []);
 
   return {
     uploadFile,

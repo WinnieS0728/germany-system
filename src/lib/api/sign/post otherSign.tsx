@@ -17,8 +17,6 @@ export function postOtherSign(apiPath: string) {
       url: `${apiPath}/CountersignAdd`,
       data: data
     });
-    // TODO log會簽
-    console.log('會簽api回傳',res.data)
     return res.data
   };
 }

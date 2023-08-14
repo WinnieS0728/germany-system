@@ -20,7 +20,7 @@ export const Confirm = () => {
 
   return (
     <article
-      className='flex flex-col gap-4 modal'
+      className='modal flex flex-col gap-4'
       style={{ backgroundColor: color.white }}
     >
       <h2 className='text-xl'>表單送簽</h2>

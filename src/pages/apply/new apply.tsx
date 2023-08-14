@@ -1,7 +1,7 @@
 import { IconBtn } from "@/components/UI/buttons";
 import { Main } from "@/layouts/main";
 import * as Icons from "@components/UI/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { InfoForm } from "../../components/apply/add/info form";
 import { TransportationForm } from "../../components/apply/add/trafic";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -31,6 +31,8 @@ import { UploadFiles } from "../../components/apply/add/upload files";
 import { ErrorsModal } from "../../components/apply/add/errors";
 import { Hamburger } from "@/layouts/hamberger";
 import { tripDetailType } from "@/lib/api/travel apply/push details";
+import { Flip, toast } from "react-toastify";
+import { createNewForm } from "@/lib/api/travel apply/create new form";
 
 const schema = yup.object().shape({
   DeptId: yup.string(),
@@ -108,22 +110,18 @@ export const NewForm = () => {
   const { spreadData } = useData(tripDetail.body, timeData.today);
   const tripDetailData = useAppSelector((state) => state.tripDetail).body;
 
+  const navigate = useNavigate();
+
   async function getCusId(name: string) {
     const res = await api.getCus(name, "DEU");
 
     return res?.[0].CustId;
   }
 
-  type eventType = {
-    ResourcesId: string;
-    type: string;
-    ResourcesName: string;
-    ResourcesName_E: string;
-  };
-
   const { uploadFile } = useFiles();
   async function onSubmit<T>(d: T) {
     const newFormData = { ...d, ...dateRange };
+    const uploadData = toast.loading("處理中...");
     const formId = await createNewForm(newFormData);
 
     const newData: tripDetailType[] = await Promise.all(
@@ -143,10 +141,23 @@ export const NewForm = () => {
         };
       })
     );
-    console.log('要送的明細',newData);
-    
+    // console.log("要送的明細", newData);
+
     pushData(newData);
-    // uploadFile(formId);
+    uploadFile(formId);
+
+    toast.update(uploadData, {
+      type: "success",
+      render: "上傳成功",
+      isLoading: false,
+      transition: Flip,
+      autoClose: 3000,
+      closeOnClick: true,
+      closeButton: true,
+    });
+    setTimeout(() => {
+      navigate("../");
+    }, 1000);
 
     clearNewFormSelect();
   }
@@ -156,9 +167,9 @@ export const NewForm = () => {
     return res;
   }
 
-  async function pushData(data: any) {
+  async function pushData(data: tripDetailType[]) {
     const res = await api.pushNewData(await data);
-    console.log("建立出差明細元件", res);
+    // console.log("建立出差明細元件", res);
     // return 新增成功
   }
 

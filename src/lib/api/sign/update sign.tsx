@@ -27,8 +27,6 @@ export function updateSignStatus(apiPath: string) {
       url: `${apiPath}/SignStepupdate`,
       data: data
     });
-    // TODO log簽核
-    console.log('簽核api回傳',res.data)
     return res.data
   };
 }

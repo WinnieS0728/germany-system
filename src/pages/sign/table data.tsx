@@ -17,7 +17,7 @@ export const useTableData = (
     return nextWeekDate;
   };
   const totalData = data.reduce((a, b) => a.concat(b), []);
-
+  
   const dataInThisWeek = getNextWeekDays().map((date) =>
     totalData
       .filter((d) => d.date.some((s) => s === date))

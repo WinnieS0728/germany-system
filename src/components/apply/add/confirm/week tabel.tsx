@@ -6,7 +6,7 @@ import { tripEvent } from "@/types";
 
 const Td = ({ data }: { data: any }) => {
   const color = useTheme()?.color;
-  const type = data?.data.purpose;
+  const type = data?.data.eventId;
   let bgc;
   switch (type) {
     case tripEvent.atu:
@@ -26,7 +26,7 @@ const Td = ({ data }: { data: any }) => {
 };
 
 export const WeekTable = ({ data }: { data: dataForTable }) => {
-  const color = useTheme()?.color;
+  const color = useTheme()?.color;  
 
   const { rows, nextWeekDays } = data;
   const [hasData, setHasData] = useState<boolean>(false);

@@ -187,6 +187,7 @@ const SignBlock = ({
                         setPasswordShow((prev) => !prev);
                       }}
                       className='p-2'
+                      tabIndex={-1}
                     >
                       {showPassword ? (
                         <Icons.Password_show />

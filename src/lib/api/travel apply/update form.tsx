@@ -12,8 +12,6 @@ export function updateForm(apiPath: string) {
       url: `${apiPath}/TraveAppHAdd`,
       data: data,
     });
-    // TODO log 更新
-    console.log('更新大單(簽核狀態) api回傳',res.data);
     return res.data;
   };
 }

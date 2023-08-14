@@ -20,10 +20,6 @@ export function pushNewData(apiPath: string) {
       url: `${apiPath}/TraveAppDAdd`,
       data: data,
     });
-
-    // TODO log 出差detail
-    console.log("建立出差detail api回傳", res.data);
-
     return res.data;
   };
 }
