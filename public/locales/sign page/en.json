@@ -1,1 +1,22 @@
-{}
+{
+  "btn": {
+    "attach": "add attach",
+    "back": "back to list",
+    "otherSign": "countersign",
+    "print": "print",
+    "sign": "sign",
+    "void": "void"
+  },
+  "noDeputy": "no deputy",
+  "table": {
+    "attach": "attach",
+    "date": "sign date",
+    "emp": "signer",
+    "image": "sign image",
+    "index": "index",
+    "opinion": "opinion",
+    "status": "sign status",
+    "step": "procedure",
+    "title": "Sign-off process"
+  }
+}

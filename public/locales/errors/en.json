@@ -1,0 +1,9 @@
+{
+  "curr": "currency is required if advance amount is not 0",
+  "date": "date is required",
+  "deputy": "dupety is required",
+  "lostData": "Incomplete travel information",
+  "noData": "at least one trip data",
+  "title": "input error",
+  "transportation": "tranportation is required"
+}

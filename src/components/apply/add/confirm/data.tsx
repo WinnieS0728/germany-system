@@ -51,7 +51,7 @@ export const useData = (data: detailDataType[], date: string): dataForTable => {
       data.push({
         ...obj,
         date: getDayList(obj.date as detailData_date),
-        data: obj.data[i],
+        data: { ...obj.data[i], eventId: obj.data[i].purpose },
       });
     }
     return data;
@@ -62,8 +62,6 @@ export const useData = (data: detailDataType[], date: string): dataForTable => {
       .filter((data) => data.date.some((i: string) => i === day))
       .sort((a, b) => b.date.length - a.date.length);
   });
-
-  // console.log(dataInThisWeek);
 
   const maxRow = Math.max(
     dataInThisWeek[0].length,
@@ -76,13 +74,14 @@ export const useData = (data: detailDataType[], date: string): dataForTable => {
   );
 
   function newRow(n: number) {
-    const initData: detailDataWithSingleData = {
+    const initData = {
       id: 0,
       date: [],
       data: {
         district: "",
         city: "",
         purpose: "",
+        eventId: "",
         cus: "",
         hotel: "",
         PS: "",

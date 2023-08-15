@@ -5,10 +5,11 @@ import * as Icons from "@components/UI/icons";
 import { HeaderForm } from "../../components/apply/list/header form";
 import { ListTable } from "@/components/apply/list/table";
 import { useTheme } from "styled-components";
+import { useTranslation } from "react-i18next";
 
 export const ListPage = () => {
   const color = useTheme()?.color;
-
+  const { t } = useTranslation(["list page"]);
   return (
     <Main className='main-section-gap'>
       <>
@@ -23,7 +24,7 @@ export const ListPage = () => {
                 />
               }
             >
-              建立表單
+              {t("create new form")}
             </IconBtn>
           </NavLink>
         </div>

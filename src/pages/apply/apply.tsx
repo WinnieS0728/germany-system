@@ -3,11 +3,13 @@ import { ListPage } from "@/pages/apply/list page";
 import { Header } from "@/layouts/header";
 import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const ApplyPage = () => {
+  const { t } = useTranslation("common");
   return (
     <>
-      <Header title='國內外出差申請單' />
+      <Header title={t("title.businessTripApply")} />
       <Suspense fallback={<h1>啊我還在跑...</h1>}>
         <Routes>
           <Route

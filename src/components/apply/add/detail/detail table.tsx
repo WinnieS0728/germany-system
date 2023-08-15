@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 import * as Icons from "@components/UI/icons";
 import api from "@/lib/api";
+import { useTranslation } from "react-i18next";
 
 type detailTableProps = {
   type: "addForm" | "sign";
@@ -18,6 +19,8 @@ type detailTableProps = {
 };
 
 const TableWhenAddForm = ({ data, index }: { data: any; index: number }) => {
+  const { i18n } = useTranslation();
+  const nowLang = i18n.language;
   const dispatch = useAppDispatch();
 
   const [dataSet, setNewData] = useState<any[]>([]);
@@ -28,6 +31,9 @@ const TableWhenAddForm = ({ data, index }: { data: any; index: number }) => {
     );
     if (!target) {
       return "";
+    }
+    if (nowLang === "en") {
+      return (target as { ResourcesName_E: string }).ResourcesName_E;
     }
     return (target as { ResourcesName: string }).ResourcesName;
   }
@@ -85,6 +91,7 @@ const TableWhenSign = ({ data }: { data: detailDataWithSingleData[] }) => {
 };
 
 export const DetailTable = ({ type, data, index }: detailTableProps) => {
+  const { t } = useTranslation("list page", { keyPrefix: "detailTable" });
   const color = useTheme()?.color;
 
   const [toggleModal] = useModalControl("newDetail");
@@ -108,7 +115,7 @@ export const DetailTable = ({ type, data, index }: detailTableProps) => {
         className='title flex items-center justify-between px-4 py-2'
         style={{ backgroundColor: color.sectionHeader, color: color.white }}
       >
-        <p>出差地點明細</p>
+        <p>{t("title")}</p>
         {type === "addForm" && (
           <button
             type='button'
@@ -119,7 +126,7 @@ export const DetailTable = ({ type, data, index }: detailTableProps) => {
               toggleModal("on");
             }}
           >
-            +新增
+            +{t("add")}
           </button>
         )}
       </div>
@@ -127,14 +134,14 @@ export const DetailTable = ({ type, data, index }: detailTableProps) => {
         <table>
           <thead>
             <tr>
-              <td>項次</td>
-              <td>行政區</td>
-              <td>城市</td>
-              <td>出差事由</td>
-              <td>客戶名稱</td>
-              <td>住宿飯店 or 地點</td>
-              <td>備註</td>
-              {type === "addForm" && <td>刪除</td>}
+              <td>{t("thead.index")}</td>
+              <td>{t("thead.dist")}</td>
+              <td>{t("thead.city")}</td>
+              <td>{t("thead.purpose")}</td>
+              <td>{t("thead.cus")}</td>
+              <td>{t("thead.lodging")}</td>
+              <td>{t("thead.PS")}</td>
+              {type === "addForm" && <td>{t("thead.delete")}</td>}
             </tr>
           </thead>
           <tbody>

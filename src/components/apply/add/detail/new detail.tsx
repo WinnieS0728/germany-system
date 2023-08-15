@@ -14,6 +14,7 @@ import { setErrors } from "@/data/reducers/error/errors";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Table } from "@/components/table/table";
+import { useTranslation } from "react-i18next";
 
 interface trProps {
   label: string;
@@ -46,6 +47,8 @@ const schema = yup.object().shape({
 });
 
 export const NewDetailForm = () => {
+  const { i18n, t } = useTranslation("list page", { keyPrefix: "detailTable" });
+  const nowLang = i18n.language;
   const color = useTheme()?.color;
   const {
     register,
@@ -156,13 +159,13 @@ export const NewDetailForm = () => {
                     color: color.white,
                   }}
                 >
-                  出差地點明細
+                  {t("title")}
                 </th>
               </tr>
             </thead>
             <tbody>
               <Tr
-                label='出差事由'
+                label={t("thead.purpose")}
                 required
               >
                 <Controller
@@ -175,15 +178,20 @@ export const NewDetailForm = () => {
                       options={options.event}
                       onChange={onChange}
                       value='ResourcesId'
-                      placeholder='選擇出差事由...'
-                      getLabelFunction={(option: any) => option.ResourcesName}
+                      placeholder={t("placeholder.event")}
+                      getLabelFunction={(option: any) => {
+                        if (nowLang === "en") {
+                          return option.ResourcesName_E;
+                        }
+                        return option.ResourcesName;
+                      }}
                       getValueFunction={(option: any) => option.ResourcesId}
                     />
                   )}
                 />
               </Tr>
               <Tr
-                label='行政區'
+                label={t("thead.dist")}
                 required
               >
                 <Controller
@@ -196,15 +204,20 @@ export const NewDetailForm = () => {
                       options={options.area}
                       onChange={onChange}
                       value='Country'
-                      placeholder='選擇行政區...'
-                      getLabelFunction={(option: any) => option.Country}
+                      placeholder={t("placeholder.dist")}
+                      getLabelFunction={(option: any) => {
+                        if (nowLang === "en") {
+                          return option.Country_E;
+                        }
+                        return option.Country;
+                      }}
                       getValueFunction={(option: any) => option.Country}
                     />
                   )}
                 />
               </Tr>
               <Tr
-                label='郵遞區號'
+                label={t("postcode")}
                 required
               >
                 <Controller
@@ -216,7 +229,7 @@ export const NewDetailForm = () => {
                       forwardRef={newDetailRef.postalCode}
                       options={options.postalCode}
                       onChange={onChange}
-                      placeholder='選擇郵遞區號...'
+                      placeholder={t("placeholder.code")}
                       getLabelFunction={(option: any) =>
                         `${option.zipcode} / ${option.place}`
                       }
@@ -233,7 +246,7 @@ export const NewDetailForm = () => {
                   )}
                 />
               </Tr>
-              <Tr label='城市'>
+              <Tr label={t("thead.city")}>
                 <input
                   type='text'
                   {...register("city")}
@@ -243,7 +256,7 @@ export const NewDetailForm = () => {
                 />
               </Tr>
               <Tr
-                label='客戶名稱'
+                label={t("thead.cus")}
                 required
               >
                 <Controller
@@ -255,7 +268,7 @@ export const NewDetailForm = () => {
                       forwardRef={newDetailRef.cus}
                       options={options.cus}
                       onChange={onChange}
-                      placeholder='選擇客戶...'
+                      placeholder={t("placeholder.cus")}
                       noOptionComponent={
                         <a
                           href='https://esys.orange-electronic.com/Customer/CustomerList'
@@ -287,22 +300,22 @@ export const NewDetailForm = () => {
                   )}
                 />
               </Tr>
-              <Tr label='住宿飯店 or 地點'>
+              <Tr label={t("thead.lodging")}>
                 <input
                   type='text'
                   {...register("hotel")}
                   className='w-full'
                   autoComplete='off'
-                  placeholder='輸入住宿飯店...'
+                  placeholder={t("placeholder.lodging")}
                 />
               </Tr>
-              <Tr label='備註'>
+              <Tr label={t("thead.PS")}>
                 <input
                   type='text'
                   {...register("PS")}
                   className='w-full'
                   autoComplete='off'
-                  placeholder='輸入出差目的...'
+                  placeholder={t("placeholder.purpose")}
                 />
               </Tr>
             </tbody>

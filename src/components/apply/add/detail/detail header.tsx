@@ -10,6 +10,7 @@ import {
   SelectRangeEventHandler,
 } from "react-day-picker";
 import { useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "styled-components";
 
 interface dateType {
@@ -23,6 +24,7 @@ interface headerProps {
 }
 
 export const DetailHeader = ({ data, index }: headerProps) => {
+  const { t } = useTranslation("list page");
   const color = useTheme()?.color;
   const timeData = useAppSelector((state) => state.time);
   const [isShow, setShow] = useState(false);
@@ -88,11 +90,11 @@ export const DetailHeader = ({ data, index }: headerProps) => {
 
   return (
     <div className='flex items-center justify-between'>
-      <div className='relative flex gap-4 flex-col lg:flex-row lg:gap-8'>
-        <div className='startDate label-input gap-1 space-x-2 flex-col items-start sm:flex-row sm:items-center'>
+      <div className='relative flex flex-col gap-4 lg:flex-row lg:gap-8'>
+        <div className='startDate label-input flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center'>
           <label style={{ whiteSpace: "nowrap" }}>
             <Required />
-            出差日期(起)
+            {t("detail.startDate")}
           </label>
           <input
             {...register(`tripData.${index}.startDate`)}
@@ -108,13 +110,13 @@ export const DetailHeader = ({ data, index }: headerProps) => {
               setShow((prev) => !prev);
             }}
             readOnly
-            placeholder='開始日期'
+            placeholder={t("detail.placeholder.startDate")}
           />
         </div>
-        <div className='endDate label-input gap-1 space-x-2 flex-col items-start sm:flex-row sm:items-center'>
+        <div className='endDate label-input flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center'>
           <label style={{ whiteSpace: "nowrap" }}>
             <Required />
-            出差日期(迄)
+            {t("detail.endDate")}
           </label>
           <input
             {...register(`tripData.${index}.endDate`)}
@@ -130,7 +132,7 @@ export const DetailHeader = ({ data, index }: headerProps) => {
               setShow((prev) => !prev);
             }}
             readOnly
-            placeholder='結束日期'
+            placeholder={t("detail.placeholder.endDate")}
           />
         </div>
         <DayPicker

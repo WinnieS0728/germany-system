@@ -32,9 +32,10 @@ import { OtherSignBlock } from "@/components/sign/other sign block";
 import { ErrorsModal } from "@/components/apply/add/errors";
 import { Hamburger } from "@/layouts/hamberger";
 import { useSign } from "@/hooks/sign";
-import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const SignPage = () => {
+  const { t } = useTranslation(["common", "sign page", "new form"]);
   const { formId } = useParams();
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -45,6 +46,16 @@ const SignPage = () => {
   }, [dispatch, formId]);
   const formInfo = useAppSelector((state) => state.formInfo).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
+  const signType = () => {
+    const type = (formInfo.nextSign as nextSign).SignGroup;
+    if (type === "簽核") {
+      return "sign";
+    }
+    if (type === "會簽") {
+      return "otherSign";
+    }
+    return "sign";
+  };
 
   const color = useTheme()?.color;
   const methods = useForm();
@@ -69,7 +80,6 @@ const SignPage = () => {
   }, [nowUser]);
 
   const { headData, detailData } = useSignPageData(formId as string);
-  // console.log(detailData);
 
   const tableData = useTableData(detailData, headData.createDate);
 
@@ -92,8 +102,6 @@ const SignPage = () => {
 
   const myErrors = useAppSelector((state) => state.errors);
 
-  const navigate = useNavigate()
-
   return (
     <>
       {isNextSigner && (
@@ -102,7 +110,7 @@ const SignPage = () => {
             <UploadFiles />
           </Modal>
           <Modal name='sign'>
-            <SignBlock type='sign' />
+            <SignBlock type={signType()} />
           </Modal>
           <Modal name='otherSign'>
             <OtherSignBlock />
@@ -112,7 +120,7 @@ const SignPage = () => {
       <Modal name='errors'>
         <ErrorsModal errors={myErrors.body} />
       </Modal>
-      <Header title='國內外出差申請單' />
+      <Header title={t("title.businessTripApply", { ns: "common" })} />
       <Main className='main-section-gap'>
         <>
           <div className='top-btn-list'>
@@ -135,7 +143,7 @@ const SignPage = () => {
                         }
                         primary
                       >
-                        簽核表單
+                        {t("btn.sign", { ns: "sign page" })}
                       </Btns.IconBtn>
                     </button>,
                     <button
@@ -153,7 +161,7 @@ const SignPage = () => {
                         }
                         primary
                       >
-                        會簽(意見徵詢)
+                        {t("btn.otherSign", { ns: "sign page" })}
                       </Btns.IconBtn>
                     </button>,
                     <button
@@ -163,7 +171,7 @@ const SignPage = () => {
                       }}
                     >
                       <Btns.IconBtn icon={<Icons.AddFiles size='1.5rem' />}>
-                        加入附件
+                        {t("btn.attach", { ns: "sign page" })}
                       </Btns.IconBtn>
                     </button>,
                     <button type='button'>
@@ -175,7 +183,7 @@ const SignPage = () => {
                           />
                         }
                       >
-                        列印
+                        {t("btn.print", { ns: "sign page" })}
                       </Btns.IconBtn>
                     </button>,
                   ]}
@@ -185,7 +193,7 @@ const SignPage = () => {
             <button type='button'>
               <Link to={"https://esys.orange-electronic.com/Eform/List"}>
                 <Btns.IconBtn icon={<Icons.Back size='1.25rem' />}>
-                  返回列表
+                  {t("btn.back", { ns: "sign page" })}
                 </Btns.IconBtn>
               </Link>
             </button>
@@ -197,7 +205,7 @@ const SignPage = () => {
                 }}
               >
                 <Btns.IconBtn icon={<Icons.Void size='1.25rem' />}>
-                  作廢
+                  {t("btn.void", { ns: "sign page" })}
                 </Btns.IconBtn>
               </button>
             )}
@@ -238,10 +246,14 @@ const SignPage = () => {
               </Block>
             ))}
             <Block>
-              <p>預支差旅費 : {headData.money}</p>
+              <p>
+                {t("money.amount", { ns: "new form" })} : {headData.money}
+              </p>
             </Block>
             <Block>
-              <p>代理人 : {headData.agent}</p>
+              <p>
+                {t("deputy.deputy", { ns: "new form" })} : {headData.agent}
+              </p>
             </Block>
             <Block>
               <AttachForm type='sign' />

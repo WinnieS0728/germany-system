@@ -63,7 +63,7 @@ export const useFetchApplyList = () => {
       const dateArray = detailList.map((list) => {
         return getDays(list);
       });
-
+      
       const dataSet = empFilter.map((list, index) => {
         return {
           date: dateArraySort(dateArray[index]),

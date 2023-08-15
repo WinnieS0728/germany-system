@@ -82,7 +82,7 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
           render={({ field: { onChange } }) => (
             <AsyncSelect
               ref={otherSignRef}
-              loadOptions={options.a}
+              loadOptions={options.otherSign}
               defaultOptions
               cacheOptions
               menuIsOpen

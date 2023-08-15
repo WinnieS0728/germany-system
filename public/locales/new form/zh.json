@@ -1,1 +1,49 @@
-{}
+{
+  "attach": {
+    "delete": "刪除",
+    "download": "下載",
+    "new": "表單附件",
+    "old": "原有附件"
+  },
+  "btn": {
+    "add": "新增出差計畫",
+    "attach": "附加文件",
+    "back": "返回列表",
+    "send": "送簽表單"
+  },
+  "deputy": {
+    "deputy": "代理人",
+    "placeholder": {
+      "deputy": "選擇代理人..."
+    }
+  },
+  "info": {
+    "auto": "自動產生",
+    "comp": "公司別",
+    "date": "建立日期",
+    "dept": "部門",
+    "emp": "建檔人員",
+    "id": "表單號碼",
+    "status": "簽核狀態"
+  },
+  "money": {
+    "amount": "預支差旅費",
+    "curr": "幣別",
+    "eur": "歐元",
+    "placeholder": {
+      "curr": "選擇幣別..."
+    },
+    "rmb": "人民幣",
+    "twd": "台幣",
+    "usd": "美金"
+  },
+  "transport": {
+    "isStay": "是否住宿",
+    "placeholder": {
+      "transportation": "選擇交通工具..."
+    },
+    "stayDay": "住宿總天數",
+    "transportation": "交通工具",
+    "tripDay": "出差總天數"
+  }
+}

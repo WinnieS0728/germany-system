@@ -7,6 +7,7 @@ import { component } from "@/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useFiles } from "@/hooks/files";
 import api from "@/lib/api";
+import { useTranslation } from "react-i18next";
 
 const FileItem_o = ({
   file,
@@ -20,6 +21,7 @@ const FileItem_o = ({
   index: number;
   d?: (n: number) => void;
 } & component) => {
+  const { t } = useTranslation("new form");
   const { getFileSize, getFileType } = useFiles();
 
   const url = URL.createObjectURL(file);
@@ -40,7 +42,9 @@ const FileItem_o = ({
               (d as (n: number) => void)(index);
             }}
           >
-            <IconBtn icon={<Icons.Delete size='1.25rem' />}>刪除</IconBtn>
+            <IconBtn icon={<Icons.Delete size='1.25rem' />}>
+              {t("attach.delete")}
+            </IconBtn>
           </button>
         )}
         {type === "sign" && (
@@ -49,7 +53,9 @@ const FileItem_o = ({
             download
           >
             <button type='button'>
-              <IconBtn icon={<Icons.Download size='1.25rem' />}>下載</IconBtn>
+              <IconBtn icon={<Icons.Download size='1.25rem' />}>
+                {t("attach.download")}
+              </IconBtn>
             </button>
           </a>
         )}
@@ -86,6 +92,7 @@ const FileItem = styled(FileItem_o)`
 `;
 
 export const AttachForm = ({ type }: component) => {
+  const { t } = useTranslation("new form", { keyPrefix: "attach" });
   const fileData = useAppSelector((state) => state.files);
 
   const newFiles = fileData.body.newFile;
@@ -93,7 +100,7 @@ export const AttachForm = ({ type }: component) => {
 
   const [attachList, setAttachList] = useState<File[]>([]);
 
-  const { name2mine, path2blob } = useFiles();  
+  const { name2mine, path2blob } = useFiles();
 
   useEffect(() => {
     (async function () {
@@ -126,7 +133,7 @@ export const AttachForm = ({ type }: component) => {
       }`}
     >
       <div className='w-full'>
-        <p>表單附件 : </p>
+        <p>{t("new")} : </p>
         <article
           className={`${
             type === "addForm"
@@ -147,7 +154,7 @@ export const AttachForm = ({ type }: component) => {
       </div>
       {type === "sign" && (
         <div className='w-full'>
-          <p>原有附件 : </p>
+          <p>{t("old")} : </p>
           <article className={"grid grid-cols-1"}>
             {attachList.map((file, index) => (
               <FileItem

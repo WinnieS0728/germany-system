@@ -3,6 +3,7 @@ import * as Icons from "@components/UI/icons";
 import { useTheme } from "styled-components";
 import { useAppDispatch } from "@/hooks/redux";
 import { deleteItem } from "@/data/reducers/trip detail/trip detail";
+import { useTranslation } from "react-i18next";
 
 interface collapseProp {
   main: JSX.Element;
@@ -12,6 +13,7 @@ interface collapseProp {
   type: "addForm" | "sign";
 }
 export const Collapse = ({ type, main, sub, remove, index }: collapseProp) => {
+  const {t} = useTranslation('list page')
   const color = useTheme()?.color;
   const [open, setOpen] = useState(true);
 
@@ -51,7 +53,7 @@ export const Collapse = ({ type, main, sub, remove, index }: collapseProp) => {
             >
               <Icons.ShowDetail color={color.blue} />
             </span>
-            <span className='hidden sm:inline-block'>詳細資料</span>
+            <span className='hidden sm:inline-block'>{t('detail.toggle')}</span>
           </button>
         </div>
       </div>

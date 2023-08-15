@@ -3,6 +3,7 @@ import { useTheme } from "styled-components";
 import { useEffect, useState } from "react";
 import { dataForTable } from "./data";
 import { tripEvent } from "@/types";
+import { useTranslation } from "react-i18next";
 
 const Td = ({ data }: { data: any }) => {
   const color = useTheme()?.color;
@@ -26,6 +27,7 @@ const Td = ({ data }: { data: any }) => {
 };
 
 export const WeekTable = ({ data }: { data: dataForTable }) => {
+  const {t} = useTranslation('confirm modal')
   const color = useTheme()?.color;  
 
   const { rows, nextWeekDays } = data;
@@ -40,7 +42,7 @@ export const WeekTable = ({ data }: { data: dataForTable }) => {
 
   return (
     <>
-      <Table title='一週出差計畫表'>
+      <Table title={t('weekTable.title')}>
         <table>
           <thead>
             <tr style={{ backgroundColor: color.confirmTable.header }}>

@@ -1,10 +1,11 @@
 import { useModalControl } from "@/hooks/modal control";
 import * as Icons from "@components/UI/icons";
 import { FieldErrors } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "styled-components";
 export const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
   // console.log(errors);
-
+  const { t } = useTranslation("errors");
   const color = useTheme()?.color;
   const errorMessage = Object.values(errors).map((err: any) => err.message);
   const tripError = getTripDataError();
@@ -26,7 +27,7 @@ export const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
       style={{ backgroundColor: color.white }}
       className='modal'
     >
-      <h2 className='border-b-4 py-4 text-center text-3xl'>表單送出失敗</h2>
+      <h2 className='border-b-4 py-4 text-center text-3xl'>{t("title")}</h2>
       <div className='flex'>
         <span
           style={{ fontSize: "10rem" }}
@@ -48,7 +49,7 @@ export const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
               </li>
             ))}
             {tripError?.map((m: string, index) => (
-              <li key={index}>🫠{m}</li>
+              <li key={index}>{m}</li>
             ))}
           </ul>
         </div>

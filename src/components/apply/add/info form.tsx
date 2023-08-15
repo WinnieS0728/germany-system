@@ -3,6 +3,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { component } from "@/types";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 interface infoPropType {
   title: string;
@@ -20,23 +21,25 @@ const Info = ({ title, content, className }: infoPropType) => {
   );
 };
 export const InfoForm = ({ type, data }: component) => {
-  const nowUser = useAppSelector((state) => state.nowUser);
+  const { i18n, t } = useTranslation(["common", "new form"]);
+  const nowLang = i18n.language;
+  const nowUser = useAppSelector((state) => state.nowUser).body;
 
   const { setValue } = useFormContext();
 
   useEffect(() => {
-    setValue("DeptId", nowUser.body.DeptId);
-    setValue("CreateId", nowUser.body.EmpId);
+    setValue("DeptId", nowUser.DeptId);
+    setValue("CreateId", nowUser.EmpId);
   }, [nowUser, setValue]);
 
   return (
-    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2'>
+    <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3'>
       <Info
-        title='表單號碼'
-        content={type === "addForm" ? "auto" : (data?.id as string)}
+        title={t("info.id", { ns: "new form" })}
+        content={type === "addForm" ? t("auto") : (data?.id as string)}
       />
       <Info
-        title='建立日期'
+        title={t("info.date", { ns: "new form" })}
         content={
           type === "addForm"
             ? dateFormatter(new Date())
@@ -44,27 +47,41 @@ export const InfoForm = ({ type, data }: component) => {
         }
       />
       <Info
-        title='簽核狀態'
-        content={type === "addForm" ? "未簽核" : (data?.status as string)}
-      />
-      <Info
-        title='公司別'
+        title={t("info.status", { ns: "new form" })}
         content={
           type === "addForm"
-            ? nowUser.body.ResourcesName
+            ? t("signStatus.no", { ns: "common" })
+            : (data?.status as string)
+        }
+      />
+      <Info
+        title={t("info.comp", { ns: "new form" })}
+        content={
+          type === "addForm"
+            ? nowLang === "en"
+              ? nowUser.ResourcesName_E
+              : nowUser.ResourcesName
             : (data?.company as string)
         }
       />
       <Info
-        title='部門'
+        title={t("info.dept", { ns: "new form" })}
         content={
-          type === "addForm" ? nowUser.body.DeptName : (data?.dept as string)
+          type === "addForm"
+            ? nowLang === "en"
+              ? nowUser.DeptName_E
+              : nowUser.DeptName
+            : (data?.dept as string)
         }
       />
       <Info
-        title='建檔人員'
+        title={t("info.emp", { ns: "new form" })}
         content={
-          type === "addForm" ? nowUser.body.EmpName : (data?.EmpName as string)
+          type === "addForm"
+            ? nowLang === "en"
+              ? nowUser.FullName.split("/")[0]
+              : nowUser.EmpName
+            : (data?.EmpName as string)
         }
       />
     </div>

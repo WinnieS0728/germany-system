@@ -17,7 +17,7 @@ function App() {
   const { i18n } = useTranslation();
 
   const [search] = useSearchParams();
-
+  
   const EmpID = nowUser.body.EmpId || search.get("userID");
 
   const usingLanguage = nowUser.body.Language?.split("-")[0];

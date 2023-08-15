@@ -6,12 +6,15 @@ import { MySelect } from "@components/form/select";
 import { timeDay } from "d3-time";
 import { useEffect, useMemo } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 interface date {
   startDate: string;
   endDate: string;
 }
 export const TransportationForm = () => {
+  const { i18n, t } = useTranslation("new form", { keyPrefix: "transport" });
+  const nowLang = i18n.language;
   const { options } = useOptions();
 
   const { register, control, setValue } = useFormContext();
@@ -101,7 +104,7 @@ export const TransportationForm = () => {
       <div className='transportation label-input'>
         <label>
           <Required />
-          交通工具 :
+          {t("transportation")} :
         </label>
         <Controller
           control={control}
@@ -111,17 +114,22 @@ export const TransportationForm = () => {
               forwardRef={newFormRef.transport}
               options={options.transport}
               onChange={onChange}
-              getLabelFunction={(option: any) => option.ResourcesName}
+              getLabelFunction={(option: any) => {
+                if (nowLang === "en") {
+                  return option.ResourcesName_E;
+                }
+                return option.ResourcesName;
+              }}
               getValueFunction={(option: any) => option.ResourcesId}
               value='ResourcesId'
-              placeholder='選擇交通工具'
+              placeholder={t("placeholder.transportation")}
             />
           )}
         />
       </div>
       <div className='grid grid-cols-1 sm:grid-cols-3'>
         <div className='stay label-input justify-start'>
-          <label>是否住宿 :</label>
+          <label>{t("isStay")} :</label>
           <input
             type='text'
             {...register("IsLodging")}
@@ -131,7 +139,7 @@ export const TransportationForm = () => {
           />
         </div>
         <div className='stayDay label-input justify-start'>
-          <label>住宿總天數 :</label>
+          <label>{t("stayDay")} :</label>
           <input
             type='text'
             {...register("StayDays", {
@@ -143,7 +151,7 @@ export const TransportationForm = () => {
           />
         </div>
         <div className='totalDay label-input justify-start'>
-          <label>出差總天數 :</label>
+          <label>{t("tripDay")} :</label>
           <input
             type='text'
             {...register("Days", {

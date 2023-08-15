@@ -1,5 +1,6 @@
 import { styled, useTheme } from "styled-components";
 import * as Icons from "@components/UI/icons";
+import { useTranslation } from "react-i18next";
 
 interface propType {
   text: string;
@@ -77,20 +78,21 @@ type longBtn = { style: "cancel" | "confirm" } & (
 
 export const LongBtn = (props: longBtn) => {
   const color = useTheme()?.color;
+  const { t } = useTranslation("common");
 
   let css;
   let content;
   switch (props.style) {
     case "cancel":
       css = { backgroundColor: color.red, color: color.white };
-      content = "取消";
+      content = t('btn.cancel');
       break;
     case "confirm":
       css = {
         backgroundColor: color.sectionHeader,
         color: color.white,
       };
-      content = "確認";
+      content = t('btn.confirm');
       break;
     default:
       css = props.style;

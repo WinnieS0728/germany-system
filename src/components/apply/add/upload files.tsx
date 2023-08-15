@@ -8,6 +8,7 @@ import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch } from "@/hooks/redux";
 import { addFile } from "@/data/reducers/files/attach";
 import { useFiles } from "@/hooks/files";
+import { useTranslation } from "react-i18next";
 
 const getColor = (props: any) => {
   if (props.$isDragAccept) {
@@ -40,6 +41,7 @@ const FileInput = styled.div`
 `;
 
 export function UploadFiles() {
+  const { t } = useTranslation("files");
   const color = useTheme()?.color;
 
   const [fileList, setFileList] = useState<File[]>([]);
@@ -80,7 +82,7 @@ export function UploadFiles() {
       className='modal space-y-4'
       style={{ backgroundColor: color.white }}
     >
-      <h2 className='border-b-4 py-4 text-center text-3xl'>檔案檔案</h2>
+      <h2 className='border-b-4 py-4 text-center text-3xl'>{t("title")}</h2>
       <form>
         <FileInput
           {...getRootProps({
@@ -97,25 +99,25 @@ export function UploadFiles() {
           />
           <p>
             {isFocused
-              ? "選擇檔案"
+              ? t("box.focus")
               : isDragAccept
-              ? "快放手"
+              ? t("box.success")
               : isDragReject
-              ? "欸不對"
-              : "點擊或拖曳檔案"}
+              ? t("box.reject")
+              : t("box.idle")}
           </p>
         </FileInput>
         <p className='text-end text-[#bdbdbd]'>
-          接受格式 : word, ppt, excel, image( JPEG, PNG )
+          {t("accept")} : word, ppt, excel, image( JPEG, PNG )
         </p>
       </form>
-      <Table title='檔案列表'>
+      <Table title={t("table.title")}>
         <table>
           <thead>
             <tr>
-              <th>檔名</th>
-              <th>檔案大小</th>
-              <th>刪除</th>
+              <th>{t("table.fileName")}</th>
+              <th>{t("table.size")}</th>
+              <th>{t("table.delete")}</th>
             </tr>
           </thead>
           <tbody>

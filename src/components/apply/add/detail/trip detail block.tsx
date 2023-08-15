@@ -8,8 +8,10 @@ import { IconBtn } from "@/components/UI/buttons";
 import { useTheme } from "styled-components";
 import { addData } from "@/data/reducers/trip detail/trip detail";
 import { Block } from "@/layouts/block";
+import { useTranslation } from "react-i18next";
 
 export const TripDetailForm = () => {
+  const { t } = useTranslation("new form");
   const color = useTheme()?.color;
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
@@ -41,7 +43,7 @@ export const TripDetailForm = () => {
             }}
             icon={<Icons.NewDetail />}
           >
-            新增出差計畫
+            {t('btn.add')}
           </IconBtn>
         </button>
       </div>

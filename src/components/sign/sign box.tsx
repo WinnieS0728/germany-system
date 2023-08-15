@@ -37,13 +37,11 @@ const SignBlock = ({
       type === "sign"
         ? yup.string().oneOf(["yes", "no"], "沒決定欸")
         : yup.string().notRequired(),
-    password: yup
-      .string()
-      .required("沒密碼"),
-      // TODO 密碼審核
-      // .test("checkPassword", "密碼錯誤", async function (value: string) {
-      //   return await api.logIn(nowUser.EmpId, value);
-      // }),
+    password: yup.string().required("沒密碼"),
+    // TODO 密碼審核
+    // .test("checkPassword", "密碼錯誤", async function (value: string) {
+    //   return await api.logIn(nowUser.EmpId, value);
+    // }),
     opinion:
       type === "sign"
         ? yup.string().when("agree", {
@@ -74,14 +72,19 @@ const SignBlock = ({
   });
   const [showPassword, setPasswordShow] = useState<boolean>(false);
   const inputDisable = type === "sign" ? false : true;
+
+  const { sign, updateFormStatus, signOver } = useSign();
+
   function onSubmit<T>(d: T) {
     // console.log(d);
     send(d as SignData);
+    if ((d as { agree: "yes" | "no" }).agree === "no") {
+      signOver();
+    }
     toggleModal("off");
     reset();
   }
 
-  const { sign, updateFormStatus } = useSign();
   const { uploadFile } = useFiles();
 
   async function send(data: SignData) {
@@ -95,7 +98,7 @@ const SignBlock = ({
   const watch_agree = useWatch({
     name: "agree",
     control,
-  });  
+  });
 
   const [toggleModal] = useModalControl("sign");
   const [toggleErrorModal] = useModalControl("errors");

@@ -38,6 +38,14 @@ export enum signStatus {
   "同意" = 1,
   "退簽" = 3,
   "作廢" = 4,
+  "" = 5,
+}
+export enum signStatus_E {
+  "not signed" = 0,
+  "agree" = 1,
+  "disagree" = 3,
+  "void" = 4,
+  "" = 5,
 }
 
 export enum tripEvent {

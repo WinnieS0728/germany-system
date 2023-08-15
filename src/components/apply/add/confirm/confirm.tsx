@@ -5,8 +5,10 @@ import * as Btns from "@components/UI/buttons";
 import { useModalControl } from "@/hooks/modal control";
 import { useAppSelector } from "@/hooks/redux";
 import { useData } from "./data";
+import { useTranslation } from "react-i18next";
 
 export const Confirm = () => {
+  const { t } = useTranslation("confirm modal");
   const color = useTheme()?.color;
   const [toggleModal] = useModalControl("review");
   const tripDetail = useAppSelector((state) => state.tripDetail);
@@ -23,8 +25,8 @@ export const Confirm = () => {
       className='modal flex flex-col gap-4'
       style={{ backgroundColor: color.white }}
     >
-      <h2 className='text-xl'>表單送簽</h2>
-      <p>表單送出後, 如要更改或作廢請洽MIS</p>
+      <h2 className='text-xl'>{t('title')}</h2>
+      <p>{t('warn')}</p>
       <WeekTable data={tablaData} />
       <PerCentTable
         data={[spreadData]}

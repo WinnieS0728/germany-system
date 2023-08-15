@@ -1,1 +1,49 @@
-{}
+{
+  "attach": {
+    "delete": "delete",
+    "download": "download",
+    "new": "new attach",
+    "old": "existing attach"
+  },
+  "btn": {
+    "add": "add trip detail",
+    "attach": "add attach",
+    "back": "back to list",
+    "send": "create"
+  },
+  "deputy": {
+    "deputy": "deputy",
+    "placeholder": {
+      "deputy": "select deputy..."
+    }
+  },
+  "info": {
+    "auto": "auto",
+    "comp": "company",
+    "date": "create date",
+    "dept": "department",
+    "emp": "create person",
+    "id": "form Id",
+    "status": "form status"
+  },
+  "money": {
+    "amount": "advance amount",
+    "curr": "currency",
+    "eur": "EUR",
+    "placeholder": {
+      "curr": "select currency..."
+    },
+    "rmb": "RMB",
+    "twd": "TWD",
+    "usd": "USD"
+  },
+  "transport": {
+    "isStay": "isLodging",
+    "placeholder": {
+      "transportation": "select transportation..."
+    },
+    "stayDay": "lodging days",
+    "transportation": "transportation",
+    "tripDay": "trip days"
+  }
+}

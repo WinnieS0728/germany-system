@@ -1,1 +1,22 @@
-{}
+{
+  "btn": {
+    "attach": "加入附件",
+    "back": "返回列表",
+    "otherSign": "會簽(意見徵詢)",
+    "print": "列印",
+    "sign": "簽核表單",
+    "void": "作廢"
+  },
+  "noDeputy": "沒代理人",
+  "table": {
+    "attach": "附件",
+    "date": "簽核時間",
+    "emp": "簽核人員",
+    "image": "簽名檔",
+    "index": "順序",
+    "opinion": "意見",
+    "status": "簽核狀態",
+    "step": "簽核程序",
+    "title": "簽核流程"
+  }
+}

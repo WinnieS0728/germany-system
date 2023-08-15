@@ -5,6 +5,7 @@ import {
 import api from "@/lib/api";
 import { tripEvent } from "@/types";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "styled-components";
 
 export const PerCentTable = ({
@@ -19,6 +20,7 @@ export const PerCentTable = ({
     month: string;
   };
 }) => {
+  const {t} = useTranslation('confirm modal')
   const color = useTheme()?.color;
   const totalData = data.reduce((a, b) => a.concat(b), []);
   const atuCus = totalData.filter((i) => i.data?.purpose === tripEvent.atu);
@@ -61,11 +63,11 @@ export const PerCentTable = ({
   }, [EmpId, monthArray, time]);
   return (
     <>
-      <Table title='拜訪評估分析'>
+      <Table title={t('percentTable.title')}>
         <table>
           <thead style={{ backgroundColor: color.confirmTable.header }}>
             <tr>
-              <th>目標值</th>
+              <th>{t('percentTable.threshold')}</th>
               <th colSpan={2}>{`≥ ${100 - threshold}`}</th>
               <th>{`≤ ${threshold}`}</th>
             </tr>
@@ -73,18 +75,18 @@ export const PerCentTable = ({
           <tbody>
             <tr>
               <td></td>
-              <td>ATU</td>
-              <td>既有客戶</td>
-              <td>新客戶</td>
+              <td>{t('percentTable.atu')}</td>
+              <td>{t('percentTable.oldCus')}</td>
+              <td>{t('percentTable.newCus')}</td>
             </tr>
             <tr>
-              <td>店家數</td>
+              <td>{t('percentTable.number')}</td>
               <td>{atuCus.length}</td>
               <td>{oldCus.length}</td>
               <td>{newCus.length}</td>
             </tr>
             <tr>
-              <td>拜訪佔比</td>
+              <td>{t('percentTable.percent')}</td>
               <td>{getPercent(atuCus.length) + "%"}</td>
               <td>{getPercent(oldCus.length) + "%"}</td>
               <td>{getPercent(newCus.length) + "%"}</td>

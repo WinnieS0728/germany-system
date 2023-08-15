@@ -50,14 +50,8 @@ export const useSign = () => {
     if (!data) {
       return;
     }
-    toast.success(`${formInfo.formId} ${popupText}`);
     const res = await api.updateForm(data);
-    // const res = await toast.promise(request, {
-    //   pending: "處理中...",
-    //   success: "表單狀態更新完成",
-    //   error: "表單狀態更新失敗",
-    // });
-    // console.log("更新表單狀態api", res);
+    toast.success(`${formInfo.formId} ${popupText}`);
   }
   function getSignNumber(value: string) {
     if (value === "yes") {
@@ -108,10 +102,16 @@ export const useSign = () => {
     afterSign();
   }
 
+  function getTitle(obj: any) {
+    return parseInt(obj.Title.split("-")[0]);
+  }
   async function otherSign(list: string[]) {
-    const otherSignMember = await Promise.all(
-      list.map(async (id: string) => (await api.getMember(id))[0])
-    );
+    const otherSignMember = (
+      await Promise.all(
+        list.map(async (id: string) => (await api.getMember(id))[0])
+      )
+    ).sort((a, b) => getTitle(a) - getTitle(b));
+
     const otherSignMemberList = otherSignMember.map(
       (member): otherSignFinalDataType => {
         return {
@@ -132,13 +132,45 @@ export const useSign = () => {
       success: "會簽完成",
       error: "會簽失敗",
     });
-    // console.log("會簽元件", res);
 
     afterSign();
   }
+
+  async function signOver() {
+    const restMember = formInfo.signList.slice(formInfo.nowOrder + 1);
+    const data: signFinalDataType[] = restMember.map((member) => {
+      return {
+        ...(member as unknown as {
+          FORMNO: string;
+          SIGNORDER: number;
+          STEPNAME: string;
+          SIGNER: string;
+          SIGNERNAME: string;
+          ALLOWCUSTOM: boolean;
+          SignGroup: string;
+          ISEnable: string;
+          Status: string;
+        }),
+        ACTUALNAME: nowUser.EmpName,
+        ACTUALSIGNER: nowUser.EmpId,
+        SIGNRESULT: 5,
+        types: "1",
+        OPINION: "",
+        SIGNTIME: "",
+        ExceId: nowUser.EmpId,
+      };
+    });
+    for (const i of data) {
+      (async function () {
+        const res = await api.updateSignStatus(i);
+      })();
+    }
+  }
+
   return {
     sign,
     updateFormStatus,
     otherSign,
+    signOver,
   };
 };

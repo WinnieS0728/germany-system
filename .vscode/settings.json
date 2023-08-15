@@ -8,6 +8,9 @@
     { "name": "setting page", "path": "./public/locales/settingPage" },
     { "name": "list page", "path": "./public/locales/list page" },
     { "name": "new form", "path": "./public/locales/new form" },
-    { "name": "sign page", "path": "./public/locales/sign page" }
+    { "name": "sign page", "path": "./public/locales/sign page" },
+    { "name": "file modal", "path": "./public/locales/files" },
+    { "name": "errors", "path": "./public/locales/errors" },
+    { "name": "confirm modal", "path": "./public/locales/confirm modal" },
   ]
 }

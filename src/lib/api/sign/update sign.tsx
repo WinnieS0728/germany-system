@@ -1,4 +1,5 @@
 import { signStatus } from "@/types";
+import { signStatus_E } from "@/types";
 import axios from "axios";
 
 export type signFinalDataType = {
@@ -9,7 +10,7 @@ export type signFinalDataType = {
   SIGNERNAME: string; //簽核人員名稱
   ACTUALNAME: string; //實際簽核人員名稱(EX: 假如財務請假，就會請財務代理人簽核
   ACTUALSIGNER: string; //實際簽核人員代號 是否簽核 未簽核回傳: ""
-  SIGNRESULT: signStatus;
+  SIGNRESULT: signStatus | signStatus_E;
   OPINION: string; //簽核意見
   SIGNTIME: string; //簽核時間
   ALLOWCUSTOM: boolean; //是否自訂簽核
@@ -25,8 +26,8 @@ export function updateSignStatus(apiPath: string) {
     const res = await axios({
       method: "POST",
       url: `${apiPath}/SignStepupdate`,
-      data: data
+      data: data,
     });
-    return res.data
+    return res.data;
   };
 }

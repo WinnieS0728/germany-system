@@ -1,0 +1,16 @@
+{
+  "percentTable": {
+    "atu": "ATU",
+    "newCus": "新客戶",
+    "number": "店家數",
+    "oldCus": "既有客戶",
+    "percent": "拜訪佔比",
+    "threshold": "目標值",
+    "title": "拜訪評估分析"
+  },
+  "title": "表單送簽",
+  "warn": "表單送出後, 如要更改或作廢請洽MIS",
+  "weekTable": {
+    "title": "一週出差計畫表"
+  }
+}

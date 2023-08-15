@@ -1,0 +1,16 @@
+{
+  "percentTable": {
+    "atu": "ATU",
+    "newCus": "new customer",
+    "number": "number",
+    "oldCus": "existing customer",
+    "percent": "percent",
+    "threshold": "threshold",
+    "title": "treval analysis"
+  },
+  "title": "form send",
+  "warn": "after the form is sent, please contact MIS if you want to change or cancel it",
+  "weekTable": {
+    "title": "weekly travel plan"
+  }
+}

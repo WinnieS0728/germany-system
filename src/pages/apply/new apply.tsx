@@ -32,32 +32,11 @@ import { ErrorsModal } from "../../components/apply/add/errors";
 import { Hamburger } from "@/layouts/hamberger";
 import { tripDetailType } from "@/lib/api/travel apply/push details";
 import { Flip, toast } from "react-toastify";
-import { createNewForm } from "@/lib/api/travel apply/create new form";
-
-const schema = yup.object().shape({
-  DeptId: yup.string(),
-  CreateId: yup.string(),
-  Transport: yup.string().required("交通工具必填"),
-  IsLodging: yup.string(),
-  StayDays: yup.number(),
-  Days: yup.number(),
-  Advance_Amount: yup.mixed(),
-  Curr: yup.string().when("Advance_Amount", {
-    is: (money: string) => money !== "0",
-    then: () => yup.string().required("金額不為 0 時幣別必填"),
-    otherwise: () => yup.string(),
-  }),
-  Deputy: yup.string().required("代理人必填"),
-  tripData: yup.array().of(
-    yup.object().shape({
-      startDate: yup.string().required("出差日期必填"),
-      endDate: yup.string().required("出差日期必填"),
-    })
-  ),
-});
+import { useTranslation } from "react-i18next";
 
 export const NewForm = () => {
   const color = useTheme()?.color;
+  const { t } = useTranslation(["common", "new form", "errors"]);
   const timeData = useAppSelector((state) => state.time);
   const tripDetail = useAppSelector((state) => state.tripDetail);
   function getNextWeekStartEnd() {
@@ -72,7 +51,27 @@ export const NewForm = () => {
       nextSunday: getTime(nextSunday),
     };
   }
-
+  const schema = yup.object().shape({
+    DeptId: yup.string(),
+    CreateId: yup.string(),
+    Transport: yup.string().required(t("transportation",{ns:'errors'})),
+    IsLodging: yup.string(),
+    StayDays: yup.number(),
+    Days: yup.number(),
+    Advance_Amount: yup.mixed(),
+    Curr: yup.string().when("Advance_Amount", {
+      is: (money: string) => money !== "0",
+      then: () => yup.string().required(t("curr",{ns:'errors'})),
+      otherwise: () => yup.string(),
+    }),
+    Deputy: yup.string().required(t("deputy",{ns:'errors'})),
+    tripData: yup.array().of(
+      yup.object().shape({
+        startDate: yup.string().required(t("date",{ns:'errors'})),
+        endDate: yup.string().required(t("date",{ns:'errors'})),
+      })
+    ),
+  });
   const methods = useForm({
     shouldUnregister: true,
     criteriaMode: "all",
@@ -202,7 +201,7 @@ export const NewForm = () => {
       }
       setError("tripData", {
         type: "custom",
-        message: "至少要有一筆出差資料",
+        message: t("noData",{ns:'errors'}),
       });
     }
     if (tripDetailData.some((d) => d.data.length === 0)) {
@@ -211,10 +210,10 @@ export const NewForm = () => {
       }
       setError("tripData", {
         type: "custom",
-        message: "出差資料填寫不完全",
+        message: t("lostData",{ns:'errors'}),
       });
     }
-  }, [errors, setError, spreadData, tripDetailData]);
+  }, [errors, setError, spreadData, t, tripDetailData]);
 
   useEffect(() => {
     trigger();
@@ -264,7 +263,7 @@ export const NewForm = () => {
                     }
                     primary
                   >
-                    送簽表單
+                    {t("btn.send", { ns: "new form" })}
                   </IconBtn>
                 </button>,
                 <button
@@ -274,14 +273,16 @@ export const NewForm = () => {
                   }}
                 >
                   <IconBtn icon={<Icons.AddFiles size='1.5rem' />}>
-                    附加文件
+                    {t("btn.attach", { ns: "new form" })}
                   </IconBtn>
                 </button>,
               ]}
             />
             <button type='button'>
               <Link to={"../"}>
-                <IconBtn icon={<Icons.Back size='1.25rem' />}>返回列表</IconBtn>
+                <IconBtn icon={<Icons.Back size='1.25rem' />}>
+                  {t("btn.back", { ns: "new form" })}
+                </IconBtn>
               </Link>
             </button>
           </div>

@@ -15,6 +15,7 @@ import { useOptions } from "@/hooks/options";
 import { setProps } from "@/data/reducers/apply list/apply list";
 import { setListData } from "@/data/actions/apply list/set data";
 import * as Btns from "@components/UI/buttons";
+import { useTranslation } from "react-i18next";
 
 interface propsType {
   className?: string;
@@ -22,7 +23,9 @@ interface propsType {
 export const HeaderForm = ({ className }: propsType) => {
   const color = useTheme()?.color;
   const timeData = useAppSelector((state) => state.time);
-  const nowUser = useAppSelector((state) => state.nowUser).body;
+  const { i18n, t } = useTranslation(["list page", "common"]);
+  const nowLang = i18n.language;
+
   const { register, handleSubmit, control, setValue } = useForm({
     shouldUnregister: true,
     criteriaMode: "all",
@@ -53,10 +56,10 @@ export const HeaderForm = ({ className }: propsType) => {
   });
 
   const formStatusOptions = [
-    { label: "未簽核", value: "1" },
-    { label: "已簽核", value: "2" },
-    { label: "退簽", value: "3" },
-    { label: "作廢", value: "4" },
+    { label: t("signStatus.no", { ns: "common" }), value: "1" },
+    { label: t("signStatus.done", { ns: "common" }), value: "2" },
+    { label: t("signStatus.return", { ns: "common" }), value: "3" },
+    { label: t("signStatus.void", { ns: "common" }), value: "4" },
   ];
 
   function getTime(d: Date | undefined) {
@@ -126,7 +129,7 @@ export const HeaderForm = ({ className }: propsType) => {
       >
         <div className='form-body grid w-full gap-4'>
           <div className='member label-input'>
-            <label>申請人員</label>
+            <label>{t("label.member")}</label>
             <div className='flex w-full flex-col gap-2 sm:flex-row'>
               <Controller
                 control={control}
@@ -135,8 +138,13 @@ export const HeaderForm = ({ className }: propsType) => {
                   <MySelect.Async
                     options={options.dept}
                     onChange={onChange}
-                    placeholder='選擇部門'
-                    getLabelFunction={(option: any) => option.DeptName}
+                    placeholder={t("placeholder.dept")}
+                    getLabelFunction={(option: any) => {
+                      if (nowLang === "en") {
+                        return option.DeptName_E;
+                      }
+                      return option.DeptName;
+                    }}
                     getValueFunction={(option: any) => option.DeptId}
                     value='DeptId'
                   />
@@ -149,8 +157,13 @@ export const HeaderForm = ({ className }: propsType) => {
                   <MySelect.Async
                     options={options.member}
                     onChange={onChange}
-                    placeholder='選擇業務'
-                    getLabelFunction={(option: any) => option.EmpName}
+                    placeholder={t("choose sales")}
+                    getLabelFunction={(option: any) => {
+                      if (nowLang === "en") {
+                        return option.FullName.split("/")[0];
+                      }
+                      return option.EmpName;
+                    }}
                     getValueFunction={(option: any) => option.EmpId}
                     value='EmpId'
                     filterFunction={(candidate) => {
@@ -165,7 +178,7 @@ export const HeaderForm = ({ className }: propsType) => {
             </div>
           </div>
           <div className='status label-input'>
-            <label>表單狀態</label>
+            <label>{t("form status")}</label>
             <Controller
               control={control}
               name='formStatus'
@@ -173,13 +186,13 @@ export const HeaderForm = ({ className }: propsType) => {
                 <MySelect.Normal
                   options={formStatusOptions}
                   onChange={onChange}
-                  placeholder='選擇狀態'
+                  placeholder={t("placeholder.status")}
                 />
               )}
             />
           </div>
           <div className='date label-input'>
-            <label>出差日期</label>
+            <label>{t("label.date")}</label>
             <span className='relative flex w-full flex-col items-center gap-2 sm:flex-row'>
               <input
                 className='w-full'
@@ -194,7 +207,7 @@ export const HeaderForm = ({ className }: propsType) => {
                   setShow((prev) => !prev);
                 }}
                 readOnly
-                placeholder='開始日期'
+                placeholder={t("placeholder.startDate")}
               />
               <span className='hidden sm:inline-block'>~</span>
               <input
@@ -211,7 +224,7 @@ export const HeaderForm = ({ className }: propsType) => {
                 }}
                 readOnly
                 {...register("date.end")}
-                placeholder='結束日期'
+                placeholder={t("placeholder.endDate")}
               />
               <DayPicker
                 mode='range'
@@ -258,7 +271,7 @@ export const HeaderForm = ({ className }: propsType) => {
               color: color.white,
             }}
           >
-            查詢表單
+            {t("search")}
           </Btns.IconBtn>
         </button>
       </form>

@@ -1,25 +1,26 @@
 import api from "@/lib/api";
 import { useAppSelector } from "./redux";
-import { useTranslation } from "react-i18next";
 
 export const useOptions = () => {
   const nowUser = useAppSelector((state) => state.nowUser);
-  const { i18n } = useTranslation();
-  const nowLang = i18n.language;
-  
+
   async function getEventOptions(input: string) {
     const res = await api.getEvent("TripEvent");
 
-    return res.filter((o: { ResourcesName: string }) =>
-      o.ResourcesName.toLowerCase().includes(input.toLowerCase())
+    return res.filter(
+      (o: { ResourcesName: string; ResourcesName_E: string }) =>
+        o.ResourcesName.toLowerCase().includes(input.toLowerCase()) ||
+        o.ResourcesName_E.toLowerCase().includes(input.toLowerCase())
     );
   }
 
   async function getAreaOptions(input: string) {
     const res = await api.getArea("DEU");
 
-    return res.filter((o: { Country: string }) =>
-      o.Country.toLowerCase().includes(input.toLowerCase())
+    return res.filter(
+      (o: { Country: string; Country_E: string }) =>
+        o.Country.toLowerCase().includes(input.toLowerCase()) ||
+        o.Country_E.toLowerCase().includes(input.toLowerCase())
     );
   }
 
@@ -39,17 +40,21 @@ export const useOptions = () => {
 
   async function getCusOptions(input: string) {
     const res = await api.getCus("", "DEU");
-
-    return res.filter((o: { CustName: string }) =>
-      o.CustName.toLowerCase().includes(input.toLowerCase())
+    
+    return res.filter(
+      (o: { CustName: string; CustName_E: string }) =>
+        o.CustName.toLowerCase().includes(input.toLowerCase()) ||
+        o.CustName_E.toLowerCase().includes(input.toLowerCase())
     );
   }
 
   async function getTransportOptions(input: string) {
     const res = await api.getEvent("Traffic");
 
-    return res.filter((o: { ResourcesName: string }) =>
-      o.ResourcesName.toLowerCase().includes(input.toLowerCase())
+    return res.filter(
+      (o: { ResourcesName: string; ResourcesName_E: string }) =>
+        o.ResourcesName.toLowerCase().includes(input.toLowerCase()) ||
+        o.ResourcesName_E.toLowerCase().includes(input.toLowerCase())
     );
   }
 
@@ -60,36 +65,25 @@ export const useOptions = () => {
     );
 
     return notMe.filter(
-      (o: { EmpName: string; EmpId: string }) =>
-        o.EmpName.toLowerCase().includes(input.toLowerCase()) ||
+      (o: { FullName: string; EmpId: string }) =>
+        o.FullName.toLowerCase().includes(input.toLowerCase()) ||
         o.EmpId.toLowerCase().includes(input.toLowerCase())
     );
   }
 
   async function getDeptOptions(input: string) {
-    const res = await api.getDept();
-
-    const memberList = Promise.all(
-      res.map(async (d: { DeptId: string }) => {
-        const m = await api.getMember("", d.DeptId);
-        return {
-          id: d.DeptId,
-          member: m,
-        };
-      })
+    const res = await api.getMember();
+    const deptNoRepeat = [
+      ...new Set(res.map((i: { DeptId: string }) => i.DeptId)),
+    ];
+    const deptArr = deptNoRepeat.map((i) =>
+      res.find((i2: { DeptId: string }) => i2.DeptId === i)
     );
 
-    const deptHasMember = (await memberList).filter(
-      (i) => i.member.length !== 0
-    );
-
-    const options = deptHasMember.map((i) =>
-      res.find((d: { DeptId: string }) => d.DeptId === i.id)
-    );
-
-    return options.filter(
-      (o: { DeptName: string; DeptId: string }) =>
+    return deptArr.filter(
+      (o: { DeptName: string; DeptName_E: string; DeptId: string }) =>
         o.DeptName.toLowerCase().includes(input.toLowerCase()) ||
+        o.DeptName_E.toLowerCase().includes(input.toLowerCase()) ||
         o.DeptId.includes(input)
     );
   }
@@ -169,7 +163,7 @@ export const useOptions = () => {
       agent: getAgentOptions,
       dept: getDeptOptions,
       member: getMemberOptions,
-      a: getDeptMemberOptions,
+      otherSign: getDeptMemberOptions,
     },
   };
 };

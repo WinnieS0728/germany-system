@@ -1,4 +1,65 @@
 {
   "create new form": "create new form",
-  "search": "Search"
+  "detail": {
+    "endDate": "trip date (end)",
+    "placeholder": {
+      "endDate": "end date",
+      "startDate": "start date"
+    },
+    "startDate": "trip date (start)",
+    "toggle": "details"
+  },
+  "detailTable": {
+    "add": "add",
+    "placeholder": {
+      "code": "select postal code...",
+      "cus": "select customer...",
+      "dist": "select district...",
+      "event": "select event...",
+      "lodging": "type lodging place...",
+      "purpose": "type travel purpose..."
+    },
+    "postcode": "postal code",
+    "thead": {
+      "PS": "P.S.",
+      "city": "city",
+      "cus": "customer",
+      "delete": "delete",
+      "dist": "district",
+      "index": "index",
+      "lodging": "hotel",
+      "purpose": "event"
+    },
+    "title": "travel details"
+  },
+  "label": {
+    "date": "trip date",
+    "member": "apply person",
+    "status": "form status"
+  },
+  "placeholder": {
+    "dept": "select department",
+    "emp": "select sales",
+    "endDate": "end date",
+    "startDate": "start date",
+    "status": "select form status"
+  },
+  "search": "Search",
+  "status": {
+    "done": "signed",
+    "no": "not signed",
+    "return": "disagree",
+    "void": "void"
+  },
+  "thead": {
+    "BTPId": "form Id",
+    "atu": "ATU customer",
+    "createId": "apply person",
+    "date": "trip date",
+    "id": "index",
+    "newCus": "new customer",
+    "nextSigner": "next signer",
+    "oldCus": "existing customer",
+    "status": "form status"
+  }
 }

@@ -4,6 +4,7 @@ import { dateFormatter } from "@/hooks/dateFormatter";
 import { signDataType } from "@/types";
 import { timeDay } from "d3-time";
 import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
+import { useTranslation } from "react-i18next";
 
 const initData: signDataType = {
   id: "",
@@ -21,7 +22,26 @@ const initData: signDataType = {
   agent: "",
 };
 
+type detailData = {
+  Area: string;
+  BTPId: string;
+  City: string;
+  Country: string;
+  CustId: string;
+  CustName: string;
+  Description: string;
+  EndDT: string;
+  ResourcesName: string;
+  ResourcesName_E: string;
+  Hotel: string;
+  Item: string;
+  StartDT: string;
+  TripEvent: string;
+};
+
 export const useSignPageData = (formId: string) => {
+  const { i18n, t } = useTranslation("sign page");
+  const nowLang = i18n.language;
   const [headData, setData] = useState<signDataType>(initData);
   const [detailData, setData2] = useState<detailDataWithSingleData[][]>([]);
 
@@ -34,7 +54,7 @@ export const useSignPageData = (formId: string) => {
   }, [formId]);
   const getDetailData = useCallback(() => {
     async function getData(id: string) {
-      const res = await api.getBusinessApplyDetail(id);
+      const res: detailData[] = await api.getBusinessApplyDetail(id);
       return res;
     }
     return getData(formId);
@@ -45,7 +65,7 @@ export const useSignPageData = (formId: string) => {
       return res;
     }
     return getData();
-  }, []);  
+  }, []);
 
   useEffect(() => {
     async function a() {
@@ -90,21 +110,25 @@ export const useSignPageData = (formId: string) => {
         id: headerData[0].BTPId,
         createDate: dateFormatter(headerData[0].Createdate.split(" ")[0]),
         status: headerData[0].status,
-        company: memberInfo[0].ResourcesName,
-        dept: memberInfo[0].DeptName,
+        company:
+          nowLang === "en"
+            ? memberInfo[0].ResourcesName_E
+            : memberInfo[0].ResourcesName,
+        dept:
+          nowLang === "en" ? memberInfo[0].DeptName_E : memberInfo[0].DeptName,
         EmpId: memberInfo[0].EmpId,
         EmpName: memberInfo[0].EmpName,
-        transportation: headerData[0].ResourcesName,
+        transportation: headerData[0].ResourcesName_E,
         isLodging: Lodging(headerData[0].IsLodging),
         stayDays: headerData[0].StayDays,
         days: headerData[0].Days,
         money: money(headerData[0].Advance_Amount, headerData[0].Curr),
-        agent: headerData[0].DeputyEmpName || "無人回應",
+        agent: headerData[0].DeputyEmpName || t("noDeputy"),
       };
       setData(data);
 
       const data2: detailDataWithSingleData[] = detailData.map(
-        (data: any, index: number) => {
+        (data, index: number) => {
           return {
             id: index + 1,
             date: getDayList({
@@ -114,7 +138,8 @@ export const useSignPageData = (formId: string) => {
             data: {
               district: data.Area,
               city: data.City,
-              purpose: data.ResourcesName,
+              purpose:
+                nowLang === "en" ? data.ResourcesName_E : data.ResourcesName,
               eventId: data.TripEvent,
               cus: data.CustName,
               hotel: data.Hotel,
@@ -138,7 +163,7 @@ export const useSignPageData = (formId: string) => {
       ].map((d) =>
         d.split(",").map((s) => data2.find((d2) => d2.id === parseInt(s)))
       ) as detailDataWithSingleData[][];
-      
+
       setData2(data3);
     }
     a();

@@ -3,15 +3,17 @@ import { MySelect } from "@/components/form/select";
 import { useSelectRef } from "@/hooks/select ref";
 import { useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 export const MoneyForm = () => {
+  const { t } = useTranslation("new form", { keyPrefix: "money" });
   const { register, control, setValue } = useFormContext();
 
   const moneyTypeOptions = [
-    { label: "歐元", value: "EUR" },
-    { label: "台幣", value: "TWD" },
-    { label: "人民幣", value: "RMB" },
-    { label: "美金", value: "USD" },
+    { label: t('eur'), value: "EUR" },
+    { label: t('twd'), value: "TWD" },
+    { label: t('rmb'), value: "RMB" },
+    { label: t('usd'), value: "USD" },
   ];
 
   const watch_money = useWatch({
@@ -32,12 +34,12 @@ export const MoneyForm = () => {
   }
 
   return (
-    <div className='flex gap-4 flex-col sm:flex-row sm:gap-8'>
+    <div className='flex flex-col gap-4 sm:flex-row sm:gap-8'>
       <div className='label-input'>
-        <label>預支差旅費 :</label>
+        <label>{t('amount')} :</label>
         <input
           type='text'
-          className="w-full"
+          className='w-full'
           {...register("Advance_Amount", {
             setValueAs: (d: string) => {
               return d.replace(/,/g, "");
@@ -60,7 +62,7 @@ export const MoneyForm = () => {
         />
       </div>
       <div className='label-input'>
-        <label>{watch_money !== "0" && <Required />}幣別 :</label>
+        <label>{watch_money !== "0" && <Required />}{t('curr')} :</label>
         <Controller
           control={control}
           name='Curr'
@@ -69,7 +71,7 @@ export const MoneyForm = () => {
               forwardRef={newFormRef.curr}
               options={moneyTypeOptions}
               onChange={onChange}
-              placeholder='請選擇'
+              placeholder={t('placeholder.curr')}
             />
           )}
         />
