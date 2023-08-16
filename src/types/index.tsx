@@ -43,7 +43,7 @@ export enum signStatus {
 export enum signStatus_E {
   "not signed" = 0,
   "agree" = 1,
-  "disagree" = 3,
+  "returned" = 3,
   "void" = 4,
   "" = 5,
 }

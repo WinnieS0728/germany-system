@@ -1,7 +1,10 @@
 import api from "@/lib/api";
 import { useAppSelector } from "./redux";
+import { useTranslation } from "react-i18next";
 
 export const useOptions = () => {
+  const { i18n } = useTranslation();
+  const nowLang = i18n.language;
   const nowUser = useAppSelector((state) => state.nowUser);
 
   async function getEventOptions(input: string) {
@@ -40,7 +43,7 @@ export const useOptions = () => {
 
   async function getCusOptions(input: string) {
     const res = await api.getCus("", "DEU");
-    
+
     return res.filter(
       (o: { CustName: string; CustName_E: string }) =>
         o.CustName.toLowerCase().includes(input.toLowerCase()) ||
@@ -72,15 +75,8 @@ export const useOptions = () => {
   }
 
   async function getDeptOptions(input: string) {
-    const res = await api.getMember();
-    const deptNoRepeat = [
-      ...new Set(res.map((i: { DeptId: string }) => i.DeptId)),
-    ];
-    const deptArr = deptNoRepeat.map((i) =>
-      res.find((i2: { DeptId: string }) => i2.DeptId === i)
-    );
-
-    return deptArr.filter(
+    const res = await getDeptList();
+    return res.filter(
       (o: { DeptName: string; DeptName_E: string; DeptId: string }) =>
         o.DeptName.toLowerCase().includes(input.toLowerCase()) ||
         o.DeptName_E.toLowerCase().includes(input.toLowerCase()) ||
@@ -99,36 +95,25 @@ export const useOptions = () => {
   }
 
   async function getDeptList() {
-    const res = await api.getDept();
-
-    const memberList = Promise.all(
-      res.map(async (d: { DeptId: string }) => {
-        const m = await api.getMember("", d.DeptId);
-        return {
-          id: d.DeptId,
-          member: m,
-        };
-      })
+    const res = await api.getMember();
+    const deptNoRepeat = [
+      ...new Set(res.map((i: { DeptId: string }) => i.DeptId)),
+    ];
+    const deptArr = deptNoRepeat.map((i) =>
+      res.find((i2: { DeptId: string }) => i2.DeptId === i)
     );
 
-    const deptHasMember = (await memberList).filter(
-      (i) => i.member.length !== 0
-    );
-
-    const options = deptHasMember.map((i) =>
-      res.find((d: { DeptId: string }) => d.DeptId === i.id)
-    );
-
-    return options;
+    return deptArr;
   }
 
   async function getDeptMemberOptions(input: string) {
     const deptList = await getDeptList();
+
     const bigData = Promise.all(
       deptList.map(async (dept) => {
         const memberInThisDept = await api.getMember("", dept.DeptId);
         return {
-          label: dept.DeptName,
+          label: nowLang === "en" ? dept.DeptName_E : dept.DeptName,
           options: memberInThisDept,
         };
       })

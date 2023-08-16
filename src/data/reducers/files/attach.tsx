@@ -32,6 +32,9 @@ const fileSlice = createSlice({
       array.splice(action.payload, 1);
       state.body.newFile = array;
     },
+    clearFile: (state) => {
+      state.body.newFile = initData;
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -50,4 +53,4 @@ const fileSlice = createSlice({
 
 export default fileSlice.reducer;
 
-export const { addFile, deleteFile } = fileSlice.actions;
+export const { addFile, deleteFile, clearFile } = fileSlice.actions;

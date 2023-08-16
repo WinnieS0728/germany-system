@@ -47,7 +47,7 @@ export const IconBtn = ({ children, icon, primary, style }: IconBtnProp) => {
     color: primary ? color?.white : color?.black,
     ...style,
   };
-
+  
   return (
     <span
       className='top-btn flex items-center justify-center gap-2 rounded-md px-10 py-2'

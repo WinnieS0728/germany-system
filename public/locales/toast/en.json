@@ -1,0 +1,22 @@
+{
+  "formStatus": {
+    "done": "is signed",
+    "return": "is returned",
+    "void": "is voided"
+  },
+  "newForm": {
+    "fail": "upload failed",
+    "pending": "processing...",
+    "success": "upload success"
+  },
+  "otherSign": {
+    "fail": "counterSign failed",
+    "pending": "processing...",
+    "success": "counterSign success"
+  },
+  "sign": {
+    "fail": "sign failed",
+    "pending": "processing...",
+    "success": "sign success"
+  }
+}

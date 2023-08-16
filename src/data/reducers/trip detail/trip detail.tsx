@@ -9,6 +9,7 @@ export interface detailData_data {
   district: string;
   city: string;
   purpose: string;
+  eventId?: string;
   cus: string;
   hotel: string;
   PS: string;

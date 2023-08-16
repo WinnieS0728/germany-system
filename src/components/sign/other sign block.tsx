@@ -10,16 +10,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useEffect } from "react";
 import { useSelectRef } from "@/hooks/select ref";
-import api from "@/lib/api";
-import { otherSignFinalDataType } from "@/lib/api/sign/post otherSign";
 import { useFiles } from "@/hooks/files";
 import { useSign } from "@/hooks/sign";
-
-const schema = yup.object().shape({
-  member: yup.array().of(yup.string()).min(1, "沒人"),
-});
+import { useTranslation } from "react-i18next";
 
 const OtherSignBlock = ({ className }: { className?: string }) => {
+  const { i18n, t } = useTranslation(["sign", "errors"]);
+  const nowLang = i18n.language;
   const color = useTheme()?.color;
   const { options } = useOptions();
 
@@ -27,7 +24,9 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
   const [toggleOtherSignModal] = useModalControl("otherSign");
 
   const formInfo = useAppSelector((state) => state.formInfo);
-
+  const schema = yup.object().shape({
+    member: yup.array().of(yup.string()).min(1, t('otherSign.noMember',{ns:'errors'})),
+  });
   const {
     handleSubmit,
     control,
@@ -58,7 +57,8 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
   const { otherSign } = useSign();
   async function send(list: string[]) {
     otherSign(list);
-    uploadFile(formInfo.body.formId);
+    // 會簽不能加附件
+    // uploadFile(formInfo.body.formId);
   }
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
 
   return (
     <article className={`modal ${className} space-y-4`}>
-      <h3>會簽人員</h3>
+      <h3>{t("otherSign.title", { ns: "sign" })}</h3>
       <form
         id='otherSign'
         onSubmit={handleSubmit(onSubmit)}
@@ -92,9 +92,14 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
               }}
               closeMenuOnSelect={false}
               isMulti
-              placeholder={"請選擇人員..."}
+              placeholder={t("otherSign.placeholder", { ns: "sign" })}
               hideSelectedOptions={false}
-              getOptionLabel={(option: any) => option.EmpName}
+              getOptionLabel={(option: any) => {
+                if (nowLang === "en") {
+                  return option.FullName.split("/")[0];
+                }
+                return option.EmpName;
+              }}
               getOptionValue={(option: any) => option.EmpId}
               filterOption={(candidate: any, input: string) => {
                 if (input.startsWith("!")) {

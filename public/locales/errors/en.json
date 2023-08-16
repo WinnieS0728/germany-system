@@ -1,9 +1,21 @@
 {
-  "curr": "currency is required if advance amount is not 0",
-  "date": "date is required",
-  "deputy": "dupety is required",
-  "lostData": "Incomplete travel information",
-  "noData": "at least one trip data",
-  "title": "input error",
-  "transportation": "tranportation is required"
+  "newForm": {
+    "curr": "currency is required if advance amount is not 0",
+    "date": "date is required",
+    "deputy": "dupety is required",
+    "lostData": "Incomplete travel information",
+    "noData": "at least one trip data",
+    "transportation": "tranportation is required"
+  },
+  "otherSign": {
+    "noMember": "at lease one person"
+  },
+  "sign": {
+    "decide": "decision is required",
+    "otherSign-opinion": "opinion is required",
+    "password": "password is required",
+    "sign-opinion": "opinion is required when disagree",
+    "wrong-psw": "wrong password"
+  },
+  "title": "input error"
 }

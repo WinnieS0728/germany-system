@@ -33,12 +33,14 @@ import { Hamburger } from "@/layouts/hamberger";
 import { tripDetailType } from "@/lib/api/travel apply/push details";
 import { Flip, toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { clearFile } from "@/data/reducers/files/attach";
 
 export const NewForm = () => {
   const color = useTheme()?.color;
-  const { t } = useTranslation(["common", "new form", "errors"]);
+  const { t } = useTranslation(["common", "new form", "errors", "toast"]);
   const timeData = useAppSelector((state) => state.time);
   const tripDetail = useAppSelector((state) => state.tripDetail);
+  const nowUser = useAppSelector((state) => state.nowUser).body;
   function getNextWeekStartEnd() {
     const thisMonday = timeMonday(new Date(timeData.today));
     const nextMonday = timeDay.offset(thisMonday, 7);
@@ -54,21 +56,23 @@ export const NewForm = () => {
   const schema = yup.object().shape({
     DeptId: yup.string(),
     CreateId: yup.string(),
-    Transport: yup.string().required(t("transportation",{ns:'errors'})),
+    Transport: yup
+      .string()
+      .required(t("newForm.transportation", { ns: "errors" })),
     IsLodging: yup.string(),
     StayDays: yup.number(),
     Days: yup.number(),
     Advance_Amount: yup.mixed(),
     Curr: yup.string().when("Advance_Amount", {
       is: (money: string) => money !== "0",
-      then: () => yup.string().required(t("curr",{ns:'errors'})),
+      then: () => yup.string().required(t("newForm.curr", { ns: "errors" })),
       otherwise: () => yup.string(),
     }),
-    Deputy: yup.string().required(t("deputy",{ns:'errors'})),
+    Deputy: yup.string().required(t("newForm.deputy", { ns: "errors" })),
     tripData: yup.array().of(
       yup.object().shape({
-        startDate: yup.string().required(t("date",{ns:'errors'})),
-        endDate: yup.string().required(t("date",{ns:'errors'})),
+        startDate: yup.string().required(t("newForm.date", { ns: "errors" })),
+        endDate: yup.string().required(t("newForm.date", { ns: "errors" })),
       })
     ),
   });
@@ -110,6 +114,7 @@ export const NewForm = () => {
   const tripDetailData = useAppSelector((state) => state.tripDetail).body;
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   async function getCusId(name: string) {
     const res = await api.getCus(name, "DEU");
@@ -120,45 +125,60 @@ export const NewForm = () => {
   const { uploadFile } = useFiles();
   async function onSubmit<T>(d: T) {
     const newFormData = { ...d, ...dateRange };
-    const uploadData = toast.loading("處理中...");
-    const formId = await createNewForm(newFormData);
+    const uploadData = toast.loading(t("newForm.pending", { ns: "toast" }));
+    try {
+      const formId = await createNewForm(newFormData);
 
-    const newData: tripDetailType[] = await Promise.all(
-      spreadData.map(async (item, index) => {
-        return {
-          BTPId: formId,
-          Item: index + 1,
-          CustId: await getCusId(item.data.cus),
-          TripEvent: item.data.purpose,
-          Description: item.data.PS,
-          Country: "DEU", // 國家
-          Area: item.data.district, // 地區
-          City: item.data.city, // 城市
-          Hotel: item.data.hotel,
-          StartDT: item.date[0],
-          EndDT: item.date[item.date.length - 1],
-        };
-      })
-    );
-    // console.log("要送的明細", newData);
+      const newData: tripDetailType[] = await Promise.all(
+        spreadData.map(async (item, index) => {
+          return {
+            BTPId: formId,
+            Item: index + 1,
+            CustId: await getCusId(item.data.cus),
+            TripEvent: item.data.purpose,
+            Description: item.data.PS,
+            Country: "DEU", // 國家
+            Area: item.data.district, // 地區
+            City: item.data.city, // 城市
+            Hotel: item.data.hotel,
+            StartDT: item.date[0],
+            EndDT: item.date[item.date.length - 1],
+          };
+        })
+      );
+      // console.log("要送的明細", newData);
 
-    pushData(newData);
-    uploadFile(formId);
+      pushData(newData);
+      uploadFile(formId);
 
-    toast.update(uploadData, {
-      type: "success",
-      render: "上傳成功",
-      isLoading: false,
-      transition: Flip,
-      autoClose: 3000,
-      closeOnClick: true,
-      closeButton: true,
-    });
-    setTimeout(() => {
-      navigate("../");
-    }, 1000);
+      clearNewFormSelect();
+      dispatch(clearFile());
 
-    clearNewFormSelect();
+      toast.update(uploadData, {
+        type: "success",
+        render: t("newForm.success", { ns: "toast" }),
+        isLoading: false,
+        transition: Flip,
+        autoClose: 3000,
+        closeOnClick: true,
+        closeButton: true,
+      });
+
+      setTimeout(() => {
+        navigate(`../`);
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+      toast.update(uploadData, {
+        type: "error",
+        render: t("newForm.fail", { ns: "toast" }),
+        isLoading: false,
+        transition: Flip,
+        autoClose: 3000,
+        closeOnClick: true,
+        closeButton: true,
+      });
+    }
   }
 
   async function createNewForm(data: any) {
@@ -180,7 +200,6 @@ export const NewForm = () => {
     name: ["Advance_Amount", "Curr"],
     control: control,
   });
-  const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(setDate(watch_date));
   }, [watch_date, dispatch]);
@@ -201,7 +220,7 @@ export const NewForm = () => {
       }
       setError("tripData", {
         type: "custom",
-        message: t("noData",{ns:'errors'}),
+        message: t("newForm.noData", { ns: "errors" }),
       });
     }
     if (tripDetailData.some((d) => d.data.length === 0)) {
@@ -210,7 +229,7 @@ export const NewForm = () => {
       }
       setError("tripData", {
         type: "custom",
-        message: t("lostData",{ns:'errors'}),
+        message: t("newForm.lostData", { ns: "errors" }),
       });
     }
   }, [errors, setError, spreadData, t, tripDetailData]);

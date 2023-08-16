@@ -12,5 +12,7 @@
     { "name": "file modal", "path": "./public/locales/files" },
     { "name": "errors", "path": "./public/locales/errors" },
     { "name": "confirm modal", "path": "./public/locales/confirm modal" },
+    { "name": "sign modal", "path": "./public/locales/sign" },
+    { "name": "toast", "path": "./public/locales/toast" },
   ]
 }

@@ -157,7 +157,7 @@ export const HeaderForm = ({ className }: propsType) => {
                   <MySelect.Async
                     options={options.member}
                     onChange={onChange}
-                    placeholder={t("choose sales")}
+                    placeholder={t("placeholder.emp")}
                     getLabelFunction={(option: any) => {
                       if (nowLang === "en") {
                         return option.FullName.split("/")[0];
@@ -178,7 +178,7 @@ export const HeaderForm = ({ className }: propsType) => {
             </div>
           </div>
           <div className='status label-input'>
-            <label>{t("form status")}</label>
+            <label>{t("label.status")}</label>
             <Controller
               control={control}
               name='formStatus'

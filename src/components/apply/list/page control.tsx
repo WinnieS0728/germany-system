@@ -1,3 +1,4 @@
+import { useId2name } from "@/hooks/id2name";
 import { useEffect, useMemo, useState } from "react";
 
 export const usePageControl = (data: any[], numberInOnePage: number) => {
@@ -27,14 +28,12 @@ export const usePageControl = (data: any[], numberInOnePage: number) => {
 
   function nextPage() {
     if (!nextBtnEnable) {
-      // console.log("cant next");
       return;
     }
     setPage((prev) => prev + 1);
   }
   function prevPage() {
     if (!prevBtnEnable) {
-      // console.log("cant prev");
       return;
     }
     setPage((prev) => prev - 1);

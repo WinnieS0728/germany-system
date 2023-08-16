@@ -1,12 +1,16 @@
+import { useId2name } from "@/hooks/id2name";
 import { useAppSelector } from "@/hooks/redux";
 import api from "@/lib/api";
 import { tripEvent } from "@/types";
 import { timeFormat } from "d3";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const useFetchApplyList = () => {
+  const { i18n } = useTranslation();
+  const nowLang = i18n.language;
   const [data, setData] = useState<any[]>([]);
-  const tableProps = useAppSelector((state) => state.listFormState);  
+  const tableProps = useAppSelector((state) => state.listFormState);
 
   const status = tableProps.status;
 
@@ -20,6 +24,7 @@ export const useFetchApplyList = () => {
     const res = await api.getBusinessApplyDetail(id);
     return res;
   }
+  const { id2name } = useId2name();
 
   const getDays = useCallback((d: any[]) => {
     const dateArray = d.map((i) => {
@@ -44,7 +49,7 @@ export const useFetchApplyList = () => {
       }
       const detailList = await Promise.all(
         empFilter.map(async (d) => await getDetail(d.BTPId))
-        );      
+      );
       const atuNumArray = detailList.map((list) => {
         return list.filter(
           (i: { TripEvent: string }) => i.TripEvent === tripEvent.atu
@@ -63,19 +68,24 @@ export const useFetchApplyList = () => {
       const dateArray = detailList.map((list) => {
         return getDays(list);
       });
-      
-      const dataSet = empFilter.map((list, index) => {
-        return {
-          date: dateArraySort(dateArray[index]),
-          formId: list.BTPId,
-          atuNum: atuNumArray[index],
-          oldCusNum: oldCusNumArray[index],
-          newCusNum: newCusNumArray[index],
-          name: list.EmpName,
-          formStatus: list.Status,
-          nextSign: list.SName?.split("/")[0].replace(/ /g, ""),
-        };
-      });
+
+      const dataSet = await Promise.all(
+        empFilter.map(async (list, index) => {
+          return {
+            date: dateArraySort(dateArray[index]),
+            formId: list.BTPId,
+            atuNum: atuNumArray[index],
+            oldCusNum: oldCusNumArray[index],
+            newCusNum: newCusNumArray[index],
+            EmpId: list.Createid,
+            name: await id2name(list.Createid),
+            formStatus: list.Status,
+            nextSign: list.SName?.split("/")[0].replace(/ /g, ""),
+          };
+        })
+      );
+      console.log(dataSet);
+
       const dateFilter = dateProcess(dataSet);
       const fineData = dateFilter.reverse().map((data, index) => {
         return {
@@ -110,7 +120,7 @@ export const useFetchApplyList = () => {
       }
     }
     fetchData();
-  }, [getDays, tableProps]);
+  }, [getDays, id2name, tableProps]);
 
   return { data, status };
 };

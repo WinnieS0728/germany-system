@@ -1,4 +1,4 @@
-import { lazy, useEffect } from "react";
+import { lazy, useEffect, useState } from "react";
 import { Suspense } from "react";
 import { Route, Routes, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
@@ -13,20 +13,28 @@ const SignPage = lazy(() => import("@pages/sign/sign"));
 
 function App() {
   const dispatch = useAppDispatch();
-  const nowUser = useAppSelector((state) => state.nowUser);
-  const { i18n } = useTranslation();
+  const nowUser = useAppSelector((state) => state.nowUser).body;
+  const { i18n } = useTranslation();  
 
-  const [search] = useSearchParams();
-  
-  const EmpID = nowUser.body.EmpId || search.get("userID");
+  const [search, setSearch] = useSearchParams();
+  const [EmpId, setId] = useState<string>("");
 
-  const usingLanguage = nowUser.body.Language?.split("-")[0];
+  useEffect(() => {
+    if (search.get("userID")) {
+      setId(search.get("userID") as string);
+    } else {
+      setId(nowUser.EmpId);
+      setSearch({ userID: nowUser.EmpId });
+    }
+  }, [nowUser, search, setSearch]);
+
+  const usingLanguage = nowUser.Language?.split("-")[0];
 
   useEffect(() => {
     dispatch(setSalesList());
-    dispatch(setUser(EmpID as string));
+    dispatch(setUser(EmpId as string));
     i18n.changeLanguage(usingLanguage);
-  }, [dispatch, EmpID, i18n, usingLanguage]);
+  }, [dispatch, EmpId, i18n, usingLanguage]);
 
   return (
     <Suspense fallback={<h1>那你網路很慢欸</h1>}>

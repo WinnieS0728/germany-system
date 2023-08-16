@@ -1,7 +1,5 @@
 import { Table } from "@/components/table/table";
-import {
-  detailDataWithSingleData,
-} from "@/data/reducers/trip detail/trip detail";
+import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
 import api from "@/lib/api";
 import { tripEvent } from "@/types";
 import { useEffect, useMemo, useState } from "react";
@@ -20,12 +18,14 @@ export const PerCentTable = ({
     month: string;
   };
 }) => {
-  const {t} = useTranslation('confirm modal')
+  // console.log(data);
+
+  const { t } = useTranslation("confirm modal");
   const color = useTheme()?.color;
   const totalData = data.reduce((a, b) => a.concat(b), []);
-  const atuCus = totalData.filter((i) => i.data?.purpose === tripEvent.atu);
-  const oldCus = totalData.filter((i) => i.data?.purpose === tripEvent.oldCus);
-  const newCus = totalData.filter((i) => i.data?.purpose === tripEvent.newCus);
+  const atuCus = totalData.filter((i) => i.data?.eventId === tripEvent.atu);
+  const oldCus = totalData.filter((i) => i.data?.eventId === tripEvent.oldCus);
+  const newCus = totalData.filter((i) => i.data?.eventId === tripEvent.newCus);
   const allCus = atuCus.length + oldCus.length + newCus.length;
 
   function getPercent(n: number): string {
@@ -63,11 +63,11 @@ export const PerCentTable = ({
   }, [EmpId, monthArray, time]);
   return (
     <>
-      <Table title={t('percentTable.title')}>
+      <Table title={t("percentTable.title")}>
         <table>
           <thead style={{ backgroundColor: color.confirmTable.header }}>
             <tr>
-              <th>{t('percentTable.threshold')}</th>
+              <th>{t("percentTable.threshold")}</th>
               <th colSpan={2}>{`≥ ${100 - threshold}`}</th>
               <th>{`≤ ${threshold}`}</th>
             </tr>
@@ -75,18 +75,18 @@ export const PerCentTable = ({
           <tbody>
             <tr>
               <td></td>
-              <td>{t('percentTable.atu')}</td>
-              <td>{t('percentTable.oldCus')}</td>
-              <td>{t('percentTable.newCus')}</td>
+              <td>{t("percentTable.atu")}</td>
+              <td>{t("percentTable.oldCus")}</td>
+              <td>{t("percentTable.newCus")}</td>
             </tr>
             <tr>
-              <td>{t('percentTable.number')}</td>
+              <td>{t("percentTable.number")}</td>
               <td>{atuCus.length}</td>
               <td>{oldCus.length}</td>
               <td>{newCus.length}</td>
             </tr>
             <tr>
-              <td>{t('percentTable.percent')}</td>
+              <td>{t("percentTable.percent")}</td>
               <td>{getPercent(atuCus.length) + "%"}</td>
               <td>{getPercent(oldCus.length) + "%"}</td>
               <td>{getPercent(newCus.length) + "%"}</td>

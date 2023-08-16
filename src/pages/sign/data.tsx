@@ -117,13 +117,16 @@ export const useSignPageData = (formId: string) => {
         dept:
           nowLang === "en" ? memberInfo[0].DeptName_E : memberInfo[0].DeptName,
         EmpId: memberInfo[0].EmpId,
-        EmpName: memberInfo[0].EmpName,
+        EmpName:
+          nowLang === "en"
+            ? memberInfo[0].FullName.split("/")[0]
+            : memberInfo[0].EmpName,
         transportation: headerData[0].ResourcesName_E,
         isLodging: Lodging(headerData[0].IsLodging),
         stayDays: headerData[0].StayDays,
         days: headerData[0].Days,
         money: money(headerData[0].Advance_Amount, headerData[0].Curr),
-        agent: headerData[0].DeputyEmpName || t("noDeputy"),
+        agent: headerData[0].Deputy || undefined,
       };
       setData(data);
 
@@ -167,7 +170,7 @@ export const useSignPageData = (formId: string) => {
       setData2(data3);
     }
     a();
-  }, [formId, getDetailData, getHeaderData, getMemberInfo]);
+  }, [formId, getDetailData, getHeaderData, getMemberInfo, nowLang, t]);
 
   return { headData, detailData };
 };

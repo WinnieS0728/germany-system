@@ -25,8 +25,8 @@ export const InfoForm = ({ type, data }: component) => {
   const nowLang = i18n.language;
   const nowUser = useAppSelector((state) => state.nowUser).body;
 
-  const { setValue } = useFormContext();
-
+  const { setValue } = useFormContext();  
+  
   useEffect(() => {
     setValue("DeptId", nowUser.DeptId);
     setValue("CreateId", nowUser.EmpId);

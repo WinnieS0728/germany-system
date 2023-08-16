@@ -1,7 +1,7 @@
-import { Controller, useForm, useWatch } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Table } from "../table/table";
 import styled from "styled-components";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import TextAreaAutosize from "react-textarea-autosize";
 import * as Btns from "@components/UI/buttons";
 import * as Icons from "@components/UI/icons";
@@ -15,6 +15,7 @@ import { setErrors } from "@/data/reducers/error/errors";
 import api from "@/lib/api";
 import { useSign } from "@/hooks/sign";
 import { useFiles } from "@/hooks/files";
+import { useTranslation } from "react-i18next";
 
 export type SignData = {
   agree: "yes" | "no";
@@ -29,27 +30,39 @@ const SignBlock = ({
   className?: string;
   type: "sign" | "otherSign";
 }) => {
+  const { t } = useTranslation(["sign", "errors"]);
   const formInfo = useAppSelector((state) => state.formInfo).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
 
   const signSchema = yup.object().shape({
     agree:
       type === "sign"
-        ? yup.string().oneOf(["yes", "no"], "沒決定欸")
+        ? yup.string().oneOf(["yes", "no"], t("sign.decide", { ns: "errors" }))
         : yup.string().notRequired(),
-    password: yup.string().required("沒密碼"),
+    password: yup.string().required(t("sign.password", { ns: "errors" })),
     // TODO 密碼審核
-    // .test("checkPassword", "密碼錯誤", async function (value: string) {
-    //   return await api.logIn(nowUser.EmpId, value);
-    // }),
+    // .test(
+    //   "checkPassword",
+    //   t("sign.wrong-psw", { ns: "errors" }),
+    //   async function (value: string) {
+    //     return await api.logIn(nowUser.EmpId, value);
+    //   }
+    // ),
     opinion:
       type === "sign"
         ? yup.string().when("agree", {
             is: (value: string) => value === "no",
-            then: () => yup.string().trim().required("意見必填"),
+            then: () =>
+              yup
+                .string()
+                .trim()
+                .required(t("sign.sign-opinion", { ns: "errors" })),
             otherwise: () => yup.string().notRequired(),
           })
-        : yup.string().trim().required("意見必填"),
+        : yup
+            .string()
+            .trim()
+            .required(t("sign.otherSign-opinion", { ns: "errors" })),
   });
 
   const {
@@ -58,6 +71,7 @@ const SignBlock = ({
     control,
     trigger,
     reset,
+    setValue,
     formState: { errors, isValid },
   } = useForm({
     shouldUnregister: true,
@@ -72,6 +86,12 @@ const SignBlock = ({
   });
   const [showPassword, setPasswordShow] = useState<boolean>(false);
   const inputDisable = type === "sign" ? false : true;
+
+  useEffect(() => {
+    if (type === "otherSign") {
+      setValue("agree", "yes");
+    }
+  }, [setValue, type]);
 
   const { sign, updateFormStatus, signOver } = useSign();
 
@@ -116,12 +136,12 @@ const SignBlock = ({
 
   return (
     <article className={`modal ${className}`}>
-      <h3>表單簽核</h3>
+      <h3>{t("title")}</h3>
       <ul className='ref-ul'>
         {type === "sign" ? (
-          <li>簽核選擇不同意, 請填寫意見 !</li>
+          <li>{t("sign-warn")}</li>
         ) : (
-          <li>會簽只需填寫意見, 無需選擇是否同意 !</li>
+          <li>{t("otherSign-warn")}</li>
         )}
       </ul>
       <form
@@ -141,7 +161,7 @@ const SignBlock = ({
                 >
                   <span className='relative py-1'>
                     {type === "sign" && <Required />}
-                    簽核決定
+                    {t("label.decide")}
                   </span>
                 </td>
                 <td>
@@ -152,7 +172,7 @@ const SignBlock = ({
                       disabled={inputDisable}
                       {...register("agree")}
                     />
-                    同意
+                    {t("radio.yes")}
                   </label>
                 </td>
               </tr>
@@ -165,7 +185,9 @@ const SignBlock = ({
                       disabled={inputDisable}
                       {...register("agree")}
                     />
-                    {type === "sign" ? "不同意, 請填寫意見" : "不同意"}
+                    {type === "sign"
+                      ? t("radio.sign-no")
+                      : t("radio.otherSign-no")}
                   </label>
                 </td>
               </tr>
@@ -173,7 +195,7 @@ const SignBlock = ({
                 <td className='title'>
                   <span className='relative py-1'>
                     <Required />
-                    簽核密碼
+                    {t("label.password")}
                   </span>
                 </td>
                 <td>
@@ -207,7 +229,7 @@ const SignBlock = ({
                     {(watch_agree === "no" || type === "otherSign") && (
                       <Required />
                     )}
-                    簽核意見
+                    {t("label.opinion")}
                   </span>
                 </td>
                 <td>

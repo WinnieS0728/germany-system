@@ -33,6 +33,7 @@ import { ErrorsModal } from "@/components/apply/add/errors";
 import { Hamburger } from "@/layouts/hamberger";
 import { useSign } from "@/hooks/sign";
 import { useTranslation } from "react-i18next";
+import { useId2name } from "@/hooks/id2name";
 
 const SignPage = () => {
   const { t } = useTranslation(["common", "sign page", "new form"]);
@@ -46,16 +47,17 @@ const SignPage = () => {
   }, [dispatch, formId]);
   const formInfo = useAppSelector((state) => state.formInfo).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
-  const signType = () => {
-    const type = (formInfo.nextSign as nextSign).SignGroup;
+
+  const [signType, setType] = useState<"sign" | "otherSign">("sign");
+  useEffect(() => {
+    const type = (formInfo.nextSign as nextSign)?.SignGroup;
     if (type === "簽核") {
-      return "sign";
+      setType("sign");
     }
     if (type === "會簽") {
-      return "otherSign";
+      setType("otherSign");
     }
-    return "sign";
-  };
+  }, [formInfo]);
 
   const color = useTheme()?.color;
   const methods = useForm();
@@ -102,15 +104,19 @@ const SignPage = () => {
 
   const myErrors = useAppSelector((state) => state.errors);
 
+  const deputyName = useId2name(headData.agent);
+
   return (
     <>
       {isNextSigner && (
         <>
-          <Modal name='files'>
-            <UploadFiles />
-          </Modal>
+          {signType === "sign" && (
+            <Modal name='files'>
+              <UploadFiles />
+            </Modal>
+          )}
           <Modal name='sign'>
-            <SignBlock type={signType()} />
+            <SignBlock type={signType} />
           </Modal>
           <Modal name='otherSign'>
             <OtherSignBlock />
@@ -124,8 +130,8 @@ const SignPage = () => {
       <Main className='main-section-gap'>
         <>
           <div className='top-btn-list'>
-            {isNextSigner && (
-              <>
+            {isNextSigner &&
+              (signType === "sign" ? (
                 <Hamburger
                   list={[
                     <button
@@ -188,8 +194,60 @@ const SignPage = () => {
                     </button>,
                   ]}
                 />
-              </>
-            )}
+              ) : (
+                <Hamburger
+                  list={[
+                    <button
+                      type='button'
+                      onClick={() => {
+                        toggleSignModal("on");
+                      }}
+                    >
+                      <Btns.IconBtn
+                        icon={
+                          <Icons.Sign
+                            size='1.5rem'
+                            color={color.white}
+                          />
+                        }
+                        primary
+                      >
+                        {t("btn.sign", { ns: "sign page" })}
+                      </Btns.IconBtn>
+                    </button>,
+                    <button
+                      type='button'
+                      onClick={() => {
+                        toggleOtherSignModal("on");
+                      }}
+                    >
+                      <Btns.IconBtn
+                        icon={
+                          <Icons.OtherSign
+                            size='1.5rem'
+                            color={color.white}
+                          />
+                        }
+                        primary
+                      >
+                        {t("btn.otherSign", { ns: "sign page" })}
+                      </Btns.IconBtn>
+                    </button>,
+                    <button type='button'>
+                      <Btns.IconBtn
+                        icon={
+                          <Icons.Print
+                            size='1.5rem'
+                            color={color.black}
+                          />
+                        }
+                      >
+                        {t("btn.print", { ns: "sign page" })}
+                      </Btns.IconBtn>
+                    </button>,
+                  ]}
+                />
+              ))}
             <button type='button'>
               <Link to={"https://esys.orange-electronic.com/Eform/List"}>
                 <Btns.IconBtn icon={<Icons.Back size='1.25rem' />}>
@@ -252,7 +310,7 @@ const SignPage = () => {
             </Block>
             <Block>
               <p>
-                {t("deputy.deputy", { ns: "new form" })} : {headData.agent}
+                {t("deputy.deputy", { ns: "new form" })} : {deputyName}
               </p>
             </Block>
             <Block>

@@ -5,6 +5,7 @@ import { signStatus_E } from "@/types";
 import { dateFormatter } from "@/hooks/dateFormatter";
 import { useAppSelector } from "@/hooks/redux";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 
 const FileList = ({ order }: { order: number }) => {
   const data = useAppSelector((state) => state.files).body.formAttach;
@@ -36,6 +37,12 @@ export const SignTable = () => {
   const nowLang = i18n.language;
   const color = useTheme()?.color;
   const formInfo = useAppSelector((state) => state.formInfo).body;
+  function isOtherSign(type: string): boolean {
+    if (type === "會簽") {
+      return true;
+    }
+    return false;
+  }
 
   return (
     <section>
@@ -67,7 +74,9 @@ export const SignTable = () => {
             {formInfo.signList.slice(1)?.map((list, index) => (
               <tr key={index}>
                 <td>{list.SIGNORDER}</td>
-                <td>{list.STEPNAME}</td>
+                <td>{`${isOtherSign(list.SignGroup) ? "會簽 -" : ""} ${
+                  list.STEPNAME
+                }`}</td>
                 <td>{list.SIGNERNAME}</td>
                 <td>
                   {(list.SIGNRESULT === 1 || list.SIGNRESULT === 3) && (

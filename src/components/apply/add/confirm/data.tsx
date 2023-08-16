@@ -44,7 +44,7 @@ export const useData = (data: detailDataType[], date: string): dataForTable => {
     return dayList;
   }
 
-  function spread(obj: detailDataType) {
+  function spread(obj: detailDataType): detailDataWithSingleData[] {
     const index = obj.data.length;
     const data = [];
     for (let i = 0; i < index; i++) {

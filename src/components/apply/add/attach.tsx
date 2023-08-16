@@ -75,7 +75,6 @@ const FileItem = styled(FileItem_o)`
     flex-flow: column;
     justify-content: space-between;
     gap: .5rem;
-    flex: 1;
   }
   .title {
     font-size: 1.25rem;
@@ -87,7 +86,7 @@ const FileItem = styled(FileItem_o)`
   }
   button {
     padding: 0;
-    width: 10rem;
+    max-width: 15rem;
   }
 `;
 

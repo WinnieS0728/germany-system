@@ -17,7 +17,7 @@ export const ListTable = () => {
   const color = useTheme()?.color;
   const { t } = useTranslation("list page");
   const nowUser = useAppSelector((state) => state.nowUser).body;
-  const { data, status } = useFetchApplyList();  
+  const { data, status } = useFetchApplyList();
 
   const howManyDataShowInOnePage = 10;
 
@@ -34,15 +34,15 @@ export const ListTable = () => {
             style={{ backgroundColor: color.sectionHeader, color: color.white }}
           >
             <tr>
-              <th>{t('thead.id')}</th>
-              <th>{t('thead.date')}</th>
-              <th>{t('thead.BTPId')}</th>
-              <th>{t('thead.atu')}</th>
-              <th>{t('thead.oldCus')}</th>
-              <th>{t('thead.newCus')}</th>
-              <th>{t('thead.createId')}</th>
-              <th>{t('thead.status')}</th>
-              <th>{t('thead.nextSigner')}</th>
+              <th>{t("thead.id")}</th>
+              <th>{t("thead.date")}</th>
+              <th>{t("thead.BTPId")}</th>
+              <th>{t("thead.atu")}</th>
+              <th>{t("thead.oldCus")}</th>
+              <th>{t("thead.newCus")}</th>
+              <th>{t("thead.createId")}</th>
+              <th>{t("thead.status")}</th>
+              <th>{t("thead.nextSigner")}</th>
             </tr>
           </thead>
           <Tbody status={status}>

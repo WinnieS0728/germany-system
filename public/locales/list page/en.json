@@ -58,7 +58,7 @@
     "date": "trip date",
     "id": "index",
     "newCus": "new customer",
-    "nextSigner": "next signer",
+    "nextSigner": "next approver",
     "oldCus": "existing customer",
     "status": "form status"
   }

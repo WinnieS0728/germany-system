@@ -9,14 +9,14 @@
   },
   "noDeputy": "no deputy",
   "table": {
-    "attach": "attach",
-    "date": "sign date",
-    "emp": "signer",
-    "image": "sign image",
-    "index": "index",
-    "opinion": "opinion",
-    "status": "sign status",
-    "step": "procedure",
+    "attach": "Attachments",
+    "date": "Time",
+    "emp": "Approver",
+    "image": "Signature",
+    "index": "No.",
+    "opinion": "Opinion",
+    "status": "Status",
+    "step": "Authorizer",
     "title": "Sign-off process"
   }
 }
