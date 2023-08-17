@@ -14,27 +14,22 @@ const SignPage = lazy(() => import("@pages/sign/sign"));
 function App() {
   const dispatch = useAppDispatch();
   const nowUser = useAppSelector((state) => state.nowUser).body;
-  const { i18n } = useTranslation();  
-
+  const { i18n } = useTranslation();
   const [search, setSearch] = useSearchParams();
-  const [EmpId, setId] = useState<string>("");
-
-  useEffect(() => {
-    if (search.get("userID")) {
-      setId(search.get("userID") as string);
-    } else {
-      setId(nowUser.EmpId);
-      setSearch({ userID: nowUser.EmpId });
-    }
-  }, [nowUser, search, setSearch]);
-
   const usingLanguage = nowUser.Language?.split("-")[0];
 
-  useEffect(() => {
+  useEffect(() => {    
+    let EmpId: string;
+    if (search.get("userID")) {
+      EmpId = search.get("userID") as string;
+    } else {
+      EmpId = nowUser.EmpId;
+      setSearch({ userID: nowUser.EmpId });
+    }
     dispatch(setSalesList());
     dispatch(setUser(EmpId as string));
     i18n.changeLanguage(usingLanguage);
-  }, [dispatch, EmpId, i18n, usingLanguage]);
+  }, [dispatch, i18n, nowUser.EmpId, search, setSearch, usingLanguage]);
 
   return (
     <Suspense fallback={<h1>那你網路很慢欸</h1>}>

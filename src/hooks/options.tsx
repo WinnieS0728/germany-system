@@ -1,11 +1,26 @@
 import api from "@/lib/api";
 import { useAppSelector } from "./redux";
 import { useTranslation } from "react-i18next";
+import { useSignStatusTranslate } from "./status translate";
 
 export const useOptions = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation("new form");
   const nowLang = i18n.language;
   const nowUser = useAppSelector((state) => state.nowUser);
+
+  const { getFormStatus } = useSignStatusTranslate();
+  const formStatusOptions = [
+    { label: getFormStatus("簽核中"), value: "1" },
+    { label: getFormStatus("已完簽"), value: "2" },
+    { label: getFormStatus("退簽"), value: "3" },
+    { label: getFormStatus("作廢"), value: "4" },
+  ];
+  const moneyTypeOptions = [
+    { label: t("money.eur"), value: "EUR" },
+    { label: t("money.twd"), value: "TWD" },
+    { label: t("money.rmb"), value: "RMB" },
+    { label: t("money.usd"), value: "USD" },
+  ];
 
   async function getEventOptions(input: string) {
     const res = await api.getEvent("TripEvent");
@@ -140,6 +155,8 @@ export const useOptions = () => {
 
   return {
     options: {
+      status: formStatusOptions,
+      curr: moneyTypeOptions,
       event: getEventOptions,
       area: getAreaOptions,
       postalCode: getPostalCodeOptions,

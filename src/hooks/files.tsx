@@ -66,6 +66,7 @@ export const useFiles = () => {
       filePackage.append("webName", "BusinessTrip");
       filePackage.append("SIGNORDER", formInfo.nowOrder.toString());
       filePackage.append("file", file);
+      console.log(filePackage);
       const res = await api.uploadFileSign(filePackage);
     }
   }

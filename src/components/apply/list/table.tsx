@@ -1,12 +1,13 @@
 import { Table } from "@/components/table/table";
 import { useTheme } from "styled-components";
-import { useFetchApplyList } from "./data";
+import { useFetchApplyList } from "./fetch list";
 import { Tbody } from "@/components/table/tbody";
 import { usePageControl } from "./page control";
 import * as Btns from "@components/UI/buttons";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "@/hooks/redux";
 import { useTranslation } from "react-i18next";
+import { useSignStatusTranslate } from "@/hooks/status translate";
 
 const DateSpan = (props: { date: string }) => {
   const { date } = props;
@@ -20,11 +21,11 @@ export const ListTable = () => {
   const { data, status } = useFetchApplyList();
 
   const howManyDataShowInOnePage = 10;
-
   const { dataInThisPage, nextPage, prevPage, buttonStatus } = usePageControl(
     data,
     10
   );
+  const { getFormStatus } = useSignStatusTranslate();
 
   return (
     <>
@@ -81,7 +82,7 @@ export const ListTable = () => {
                     <td>{i.oldCusNum}</td>
                     <td>{i.newCusNum}</td>
                     <td>{i.name}</td>
-                    <td>{i.formStatus}</td>
+                    <td>{getFormStatus(i.formStatus)}</td>
                     <td>{i.nextSign || "-"}</td>
                   </tr>
                 ))

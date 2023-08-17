@@ -4,9 +4,8 @@ import * as Icons from "@components/UI/icons";
 import styled from "styled-components";
 import { deleteFile } from "@/data/reducers/files/attach";
 import { component } from "@/types";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useFiles } from "@/hooks/files";
-import api from "@/lib/api";
 import { useTranslation } from "react-i18next";
 
 const FileItem_o = ({
@@ -93,6 +92,7 @@ const FileItem = styled(FileItem_o)`
 export const AttachForm = ({ type }: component) => {
   const { t } = useTranslation("new form", { keyPrefix: "attach" });
   const fileData = useAppSelector((state) => state.files);
+  const dispatch = useAppDispatch();
 
   const newFiles = fileData.body.newFile;
   const formAttach = fileData.body.formAttach;
@@ -120,7 +120,6 @@ export const AttachForm = ({ type }: component) => {
     })();
   }, [formAttach, name2mine, path2blob]);
 
-  const dispatch = useAppDispatch();
   function deleteFiles(index: number) {
     dispatch(deleteFile(index));
   }

@@ -36,6 +36,7 @@ export const useSign = () => {
         type: "1",
       };
       popupText = t("formStatus.void");
+      afterSign();
     } else if (agree === "no") {
       data = {
         BTPId: formInfo.formId,
@@ -144,6 +145,8 @@ export const useSign = () => {
 
   async function signOver() {
     const restMember = formInfo.signList.slice(formInfo.nowOrder + 1);
+    console.log(restMember);
+    
     const data: signFinalDataType[] = restMember.map((member) => {
       return {
         ...(member as unknown as {
@@ -171,7 +174,7 @@ export const useSign = () => {
         const res = await api.updateSignStatus(i);
       })();
     }
-    console.log('已完簽');
+    console.log("已完簽");
   }
 
   return {

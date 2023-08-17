@@ -45,12 +45,6 @@
     "status": "select form status"
   },
   "search": "Search",
-  "status": {
-    "done": "signed",
-    "no": "not signed",
-    "return": "disagree",
-    "void": "void"
-  },
   "thead": {
     "BTPId": "form Id",
     "atu": "ATU customer",

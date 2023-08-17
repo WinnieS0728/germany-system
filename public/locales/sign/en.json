@@ -15,5 +15,6 @@
     "yes": "agree"
   },
   "sign-warn": "please fill in opinion when select disagree !",
-  "title": "form approval"
+  "title": "form approval",
+  "void-title": "confirm void"
 }

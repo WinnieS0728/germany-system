@@ -4,7 +4,7 @@ import { PerCentTable } from "./percent table";
 import * as Btns from "@components/UI/buttons";
 import { useModalControl } from "@/hooks/modal control";
 import { useAppSelector } from "@/hooks/redux";
-import { useData } from "./data";
+import { useTripDataProcessing } from "./data";
 import { useTranslation } from "react-i18next";
 
 export const Confirm = () => {
@@ -14,7 +14,7 @@ export const Confirm = () => {
   const tripDetail = useAppSelector((state) => state.tripDetail);
   const nowUser = useAppSelector((state) => state.nowUser);
   const timeData = useAppSelector((state) => state.time);
-  const { nextWeekDays, rows, spreadData } = useData(
+  const { nextWeekDays, rows, spreadData } = useTripDataProcessing(
     tripDetail.body,
     timeData.today
   );
@@ -25,8 +25,8 @@ export const Confirm = () => {
       className='modal flex flex-col gap-4'
       style={{ backgroundColor: color.white }}
     >
-      <h2 className='text-xl'>{t('title')}</h2>
-      <p>{t('warn')}</p>
+      <h2 className='text-xl'>{t("title")}</h2>
+      <p>{t("warn")}</p>
       <WeekTable data={tablaData} />
       <PerCentTable
         data={[spreadData]}

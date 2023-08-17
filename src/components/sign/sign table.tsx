@@ -1,11 +1,11 @@
 import { useTheme } from "styled-components";
 import { Table } from "../table/table";
-import { signStatus } from "@/types";
-import { signStatus_E } from "@/types";
 import { dateFormatter } from "@/hooks/dateFormatter";
 import { useAppSelector } from "@/hooks/redux";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
+import { useId2name } from "@/hooks/id2name";
+import { useSignStatusTranslate } from "@/hooks/status translate";
 
 const FileList = ({ order }: { order: number }) => {
   const data = useAppSelector((state) => state.files).body.formAttach;
@@ -33,16 +33,33 @@ const FileList = ({ order }: { order: number }) => {
 };
 
 export const SignTable = () => {
-  const { i18n, t } = useTranslation("sign page");
-  const nowLang = i18n.language;
+  const { t } = useTranslation("sign page");
   const color = useTheme()?.color;
   const formInfo = useAppSelector((state) => state.formInfo).body;
+  const [newData, setData] = useState(formInfo.signList);
+  const { id2name } = useId2name();
+  const { getSignStatus } = useSignStatusTranslate();
+
   function isOtherSign(type: string): boolean {
     if (type === "會簽") {
       return true;
     }
     return false;
   }
+
+  useEffect(() => {
+    (async function () {
+      const data = await Promise.all(
+        formInfo.signList.map(async (i) => {
+          return {
+            ...i,
+            SIGNERNAME: await id2name(i.SIGNER),
+          };
+        })
+      );
+      setData(data);
+    })();
+  }, [formInfo.signList, id2name]);
 
   return (
     <section>
@@ -71,7 +88,7 @@ export const SignTable = () => {
             </tr>
           </thead>
           <tbody>
-            {formInfo.signList.slice(1)?.map((list, index) => (
+            {newData.slice(1)?.map((list, index) => (
               <tr key={index}>
                 <td>{list.SIGNORDER}</td>
                 <td>{`${isOtherSign(list.SignGroup) ? "會簽 -" : ""} ${
@@ -88,11 +105,7 @@ export const SignTable = () => {
                     </span>
                   )}
                 </td>
-                <td>
-                  {nowLang === "en"
-                    ? signStatus_E[parseInt(`${list.SIGNRESULT}`)]
-                    : signStatus[parseInt(`${list.SIGNRESULT}`)]}
-                </td>
+                <td>{getSignStatus(list.SIGNRESULT)}</td>
                 <td style={{ whiteSpace: "nowrap" }}>
                   {list.SIGNTIME && dateFormatter(list.SIGNTIME)}
                 </td>

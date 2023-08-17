@@ -9,20 +9,19 @@ import {
 } from "react-day-picker";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { isValid } from "date-fns";
-import { timeFormat } from "d3";
 import * as Icons from "@components/UI/icons";
 import { useOptions } from "@/hooks/options";
 import { setProps } from "@/data/reducers/apply list/apply list";
 import { setListData } from "@/data/actions/apply list/set data";
 import * as Btns from "@components/UI/buttons";
 import { useTranslation } from "react-i18next";
+import { useId2name } from "@/hooks/id2name";
+import { dateFormatter } from "@/hooks/dateFormatter";
 
-interface propsType {
-  className?: string;
-}
 export const HeaderForm = ({ className }: propsType) => {
   const color = useTheme()?.color;
   const timeData = useAppSelector((state) => state.time);
+  const nowUser = useAppSelector((state) => state.nowUser).body;
   const { i18n, t } = useTranslation(["list page", "common"]);
   const nowLang = i18n.language;
 
@@ -32,7 +31,7 @@ export const HeaderForm = ({ className }: propsType) => {
     mode: "onChange",
     defaultValues: {
       dept: "",
-      EmpId: "",
+      EmpId: nowUser.EmpId,
       formStatus: "",
       date: {
         start: "",
@@ -40,6 +39,18 @@ export const HeaderForm = ({ className }: propsType) => {
       },
     },
   });
+
+  const watch_dept = useWatch({
+    name: "dept",
+    control,
+  });
+
+  const [range, setRange] = useState<dateType | undefined>({
+    from: "",
+    to: "",
+  });
+  const [month, setMonth] = useState<Date>();
+  const [isShow, setShow] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   function onSubmit<T>(d: T) {
@@ -49,44 +60,13 @@ export const HeaderForm = ({ className }: propsType) => {
   }
 
   const { options } = useOptions();
-
-  const watch_dept = useWatch({
-    name: "dept",
-    control,
-  });
-
-  const formStatusOptions = [
-    { label: t("signStatus.no", { ns: "common" }), value: "1" },
-    { label: t("signStatus.done", { ns: "common" }), value: "2" },
-    { label: t("signStatus.return", { ns: "common" }), value: "3" },
-    { label: t("signStatus.void", { ns: "common" }), value: "4" },
-  ];
-
-  function getTime(d: Date | undefined) {
-    if (!isValid(d)) {
-      return "";
-    }
-    const date = timeFormat("%Y-%m-%d")(d as Date);
-
-    return date;
-  }
-
-  interface dateType {
-    from: Date | string | undefined;
-    to: Date | string | undefined;
-  }
-  const [range, setRange] = useState<dateType | undefined>({
-    from: "",
-    to: "",
-  });
-  const [month, setMonth] = useState<Date>();
-  const [isShow, setShow] = useState<boolean>(false);
+  const { splitName } = useId2name();
 
   const Footer = () => {
-    const goToday = () => {
+    function goToday() {
       setMonth(new Date(timeData.today));
       //   handleSelected(new Date(timeData.today));
-    };
+    }
     return (
       <span
         style={{
@@ -113,8 +93,8 @@ export const HeaderForm = ({ className }: propsType) => {
 
     if (isValid(d?.from) && isValid(d?.to)) {
       setValue("date", {
-        start: getTime(d.from as Date),
-        end: getTime(d.to as Date),
+        start: dateFormatter(d.from as Date),
+        end: dateFormatter(d.to as Date),
       });
       setShow(false);
     }
@@ -158,12 +138,7 @@ export const HeaderForm = ({ className }: propsType) => {
                     options={options.member}
                     onChange={onChange}
                     placeholder={t("placeholder.emp")}
-                    getLabelFunction={(option: any) => {
-                      if (nowLang === "en") {
-                        return option.FullName.split("/")[0];
-                      }
-                      return option.EmpName;
-                    }}
+                    getLabelFunction={(option: any) => splitName(option)}
                     getValueFunction={(option: any) => option.EmpId}
                     value='EmpId'
                     filterFunction={(candidate) => {
@@ -184,7 +159,7 @@ export const HeaderForm = ({ className }: propsType) => {
               name='formStatus'
               render={({ field: { onChange } }) => (
                 <MySelect.Normal
-                  options={formStatusOptions}
+                  options={options.status}
                   onChange={onChange}
                   placeholder={t("placeholder.status")}
                 />
@@ -202,7 +177,7 @@ export const HeaderForm = ({ className }: propsType) => {
                   color: color?.black,
                 }}
                 autoComplete='off'
-                value={getTime(range?.from as Date)}
+                value={dateFormatter(range?.from as Date)}
                 onClickCapture={() => {
                   setShow((prev) => !prev);
                 }}
@@ -218,7 +193,7 @@ export const HeaderForm = ({ className }: propsType) => {
                   color: color?.black,
                 }}
                 autoComplete='off'
-                value={getTime(range?.to as Date)}
+                value={dateFormatter(range?.to as Date)}
                 onClickCapture={() => {
                   setShow((prev) => !prev);
                 }}
@@ -278,3 +253,12 @@ export const HeaderForm = ({ className }: propsType) => {
     </>
   );
 };
+
+type propsType = {
+  className?: string;
+};
+
+interface dateType {
+  from: Date | string | undefined;
+  to: Date | string | undefined;
+}

@@ -1,4 +1,3 @@
-import { useId2name } from "@/hooks/id2name";
 import { useEffect, useMemo, useState } from "react";
 
 export const usePageControl = (data: any[], numberInOnePage: number) => {
@@ -38,11 +37,19 @@ export const usePageControl = (data: any[], numberInOnePage: number) => {
     }
     setPage((prev) => prev - 1);
   }
+  function gotoPage(page = 1) {
+    if (page > totalPage) {
+      setPage(totalPage);
+    } else {
+      setPage(page);
+    }
+  }
+
   const dataInThisPage = useMemo(() => {
     const startIndex = (page - 1) * numberInOnePage;
     const endIndex = startIndex + numberInOnePage;
     return data.slice(startIndex, endIndex);
   }, [page, data, numberInOnePage]);
 
-  return { dataInThisPage, nextPage, prevPage, buttonStatus };
+  return { dataInThisPage, nextPage, prevPage, buttonStatus, gotoPage };
 };

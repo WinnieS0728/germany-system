@@ -1,5 +1,6 @@
 import { setNextSigner } from "@/data/actions/sign/set next sign";
 import { setSignList } from "@/data/actions/sign/set sign list";
+import { statusNumberType } from "@/hooks/status translate";
 import { createSlice } from "@reduxjs/toolkit";
 import { statusType } from "types/api";
 
@@ -11,7 +12,7 @@ export interface signList {
   SIGNERNAME: string;
   ACTUALNAME: string;
   ACTUALSIGNER: string;
-  SIGNRESULT: number & (0 | 1 | 2 | 3 | 4);
+  SIGNRESULT: statusNumberType;
   OPINION: string;
   SIGNTIME: string;
   ALLOWCUSTOM: false;
@@ -46,12 +47,14 @@ type data = {
   nextSign: nextSign | object;
   signList: signList[];
   nowOrder: number;
+  signType: "sign" | "otherSign";
 };
 const data: data = {
   formId: "",
   nextSign: {},
   signList: [],
   nowOrder: 0,
+  signType: "sign",
 };
 
 const formInfoSlice = createSlice({
@@ -75,6 +78,11 @@ const formInfoSlice = createSlice({
             SIGNORDER: number;
           }
         )?.SIGNORDER;
+        if ((action.payload[0] as nextSign)?.SignGroup === "會簽") {
+          state.body.signType = "otherSign";
+        } else if ((action.payload[0] as nextSign)?.SignGroup === "簽核") {
+          state.body.signType = "sign";
+        }
       })
       .addCase(setNextSigner.pending, (state) => {
         state.status = statusType.loading;
@@ -82,6 +90,7 @@ const formInfoSlice = createSlice({
       .addCase(setNextSigner.rejected, (state) => {
         state.status = statusType.failed;
         state.body.nextSign = data.nextSign;
+        state.body.signType = data.signType;
       })
       .addCase(setSignList.fulfilled, (state, action) => {
         state.status = statusType.succeeded;

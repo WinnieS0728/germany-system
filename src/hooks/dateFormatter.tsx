@@ -1,6 +1,9 @@
 import { timeFormat } from "d3";
 
 export function dateFormatter(d: Date | string): string {
+  if (!d) {
+    return "";
+  }
   if (typeof d === "string") {
     return timeFormat("%Y-%m-%d")(new Date(d));
   } else {

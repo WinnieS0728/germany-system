@@ -6,7 +6,7 @@ import {
 } from "@/data/reducers/trip detail/trip detail";
 import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch } from "@/hooks/redux";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 import * as Icons from "@components/UI/icons";
 import api from "@/lib/api";
@@ -24,21 +24,30 @@ const TableWhenAddForm = ({ data, index }: { data: any; index: number }) => {
   const dispatch = useAppDispatch();
 
   const [dataSet, setNewData] = useState<any[]>([]);
-  async function getEventName(code: string) {
-    const list: [] = await api.getEvent("TripEvent");
-    const target = list.find(
-      (i: { ResourcesId: string }) => i.ResourcesId === code
-    );
-    if (!target) {
-      return "";
-    }
-    if (nowLang === "en") {
-      return (target as { ResourcesName_E: string }).ResourcesName_E;
-    }
-    return (target as { ResourcesName: string }).ResourcesName;
-  }
+  const getEventName = useCallback(
+    (code: string) => {
+      return (async function () {
+        const list: [] = await api.getEvent("TripEvent");
+        const target = list.find(
+          (i: { ResourcesId: string }) => i.ResourcesId === code
+        );
+        if (!target) {
+          return "";
+        }
+        if (nowLang === "en") {
+          return (target as { ResourcesName_E: string }).ResourcesName_E;
+        }
+        return (target as { ResourcesName: string }).ResourcesName;
+      })();
+    },
+    [nowLang]
+  );
   useEffect(() => {
     (async function () {
+      if (!data) {
+        setNewData([]);
+        return;
+      }
       const newArray = await Promise.all(
         data.map(async (i: { purpose: string }) => {
           return {
@@ -49,7 +58,7 @@ const TableWhenAddForm = ({ data, index }: { data: any; index: number }) => {
       );
       setNewData(newArray);
     })();
-  }, [data, index]);
+  }, [data, getEventName, index]);
 
   return dataSet.map((d, id: number) => {
     return (

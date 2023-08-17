@@ -47,7 +47,7 @@ export const IconBtn = ({ children, icon, primary, style }: IconBtnProp) => {
     color: primary ? color?.white : color?.black,
     ...style,
   };
-  
+
   return (
     <span
       className='top-btn flex items-center justify-center gap-2 rounded-md px-10 py-2'
@@ -85,14 +85,14 @@ export const LongBtn = (props: longBtn) => {
   switch (props.style) {
     case "cancel":
       css = { backgroundColor: color.red, color: color.white };
-      content = t('btn.cancel');
+      content = t("btn.cancel");
       break;
     case "confirm":
       css = {
         backgroundColor: color.sectionHeader,
         color: color.white,
       };
-      content = t('btn.confirm');
+      content = t("btn.confirm");
       break;
     default:
       css = props.style;
@@ -124,12 +124,13 @@ interface PageControlBtnProps {
 }
 export const PageControlBtn = (props: PageControlBtnProps) => {
   const { type, onClick, disabled } = props;
+  const { t } = useTranslation("common", { keyPrefix: "pageControl" });
   const color = useTheme()?.color;
   let content;
   if (type === "prev") {
-    content = "上一頁";
+    content = t("prev");
   } else if (type === "next") {
-    content = "下一頁";
+    content = t("next");
   }
   return (
     <button

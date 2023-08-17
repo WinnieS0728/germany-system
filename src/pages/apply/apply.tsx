@@ -20,10 +20,6 @@ const ApplyPage = () => {
             path='add'
             element={<NewForm />}
           />
-          <Route
-            path='sign'
-            element={<h1>表單簽核</h1>}
-          />
         </Routes>
       </Suspense>
     </>

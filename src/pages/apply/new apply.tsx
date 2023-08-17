@@ -8,51 +8,47 @@ import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { MoneyForm } from "../../components/apply/add/money";
 import { AgentForm } from "../../components/apply/add/agent";
 import { AttachForm } from "../../components/apply/add/attach";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { TripDetailForm } from "../../components/apply/add/detail/trip detail block";
 import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { setDate } from "@/data/reducers/trip detail/trip detail";
+import { clearData, setDate } from "@/data/reducers/trip detail/trip detail";
 import { useSelectRef } from "@/hooks/select ref";
 import { timeDay, timeMonday } from "d3-time";
-import { timeFormat } from "d3";
 import api from "@/lib/api";
-import { useData } from "../../components/apply/add/confirm/data";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useTheme } from "styled-components";
 import { Block } from "@/layouts/block";
 import { setErrors } from "@/data/reducers/error/errors";
 import { useFiles } from "@/hooks/files";
-import { Modal } from "@/layouts/modal";
-import { NewDetailForm } from "../../components/apply/add/detail/new detail";
-import { Confirm } from "../../components/apply/add/confirm/confirm";
-import { UploadFiles } from "../../components/apply/add/upload files";
-import { ErrorsModal } from "../../components/apply/add/errors";
-import { Hamburger } from "@/layouts/hamberger";
+import { Hamburger } from "@/layouts/hamburger";
 import { tripDetailType } from "@/lib/api/travel apply/push details";
 import { Flip, toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { clearFile } from "@/data/reducers/files/attach";
+import { dateFormatter } from "@/hooks/dateFormatter";
+import { useTripDataProcessing } from "@/components/apply/add/confirm/data";
+import { PopupLayer } from "@/layouts/popup";
 
 export const NewForm = () => {
   const color = useTheme()?.color;
   const { t } = useTranslation(["common", "new form", "errors", "toast"]);
   const timeData = useAppSelector((state) => state.time);
-  const tripDetail = useAppSelector((state) => state.tripDetail);
+  const tripDetail = useAppSelector((state) => state.tripDetail).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
-  function getNextWeekStartEnd() {
-    const thisMonday = timeMonday(new Date(timeData.today));
-    const nextMonday = timeDay.offset(thisMonday, 7);
-    const nextSunday = timeDay.offset(thisMonday, 13);
-    function getTime(d: Date) {
-      return timeFormat("%Y-%m-%d")(d);
-    }
-    return {
-      nextMonday: getTime(nextMonday),
-      nextSunday: getTime(nextSunday),
-    };
-  }
+
+  const { clearNewFormSelect } = useSelectRef();
+  const dateRange = getNextWeekStartEnd();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { uploadFile } = useFiles();
+  const { spreadData } = useTripDataProcessing(tripDetail, timeData.today);
+
+  const [toggleModal] = useModalControl("review");
+  const [toggleErrorModal] = useModalControl("errors");
+  const [toggleFilesModal] = useModalControl("files");
+
   const schema = yup.object().shape({
     DeptId: yup.string(),
     CreateId: yup.string(),
@@ -77,13 +73,12 @@ export const NewForm = () => {
     ),
   });
   const methods = useForm({
-    shouldUnregister: true,
     criteriaMode: "all",
     mode: "onChange",
     resolver: yupResolver(schema),
     defaultValues: {
-      DeptId: "",
-      CreateId: "",
+      DeptId: nowUser.DeptId,
+      CreateId: nowUser.EmpId,
       Transport: "",
       IsLodging: "No",
       StayDays: 0,
@@ -102,19 +97,29 @@ export const NewForm = () => {
     trigger,
     formState: { errors, isValid },
   } = methods;
-  const { clearNewFormSelect } = useSelectRef();
 
-  const [toggleModal] = useModalControl("review");
-  const [toggleErrorModal] = useModalControl("errors");
-  const [toggleFilesModal] = useModalControl("files");
+  const watch_date = useWatch({
+    name: "tripData",
+    control: control,
+  });
 
-  const dateRange = getNextWeekStartEnd();
+  useEffect(() => {
+    trigger();
+  }, [trigger, tripDetail, watch_date]);
 
-  const { spreadData } = useData(tripDetail.body, timeData.today);
-  const tripDetailData = useAppSelector((state) => state.tripDetail).body;
+  useEffect(() => {
+    dispatch(setDate(watch_date));
+  }, [watch_date, dispatch]);
 
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  function getNextWeekStartEnd() {
+    const thisMonday = timeMonday(new Date(timeData.today));
+    const nextMonday = timeDay.offset(thisMonday, 7);
+    const nextSunday = timeDay.offset(thisMonday, 13);
+    return {
+      nextMonday: dateFormatter(nextMonday),
+      nextSunday: dateFormatter(nextSunday),
+    };
+  }
 
   async function getCusId(name: string) {
     const res = await api.getCus(name, "DEU");
@@ -122,63 +127,50 @@ export const NewForm = () => {
     return res?.[0].CustId;
   }
 
-  const { uploadFile } = useFiles();
   async function onSubmit<T>(d: T) {
     const newFormData = { ...d, ...dateRange };
-    const uploadData = toast.loading(t("newForm.pending", { ns: "toast" }));
-    try {
-      const formId = await createNewForm(newFormData);
 
-      const newData: tripDetailType[] = await Promise.all(
-        spreadData.map(async (item, index) => {
-          return {
-            BTPId: formId,
-            Item: index + 1,
-            CustId: await getCusId(item.data.cus),
-            TripEvent: item.data.purpose,
-            Description: item.data.PS,
-            Country: "DEU", // 國家
-            Area: item.data.district, // 地區
-            City: item.data.city, // 城市
-            Hotel: item.data.hotel,
-            StartDT: item.date[0],
-            EndDT: item.date[item.date.length - 1],
-          };
-        })
-      );
-      // console.log("要送的明細", newData);
+    toast.promise(send(newFormData), {
+      pending: t("newForm.pending"),
+      success: t("newForm.success"),
+      error: t("newForm.fail"),
+    });
+    toggleModal("off");
+  }
 
-      pushData(newData);
-      uploadFile(formId);
+  async function send(data: any) {
+    const formId = await createNewForm(data);
 
-      clearNewFormSelect();
-      dispatch(clearFile());
+    const newData: tripDetailType[] = await Promise.all(
+      spreadData.map(async (item, index) => {
+        return {
+          BTPId: formId,
+          Item: index + 1,
+          CustId: await getCusId(item.data.cus),
+          TripEvent: item.data.purpose,
+          Description: item.data.PS,
+          Country: "DEU", // 國家
+          Area: item.data.district, // 地區
+          City: item.data.city, // 城市
+          Hotel: item.data.hotel,
+          StartDT: item.date[0],
+          EndDT: item.date[item.date.length - 1],
+        };
+      })
+    );
+    // console.log("要送的明細", newData);
 
-      toast.update(uploadData, {
-        type: "success",
-        render: t("newForm.success", { ns: "toast" }),
-        isLoading: false,
-        transition: Flip,
-        autoClose: 3000,
-        closeOnClick: true,
-        closeButton: true,
-      });
+    pushData(newData);
+    uploadFile(formId);
 
-      setTimeout(() => {
-        navigate(`../`);
-      }, 1000);
-    } catch (err) {
-      console.log(err);
-      toast.update(uploadData, {
-        type: "error",
-        render: t("newForm.fail", { ns: "toast" }),
-        isLoading: false,
-        transition: Flip,
-        autoClose: 3000,
-        closeOnClick: true,
-        closeButton: true,
-      });
-    }
+    clearNewFormSelect();
+    dispatch(clearData());
+    dispatch(clearFile());
+
+    toggleModal("off");
+    setTimeout(() => {
+      navigate(`../`);
+    }, 1000);
   }
 
   async function createNewForm(data: any) {
@@ -192,20 +184,8 @@ export const NewForm = () => {
     // return 新增成功
   }
 
-  const watch_date = useWatch({
-    name: "tripData",
-    control: control,
-  });
-  const watch_money = useWatch({
-    name: ["Advance_Amount", "Curr"],
-    control: control,
-  });
-  useEffect(() => {
-    dispatch(setDate(watch_date));
-  }, [watch_date, dispatch]);
-
   //  TODO 預防重新整理
-  // useEffect(() => {
+  // useLayoutEffect(() => {
   //   function alertUser(event: any) {
   //     event.preventDefault();
   //     event.returnValue = "";
@@ -223,7 +203,7 @@ export const NewForm = () => {
         message: t("newForm.noData", { ns: "errors" }),
       });
     }
-    if (tripDetailData.some((d) => d.data.length === 0)) {
+    if (tripDetail.some((d) => d.data.length === 0)) {
       if (errors.tripData) {
         return;
       }
@@ -232,11 +212,7 @@ export const NewForm = () => {
         message: t("newForm.lostData", { ns: "errors" }),
       });
     }
-  }, [errors, setError, spreadData, t, tripDetailData]);
-
-  useEffect(() => {
-    trigger();
-  }, [watch_date, tripDetailData, watch_money, trigger]);
+  }, [errors, setError, spreadData, t, tripDetail]);
 
   function done() {
     trigger();
@@ -248,27 +224,14 @@ export const NewForm = () => {
     }
   }
 
-  const myErrors = useAppSelector((state) => state.errors);
-
   return (
     <>
-      <Modal name='newDetail'>
-        <NewDetailForm />
-      </Modal>
-      <Modal name='review'>
-        <Confirm />
-      </Modal>
-      <Modal name='files'>
-        <UploadFiles />
-      </Modal>
-      <Modal name='errors'>
-        <ErrorsModal errors={myErrors.body} />
-      </Modal>
+      <PopupLayer />
       <Main className='main-section-gap'>
         <>
           <div className='top-btn-list'>
-            <Hamburger
-              list={[
+            <Hamburger>
+              <>
                 <button
                   type='button'
                   onClick={done}
@@ -284,7 +247,7 @@ export const NewForm = () => {
                   >
                     {t("btn.send", { ns: "new form" })}
                   </IconBtn>
-                </button>,
+                </button>
                 <button
                   type='button'
                   onClick={() => {
@@ -294,9 +257,9 @@ export const NewForm = () => {
                   <IconBtn icon={<Icons.AddFiles size='1.5rem' />}>
                     {t("btn.attach", { ns: "new form" })}
                   </IconBtn>
-                </button>,
-              ]}
-            />
+                </button>
+              </>
+            </Hamburger>
             <button type='button'>
               <Link to={"../"}>
                 <IconBtn icon={<Icons.Back size='1.25rem' />}>

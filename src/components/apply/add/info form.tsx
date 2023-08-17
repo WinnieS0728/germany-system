@@ -1,8 +1,7 @@
 import { dateFormatter } from "@/hooks/dateFormatter";
+import { useId2name } from "@/hooks/id2name";
 import { useAppSelector } from "@/hooks/redux";
 import { component } from "@/types";
-import { useEffect } from "react";
-import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 interface infoPropType {
@@ -25,12 +24,7 @@ export const InfoForm = ({ type, data }: component) => {
   const nowLang = i18n.language;
   const nowUser = useAppSelector((state) => state.nowUser).body;
 
-  const { setValue } = useFormContext();  
-  
-  useEffect(() => {
-    setValue("DeptId", nowUser.DeptId);
-    setValue("CreateId", nowUser.EmpId);
-  }, [nowUser, setValue]);
+  const { splitName } = useId2name();
 
   return (
     <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3'>
@@ -78,9 +72,7 @@ export const InfoForm = ({ type, data }: component) => {
         title={t("info.emp", { ns: "new form" })}
         content={
           type === "addForm"
-            ? nowLang === "en"
-              ? nowUser.FullName.split("/")[0]
-              : nowUser.EmpName
+            ? splitName(nowUser as any)
             : (data?.EmpName as string)
         }
       />

@@ -12,7 +12,10 @@ export interface dataForTable {
   rows: (detailDataWithSingleData | undefined)[][];
   spreadData: detailDataWithSingleData[];
 }
-export const useData = (data: detailDataType[], date: string): dataForTable => {
+export const useTripDataProcessing = (
+  data: detailDataType[],
+  date: string
+): dataForTable => {
   function getTime(d: Date) {
     return timeFormat("%Y-%m-%d")(d);
   }

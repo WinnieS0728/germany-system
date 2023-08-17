@@ -20,11 +20,16 @@
     "11": "Nov",
     "12": "Dec"
   },
+  "pageControl": {
+    "next": "next page",
+    "prev": "prev page"
+  },
   "signStatus": {
+    "agree": "agree",
     "done": "signed",
     "ing": "signing off",
     "no": "not signed",
-    "return": "withdraw",
+    "return": "returned",
     "void": "void"
   },
   "title": {

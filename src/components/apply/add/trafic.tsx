@@ -15,7 +15,10 @@ interface date {
 export const TransportationForm = () => {
   const { i18n, t } = useTranslation("new form", { keyPrefix: "transport" });
   const nowLang = i18n.language;
+  const detailData = useAppSelector((state) => state.tripDetail).body;
+
   const { options } = useOptions();
+  const { newFormRef } = useSelectRef();
 
   const { register, control, setValue } = useFormContext();
   const watch_date: date[] = useWatch({
@@ -24,9 +27,7 @@ export const TransportationForm = () => {
     defaultValue: [],
   });
 
-  const { newFormRef } = useSelectRef();
-  const detailData = useAppSelector((state) => state.tripDetail);
-  const stayList = detailData.body.map((d) => {
+  const stayList = detailData.map((d) => {
     return d.data.map((i) => i.hotel);
   });
 

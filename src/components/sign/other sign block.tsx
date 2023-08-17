@@ -4,28 +4,33 @@ import { useOptions } from "@/hooks/options";
 import * as Btns from "@components/UI/buttons";
 import { Controller, useForm } from "react-hook-form";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch } from "@/hooks/redux";
 import { setErrors } from "@/data/reducers/error/errors";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useEffect } from "react";
 import { useSelectRef } from "@/hooks/select ref";
-import { useFiles } from "@/hooks/files";
 import { useSign } from "@/hooks/sign";
 import { useTranslation } from "react-i18next";
+import { useId2name } from "@/hooks/id2name";
 
 const OtherSignBlock = ({ className }: { className?: string }) => {
-  const { i18n, t } = useTranslation(["sign", "errors"]);
-  const nowLang = i18n.language;
   const color = useTheme()?.color;
+  const { t } = useTranslation(["sign", "errors"]);
   const { options } = useOptions();
+  const { otherSignRef } = useSelectRef();
+  const { splitName } = useId2name();
+  const dispatch = useAppDispatch();
+  const { otherSign } = useSign();
 
   const [toggleErrorModal] = useModalControl("errors");
   const [toggleOtherSignModal] = useModalControl("otherSign");
 
-  const formInfo = useAppSelector((state) => state.formInfo);
   const schema = yup.object().shape({
-    member: yup.array().of(yup.string()).min(1, t('otherSign.noMember',{ns:'errors'})),
+    member: yup
+      .array()
+      .of(yup.string())
+      .min(1, t("otherSign.noMember", { ns: "errors" })),
   });
   const {
     handleSubmit,
@@ -42,9 +47,6 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
     },
   });
 
-  const { otherSignRef } = useSelectRef();
-  const dispatch = useAppDispatch();
-
   function onSubmit<T>(d: T) {
     // console.log(d);
     send((d as { member: string[] }).member);
@@ -53,12 +55,8 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
     reset();
   }
 
-  const { uploadFile } = useFiles();
-  const { otherSign } = useSign();
   async function send(list: string[]) {
     otherSign(list);
-    // 會簽不能加附件
-    // uploadFile(formInfo.body.formId);
   }
 
   useEffect(() => {
@@ -94,12 +92,7 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
               isMulti
               placeholder={t("otherSign.placeholder", { ns: "sign" })}
               hideSelectedOptions={false}
-              getOptionLabel={(option: any) => {
-                if (nowLang === "en") {
-                  return option.FullName.split("/")[0];
-                }
-                return option.EmpName;
-              }}
+              getOptionLabel={(option: any) => splitName(option)}
               getOptionValue={(option: any) => option.EmpId}
               filterOption={(candidate: any, input: string) => {
                 if (input.startsWith("!")) {

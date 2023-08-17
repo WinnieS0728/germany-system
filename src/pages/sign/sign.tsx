@@ -5,7 +5,7 @@ import { Header } from "@/layouts/header";
 import { Main } from "@/layouts/main";
 import * as Icons from "@components/UI/icons";
 import { FormProvider, useForm } from "react-hook-form";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useTheme } from "styled-components";
 import { useSignPageData } from "./data";
 import { TransportationBlock } from "@/components/apply/sign/transport";
@@ -25,44 +25,26 @@ import { setSignList } from "@/data/actions/sign/set sign list";
 import { setNextSigner } from "@/data/actions/sign/set next sign";
 import { setFormAttach } from "@/data/actions/files/fetch form attach";
 import api from "@/lib/api";
-import { Modal } from "@/layouts/modal";
-import { UploadFiles } from "@/components/apply/add/upload files";
-import { SignBlock } from "@/components/sign/sign box";
-import { OtherSignBlock } from "@/components/sign/other sign block";
-import { ErrorsModal } from "@/components/apply/add/errors";
-import { Hamburger } from "@/layouts/hamberger";
-import { useSign } from "@/hooks/sign";
+import { Hamburger } from "@/layouts/hamburger";
 import { useTranslation } from "react-i18next";
-import { useId2name } from "@/hooks/id2name";
+import { PopupLayer } from "@/layouts/popup";
 
 const SignPage = () => {
-  const { t } = useTranslation(["common", "sign page", "new form"]);
   const { formId } = useParams();
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(setFormId(formId));
-    dispatch(setSignList(formId as string));
-    dispatch(setNextSigner(formId as string));
-    dispatch(setFormAttach(formId as string));
-  }, [dispatch, formId]);
+  const { t } = useTranslation(["common", "sign page", "new form"]);
   const formInfo = useAppSelector((state) => state.formInfo).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
-
-  const [signType, setType] = useState<"sign" | "otherSign">("sign");
-  useEffect(() => {
-    const type = (formInfo.nextSign as nextSign)?.SignGroup;
-    if (type === "簽核") {
-      setType("sign");
-    }
-    if (type === "會簽") {
-      setType("otherSign");
-    }
-  }, [formInfo]);
-
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const color = useTheme()?.color;
   const methods = useForm();
+  const dispatch = useAppDispatch();
+  const { headData, detailData } = useSignPageData(formId as string);
+  const tableData = useTableData(detailData, headData.createDate);
 
-  const { updateFormStatus } = useSign();
+  const [toggleVoidModal] = useModalControl("void");
+  const [toggleSignModal] = useModalControl("sign");
+  const [toggleOtherSignModal] = useModalControl("otherSign");
+  const [toggleFileModal] = useModalControl("files");
 
   const isNextSigner = useMemo(() => {
     if ((formInfo.nextSign as nextSign)?.SIGNER === nowUser.EmpId) {
@@ -70,8 +52,13 @@ const SignPage = () => {
     }
     return false;
   }, [formInfo, nowUser]);
+  const isVoid = useMemo(() => {
+    if (headData.status === "作廢") {
+      return true;
+    }
+    return false;
+  }, [headData.status]);
 
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   useEffect(() => {
     (async function () {
       const res = await api.getMemberGroup(nowUser.EmpId);
@@ -81,173 +68,97 @@ const SignPage = () => {
     })();
   }, [nowUser]);
 
-  const { headData, detailData } = useSignPageData(formId as string);
-
-  const tableData = useTableData(detailData, headData.createDate);
-
-  const totalData = detailData
-    .reduce((a, b) => a.concat(b), [])
-    .sort((a, b) => timeSort(a.date) - timeSort(b.date));
+  useEffect(() => {
+    dispatch(setFormId(formId));
+    dispatch(setSignList(formId as string));
+    dispatch(setNextSigner(formId as string));
+    dispatch(setFormAttach(formId as string));
+  }, [dispatch, formId]);
 
   function timeSort(date: string[]): number {
     return new Date(date[0]).getTime();
   }
+
+  const totalData = detailData
+    .reduce((a, b) => a.concat(b), [])
+    .sort((a, b) => timeSort(a.date) - timeSort(b.date));
 
   const tripTime = {
     year: totalData[0]?.date[0].split("-")[0],
     month: totalData[0]?.date[0].split("-")[1],
   };
 
-  const [toggleSignModal] = useModalControl("sign");
-  const [toggleOtherSignModal] = useModalControl("otherSign");
-  const [toggleFileModal] = useModalControl("files");
-
-  const myErrors = useAppSelector((state) => state.errors);
-
-  const deputyName = useId2name(headData.agent);
-
   return (
     <>
-      {isNextSigner && (
-        <>
-          {signType === "sign" && (
-            <Modal name='files'>
-              <UploadFiles />
-            </Modal>
-          )}
-          <Modal name='sign'>
-            <SignBlock type={signType} />
-          </Modal>
-          <Modal name='otherSign'>
-            <OtherSignBlock />
-          </Modal>
-        </>
-      )}
-      <Modal name='errors'>
-        <ErrorsModal errors={myErrors.body} />
-      </Modal>
+      <PopupLayer />
       <Header title={t("title.businessTripApply", { ns: "common" })} />
       <Main className='main-section-gap'>
         <>
           <div className='top-btn-list'>
-            {isNextSigner &&
-              (signType === "sign" ? (
-                <Hamburger
-                  list={[
-                    <button
-                      type='button'
-                      onClick={() => {
-                        toggleSignModal("on");
-                      }}
+            {isNextSigner && !isVoid && (
+              <Hamburger>
+                <>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      toggleSignModal("on");
+                    }}
+                  >
+                    <Btns.IconBtn
+                      icon={
+                        <Icons.Sign
+                          size='1.5rem'
+                          color={color.white}
+                        />
+                      }
+                      primary
                     >
-                      <Btns.IconBtn
-                        icon={
-                          <Icons.Sign
-                            size='1.5rem'
-                            color={color.white}
-                          />
-                        }
-                        primary
-                      >
-                        {t("btn.sign", { ns: "sign page" })}
-                      </Btns.IconBtn>
-                    </button>,
-                    <button
-                      type='button'
-                      onClick={() => {
-                        toggleOtherSignModal("on");
-                      }}
+                      {t("btn.sign", { ns: "sign page" })}
+                    </Btns.IconBtn>
+                  </button>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      toggleOtherSignModal("on");
+                    }}
+                  >
+                    <Btns.IconBtn
+                      icon={
+                        <Icons.OtherSign
+                          size='1.5rem'
+                          color={color.white}
+                        />
+                      }
+                      primary
                     >
-                      <Btns.IconBtn
-                        icon={
-                          <Icons.OtherSign
-                            size='1.5rem'
-                            color={color.white}
-                          />
-                        }
-                        primary
-                      >
-                        {t("btn.otherSign", { ns: "sign page" })}
-                      </Btns.IconBtn>
-                    </button>,
-                    <button
-                      type='button'
-                      onClick={() => {
-                        toggleFileModal("on");
-                      }}
+                      {t("btn.otherSign", { ns: "sign page" })}
+                    </Btns.IconBtn>
+                  </button>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      toggleFileModal("on");
+                    }}
+                  >
+                    <Btns.IconBtn icon={<Icons.AddFiles size='1.5rem' />}>
+                      {t("btn.attach", { ns: "sign page" })}
+                    </Btns.IconBtn>
+                  </button>
+                  <button type='button'>
+                    <Btns.IconBtn
+                      icon={
+                        <Icons.Print
+                          size='1.5rem'
+                          color={color.black}
+                        />
+                      }
                     >
-                      <Btns.IconBtn icon={<Icons.AddFiles size='1.5rem' />}>
-                        {t("btn.attach", { ns: "sign page" })}
-                      </Btns.IconBtn>
-                    </button>,
-                    <button type='button'>
-                      <Btns.IconBtn
-                        icon={
-                          <Icons.Print
-                            size='1.5rem'
-                            color={color.black}
-                          />
-                        }
-                      >
-                        {t("btn.print", { ns: "sign page" })}
-                      </Btns.IconBtn>
-                    </button>,
-                  ]}
-                />
-              ) : (
-                <Hamburger
-                  list={[
-                    <button
-                      type='button'
-                      onClick={() => {
-                        toggleSignModal("on");
-                      }}
-                    >
-                      <Btns.IconBtn
-                        icon={
-                          <Icons.Sign
-                            size='1.5rem'
-                            color={color.white}
-                          />
-                        }
-                        primary
-                      >
-                        {t("btn.sign", { ns: "sign page" })}
-                      </Btns.IconBtn>
-                    </button>,
-                    <button
-                      type='button'
-                      onClick={() => {
-                        toggleOtherSignModal("on");
-                      }}
-                    >
-                      <Btns.IconBtn
-                        icon={
-                          <Icons.OtherSign
-                            size='1.5rem'
-                            color={color.white}
-                          />
-                        }
-                        primary
-                      >
-                        {t("btn.otherSign", { ns: "sign page" })}
-                      </Btns.IconBtn>
-                    </button>,
-                    <button type='button'>
-                      <Btns.IconBtn
-                        icon={
-                          <Icons.Print
-                            size='1.5rem'
-                            color={color.black}
-                          />
-                        }
-                      >
-                        {t("btn.print", { ns: "sign page" })}
-                      </Btns.IconBtn>
-                    </button>,
-                  ]}
-                />
-              ))}
+                      {t("btn.print", { ns: "sign page" })}
+                    </Btns.IconBtn>
+                  </button>
+                </>
+              </Hamburger>
+            )}
             <button type='button'>
               <Link to={"https://esys.orange-electronic.com/Eform/List"}>
                 <Btns.IconBtn icon={<Icons.Back size='1.25rem' />}>
@@ -255,11 +166,11 @@ const SignPage = () => {
                 </Btns.IconBtn>
               </Link>
             </button>
-            {isAdmin && (
+            {isAdmin && !isVoid && (
               <button
                 type='button'
                 onClick={() => {
-                  updateFormStatus("delete");
+                  toggleVoidModal("on");
                 }}
               >
                 <Btns.IconBtn icon={<Icons.Void size='1.25rem' />}>
@@ -310,7 +221,7 @@ const SignPage = () => {
             </Block>
             <Block>
               <p>
-                {t("deputy.deputy", { ns: "new form" })} : {deputyName}
+                {t("deputy.deputy", { ns: "new form" })} : {headData.agent}
               </p>
             </Block>
             <Block>

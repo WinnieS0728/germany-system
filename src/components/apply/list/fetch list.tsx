@@ -4,11 +4,8 @@ import api from "@/lib/api";
 import { tripEvent } from "@/types";
 import { timeFormat } from "d3";
 import { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 export const useFetchApplyList = () => {
-  const { i18n } = useTranslation();
-  const nowLang = i18n.language;
   const [data, setData] = useState<any[]>([]);
   const tableProps = useAppSelector((state) => state.listFormState);
 
@@ -84,7 +81,6 @@ export const useFetchApplyList = () => {
           };
         })
       );
-      console.log(dataSet);
 
       const dateFilter = dateProcess(dataSet);
       const fineData = dateFilter.reverse().map((data, index) => {

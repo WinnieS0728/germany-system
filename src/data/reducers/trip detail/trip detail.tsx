@@ -84,10 +84,20 @@ const tripDetailSlice = createSlice({
       const targetItem = state.body.find((i) => i.id === action.payload);
       targetItem?.data.splice(-1);
     },
+    clearData: (state) => {
+      state.body = data;
+    },
   },
 });
 
 export default tripDetailSlice.reducer;
 
-export const { setTarget, addData, pushData, deleteData, setDate, deleteItem } =
-  tripDetailSlice.actions;
+export const {
+  setTarget,
+  addData,
+  pushData,
+  deleteData,
+  setDate,
+  deleteItem,
+  clearData,
+} = tripDetailSlice.actions;

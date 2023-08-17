@@ -33,6 +33,15 @@ const SignBlock = ({
   const { t } = useTranslation(["sign", "errors"]);
   const formInfo = useAppSelector((state) => state.formInfo).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
+  const { sign, updateFormStatus, signOver } = useSign();
+  const [showPassword, setPasswordShow] = useState<boolean>(false);
+  const { uploadFile } = useFiles();
+  const dispatch = useAppDispatch();
+
+  const [toggleModal] = useModalControl("sign");
+  const [toggleErrorModal] = useModalControl("errors");
+
+  const inputDisable = type === "sign" ? false : true;
 
   const signSchema = yup.object().shape({
     agree:
@@ -47,7 +56,7 @@ const SignBlock = ({
     //   async function (value: string) {
     //     return await api.logIn(nowUser.EmpId, value);
     //   }
-    // ),
+    // )
     opinion:
       type === "sign"
         ? yup.string().when("agree", {
@@ -71,11 +80,12 @@ const SignBlock = ({
     control,
     trigger,
     reset,
+    watch,
     setValue,
     formState: { errors, isValid },
   } = useForm({
     shouldUnregister: true,
-    mode: "onSubmit",
+    mode: "onChange",
     criteriaMode: "all",
     resolver: yupResolver(signSchema),
     defaultValues: {
@@ -84,8 +94,8 @@ const SignBlock = ({
       opinion: "",
     },
   });
-  const [showPassword, setPasswordShow] = useState<boolean>(false);
-  const inputDisable = type === "sign" ? false : true;
+
+  const watch_agree = watch("agree");
 
   useEffect(() => {
     if (type === "otherSign") {
@@ -93,7 +103,9 @@ const SignBlock = ({
     }
   }, [setValue, type]);
 
-  const { sign, updateFormStatus, signOver } = useSign();
+  useEffect(() => {
+    trigger();
+  }, [trigger, watch_agree]);
 
   function onSubmit<T>(d: T) {
     // console.log(d);
@@ -105,27 +117,11 @@ const SignBlock = ({
     reset();
   }
 
-  const { uploadFile } = useFiles();
-
   async function send(data: SignData) {
     sign(data);
     updateFormStatus(data.agree);
     uploadFile(formInfo.formId);
   }
-
-  const dispatch = useAppDispatch();
-
-  const watch_agree = useWatch({
-    name: "agree",
-    control,
-  });
-
-  const [toggleModal] = useModalControl("sign");
-  const [toggleErrorModal] = useModalControl("errors");
-
-  useEffect(() => {
-    trigger();
-  }, [trigger, watch_agree]);
 
   function validation() {
     dispatch(setErrors(errors));

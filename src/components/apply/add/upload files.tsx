@@ -43,10 +43,10 @@ const FileInput = styled.div`
 export function UploadFiles() {
   const { t } = useTranslation("files");
   const color = useTheme()?.color;
-
+  const dispatch = useAppDispatch();
   const [fileList, setFileList] = useState<File[]>([]);
-
   const { getFileSize, getDropzoneAccept } = useFiles();
+  const [toggleFileModal] = useModalControl("files");
 
   const onDrop = useCallback((files: File[]) => {
     setFileList((prev) => {
@@ -66,7 +66,6 @@ export function UploadFiles() {
     setFileList(array);
   }
 
-  const dispatch = useAppDispatch();
   function sendFile() {
     for (const file of fileList) {
       dispatch(addFile(file));
@@ -74,8 +73,6 @@ export function UploadFiles() {
     toggleFileModal("off");
     setFileList([]);
   }
-
-  const [toggleFileModal] = useModalControl("files");
 
   return (
     <article

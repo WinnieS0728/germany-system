@@ -7,6 +7,7 @@ export type modalList = {
   files: boolean;
   sign: boolean;
   otherSign: boolean;
+  void: boolean;
 };
 
 const initData: modalList = {
@@ -16,6 +17,7 @@ const initData: modalList = {
   files: false,
   sign: false,
   otherSign: false,
+  void: false,
 };
 const modalControlSlice = createSlice({
   name: "modalControl",

@@ -5,6 +5,8 @@ import { signDataType } from "@/types";
 import { timeDay } from "d3-time";
 import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
 import { useTranslation } from "react-i18next";
+import { useId2name } from "@/hooks/id2name";
+import { useSignStatusTranslate } from "@/hooks/status translate";
 
 const initData: signDataType = {
   id: "",
@@ -45,6 +47,9 @@ export const useSignPageData = (formId: string) => {
   const [headData, setData] = useState<signDataType>(initData);
   const [detailData, setData2] = useState<detailDataWithSingleData[][]>([]);
 
+  const { id2name } = useId2name();
+  const { getFormStatus } = useSignStatusTranslate();
+
   const getHeaderData = useCallback(() => {
     async function getData(id: string) {
       const res = await api.getBusinessApplyHeader(id);
@@ -66,6 +71,8 @@ export const useSignPageData = (formId: string) => {
     }
     return getData();
   }, []);
+
+  const { splitName } = useId2name();
 
   useEffect(() => {
     async function a() {
@@ -109,7 +116,7 @@ export const useSignPageData = (formId: string) => {
       const data: signDataType = {
         id: headerData[0].BTPId,
         createDate: dateFormatter(headerData[0].Createdate.split(" ")[0]),
-        status: headerData[0].status,
+        status: getFormStatus(headerData[0].status),
         company:
           nowLang === "en"
             ? memberInfo[0].ResourcesName_E
@@ -117,16 +124,13 @@ export const useSignPageData = (formId: string) => {
         dept:
           nowLang === "en" ? memberInfo[0].DeptName_E : memberInfo[0].DeptName,
         EmpId: memberInfo[0].EmpId,
-        EmpName:
-          nowLang === "en"
-            ? memberInfo[0].FullName.split("/")[0]
-            : memberInfo[0].EmpName,
+        EmpName: splitName(memberInfo[0]),
         transportation: headerData[0].ResourcesName_E,
         isLodging: Lodging(headerData[0].IsLodging),
         stayDays: headerData[0].StayDays,
         days: headerData[0].Days,
         money: money(headerData[0].Advance_Amount, headerData[0].Curr),
-        agent: headerData[0].Deputy || undefined,
+        agent: await id2name(headerData[0].Deputy),
       };
       setData(data);
 

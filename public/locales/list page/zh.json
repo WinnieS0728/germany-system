@@ -45,12 +45,6 @@
     "status": "選擇狀態"
   },
   "search": "查詢表單",
-  "status": {
-    "done": "已簽核",
-    "no": "未簽核",
-    "return": "退簽",
-    "void": "作廢"
-  },
   "thead": {
     "BTPId": "表單號碼",
     "atu": "ATU 拜訪數",
