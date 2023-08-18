@@ -16,7 +16,6 @@ export function LogIn(apiPath: string) {
       }
       return false;
     } catch (error) {
-      // console.clear();
       return false;
     }
   };

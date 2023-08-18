@@ -1,4 +1,5 @@
 import { setListData } from "@/data/actions/apply list/set data";
+import { tripListResType } from "@/lib/api/travel apply/get list";
 import { statusType } from "@/types/api";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -8,7 +9,7 @@ const props = {
   dept: "",
   formStatus: "",
 };
-const initData: unknown[] = [];
+const initData: tripListResType[] = [];
 
 const listFormStateSlice = createSlice({
   name: "listTable",

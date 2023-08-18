@@ -2,6 +2,7 @@ import { Required } from "@/components/form/required";
 import { useOptions } from "@/hooks/options";
 import { useAppSelector } from "@/hooks/redux";
 import { useSelectRef } from "@/hooks/select ref";
+import { trafficEvent } from "@/lib/api/event/get event";
 import { MySelect } from "@components/form/select";
 import { timeDay } from "d3-time";
 import { useEffect, useMemo } from "react";
@@ -115,13 +116,13 @@ export const TransportationForm = () => {
               forwardRef={newFormRef.transport}
               options={options.transport}
               onChange={onChange}
-              getLabelFunction={(option: any) => {
+              getLabelFunction={(option: trafficEvent) => {
                 if (nowLang === "en") {
                   return option.ResourcesName_E;
                 }
                 return option.ResourcesName;
               }}
-              getValueFunction={(option: any) => option.ResourcesId}
+              getValueFunction={(option: trafficEvent) => option.ResourcesId}
               value='ResourcesId'
               placeholder={t("placeholder.transportation")}
             />

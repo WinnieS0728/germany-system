@@ -4,7 +4,7 @@ import api from "@api/index";
 export const setSignList = createAsyncThunk(
   "formInfo/setSignList",
   async (id: string) => {
-    const res: object[] = await api.getSignList(id);    
+    const res = await api.getSignList(id);    
 
     return res;
   }

@@ -17,6 +17,7 @@ import * as Btns from "@components/UI/buttons";
 import { useTranslation } from "react-i18next";
 import { useId2name } from "@/hooks/id2name";
 import { dateFormatter } from "@/hooks/dateFormatter";
+import { memberResType } from "@/lib/api/member/getMember";
 
 export const HeaderForm = ({ className }: propsType) => {
   const color = useTheme()?.color;
@@ -119,13 +120,13 @@ export const HeaderForm = ({ className }: propsType) => {
                     options={options.dept}
                     onChange={onChange}
                     placeholder={t("placeholder.dept")}
-                    getLabelFunction={(option: any) => {
+                    getLabelFunction={(option: memberResType) => {
                       if (nowLang === "en") {
                         return option.DeptName_E;
                       }
                       return option.DeptName;
                     }}
-                    getValueFunction={(option: any) => option.DeptId}
+                    getValueFunction={(option: memberResType) => option.DeptId}
                     value='DeptId'
                   />
                 )}
@@ -138,10 +139,12 @@ export const HeaderForm = ({ className }: propsType) => {
                     options={options.member}
                     onChange={onChange}
                     placeholder={t("placeholder.emp")}
-                    getLabelFunction={(option: any) => splitName(option)}
-                    getValueFunction={(option: any) => option.EmpId}
+                    getLabelFunction={(option: memberResType) =>
+                      splitName(option)
+                    }
+                    getValueFunction={(option: memberResType) => option.EmpId}
                     value='EmpId'
-                    filterFunction={(candidate) => {
+                    filterFunction={(candidate: { data: memberResType }) => {
                       if (candidate.data.DeptId === watch_dept) {
                         return true;
                       }

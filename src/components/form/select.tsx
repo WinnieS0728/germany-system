@@ -1,24 +1,28 @@
-import Select, { GetOptionLabel, GetOptionValue } from "react-select";
+import Select, {
+  GetOptionLabel,
+  GetOptionValue,
+  SelectInstance,
+} from "react-select";
 import AsyncSelect from "react-select/async";
 
 import makeAnimated from "react-select/animated";
+import { ChangeEvent, RefObject } from "react";
 
-interface selectProp {
-  options: any | any[];
-  onChange: (event: any) => void;
+interface selectProp<T> {
+  options: any;
+  onChange: (event: string | ChangeEvent<Element>) => void;
   clear?: boolean;
   autoClose?: boolean;
   disable?: boolean;
   placeholder?: string;
   name?: string;
   noOptionComponent?: string | JSX.Element;
-  getLabelFunction?: GetOptionLabel<any[]>;
-  getValueFunction?: GetOptionValue<any[]>;
-  filterFunction?: (candidate: any) => boolean;
-  value?: string;
-  forwardRef?: any;
+  getLabelFunction?: GetOptionLabel<T>;
+  getValueFunction?: GetOptionValue<T>;
+  filterFunction?: any;
+  forwardRef?: RefObject<SelectInstance>;
   multi?: boolean;
-  defaultValue?: any;
+  value?: string;
 }
 
 const animateComponents = makeAnimated();
@@ -33,7 +37,7 @@ const Normal = ({
   noOptionComponent,
   forwardRef,
   multi,
-}: selectProp) => {
+}: selectProp<any>) => {
   function handleChange(e: any) {
     // console.log(e);
     if (e) {
@@ -48,7 +52,7 @@ const Normal = ({
       <Select
         ref={forwardRef}
         components={animateComponents}
-        options={options}
+        options={options as unknown as readonly unknown[]}
         onChange={handleChange}
         isClearable={clear}
         isMulti={multi}
@@ -76,7 +80,7 @@ const Async = ({
   value,
   forwardRef,
   multi,
-}: selectProp) => {
+}: selectProp<any>) => {
   function handleChange(e: any) {
     if (e) {
       // console.log(e);

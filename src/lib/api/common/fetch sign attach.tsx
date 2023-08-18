@@ -1,8 +1,17 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
+type signFileResType = {
+  FileId: string;
+  FileName: string;
+  FilePath: string;
+  WebName: "BusinessTrip";
+  WebID: string;
+  ExecID: string;
+  SIGNORDER: string;
+};
 export function getFormAttach(apiPath: string) {
   return async function (id: string) {
-    const res = await axios({
+    const res: AxiosResponse<signFileResType[]> = await axios({
       method: "POST",
       url: `${apiPath}/GetSignWFP`,
       data: {

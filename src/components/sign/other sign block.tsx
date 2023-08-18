@@ -13,6 +13,7 @@ import { useSelectRef } from "@/hooks/select ref";
 import { useSign } from "@/hooks/sign";
 import { useTranslation } from "react-i18next";
 import { useId2name } from "@/hooks/id2name";
+import { memberResType } from "@/lib/api/member/getMember";
 
 const OtherSignBlock = ({ className }: { className?: string }) => {
   const color = useTheme()?.color;
@@ -79,22 +80,25 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
           name='member'
           render={({ field: { onChange } }) => (
             <AsyncSelect
-              ref={otherSignRef}
-              loadOptions={options.otherSign}
+              ref={otherSignRef as any}
+              loadOptions={options.otherSign as any}
               defaultOptions
               cacheOptions
               menuIsOpen
               onChange={(d) => {
-                const value: string[] = (d as any[]).map((m) => m.EmpId);
+                const value: string[] = d.map((m) => m.EmpId);
                 onChange(value);
               }}
               closeMenuOnSelect={false}
               isMulti
               placeholder={t("otherSign.placeholder", { ns: "sign" })}
               hideSelectedOptions={false}
-              getOptionLabel={(option: any) => splitName(option)}
-              getOptionValue={(option: any) => option.EmpId}
-              filterOption={(candidate: any, input: string) => {
+              getOptionLabel={(option: memberResType) => splitName(option)}
+              getOptionValue={(option: memberResType) => option.EmpId}
+              filterOption={(
+                candidate: { data: memberResType },
+                input: string
+              ) => {
                 if (input.startsWith("!")) {
                   return true;
                 } else {

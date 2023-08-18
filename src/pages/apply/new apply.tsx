@@ -24,12 +24,44 @@ import { setErrors } from "@/data/reducers/error/errors";
 import { useFiles } from "@/hooks/files";
 import { Hamburger } from "@/layouts/hamburger";
 import { tripDetailType } from "@/lib/api/travel apply/push details";
-import { Flip, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { clearFile } from "@/data/reducers/files/attach";
 import { dateFormatter } from "@/hooks/dateFormatter";
 import { useTripDataProcessing } from "@/components/apply/add/confirm/data";
 import { PopupLayer } from "@/layouts/popup";
+import { dataFromForm } from "@/lib/api/travel apply/create new form";
+import { moneyType } from "@/types";
+
+export interface infoForm {
+  DeptId: string;
+  CreateId: string;
+}
+export interface transportation {
+  Transport: string;
+  IsLodging: "No" | "Yes";
+  StayDays: number;
+  Days: number;
+}
+export interface money {
+  Advance_Amount: string;
+  Curr: moneyType | "";
+}
+export interface deputy {
+  Deputy: string;
+}
+export interface tripData {
+  [index: number]: {
+    startDate: string;
+    endDate: string;
+  };
+}
+
+type NewFormDefaultValue = infoForm &
+  transportation &
+  money &
+  deputy &
+  tripData;
 
 export const NewForm = () => {
   const color = useTheme()?.color;
@@ -116,8 +148,8 @@ export const NewForm = () => {
     const nextMonday = timeDay.offset(thisMonday, 7);
     const nextSunday = timeDay.offset(thisMonday, 13);
     return {
-      nextMonday: dateFormatter(nextMonday),
-      nextSunday: dateFormatter(nextSunday),
+      StartDT: dateFormatter(nextMonday),
+      EndDT: dateFormatter(nextSunday),
     };
   }
 
@@ -128,7 +160,10 @@ export const NewForm = () => {
   }
 
   async function onSubmit<T>(d: T) {
-    const newFormData = { ...d, ...dateRange };
+    const newFormData = {
+      ...(d as Omit<dataFromForm, "StartDT" | "EndDT">),
+      ...dateRange,
+    };
 
     toast.promise(send(newFormData), {
       pending: t("newForm.pending"),
@@ -138,7 +173,7 @@ export const NewForm = () => {
     toggleModal("off");
   }
 
-  async function send(data: any) {
+  async function send(data: dataFromForm) {
     const formId = await createNewForm(data);
 
     const newData: tripDetailType[] = await Promise.all(
@@ -173,7 +208,7 @@ export const NewForm = () => {
     }, 1000);
   }
 
-  async function createNewForm(data: any) {
+  async function createNewForm(data: dataFromForm) {
     const res = await api.postNewForm(data);
     return res;
   }

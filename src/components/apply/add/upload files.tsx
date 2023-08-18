@@ -10,7 +10,13 @@ import { addFile } from "@/data/reducers/files/attach";
 import { useFiles } from "@/hooks/files";
 import { useTranslation } from "react-i18next";
 
-const getColor = (props: any) => {
+type styleProp = {
+  $isFocused: boolean;
+  $isDragAccept: boolean;
+  $isDragReject: boolean;
+};
+
+const getColor = (props: styleProp) => {
   if (props.$isDragAccept) {
     return "#00e676";
   }
@@ -23,7 +29,7 @@ const getColor = (props: any) => {
   return "#eeeeee";
 };
 
-const FileInput = styled.div`
+const FileInput = styled.div<styleProp>`
     flex: 1;
     display: flex;
     flex-direction: column;

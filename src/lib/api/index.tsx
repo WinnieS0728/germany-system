@@ -3,7 +3,6 @@ import { getVisitData } from "./visit store/visit store";
 import { getEvent } from "./event/get event";
 import { GetThresHold } from "./kpi threshold/threshold";
 import { SetThresHold } from "./kpi threshold/threshold";
-import { getDept } from "./common/getDept";
 import { getArea } from "./common/getArea";
 import { getCus } from "./common/getCus";
 import { getPostCalCode } from "./postal code/postal code";
@@ -17,7 +16,6 @@ import { LogIn } from "./common/log in";
 import { getNextSigner } from "./sign/get next signer";
 import { postOtherSign } from "./sign/post otherSign";
 import { updateSignStatus } from "./sign/update sign";
-import { uploadFile } from "./common/upload file";
 import { uploadFileSign } from "./common/upload file sign";
 import { getFormAttach } from "./common/fetch sign attach";
 import { updateForm } from "./travel apply/update form";
@@ -27,30 +25,35 @@ import { getGroup } from "./common/get group";
 const apiPath = import.meta.env.VITE_API_PATH;
 
 const api = {
+  // common
   getMember: getMemberList(apiPath),
-  getVisitData: getVisitData(apiPath),
-  getEvent: getEvent(apiPath),
-  threshold: { fetch: GetThresHold(apiPath), post: SetThresHold(apiPath) },
-  getDept: getDept(apiPath),
   getArea: getArea(apiPath),
   getCus: getCus(apiPath),
-  getPostCode: getPostCalCode(apiPath),
-  postNewForm: addForm(apiPath),
-  updateForm: updateForm(apiPath),
-  pushNewData: pushNewData(apiPath),
+  logIn: LogIn(apiPath),
+  getMemberGroup: getGroup(apiPath),
+  getFormAttach: getFormAttach(apiPath),
+  //files
+  uploadFileSign: uploadFileSign(apiPath),
+  downloadFile: downloadFile(apiPath),
+  // event
+  getEvent: getEvent(apiPath),
+  // analyze
+  getVisitData: getVisitData(apiPath),
+  threshold: { fetch: GetThresHold(apiPath), post: SetThresHold(apiPath) },
+  // trip
+  getPostCode: getPostCalCode(), // * local file
   getBusinessApplyList: getBusinessApplyList(apiPath),
   getBusinessApplyDetail: getBusinessApplyDetail(apiPath),
   getBusinessApplyHeader: getBusinessApplyHeader(apiPath),
+  // post trip
+  postNewForm: addForm(apiPath),
+  updateForm: updateForm(apiPath),
+  pushNewData: pushNewData(apiPath),
+  //sign
   getSignList: getSignList(apiPath),
   getNextSigner: getNextSigner(apiPath),
-  logIn: LogIn(apiPath),
   postOtherSign: postOtherSign(apiPath),
   updateSignStatus: updateSignStatus(apiPath),
-  uploadFile: uploadFile(apiPath),
-  uploadFileSign: uploadFileSign(apiPath),
-  downloadFile: downloadFile(apiPath),
-  getFormAttach: getFormAttach(apiPath),
-  getMemberGroup: getGroup(apiPath),
 };
 
 export default api;

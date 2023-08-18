@@ -2,6 +2,8 @@ import api from "@/lib/api";
 import { useAppSelector } from "./redux";
 import { useTranslation } from "react-i18next";
 import { useSignStatusTranslate } from "./status translate";
+import { memberResType } from "@/lib/api/member/getMember";
+import { moneyType } from "@/types";
 
 export const useOptions = () => {
   const { i18n, t } = useTranslation("new form");
@@ -9,13 +11,19 @@ export const useOptions = () => {
   const nowUser = useAppSelector((state) => state.nowUser);
 
   const { getFormStatus } = useSignStatusTranslate();
-  const formStatusOptions = [
+  const formStatusOptions: {
+    label: string;
+    value: "1" | "2" | "3" | "4";
+  }[] = [
     { label: getFormStatus("簽核中"), value: "1" },
     { label: getFormStatus("已完簽"), value: "2" },
     { label: getFormStatus("退簽"), value: "3" },
     { label: getFormStatus("作廢"), value: "4" },
   ];
-  const moneyTypeOptions = [
+  const moneyTypeOptions: {
+    label: string;
+    value: moneyType;
+  }[] = [
     { label: t("money.eur"), value: "EUR" },
     { label: t("money.twd"), value: "TWD" },
     { label: t("money.rmb"), value: "RMB" },
@@ -90,7 +98,7 @@ export const useOptions = () => {
   }
 
   async function getDeptOptions(input: string) {
-    const res = await getDeptList();
+    const res = (await getDeptList()) as memberResType[];
     return res.filter(
       (o: { DeptName: string; DeptName_E: string; DeptId: string }) =>
         o.DeptName.toLowerCase().includes(input.toLowerCase()) ||
@@ -126,6 +134,9 @@ export const useOptions = () => {
 
     const bigData = Promise.all(
       deptList.map(async (dept) => {
+        if (!dept) {
+          return;
+        }
         const memberInThisDept = await api.getMember("", dept.DeptId);
         return {
           label: nowLang === "en" ? dept.DeptName_E : dept.DeptName,
@@ -136,6 +147,9 @@ export const useOptions = () => {
     // console.log("data", await bigData);
 
     return (await bigData)?.filter((i) => {
+      if (!i) {
+        return;
+      }
       if (input.startsWith("!")) {
         return i.options.some(
           (d: { DeptName: string; DeptId: string }) =>

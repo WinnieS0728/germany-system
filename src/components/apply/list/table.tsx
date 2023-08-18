@@ -1,6 +1,6 @@
 import { Table } from "@/components/table/table";
 import { useTheme } from "styled-components";
-import { useFetchApplyList } from "./fetch list";
+import { dataSet, useFetchApplyList } from "./fetch list";
 import { Tbody } from "@/components/table/tbody";
 import { usePageControl } from "./page control";
 import * as Btns from "@components/UI/buttons";
@@ -21,10 +21,8 @@ export const ListTable = () => {
   const { data, status } = useFetchApplyList();
 
   const howManyDataShowInOnePage = 10;
-  const { dataInThisPage, nextPage, prevPage, buttonStatus } = usePageControl(
-    data,
-    10
-  );
+  const { dataInThisPage, nextPage, prevPage, buttonStatus } =
+    usePageControl<dataSet>(data, 10);
   const { getFormStatus } = useSignStatusTranslate();
 
   return (

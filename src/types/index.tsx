@@ -33,23 +33,17 @@ export type component = {
   data?: signDataType;
 };
 
-export enum signStatus {
-  "未簽核" = 0,
-  "同意" = 1,
-  "退簽" = 3,
-  "作廢" = 4,
-  "" = 5,
-}
-export enum signStatus_E {
-  "not signed" = 0,
-  "agree" = 1,
-  "returned" = 3,
-  "void" = 4,
-  "" = 5,
-}
+export type signStatus = 0 | 1 | 3 | 4 | 5;
+// "未簽核" = 0,
+// "同意" = 1,
+// "退簽" = 3,
+// "作廢" = 4,
+// "" = 5,
 
 export enum tripEvent {
   "atu" = "TripEvent-5",
   "oldCus" = "TripEvent-6",
   "newCus" = "TripEvent-7",
 }
+
+export type moneyType = "TWD" | "RMB" | "EUR" | "USD";

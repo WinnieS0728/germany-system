@@ -1,20 +1,22 @@
 import { useModalControl } from "@/hooks/modal control";
 import * as Icons from "@components/UI/icons";
-import { FieldErrors } from "react-hook-form";
+import { FieldError, FieldErrors } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "styled-components";
 export const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
   // console.log(errors);
   const { t } = useTranslation("errors");
   const color = useTheme()?.color;
-  const errorMessage = Object.values(errors).map((err: any) => err.message);
+  const errorMessage = (Object.values(errors) as FieldError[]).map(
+    (err) => err.message
+  );
   const tripError = getTripDataError();
   const [toggleModal] = useModalControl("errors");
 
   function getTripDataError() {
     if (Array.isArray(errors.tripData)) {
       const error = errors.tripData
-        .map((i: any) => [i?.startDate?.message, i?.endDate?.message])
+        .map((i) => [i?.startDate?.message, i?.endDate?.message])
         .reduce((a: string[], b: string[]) => a.concat(b), [])
         .filter((i: string) => i !== undefined);
       return [...new Set(error)];

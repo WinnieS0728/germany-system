@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { dataForTable } from "./data";
 import { tripEvent } from "@/types";
 import { useTranslation } from "react-i18next";
+import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
 
-const Td = ({ data }: { data: any }) => {
+const Td = ({ data }: { data: detailDataWithSingleData }) => {
   const color = useTheme()?.color;
   const type = data?.data.eventId;
   let bgc;
@@ -27,8 +28,8 @@ const Td = ({ data }: { data: any }) => {
 };
 
 export const WeekTable = ({ data }: { data: dataForTable }) => {
-  const {t} = useTranslation('confirm modal')
-  const color = useTheme()?.color;  
+  const { t } = useTranslation("confirm modal");
+  const color = useTheme()?.color;
 
   const { rows, nextWeekDays } = data;
   const [hasData, setHasData] = useState<boolean>(false);
@@ -42,7 +43,7 @@ export const WeekTable = ({ data }: { data: dataForTable }) => {
 
   return (
     <>
-      <Table title={t('weekTable.title')}>
+      <Table title={t("weekTable.title")}>
         <table>
           <thead>
             <tr style={{ backgroundColor: color.confirmTable.header }}>
@@ -81,7 +82,7 @@ export const WeekTable = ({ data }: { data: dataForTable }) => {
                     {row.map((r, i) => (
                       <Td
                         key={i}
-                        data={r}
+                        data={r as detailDataWithSingleData}
                       />
                     ))}
                   </tr>

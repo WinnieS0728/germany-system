@@ -43,7 +43,7 @@ export const TripDetailForm = () => {
             }}
             icon={<Icons.NewDetail />}
           >
-            {t('btn.add')}
+            {t("btn.add")}
           </IconBtn>
         </button>
       </div>

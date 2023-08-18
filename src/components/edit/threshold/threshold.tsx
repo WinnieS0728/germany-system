@@ -12,6 +12,18 @@ import api from "@/lib/api";
 import { setThreshold } from "@/data/actions/kpi threshold/threshold";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import { monthType } from "@/types";
+
+interface formData {
+  EmpId: string;
+  EmpName: string;
+}
+interface perMonthThreshold {
+  existCus: number;
+  newCus: number;
+}
+
+type thresholdData = Record<monthType, perMonthThreshold> & formData;
 
 export const ThresholdSettingTable = () => {
   const { t } = useTranslation(["common"]);
@@ -72,13 +84,7 @@ export const ThresholdSettingTable = () => {
     threshold: yup.array().of(monthSchema),
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-    setValue,
-  } = useForm({
+  const { register, handleSubmit, control, setValue } = useForm({
     shouldUnregister: true,
     criteriaMode: "all",
     mode: "onChange",
@@ -126,11 +132,9 @@ export const ThresholdSettingTable = () => {
   async function sendApiRequest(
     index: number,
     id: string,
-    data: {
-      [keys: string]: number | undefined;
-    }
+    data: Record<string, number>
   ) {
-    const checkDataIsExist = await dataExist;
+    const checkDataIsExist = dataExist;
     const res = api.threshold.post(
       timeData.thisYear,
       id,
@@ -141,14 +145,14 @@ export const ThresholdSettingTable = () => {
     return res;
   }
 
-  async function onSubmit(d: { threshold: any }) {
-    const data = d.threshold;
+  async function onSubmit<T>(d: T) {
+    const data = (d as { threshold: thresholdData[] }).threshold;
 
     const postStatus = Promise.all(
-      data.map(async (d: any, index: number) => {
-        const monthData: { [keys: string]: number | undefined } = {};
+      data.map(async (d, index: number) => {
+        const monthData: Record<string, number> = {};
         for (const m of monthAry) {
-          monthData[m] = d?.[m]?.newCus;
+          monthData[m] = d?.[m as monthType]?.newCus;
         }
 
         return {

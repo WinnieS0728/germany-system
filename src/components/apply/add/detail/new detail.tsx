@@ -1,5 +1,8 @@
 import { MySelect } from "@/components/form/select";
-import { pushData } from "@/data/reducers/trip detail/trip detail";
+import {
+  detailData_data,
+  pushData,
+} from "@/data/reducers/trip detail/trip detail";
 import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch } from "@/hooks/redux";
 import api from "@/lib/api";
@@ -15,12 +18,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Table } from "@/components/table/table";
 import { useTranslation } from "react-i18next";
+import { tripEvent } from "@/lib/api/event/get event";
+import { areaResType } from "@/lib/api/common/getArea";
+import { postcodeResType } from "@/lib/api/postal code/postal code";
+import { cusResType } from "@/lib/api/common/getCus";
 
 interface trProps {
   label: string;
   children: JSX.Element;
   required?: boolean;
 }
+
+export type newDetailType = detailData_data & { purposeName?: string };
+
 const Tr = ({ label, children, required }: trProps) => {
   const color = useTheme()?.color;
   return (
@@ -179,13 +189,15 @@ export const NewDetailForm = () => {
                       onChange={onChange}
                       value='ResourcesId'
                       placeholder={t("placeholder.event")}
-                      getLabelFunction={(option: any) => {
+                      getLabelFunction={(option: tripEvent) => {
                         if (nowLang === "en") {
                           return option.ResourcesName_E;
                         }
                         return option.ResourcesName;
                       }}
-                      getValueFunction={(option: any) => option.ResourcesId}
+                      getValueFunction={(option: tripEvent) =>
+                        option.ResourcesId
+                      }
                     />
                   )}
                 />
@@ -205,13 +217,13 @@ export const NewDetailForm = () => {
                       onChange={onChange}
                       value='Country'
                       placeholder={t("placeholder.dist")}
-                      getLabelFunction={(option: any) => {
+                      getLabelFunction={(option: areaResType) => {
                         if (nowLang === "en") {
                           return option.Country_E;
                         }
                         return option.Country;
                       }}
-                      getValueFunction={(option: any) => option.Country}
+                      getValueFunction={(option: areaResType) => option.Country}
                     />
                   )}
                 />
@@ -230,11 +242,15 @@ export const NewDetailForm = () => {
                       options={options.postalCode}
                       onChange={onChange}
                       placeholder={t("placeholder.code")}
-                      getLabelFunction={(option: any) =>
+                      getLabelFunction={(option: postcodeResType) =>
                         `${option.zipcode} / ${option.place}`
                       }
-                      getValueFunction={(option: any) => option.zipcode}
-                      filterFunction={(candidate) => {
+                      getValueFunction={(option: postcodeResType) =>
+                        option.zipcode
+                      }
+                      filterFunction={(candidate: {
+                        data: postcodeResType;
+                      }) => {
                         if (candidate.data.state === watch_area) {
                           return true;
                         }
@@ -287,10 +303,10 @@ export const NewDetailForm = () => {
                           </button>
                         </a>
                       }
-                      getLabelFunction={(option: any) => option.CustName}
-                      getValueFunction={(option: any) => option.CustName}
+                      getLabelFunction={(option: cusResType) => option.CustName}
+                      getValueFunction={(option: cusResType) => option.CustName}
                       value='CustName'
-                      filterFunction={(candidate) => {
+                      filterFunction={(candidate: { data: cusResType }) => {
                         if (candidate.data.PostalCode === watch_postcode) {
                           return true;
                         }

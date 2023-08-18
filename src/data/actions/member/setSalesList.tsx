@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "@api/index";
-import type { responseType } from "types/api";
 
 const salesMemberList = [
   // "223001",
@@ -15,7 +14,7 @@ const salesMemberList = [
 export const setSalesList = createAsyncThunk(
   "salesList/setSalesList",
   async () => {
-    const res: responseType[] = await api.getMember();
+    const res = await api.getMember();
     const salesList = salesMemberList.map((id) => {
       const list = res.find((i) => i.EmpId === id);
       return list;

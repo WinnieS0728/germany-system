@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export type tripDetailType = {
   Area: string;
@@ -15,7 +15,7 @@ export type tripDetailType = {
 };
 export function pushNewData(apiPath: string) {
   return async function (data: tripDetailType[]) {
-    const res = await axios({
+    const res:AxiosResponse<string> = await axios({
       method: "POST",
       url: `${apiPath}/TraveAppDAdd`,
       data: data,

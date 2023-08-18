@@ -1,13 +1,30 @@
-import axios from "axios";
+import { statusStringType } from "@/hooks/status translate";
+import axios, { AxiosResponse } from "axios";
 
-interface data {
-  formStatus?: string;
+export type fetchFormListBody = {
+  formStatus?: "1" | "2" | "3" | "4";
   EmpId?: string;
   dept?: string;
-}
+};
+
+export type tripListResType = {
+  BTPId: string;
+  Status: statusStringType;
+  Comid: string;
+  Coname: string;
+  TripEvent: string;
+  Cname: string;
+  TQty: string;
+  Createid: string;
+  EmpName: string;
+  StartDT: string;
+  STNAME: string;
+  SIGNER: string;
+  SName: string;
+};
 export function getBusinessApplyList(apiPath: string) {
-  return async function (data: data) {
-    const res = await axios({
+  return async function (data: fetchFormListBody) {
+    const res: AxiosResponse<tripListResType[]> = await axios({
       method: "POST",
       url: `${apiPath}/GetTraveAppList`,
       data: {

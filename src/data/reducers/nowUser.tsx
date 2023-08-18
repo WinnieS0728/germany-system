@@ -1,8 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { setUser } from "../actions/member/setUser";
-import { responseType, statusType } from "@/types/api";
+import { statusType } from "@/types/api";
+import { memberResType } from "@/lib/api/member/getMember";
 
-const data: responseType = {};
+const data: memberResType = {
+  DeptId: "",
+  DeptName: "",
+  DeptName_E: "",
+  EmpId: "",
+  EmpName: "",
+  ResourcesId: "",
+  ResourcesName: "",
+  ResourcesName_E: "",
+  Compose: "",
+  FullName: "",
+  Title: "",
+  Language: "zh-TW",
+};
 
 const userSlice = createSlice({
   name: "nowUser",

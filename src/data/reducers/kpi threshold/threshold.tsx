@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { setThreshold } from "@actions/kpi threshold/threshold";
-import { responseType, statusType } from "types/api";
+import { statusType } from "types/api";
+import { thresholdResType } from "@/lib/api/kpi threshold/threshold";
 
-const data: responseType[] = [];
+const data: thresholdResType[] = [];
 
 const thresholdSlice = createSlice({
   name: "threshold",

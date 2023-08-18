@@ -1,8 +1,15 @@
 import { setThreshold } from "@/data/actions/kpi threshold/threshold";
-import { tripEvent } from "@/types";
-import { responseType } from "@/types/api";
+import { thresholdResType } from "@/lib/api/kpi threshold/threshold";
+import { visit_otherResType } from "@/lib/api/visit store/visit store";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { useEffect } from "react";
+
+
+export type salesThresholdData = {
+  name: string;
+  visitData: Record<string, number>;
+  threshold: thresholdResType;
+};
 
 export function GetData() {
   const visitData = useAppSelector((state) => state.weekVisit);
@@ -10,10 +17,10 @@ export function GetData() {
   const timeData = useAppSelector((state) => state.time);
   const threshold = useAppSelector((state) => state.threshold);
 
-  function getStorNumber(data: responseType[], key: string): number {
+  function getStorNumber(data: visit_otherResType[], key: string): number {
     if (!data) return 0;
     const num = data
-      .filter((i) => i.ResourcesId === key)
+      .filter((i) => i.ResourcesName === key)
       .map((i) => +i.Vqty)
       .reduce((a, b) => a + b, 0);
     return num;
@@ -24,9 +31,9 @@ export function GetData() {
   } {
     const data = visitData.body?.filter((i) => i.empname === name);
 
-    const atu = getStorNumber(data, tripEvent.atu) || 0;
-    const existCus = getStorNumber(data, tripEvent.oldCus) || 0;
-    const newCus = getStorNumber(data, tripEvent.newCus) || 0;
+    const atu = getStorNumber(data, "拜訪A.T.U.") || 0;
+    const existCus = getStorNumber(data, "拜訪既有客戶") || 0;
+    const newCus = getStorNumber(data, "拜訪新客戶") || 0;
     const old = atu + existCus;
     const total = atu + existCus + newCus;
 
@@ -45,14 +52,17 @@ export function GetData() {
   }, [dispatch, salesData, timeData]);
   // console.log(threshold.body);
 
-  const salesDataList = salesData.body.map((i) => {
+  const salesDataList: salesThresholdData[] = salesData.body.map((i) => {
     const name = i ? i.EmpName : "";
     return {
       name: name,
       visitData: getSalesVisitData(name),
-      threshold: threshold.body.find((i) => i.EmpName === name),
+      threshold: threshold.body.find(
+        (i) => i.EmpName === name
+      ) as thresholdResType,
     };
   });
 
   return salesDataList;
 }
+

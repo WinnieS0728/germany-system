@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "@api/index";
-import type { responseType } from "types/api";
+import { fetchFormListBody } from "@/lib/api/travel apply/get list";
 
 export const setListData = createAsyncThunk(
   "listTable/setListData",
-  async (data: any) => {
-    const res: responseType[] = await api.getBusinessApplyList(data);
+  async (data: fetchFormListBody) => {
+    const res = await api.getBusinessApplyList(data);
 
     return res;
   }

@@ -1,8 +1,21 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
+export type cusResType = {
+  CustId: string;
+  CustName: string;
+  CustName_E: string;
+  MArea: null;
+  PostalCode: string;
+  CountryId: null;
+  Country: "DEU";
+  CountryE: null;
+  Empid: null;
+  Assigned: "";
+  CType: "";
+};
 export function getCus(apiPath: string) {
   return async function (name: string, country?: string) {
-    const res = await axios({
+    const res: AxiosResponse<cusResType[]> = await axios({
       method: "POST",
       url: `${apiPath}/GetSaleCustomerList`,
       data: {

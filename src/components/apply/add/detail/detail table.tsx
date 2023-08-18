@@ -1,6 +1,7 @@
 import { Table } from "@/components/table/table";
 import {
   deleteData,
+  detailDataType,
   detailDataWithSingleData,
   setTarget,
 } from "@/data/reducers/trip detail/trip detail";
@@ -11,23 +12,31 @@ import { useTheme } from "styled-components";
 import * as Icons from "@components/UI/icons";
 import api from "@/lib/api";
 import { useTranslation } from "react-i18next";
+import { newDetailType } from "./new detail";
 
 type detailTableProps = {
   type: "addForm" | "sign";
-  data: any;
+  data: detailDataWithSingleData[] | detailDataType;
   index?: number;
 };
 
-const TableWhenAddForm = ({ data, index }: { data: any; index: number }) => {
+const TableWhenAddForm = ({
+  data,
+  index,
+}: {
+  data: newDetailType[];
+  index: number;
+}) => {
   const { i18n } = useTranslation();
   const nowLang = i18n.language;
   const dispatch = useAppDispatch();
+  console.log(data);
 
-  const [dataSet, setNewData] = useState<any[]>([]);
+  const [dataSet, setNewData] = useState<newDetailType[]>([]);
   const getEventName = useCallback(
     (code: string) => {
       return (async function () {
-        const list: [] = await api.getEvent("TripEvent");
+        const list = await api.getEvent("TripEvent");
         const target = list.find(
           (i: { ResourcesId: string }) => i.ResourcesId === code
         );
@@ -49,7 +58,7 @@ const TableWhenAddForm = ({ data, index }: { data: any; index: number }) => {
         return;
       }
       const newArray = await Promise.all(
-        data.map(async (i: { purpose: string }) => {
+        data.map(async (i) => {
           return {
             ...i,
             purposeName: await getEventName(i.purpose),
@@ -106,8 +115,8 @@ export const DetailTable = ({ type, data, index }: detailTableProps) => {
   const [toggleModal] = useModalControl("newDetail");
 
   const [hasData, setData] = useState<boolean>(false);
-  const dataSet = data?.data;
-
+  const dataSet = (data as detailDataType)?.data;
+  
   useEffect(() => {
     if (dataSet && dataSet.length !== 0) {
       setData(true);
@@ -166,7 +175,7 @@ export const DetailTable = ({ type, data, index }: detailTableProps) => {
                 </tr>
               )
             ) : (
-              <TableWhenSign data={data} />
+              <TableWhenSign data={data as detailDataWithSingleData[]} />
             )}
           </tbody>
         </table>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-export const usePageControl = (data: any[], numberInOnePage: number) => {
+export const usePageControl = <T,>(data: T[], numberInOnePage: number) => {
   const [page, setPage] = useState(1);
   const totalPage = Math.ceil(data.length / numberInOnePage);
 
@@ -45,7 +45,7 @@ export const usePageControl = (data: any[], numberInOnePage: number) => {
     }
   }
 
-  const dataInThisPage = useMemo(() => {
+  const dataInThisPage: T[] = useMemo(() => {
     const startIndex = (page - 1) * numberInOnePage;
     const endIndex = startIndex + numberInOnePage;
     return data.slice(startIndex, endIndex);

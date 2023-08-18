@@ -72,7 +72,7 @@ export const InfoForm = ({ type, data }: component) => {
         title={t("info.emp", { ns: "new form" })}
         content={
           type === "addForm"
-            ? splitName(nowUser as any)
+            ? splitName(nowUser)
             : (data?.EmpName as string)
         }
       />

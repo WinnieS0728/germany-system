@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { responseType, statusType } from "types/api";
+import { statusType } from "types/api";
 
 import { setWeekVisitData } from "@actions/visit data/set week visit";
+import { visit_otherResType } from "@/lib/api/visit store/visit store";
 
-const data: responseType[] = [];
+const data: visit_otherResType[] = [];
 
 const weekVisitSlice = createSlice({
   name: "weekVisit",
