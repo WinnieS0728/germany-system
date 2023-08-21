@@ -29,9 +29,10 @@ export const useFetchApplyList = () => {
   const { i18n } = useTranslation();
   const nowLang = i18n.language;
   const tableProps = useAppSelector((state) => state.listFormState);
-  const [data, setData] = useState<dataSet[]>([]);
-
+  const { props, body } = tableProps;
   const status = tableProps.status;
+  
+  const [data, setData] = useState<dataSet[]>([]);
 
   function getTimeStamp(d: string) {
     return new Date(d).getTime();
@@ -57,7 +58,6 @@ export const useFetchApplyList = () => {
   }, []);
 
   const asyncData = useMemo(() => {
-    const { props, body } = tableProps;
     async function fetchData() {
       const empFilter = empProcess(body);
       if (!empFilter) {
@@ -86,8 +86,8 @@ export const useFetchApplyList = () => {
             formStatus: list.Status,
             nextSign:
               nowLang === "en"
-                ? list.SName?.split("/")[0].replace(/ /g, "")
-                : list.SName?.split("/")[1].replace(/ /g, ""),
+                ? list.SName?.split("/")[0]?.replace(/ /g, "")
+                : list.SName?.split("/")[1]?.replace(/ /g, ""),
           };
         })
       );
@@ -129,7 +129,7 @@ export const useFetchApplyList = () => {
       }
     }
     return fetchData();
-  }, [getDays, id2name, nowLang, tableProps]);
+  }, [body, getDays, id2name, nowLang, props.EmpId, props.date]);
 
   useEffect(() => {
     (async function () {
