@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import Joyride from "react-joyride";
+import Joyride, { Step } from "react-joyride";
 
 interface propsType {
-  steps: any;
+  steps: Step[];
   active: boolean;
   restart: () => void;
 }

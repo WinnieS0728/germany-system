@@ -1,6 +1,7 @@
 import { Table } from "@/components/table/table";
 import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
 import api from "@/lib/api";
+import { thresholdResType } from "@/lib/api/kpi threshold/threshold";
 import { tripEvent } from "@/types";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -55,8 +56,9 @@ export const PerCentTable = ({
   useEffect(() => {
     async function getThreshold() {
       const res = await api.threshold.fetch(time.year, EmpId);
-      const thisMonth =
-        monthArray[new Date(`2023-${time.month}-01`).getMonth()];
+      const thisMonth = monthArray[
+        new Date(`2023-${time.month}-01`).getMonth()
+      ] as keyof thresholdResType;
       setThreshold(parseInt(res?.[0]?.[thisMonth]) || 0);
     }
     getThreshold();

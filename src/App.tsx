@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from "react";
+import { lazy, useLayoutEffect } from "react";
 import { Suspense } from "react";
 import { Route, Routes, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
@@ -10,6 +10,7 @@ const CustomRatePage = lazy(() => import("@pages/custom rate"));
 const EditPage = lazy(() => import("@pages/edit/edit"));
 const ApplyPage = lazy(() => import("@pages/apply/apply"));
 const SignPage = lazy(() => import("@pages/sign/sign"));
+const PrintPage = lazy(() => import("@pages/print"));
 
 function App() {
   const dispatch = useAppDispatch();
@@ -18,7 +19,7 @@ function App() {
   const [search, setSearch] = useSearchParams();
   const usingLanguage = nowUser.Language?.split("-")[0];
 
-  useEffect(() => {    
+  useLayoutEffect(() => {    
     let EmpId: string;
     if (search.get("userID")) {
       EmpId = search.get("userID") as string;
@@ -49,6 +50,10 @@ function App() {
         <Route
           path='sign/:formId'
           element={<SignPage />}
+        />
+        <Route
+          path='print'
+          element={<PrintPage />}
         />
         <Route
           path='*'

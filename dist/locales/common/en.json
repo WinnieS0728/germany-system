@@ -1,4 +1,8 @@
 {
+  "btn": {
+    "cancel": "cancel",
+    "confirm": "confirm"
+  },
   "buttons": {
     "save": "save"
   },
@@ -15,5 +19,20 @@
     "10": "Oct",
     "11": "Nov",
     "12": "Dec"
+  },
+  "pageControl": {
+    "next": "next page",
+    "prev": "prev page"
+  },
+  "signStatus": {
+    "agree": "agree",
+    "done": "signed",
+    "ing": "signing off",
+    "no": "not signed",
+    "return": "returned",
+    "void": "void"
+  },
+  "title": {
+    "businessTripApply": "Business Trip Apply"
   }
 }

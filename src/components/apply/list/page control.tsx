@@ -49,7 +49,7 @@ export const usePageControl = <T,>(data: T[], numberInOnePage: number) => {
     const startIndex = (page - 1) * numberInOnePage;
     const endIndex = startIndex + numberInOnePage;
     return data.slice(startIndex, endIndex);
-  }, [page, data, numberInOnePage]);
+  }, [page, numberInOnePage, data]);
 
   return { dataInThisPage, nextPage, prevPage, buttonStatus, gotoPage };
 };

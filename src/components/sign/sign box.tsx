@@ -1,4 +1,4 @@
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Table } from "../table/table";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
@@ -12,10 +12,10 @@ import * as yup from "yup";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { DevTool } from "@hookform/devtools";
 import { setErrors } from "@/data/reducers/error/errors";
-import api from "@/lib/api";
 import { useSign } from "@/hooks/sign";
 import { useFiles } from "@/hooks/files";
 import { useTranslation } from "react-i18next";
+import api from "@/lib/api";
 
 export type SignData = {
   agree: "yes" | "no";
@@ -48,15 +48,17 @@ const SignBlock = ({
       type === "sign"
         ? yup.string().oneOf(["yes", "no"], t("sign.decide", { ns: "errors" }))
         : yup.string().notRequired(),
-    password: yup.string().required(t("sign.password", { ns: "errors" })),
-    // TODO 密碼審核
-    // .test(
-    //   "checkPassword",
-    //   t("sign.wrong-psw", { ns: "errors" }),
-    //   async function (value: string) {
-    //     return await api.logIn(nowUser.EmpId, value);
-    //   }
-    // )
+    password: yup
+      .string()
+      .required(t("sign.password", { ns: "errors" }))
+      // TODO 密碼審核
+      .test(
+        "checkPassword",
+        t("sign.wrong-psw", { ns: "errors" }),
+        async function (value: string) {
+          return await api.logIn(nowUser.EmpId, value);
+        }
+      ),
     opinion:
       type === "sign"
         ? yup.string().when("agree", {
@@ -290,4 +292,4 @@ const styled_sign = styled(SignBlock)`
     }
 `;
 
-export { styled_sign as SignBlock };
+export default styled_sign;

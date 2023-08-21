@@ -1,10 +1,18 @@
 import { monthType } from "@/types";
+import { FieldArrayWithId, UseFormRegister } from "react-hook-form";
 import { useTheme } from "styled-components";
+import { thresholdList_emp, threshold_data } from "./data";
 
 interface propsType {
-  field: any;
+  field: FieldArrayWithId<
+    Record<"threshold", (Partial<thresholdList_emp> & threshold_data)[]>,
+    "threshold",
+    "id"
+  >;
   index: number;
-  register: any;
+  register: UseFormRegister<
+    Record<"threshold", (Partial<thresholdList_emp> & threshold_data)[]>
+  >;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
   setSelectNumber: React.Dispatch<React.SetStateAction<number>>;
 }

@@ -3,7 +3,8 @@ import * as Icons from "@components/UI/icons";
 import { FieldError, FieldErrors } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "styled-components";
-export const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
+
+const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
   // console.log(errors);
   const { t } = useTranslation("errors");
   const color = useTheme()?.color;
@@ -70,3 +71,5 @@ export const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
     </div>
   );
 };
+
+export default ErrorsModal

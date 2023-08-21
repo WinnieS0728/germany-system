@@ -7,7 +7,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { useTripDataProcessing } from "./data";
 import { useTranslation } from "react-i18next";
 
-export const Confirm = () => {
+const Confirm = () => {
   const { t } = useTranslation("confirm modal");
   const color = useTheme()?.color;
   const [toggleModal] = useModalControl("review");
@@ -50,3 +50,5 @@ export const Confirm = () => {
     </article>
   );
 };
+
+export default Confirm;

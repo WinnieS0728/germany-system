@@ -46,7 +46,7 @@ const FileInput = styled.div<styleProp>`
     cursor: pointer;
 `;
 
-export function UploadFiles() {
+function UploadFiles() {
   const { t } = useTranslation("files");
   const color = useTheme()?.color;
   const dispatch = useAppDispatch();
@@ -167,3 +167,5 @@ export function UploadFiles() {
     </article>
   );
 }
+
+export default UploadFiles

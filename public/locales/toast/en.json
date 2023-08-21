@@ -1,8 +1,13 @@
 {
   "formStatus": {
     "done": "is signed",
+    "fail": "got error",
+    "pending": "processing...",
     "return": "is returned",
     "void": "is voided"
+  },
+  "list": {
+    "noData": "no data"
   },
   "newForm": {
     "fail": "upload failed",

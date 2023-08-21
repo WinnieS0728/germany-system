@@ -1,8 +1,13 @@
 {
   "formStatus": {
     "done": "已完簽",
+    "fail": "失敗",
+    "pending": "處理中...",
     "return": "已退簽",
     "void": "已作廢"
+  },
+  "list": {
+    "noData": "查無資料"
   },
   "newForm": {
     "fail": "上傳失敗",

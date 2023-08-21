@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { clearFile } from "@/data/reducers/files/attach";
+import { memberResType } from "@/lib/api/member/getMember";
 
 export const useSign = () => {
   const { t } = useTranslation("toast");
@@ -55,8 +56,12 @@ export const useSign = () => {
     if (!data) {
       return;
     }
-    const res = await api.updateForm(data);
-    toast.success(`${formInfo.formId} ${popupText}`);
+    const request = api.updateForm(data);
+    toast.promise(request, {
+      pending: t("formStatus.pending"),
+      success: `${formInfo.formId} ${popupText}`,
+      error: t("formStatus.fail"),
+    });
   }
   function getSignNumber(value: string) {
     if (value === "yes") {
@@ -97,7 +102,7 @@ export const useSign = () => {
       ExceId: nowUser.EmpId,
     };
     const request = api.updateSignStatus(signFinalData);
-    const res = await toast.promise(request, {
+    toast.promise(request, {
       pending: t("sign.pending"),
       success: t("sign.success"),
       error: t("sign.fail"),
@@ -108,7 +113,7 @@ export const useSign = () => {
     afterSign();
   }
 
-  function getTitle(obj: any) {
+  function getTitle(obj: memberResType) {
     return parseInt(obj.Title.split("-")[0]);
   }
   async function otherSign(list: string[]) {
@@ -133,7 +138,7 @@ export const useSign = () => {
     );
 
     const request = api.postOtherSign(otherSignMemberList);
-    const res = await toast.promise(request, {
+    toast.promise(request, {
       pending: t("otherSign.pending"),
       success: t("otherSign.success"),
       error: t("otherSign.fail"),
@@ -146,7 +151,7 @@ export const useSign = () => {
   async function signOver() {
     const restMember = formInfo.signList.slice(formInfo.nowOrder + 1);
     console.log(restMember);
-    
+
     const data: signFinalDataType[] = restMember.map((member) => {
       return {
         ...(member as unknown as {
@@ -170,8 +175,8 @@ export const useSign = () => {
       };
     });
     for (const i of data) {
-      (async function () {
-        const res = await api.updateSignStatus(i);
+      (function () {
+        api.updateSignStatus(i);
       })();
     }
     console.log("已完簽");

@@ -81,7 +81,7 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
           render={({ field: { onChange } }) => (
             <AsyncSelect
               ref={otherSignRef as any}
-              loadOptions={options.otherSign as any}
+              loadOptions={options.otherSign as (inputValue: string) => void}
               defaultOptions
               cacheOptions
               menuIsOpen
@@ -180,4 +180,4 @@ const styled_otherSign = styled(OtherSignBlock)`
     }
 `;
 
-export { styled_otherSign as OtherSignBlock };
+export default styled_otherSign;

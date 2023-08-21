@@ -50,18 +50,16 @@ export interface money {
 export interface deputy {
   Deputy: string;
 }
-export interface tripData {
-  [index: number]: {
-    startDate: string;
-    endDate: string;
-  };
-}
+export type tripData = {
+  startDate: string;
+  endDate: string;
+}[];
 
-type NewFormDefaultValue = infoForm &
+export type NewFormDefaultValue = infoForm &
   transportation &
   money &
   deputy &
-  tripData;
+  Record<"tripData", tripData>;
 
 export const NewForm = () => {
   const color = useTheme()?.color;
@@ -82,15 +80,15 @@ export const NewForm = () => {
   const [toggleFilesModal] = useModalControl("files");
 
   const schema = yup.object().shape({
-    DeptId: yup.string(),
-    CreateId: yup.string(),
+    DeptId: yup.string().required("表單錯誤"),
+    CreateId: yup.string().required("表單錯誤"),
     Transport: yup
       .string()
       .required(t("newForm.transportation", { ns: "errors" })),
-    IsLodging: yup.string(),
-    StayDays: yup.number(),
-    Days: yup.number(),
-    Advance_Amount: yup.mixed(),
+    IsLodging: yup.string().required("表單錯誤"),
+    StayDays: yup.number().required("表單錯誤"),
+    Days: yup.number().required("表單錯誤"),
+    Advance_Amount: yup.mixed().required("表單錯誤"),
     Curr: yup.string().when("Advance_Amount", {
       is: (money: string) => money !== "0",
       then: () => yup.string().required(t("newForm.curr", { ns: "errors" })),
@@ -103,8 +101,9 @@ export const NewForm = () => {
         endDate: yup.string().required(t("newForm.date", { ns: "errors" })),
       })
     ),
-  });
-  const methods = useForm({
+  }) as yup.ObjectSchema<NewFormDefaultValue>;
+
+  const methods = useForm<NewFormDefaultValue>({
     criteriaMode: "all",
     mode: "onChange",
     resolver: yupResolver(schema),
@@ -213,21 +212,22 @@ export const NewForm = () => {
     return res;
   }
 
-  async function pushData(data: tripDetailType[]) {
-    const res = await api.pushNewData(await data);
+  function pushData(data: tripDetailType[]) {
+    api.pushNewData(data);
     // console.log("建立出差明細元件", res);
     // return 新增成功
   }
 
   //  TODO 預防重新整理
-  // useLayoutEffect(() => {
-  //   function alertUser(event: any) {
-  //     event.preventDefault();
-  //     event.returnValue = "";
-  //   }
-  //   window.addEventListener("beforeunload", alertUser);
-  //   return () => window.removeEventListener("beforeunload", alertUser);
-  // }, []);
+  useLayoutEffect(() => {
+    function alertUser(event: BeforeUnloadEvent) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+    window.addEventListener("beforeunload", alertUser);
+    return () => window.removeEventListener("beforeunload", alertUser);
+  }, []);
+  
   useEffect(() => {
     if (spreadData.length === 0) {
       if (errors.tripData) {

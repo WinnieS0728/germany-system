@@ -1,3 +1,4 @@
+import { dateFormatter } from "@/hooks/dateFormatter";
 import { useId2name } from "@/hooks/id2name";
 import { useAppSelector } from "@/hooks/redux";
 import { statusStringType } from "@/hooks/status translate";
@@ -5,8 +6,7 @@ import api from "@/lib/api";
 import { tripDetailResType } from "@/lib/api/travel apply/get detail";
 import { tripListResType } from "@/lib/api/travel apply/get list";
 import { tripEvent } from "@/types";
-import { timeFormat } from "d3";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export type dataSet = {
@@ -28,17 +28,15 @@ export type dataSet = {
 export const useFetchApplyList = () => {
   const { i18n } = useTranslation();
   const nowLang = i18n.language;
-  const [data, setData] = useState<dataSet[]>([]);
   const tableProps = useAppSelector((state) => state.listFormState);
+  const [data, setData] = useState<dataSet[]>([]);
 
   const status = tableProps.status;
 
   function getTimeStamp(d: string) {
     return new Date(d).getTime();
   }
-  function getFormatDate(d: string | Date) {
-    return timeFormat("%Y-%m-%d")(new Date(d));
-  }
+
   async function getDetail(id: string) {
     const res = await api.getBusinessApplyDetail(id);
     return res;
@@ -51,36 +49,29 @@ export const useFetchApplyList = () => {
         return [];
       }
       return [
-        getFormatDate(i.StartDT.split(" ")[0]),
-        getFormatDate(i.EndDT.split(" ")[0]),
+        dateFormatter(i.StartDT.split(" ")[0]),
+        dateFormatter(i.EndDT.split(" ")[0]),
       ];
     });
     return dateArray;
   }, []);
 
-  useEffect(() => {
+  const asyncData = useMemo(() => {
     const { props, body } = tableProps;
     async function fetchData() {
       const empFilter = empProcess(body);
       if (!empFilter) {
-        console.log("查無資料");
         return [];
       }
       const detailList = await Promise.all(
         empFilter.map(async (d) => await getDetail(d.BTPId))
       );
-      const atuNumArray = detailList.map((list) => {
-        return list.filter((i) => i.TripEvent === tripEvent.atu).length;
-      });
-      const oldCusNumArray = detailList.map((list) => {
-        return list.filter((i) => i.TripEvent === tripEvent.oldCus).length;
-      });
-      const newCusNumArray = detailList.map((list) => {
-        return list.filter((i) => i.TripEvent === tripEvent.newCus).length;
-      });
-      const dateArray = detailList.map((list) => {
-        return getDays(list);
-      });
+
+      const atuNumArray = visitFilter(tripEvent.atu);
+      const oldCusNumArray = visitFilter(tripEvent.oldCus);
+      const newCusNumArray = visitFilter(tripEvent.newCus);
+
+      const dateArray = detailList.map((list) => getDays(list));
 
       const dataSet: dataSet[] = await Promise.all(
         empFilter.map(async (list, index) => {
@@ -108,8 +99,13 @@ export const useFetchApplyList = () => {
           ...data,
         };
       });
-      setData(fineData);
+      return fineData;
 
+      function visitFilter(filter: string) {
+        return detailList.map(
+          (list) => list.filter((i) => i.TripEvent === filter).length
+        );
+      }
       function empProcess(data: tripListResType[]) {
         if (!props.EmpId) {
           return data;
@@ -132,8 +128,14 @@ export const useFetchApplyList = () => {
         return { start: dateArray[0], end: dateArray[dateArray.length - 1] };
       }
     }
-    fetchData();
+    return fetchData();
   }, [getDays, id2name, nowLang, tableProps]);
+
+  useEffect(() => {
+    (async function () {
+      setData(await asyncData);
+    })();
+  }, [asyncData]);
 
   return { data, status };
 };

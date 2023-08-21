@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next";
 import { useId2name } from "@/hooks/id2name";
 import { dateFormatter } from "@/hooks/dateFormatter";
 import { memberResType } from "@/lib/api/member/getMember";
+import { fetchFormListBody } from "@/lib/api/travel apply/get list";
 
 export const HeaderForm = ({ className }: propsType) => {
   const color = useTheme()?.color;
@@ -57,7 +58,7 @@ export const HeaderForm = ({ className }: propsType) => {
   function onSubmit<T>(d: T) {
     // console.log(d);
     dispatch(setProps(d));
-    dispatch(setListData(d));
+    dispatch(setListData(d as fetchFormListBody));
   }
 
   const { options } = useOptions();

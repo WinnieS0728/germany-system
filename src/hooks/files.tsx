@@ -6,8 +6,7 @@ import ppt from "@img/files/ppt_icon.svg";
 import pdf from "@img/files/pdf_icon.svg";
 import img from "@img/files/img_icon.svg";
 import normal from "@img/files/file_icon.svg";
-import axios from "axios";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 
 interface id {
   id: string;
@@ -67,7 +66,7 @@ export const useFiles = () => {
       filePackage.append("SIGNORDER", formInfo.nowOrder.toString());
       filePackage.append("file", file);
       console.log(filePackage);
-      const res = await api.uploadFileSign(filePackage);
+      api.uploadFileSign(filePackage);
     }
   }
 

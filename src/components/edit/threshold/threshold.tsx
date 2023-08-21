@@ -5,7 +5,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFieldArray, useForm } from "react-hook-form";
 import { TrList } from "./tr";
 import * as yup from "yup";
-import { GetData } from "./data";
+import {
+  GetData,
+  thresholdList_emp,
+  threshold_data,
+  threshold_number,
+} from "./data";
 import { useEffect, useRef, useState } from "react";
 import { SubmitBtn } from "@/components/UI/buttons";
 import api from "@/lib/api";
@@ -14,16 +19,10 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { monthType } from "@/types";
 
-interface formData {
-  EmpId: string;
-  EmpName: string;
-}
-interface perMonthThreshold {
-  existCus: number;
-  newCus: number;
-}
-
-type thresholdData = Record<monthType, perMonthThreshold> & formData;
+export type thresholdData = Record<
+  "threshold",
+  (threshold_data & thresholdList_emp)[]
+>;
 
 export const ThresholdSettingTable = () => {
   const { t } = useTranslation(["common"]);
@@ -32,18 +31,16 @@ export const ThresholdSettingTable = () => {
   const nowUser_id = nowUser.body.EmpId;
   const [selected, setSelected] = useState<string>("");
   const [selectNumber, setSelectNumber] = useState<number>(0);
-  const isDataSet = useRef(false);
+  const isDataSet = useRef<boolean>(false);
 
-  const dataSet = GetData().dataSet;
-  const status = GetData().status;
-  const dataExist = GetData().dataExist;
+  const { dataSet, status, dataExist } = GetData();
 
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(setThreshold(timeData.thisYear));
   }, [dispatch, timeData]);
 
-  const monthAry = [
+  const monthAry: monthType[] = [
     "Jan",
     "Feb",
     "Mar",
@@ -60,12 +57,12 @@ export const ThresholdSettingTable = () => {
 
   const initData = dataSet;
 
-  const percentSchema = yup.object({
+  const percentSchema = yup.object().shape({
     existCus: yup.number().min(0, "最小0").max(100, "最大100"),
     newCus: yup.number().min(0, "最小0").max(100, "最大100"),
-  });
+  }) as yup.ObjectSchema<threshold_number>;
 
-  const monthSchema = yup.object({
+  const monthSchema = yup.object().shape({
     Jan: percentSchema,
     Feb: percentSchema,
     Mar: percentSchema,
@@ -78,13 +75,15 @@ export const ThresholdSettingTable = () => {
     Oct: percentSchema,
     Nov: percentSchema,
     Dec: percentSchema,
-  });
+  }) as yup.ObjectSchema<threshold_data>;
 
   const schema = yup.object({
     threshold: yup.array().of(monthSchema),
-  });
+  }) as yup.ObjectSchema<Record<"threshold", threshold_data[]>>;
 
-  const { register, handleSubmit, control, setValue } = useForm({
+  const { register, handleSubmit, control, setValue } = useForm<
+    Record<"threshold", typeof dataSet>
+  >({
     shouldUnregister: true,
     criteriaMode: "all",
     mode: "onChange",
@@ -114,7 +113,7 @@ export const ThresholdSettingTable = () => {
   }, [status, replace, dataSet]);
 
   useEffect(() => {
-    let type;
+    let type = "newCus";
     if (selected.endsWith("existCus")) {
       // console.log("修改既有客戶");
       type = "newCus";
@@ -126,7 +125,10 @@ export const ThresholdSettingTable = () => {
     const index = parseInt(spreadName[1]);
     const month = spreadName[2];
 
-    setValue(`threshold.${index}.${month}.${type}` as any, 100 - selectNumber);
+    setValue(
+      `threshold.${index}.${month}.${type}` as `threshold.0.Jan.newCus`,
+      100 - selectNumber
+    );
   }, [selected, setValue, selectNumber]);
 
   async function sendApiRequest(
@@ -146,7 +148,7 @@ export const ThresholdSettingTable = () => {
   }
 
   async function onSubmit<T>(d: T) {
-    const data = (d as { threshold: thresholdData[] }).threshold;
+    const data = (d as thresholdData).threshold;
 
     const postStatus = Promise.all(
       data.map(async (d, index: number) => {

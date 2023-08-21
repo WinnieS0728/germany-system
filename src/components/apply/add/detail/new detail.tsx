@@ -56,7 +56,7 @@ const schema = yup.object().shape({
   PS: yup.string(),
 });
 
-export const NewDetailForm = () => {
+const NewDetailForm = () => {
   const { i18n, t } = useTranslation("list page", { keyPrefix: "detailTable" });
   const nowLang = i18n.language;
   const color = useTheme()?.color;
@@ -354,3 +354,5 @@ export const NewDetailForm = () => {
     </>
   );
 };
+
+export default NewDetailForm

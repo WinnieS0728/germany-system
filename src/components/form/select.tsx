@@ -19,7 +19,7 @@ interface selectProp<T> {
   noOptionComponent?: string | JSX.Element;
   getLabelFunction?: GetOptionLabel<T>;
   getValueFunction?: GetOptionValue<T>;
-  filterFunction?: any;
+  filterFunction?: (candidate: T) => boolean;
   forwardRef?: RefObject<SelectInstance>;
   multi?: boolean;
   value?: string;

@@ -5,7 +5,7 @@ import { useSign } from "@/hooks/sign";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "@/hooks/redux";
 
-export const VoidModal = () => {
+const VoidModal = () => {
   const color = useTheme()?.color;
   const { t } = useTranslation("sign");
   const [toggleModal] = useModalControl("void");
@@ -42,3 +42,5 @@ export const VoidModal = () => {
     </article>
   );
 };
+
+export default VoidModal

@@ -1,18 +1,18 @@
-import { ErrorsModal } from "@/components/apply/add/errors";
 import { Modal } from "./modal";
-import { NewDetailForm } from "@/components/apply/add/detail/new detail";
-import { Confirm } from "@/components/apply/add/confirm/confirm";
-import { UploadFiles } from "@/components/apply/add/upload files";
 import { useAppSelector } from "@/hooks/redux";
 import { useModalControl } from "@/hooks/modal control";
 import { useScroll } from "@/hooks/scroll control";
-import { OtherSignBlock } from "@/components/sign/other sign block";
-import { SignBlock } from "@/components/sign/sign box";
-import { useEffect, useState } from "react";
-import { nextSign } from "@/data/reducers/sign/form info";
-import { VoidModal } from "@/components/sign/void modal";
+import { Suspense, lazy } from "react";
 
-type signType = "sign" | "otherSign";
+const NewDetailForm = lazy(
+  () => import("@/components/apply/add/detail/new detail")
+);
+const Confirm = lazy(() => import("@/components/apply/add/confirm/confirm"));
+const UploadFiles = lazy(() => import("@/components/apply/add/upload files"));
+const SignBlock = lazy(() => import("@/components/sign/sign box"));
+const OtherSignBlock = lazy(() => import("@/components/sign/other sign block"));
+const VoidModal = lazy(() => import("@/components/sign/void modal"));
+const ErrorsModal = lazy(() => import("@/components/apply/add/errors"));
 
 export const PopupLayer = () => {
   const errors = useAppSelector((state) => state.errors);
@@ -44,7 +44,7 @@ export const PopupLayer = () => {
   }
 
   return (
-    <>
+    <Suspense>
       {detailState && (
         <Modal name='newDetail'>
           <NewDetailForm />
@@ -80,6 +80,6 @@ export const PopupLayer = () => {
           <ErrorsModal errors={errors.body} />
         </Modal>
       )}
-    </>
+    </Suspense>
   );
 };

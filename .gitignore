@@ -11,6 +11,7 @@ node_modules
 dist-ssr
 dist
 *.local
+zip
 
 # Editor directories and files
 !.vscode/extensions.json

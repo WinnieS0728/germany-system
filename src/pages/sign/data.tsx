@@ -6,7 +6,10 @@ import { timeDay } from "d3-time";
 import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
 import { useTranslation } from "react-i18next";
 import { useId2name } from "@/hooks/id2name";
-import { useSignStatusTranslate } from "@/hooks/status translate";
+import {
+  statusStringType,
+  useSignStatusTranslate,
+} from "@/hooks/status translate";
 
 const initData: signDataType = {
   id: "",
@@ -116,7 +119,7 @@ export const useSignPageData = (formId: string) => {
       const data: signDataType = {
         id: headerData[0].BTPId,
         createDate: dateFormatter(headerData[0].Createdate.split(" ")[0]),
-        status: getFormStatus(headerData[0].status),
+        status: getFormStatus(headerData[0].status as statusStringType),
         company:
           nowLang === "en"
             ? memberInfo[0].ResourcesName_E
@@ -174,7 +177,17 @@ export const useSignPageData = (formId: string) => {
       setData2(data3);
     }
     a();
-  }, [formId, getDetailData, getHeaderData, getMemberInfo, nowLang, t]);
+  }, [
+    formId,
+    getDetailData,
+    getFormStatus,
+    getHeaderData,
+    getMemberInfo,
+    id2name,
+    nowLang,
+    splitName,
+    t,
+  ]);
 
   return { headData, detailData };
 };

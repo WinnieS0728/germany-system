@@ -3,24 +3,23 @@ import { Collapse } from "@/layouts/collapse";
 import { DetailTable } from "./detail table";
 import { DetailHeader } from "./detail header";
 import * as Icons from "@components/UI/icons";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import { IconBtn } from "@/components/UI/buttons";
 import { useTheme } from "styled-components";
 import { addData } from "@/data/reducers/trip detail/trip detail";
 import { Block } from "@/layouts/block";
 import { useTranslation } from "react-i18next";
+import { NewFormDefaultValue } from "@/pages/apply/new apply";
 
 export const TripDetailForm = () => {
   const { t } = useTranslation("new form");
   const color = useTheme()?.color;
-  const { control } = useFormContext();
-  const { fields, append, remove } = useFieldArray({
-    name: "tripData",
-    control,
-  });
+  const dispatch = useAppDispatch();
   const tripDetail = useAppSelector((state) => state.tripDetail);
 
-  const dispatch = useAppDispatch();
+  const { fields, append, remove } = useFieldArray<NewFormDefaultValue>({
+    name: "tripData",
+  });
 
   return (
     <>

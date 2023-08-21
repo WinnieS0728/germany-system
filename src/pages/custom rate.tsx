@@ -6,11 +6,12 @@ import { Section } from "@/layouts/section";
 import { Header } from "@layouts/header";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Step } from "react-joyride";
 
 const CustomRatePage = () => {
   const { t } = useTranslation(["customRatePage", "joyride"]);
   const [JoyActive, setJoyActive] = useState(false);  
-  const steps = [
+  const steps:Step[] = [
     {
       title: t("ratePage.step1.title", { ns: "joyride" }),
       target: "#joy-ratePage-1",

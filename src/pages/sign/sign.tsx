@@ -144,7 +144,7 @@ const SignPage = () => {
                       {t("btn.attach", { ns: "sign page" })}
                     </Btns.IconBtn>
                   </button>
-                  <button type='button'>
+                  <button type='button' disabled>
                     <Btns.IconBtn
                       icon={
                         <Icons.Print
