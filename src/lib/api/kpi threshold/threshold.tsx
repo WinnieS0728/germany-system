@@ -1,13 +1,37 @@
-import axios from "axios";
+import { monthType } from "@/types";
+import axios, { AxiosResponse } from "axios";
 
+export type thresholdResType = {
+  YYYY: string;
+  Empid: string;
+  EmpName: string;
+  STYPE: string;
+  Sname: string;
+  Jan: string;
+  Feb: string;
+  Mar: string;
+  Apr: string;
+  May: string;
+  Jun: string;
+  Jul: string;
+  Aug: string;
+  Sep: string;
+  Oct: string;
+  Nov: string;
+  Dec: string;
+  COUNTRY: string;
+  CREATEID: string;
+  CEmpName: string;
+  CREATEDATE: string;
+};
 export function GetThresHold(apiPath: string) {
-  return async function (year: string) {
-    const res = await axios({
+  return async function (year: string, id?: string) {
+    const res: AxiosResponse<thresholdResType[]> = await axios({
       method: "POST",
       url: `${apiPath}/GetSalesCom`,
       data: {
         YYYY: year, //西元年
-        EmpId: "", //員工
+        EmpId: id || "", //員工
         TYPE: "TripEvent-7", //類型 如即有客戶
       },
     });
@@ -19,14 +43,14 @@ export function SetThresHold(apiPath: string) {
   return async function (
     year: string,
     id: string,
-    data: { [keys: string]: number | undefined },
+    data: Record<monthType, number | undefined>,
     type: boolean,
     nowUser: string
   ) {
     // console.log({ year }, { id }, { data }, { type }, { nowUser });
 
     try {
-      const res = await axios({
+      const res:AxiosResponse<string> = await axios({
         method: "POST",
         url: `${apiPath}/SalesComAdd`,
         data: {

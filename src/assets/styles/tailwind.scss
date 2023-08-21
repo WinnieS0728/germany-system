@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .top-btn-list {
+    @apply flex gap-2;
+
+    button {
+      @apply p-0;
+    }
+  }
+
+  .label-input {
+    @apply flex items-center justify-center gap-4;
+
+    label {
+      @apply min-w-fit relative;
+    }
+  }
+
+  .main-section-gap {
+    @apply flex flex-col gap-4;
+  }
+
+  .error-ul {
+    li {
+      @apply leading-8
+    }
+  }
+
+  .modal {
+    @apply w-full rounded-xl px-8 py-6
+  }
+
+  .submit-btns{
+    @apply flex items-center justify-center gap-4 flex-col-reverse sm:flex-row
+  }
+}

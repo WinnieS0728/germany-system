@@ -1,6 +1,7 @@
 interface propsType {
   children: JSX.Element;
+  className?: string;
 }
-export const Main = ({ children }: propsType) => {
-  return <main className='p-4'>{children}</main>;
+export const Main = ({ children, className }: propsType) => {
+  return <main className={`${className} p-4`}>{children}</main>;
 };

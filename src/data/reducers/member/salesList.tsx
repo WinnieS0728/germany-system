@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { setSalesList } from "@actions/member/setSalesList";
-import { stateType, statusType } from "types/api";
+import { statusType } from "types/api";
+import { memberResType } from "@/lib/api/member/getMember";
 
-const data: stateType = [];
+const data: memberResType[] = [];
 
 const salesListSlice = createSlice({
   name: "salesList",
@@ -15,7 +16,7 @@ const salesListSlice = createSlice({
     builder
       .addCase(setSalesList.fulfilled, (state, action) => {
         state.status = statusType.succeeded;
-        state.body = action.payload;
+        state.body = action.payload as memberResType[];
       })
       .addCase(setSalesList.pending, (state) => {
         state.status = statusType.loading;

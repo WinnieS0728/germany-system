@@ -12,7 +12,7 @@ export default ({ mode }) => {
   // https://vitejs.dev/config/
   return defineConfig({
     plugins: [react()],
-    base: './',
+    base: "./",
     resolve: {
       alias: {
         "@": resolve("src"),
@@ -28,6 +28,7 @@ export default ({ mode }) => {
         "@layouts": resolve("src/layouts"),
         "@buttons": resolve("src/components/UI/buttons"),
         "@img": resolve("src/assets/images"),
+        "@localData": resolve("public/data"),
         types: resolve("src/types"),
       },
     },

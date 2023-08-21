@@ -1,13 +1,18 @@
 {
-    "i18nJsonEditor.forceKeyUPPERCASE": false,
-    "i18nJsonEditor.supportedFolders": [
-        "locales"
-    ],
-    "i18nJsonEditor.workspaceFolders": [
-        {"name":"translation","path":"public/locales/translation"},
-        {"name":"common","path":"public/locales/common"},
-        {"name":"joyride","path":"public/locales/joyride"},
-        {"name":"custom rate page","path":"public/locales/customRatePage"},
-        {"name":"setting page","path":"public/locales/settingPage"}
-    ]
+  "i18nJsonEditor.forceKeyUPPERCASE": false,
+  "i18nJsonEditor.supportedFolders": ["locales"],
+  "i18nJsonEditor.workspaceFolders": [
+    { "name": "Common", "path": "./public/locales/common" },
+    { "name": "custom rate page", "path": "./public/locales/customRatePage" },
+    { "name": "joyride", "path": "./public/locales/joyride" },
+    { "name": "setting page", "path": "./public/locales/settingPage" },
+    { "name": "list page", "path": "./public/locales/list page" },
+    { "name": "new form", "path": "./public/locales/new form" },
+    { "name": "sign page", "path": "./public/locales/sign page" },
+    { "name": "file modal", "path": "./public/locales/files" },
+    { "name": "errors", "path": "./public/locales/errors" },
+    { "name": "confirm modal", "path": "./public/locales/confirm modal" },
+    { "name": "sign modal", "path": "./public/locales/sign" },
+    { "name": "toast", "path": "./public/locales/toast" },
+  ]
 }

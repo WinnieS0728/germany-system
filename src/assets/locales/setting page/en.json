@@ -1,9 +1,0 @@
-{
-  "nav": {
-    "osom achieve": "OSOM項目目標設定",
-    "store achieve": "拜訪店家目標設定",
-    "threshold": "客戶拜訪佔比警示值",
-    "tx": "業務TX目標銷售數量"
-  },
-  "title": "KPI setting"
-}

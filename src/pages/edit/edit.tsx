@@ -1,6 +1,6 @@
 import { Header } from "@layouts/header";
 import { Outlet, Route, Routes } from "react-router-dom";
-import { Nav } from "@/layouts/edit nav";
+import { Nav } from "@/pages/edit/edit nav";
 import { useTranslation } from "react-i18next";
 import { Suspense, lazy } from "react";
 

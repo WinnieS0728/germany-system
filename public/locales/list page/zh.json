@@ -1,0 +1,59 @@
+{
+  "create new form": "建立表單",
+  "detail": {
+    "endDate": "出差日期(迄)",
+    "placeholder": {
+      "endDate": "結束日期",
+      "startDate": "開始日期"
+    },
+    "startDate": "出差日期(起)",
+    "toggle": "詳細資料"
+  },
+  "detailTable": {
+    "add": "新增",
+    "placeholder": {
+      "code": "選擇郵遞區號...",
+      "cus": "選擇客戶...",
+      "dist": "選擇行政區...",
+      "event": "選擇出差事由...",
+      "lodging": "輸入住宿飯店...",
+      "purpose": "輸入出差目的..."
+    },
+    "postcode": "郵遞區號",
+    "thead": {
+      "PS": "備註",
+      "city": "城市",
+      "cus": "客戶名稱",
+      "delete": "刪除",
+      "dist": "行政區",
+      "index": "項次",
+      "lodging": "住宿飯店 or 地點",
+      "purpose": "出差事由"
+    },
+    "title": "出差地點明細"
+  },
+  "label": {
+    "date": "出差日期",
+    "member": "申請人員",
+    "status": "表單狀態"
+  },
+  "placeholder": {
+    "dept": "選擇部門",
+    "emp": "選擇業務",
+    "endDate": "結束日期",
+    "startDate": "開始日期",
+    "status": "選擇狀態"
+  },
+  "search": "查詢表單",
+  "thead": {
+    "BTPId": "表單號碼",
+    "atu": "ATU 拜訪數",
+    "createId": "申請人員",
+    "date": "出差日期",
+    "id": "項次",
+    "newCus": "新客戶拜訪數",
+    "nextSigner": "待簽核人員",
+    "oldCus": "既有客戶拜訪數",
+    "status": "申請狀態"
+  }
+}

@@ -37,6 +37,7 @@
       "@layouts/*": ["./src/layouts/*"],
       "@buttons": ["./src/components/UI/buttons"],
       "@img/*": ["./src/assets/images/*"],
+      "@localData/*": ["./public/data/*"],
       "types/*": ["./src/types/*"]
     }
   },

@@ -7,8 +7,9 @@ import { useTheme } from "styled-components";
 import { timeDay, timeMonday, timeSunday } from "d3-time";
 import { timeFormat } from "d3";
 import { setWeekVisitData } from "@actions/visit data/set week visit";
-import { GetData } from "./week data";
+import { GetData, salesThresholdData } from "./week data";
 import { useTranslation } from "react-i18next";
+import { thresholdResType } from "@/lib/api/kpi threshold/threshold";
 
 export const WeekTable = () => {
   const { t } = useTranslation(["common", "customRatePage"]);
@@ -161,8 +162,10 @@ export const WeekTable = () => {
     return percent ? percent : 0;
   }
 
-  function getKpiThreshold(d: any) {
-    const month = selected.toLocaleString("en", { month: "short" });
+  function getKpiThreshold(d: salesThresholdData) {
+    const month = selected.toLocaleString("en", {
+      month: "short",
+    }) as keyof thresholdResType;
     const num = d.threshold?.[month];
 
     return parseInt(num);

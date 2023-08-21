@@ -28,13 +28,13 @@ const personVisitSlice = createSlice({
           action.payload.map((i) => {
             const target = Number(i.MM) - 1;
             switch (i.ResourcesName) {
-              case "拜訪A.T.U.":
+              case '拜訪A.T.U.':
                 state.body[target].ATU = +i.Vqty;
                 break;
-              case "拜訪現有客戶":
+              case '拜訪既有客戶':
                 state.body[target].existCus = +i.Vqty;
                 break;
-              case "拜訪新客戶":
+              case '拜訪新客戶':
                 state.body[target].newCus = +i.Vqty;
                 break;
               default:

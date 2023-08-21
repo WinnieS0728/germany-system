@@ -20,7 +20,7 @@ export const YearTable = () => {
   const dispatch = useAppDispatch();
 
   const Filter = () => {
-    const salesList = useAppSelector((state) => state.member);
+    const salesList = useAppSelector((state) => state.salesList);
     const dataSet = salesList.body;
 
     function handleChange(id: string) {

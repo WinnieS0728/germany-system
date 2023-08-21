@@ -1,5 +1,7 @@
 import "react-day-picker/dist/style.css";
 import "react-toastify/ReactToastify.css";
+import "react-loading-skeleton/dist/skeleton.css";
+import "@styles/tailwind.scss";
 import "@styles/index.scss";
 import "./i18n.ts";
 
@@ -15,24 +17,24 @@ import { ToastContainer } from "react-toastify";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <HashRouter>
-          <App />
-          <ToastContainer
-            position='top-center'
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme='colored'
-          />
-        </HashRouter>
-      </ThemeProvider>
-    </Provider>
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
+      <HashRouter>
+        <App />
+        <ToastContainer
+          position='top-center'
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme='colored'
+        />
+      </HashRouter>
+    </ThemeProvider>
+  </Provider>
   // </React.StrictMode>
 );

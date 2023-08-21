@@ -13,7 +13,7 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-  @media (prefers-color-scheme:light){
+  @media (prefers-color-scheme: light) {
     color: #213547;
     background-color: #ffffff;
   }
@@ -49,6 +49,10 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
 button:hover {
   border-color: #646cff;
@@ -92,6 +96,37 @@ input {
 }
 
 select,
-input {
+textarea,
+input:not([type="submit"]) {
   padding: 0.3em 0.5em;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.25rem;
+}
+
+textarea {
+  resize: none;
+}
+
+.rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  color: black;
+}
+
+input.noBorder {
+  border: 0;
+  cursor: default;
+  background-color: transparent;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.ref-ul {
+  list-style: "\203B  "inside;
+}
+
+@media print {
+  .no-print {
+    display: none;
+  }
 }
