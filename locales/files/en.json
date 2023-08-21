@@ -1,0 +1,16 @@
+{
+  "accept": "accept type",
+  "box": {
+    "focus": "select files",
+    "idle": "click or drop file here",
+    "reject": "files not accept",
+    "success": "drop files here"
+  },
+  "table": {
+    "delete": "delete",
+    "fileName": "fileName",
+    "size": "file size",
+    "title": "attach list"
+  },
+  "title": "add attach"
+}

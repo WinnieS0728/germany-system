@@ -1,0 +1,16 @@
+{
+  "accept": "接受格式",
+  "box": {
+    "focus": "選擇檔案",
+    "idle": "點擊或拖曳檔案",
+    "reject": "格式錯誤",
+    "success": "放下檔案"
+  },
+  "table": {
+    "delete": "刪除",
+    "fileName": "檔名",
+    "size": "檔案大小",
+    "title": "檔案列表"
+  },
+  "title": "上傳檔案"
+}

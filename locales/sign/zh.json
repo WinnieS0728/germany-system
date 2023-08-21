@@ -1,0 +1,20 @@
+{
+  "label": {
+    "decide": "簽核決定",
+    "opinion": "簽核意見",
+    "password": "簽核密碼"
+  },
+  "otherSign-warn": "會簽只需填寫意見, 無需選擇是否同意 !",
+  "otherSign": {
+    "placeholder": "請選擇人員...",
+    "title": "會簽人員"
+  },
+  "radio": {
+    "otherSign-no": "不同意",
+    "sign-no": "不同意, 請填寫意見",
+    "yes": "同意"
+  },
+  "sign-warn": "簽核選擇不同意, 請填寫意見 !",
+  "title": "表單簽核",
+  "void-title": "即將作廢"
+}

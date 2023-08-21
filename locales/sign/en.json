@@ -1,0 +1,20 @@
+{
+  "label": {
+    "decide": "decision",
+    "opinion": "opinion",
+    "password": "password"
+  },
+  "otherSign-warn": "Countersign only needs to fill in the comments, no need to choose whether to agree or not !",
+  "otherSign": {
+    "placeholder": "select member...",
+    "title": "counterSign member"
+  },
+  "radio": {
+    "otherSign-no": "disagree",
+    "sign-no": "disagree, please fill in opinion",
+    "yes": "agree"
+  },
+  "sign-warn": "please fill in opinion when select disagree !",
+  "title": "form approval",
+  "void-title": "confirm void"
+}

@@ -1,0 +1,21 @@
+{
+  "newForm": {
+    "curr": "金額不為 0 時幣別必填",
+    "date": "出差日期必填",
+    "deputy": "代理人必填",
+    "lostData": "出差資料填寫不完全",
+    "noData": "至少要有一筆出差資料",
+    "transportation": "交通工具必填"
+  },
+  "otherSign": {
+    "noMember": "至少要有一個人"
+  },
+  "sign": {
+    "decide": "決定必填",
+    "otherSign-opinion": "意見必填",
+    "password": "密碼必填",
+    "sign-opinion": "不同意時意見必填",
+    "wrong-psw": "密碼錯誤"
+  },
+  "title": "表單送出失敗"
+}
