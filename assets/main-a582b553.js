@@ -1,4 +1,4 @@
-import{n as t,j as a}from"./index-d92dbf70.js";const i=({className:e,title:s,children:n,filter:r})=>a.jsxs("div",{className:e,children:[s&&a.jsxs("div",{className:"header",children:[s,r]}),a.jsx("div",{className:"table-wrapper",children:n})]}),c=t(i)`
+import{n as t,j as a}from"./index-cdc06e8f.js";const i=({className:e,title:s,children:n,filter:r})=>a.jsxs("div",{className:e,children:[s&&a.jsxs("div",{className:"header",children:[s,r]}),a.jsx("div",{className:"table-wrapper",children:n})]}),c=t(i)`
     .header{
         display: flex;
         justify-content: space-between;
