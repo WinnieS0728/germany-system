@@ -31,7 +31,7 @@ export const useFetchApplyList = () => {
   const tableProps = useAppSelector((state) => state.listFormState);
   const { props, body } = tableProps;
   const status = tableProps.status;
-  
+
   const [data, setData] = useState<dataSet[]>([]);
 
   function getTimeStamp(d: string) {
@@ -85,9 +85,11 @@ export const useFetchApplyList = () => {
             name: await id2name(list.Createid),
             formStatus: list.Status,
             nextSign:
-              nowLang === "en"
-                ? list.SName?.split("/")[0]?.replace(/ /g, "")
-                : list.SName?.split("/")[1]?.replace(/ /g, ""),
+              list.Status === "簽核中"
+                ? nowLang === "en"
+                  ? list.SName?.split("/")[0]?.replace(/ /g, "")
+                  : list.SName?.split("/")[1]?.replace(/ /g, "")
+                : "",
           };
         })
       );
