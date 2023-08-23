@@ -2,19 +2,17 @@ import { dateFormatter } from "@/hooks/dateFormatter";
 import axios, { AxiosResponse } from "axios";
 import { timeDay } from "d3-time";
 
-export type visit_otherResType = {
-  empname: string;
-  Vqty: string;
-  YYYY: string;
-  MM: string;
-  ResourcesName: string;
-};
 export type visit_YearResType = {
   Vqty: string;
   YYYY: string;
   MM: string;
   ResourcesName: string;
 };
+
+export type visit_otherResType = {
+  empname: string;
+} & visit_YearResType;
+
 function thisYear(apiPath: string) {
   return async function () {
     const res: AxiosResponse<visit_YearResType[]> = await axios({
