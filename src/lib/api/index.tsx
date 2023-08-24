@@ -52,8 +52,8 @@ const api = {
   //sign
   getSignList: getSignList(apiPath),
   getNextSigner: getNextSigner(apiPath),
-  postOtherSign: postOtherSign(apiPath),
   updateSignStatus: updateSignStatus(apiPath),
+  postOtherSign: postOtherSign(apiPath),
 };
 
 export default api;

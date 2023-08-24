@@ -7,7 +7,7 @@ export type otherSignFinalDataType = {
   SIGNER: string;
   SIGNERNAME: string;
   OPINION: string;
-  SignGroup: string & "會簽";
+  SignGroup: "會簽";
 };
 
 export function postOtherSign(apiPath: string) {
