@@ -35,16 +35,16 @@ const Confirm = () => {
       />
       <div className='submit-btns'>
         <Btns.LongBtn
+          type='submit'
+          style='confirm'
+          form='business apply'
+        />
+        <Btns.LongBtn
           type='button'
           style='cancel'
           onClick={() => {
             toggleModal("off");
           }}
-        />
-        <Btns.LongBtn
-          type='submit'
-          style='confirm'
-          form='business apply'
         />
       </div>
     </article>

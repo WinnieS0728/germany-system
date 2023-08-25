@@ -150,7 +150,7 @@ export const useSign = () => {
 
   async function signOver() {
     const restMember = formInfo.signList.slice(formInfo.nowOrder + 1);
-    console.log(restMember);
+    // console.log(restMember);
 
     const data: signFinalDataType[] = restMember.map((member) => {
       return {
@@ -179,7 +179,7 @@ export const useSign = () => {
         api.updateSignStatus(i);
       })();
     }
-    console.log("已完簽");
+    // console.log("已完簽");
   }
 
   return {

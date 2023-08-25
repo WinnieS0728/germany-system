@@ -25,16 +25,16 @@ const VoidModal = () => {
       <div className='submit-btns'>
         <Btns.LongBtn
           type='button'
-          style='cancel'
+          style='confirm'
           onClick={() => {
+            updateFormStatus("delete");
             toggleModal("off");
           }}
         />
         <Btns.LongBtn
           type='button'
-          style='confirm'
+          style='cancel'
           onClick={() => {
-            updateFormStatus("delete");
             toggleModal("off");
           }}
         />

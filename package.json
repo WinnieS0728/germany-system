@@ -19,6 +19,7 @@
     "d3": "^7.8.5",
     "d3-time": "^3.1.0",
     "date-fns": "^2.30.0",
+    "file-saver": "^2.0.5",
     "gh-pages": "^5.0.0",
     "i18next": "^23.2.6",
     "i18next-browser-languagedetector": "^7.1.0",
@@ -43,12 +44,14 @@
     "styled-components": "^6.0.0-rc.3",
     "usehooks-ts": "^2.9.1",
     "utility-types": "^3.10.0",
+    "xlsx": "^0.18.5",
     "yup": "^1.2.0"
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
     "@types/d3": "^7.4.0",
     "@types/d3-time": "^3.0.0",
+    "@types/file-saver": "^2.0.5",
     "@types/node": "^20.3.1",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",

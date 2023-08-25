@@ -149,11 +149,6 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
       </form>
       <div className='submit-btns'>
         <Btns.LongBtn
-          type='reset'
-          style='cancel'
-          form='otherSign'
-        />
-        <Btns.LongBtn
           type='submit'
           style='confirm'
           form='otherSign'
@@ -163,6 +158,11 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
               toggleErrorModal("on");
             }
           }}
+        />
+        <Btns.LongBtn
+          type='reset'
+          style='cancel'
+          form='otherSign'
         />
       </div>
     </article>

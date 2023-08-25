@@ -30,7 +30,7 @@ const TableWhenAddForm = ({
   const { i18n } = useTranslation();
   const nowLang = i18n.language;
   const dispatch = useAppDispatch();
-  console.log(data);
+  // console.log(data);
 
   const [dataSet, setNewData] = useState<newDetailType[]>([]);
   const getEventName = useCallback(

@@ -34,6 +34,7 @@ const mineObj: (id & type)[] = [
     type: {
       xls: "application/vnd.ms-excel",
       xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      numbers: "application/x-iwork-numbers-sffnumbers"
     },
   },
   {

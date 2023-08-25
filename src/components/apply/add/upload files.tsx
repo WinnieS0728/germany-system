@@ -152,16 +152,16 @@ function UploadFiles() {
       <div className='submit-btns'>
         <Btns.LongBtn
           type='button'
+          style='confirm'
+          onClick={sendFile}
+        />
+        <Btns.LongBtn
+          type='button'
           style='cancel'
           onClick={() => {
             setFileList([]);
             toggleFileModal("off");
           }}
-        />
-        <Btns.LongBtn
-          type='button'
-          style='confirm'
-          onClick={sendFile}
         />
       </div>
     </article>

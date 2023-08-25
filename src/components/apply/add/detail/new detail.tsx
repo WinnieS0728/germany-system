@@ -339,15 +339,15 @@ const NewDetailForm = () => {
         </Table>
         <div className='submit-btns'>
           <Btns.LongBtn
-            type='reset'
-            style='cancel'
-            form='new detail'
-          />
-          <Btns.LongBtn
             type='submit'
             style='confirm'
             form='new detail'
             onClick={validate}
+          />
+          <Btns.LongBtn
+            type='reset'
+            style='cancel'
+            form='new detail'
           />
         </div>
       </form>

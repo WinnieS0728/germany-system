@@ -245,15 +245,15 @@ const SignBlock = ({
         </Table>
         <div className='submit-btns'>
           <Btns.LongBtn
-            type='reset'
-            style='cancel'
-            form='sign'
-          />
-          <Btns.LongBtn
             type='submit'
             style='confirm'
             form='sign'
             onClick={validation}
+          />
+          <Btns.LongBtn
+            type='reset'
+            style='cancel'
+            form='sign'
           />
         </div>
       </form>
