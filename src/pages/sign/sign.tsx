@@ -38,7 +38,7 @@ const SignPage = () => {
   const color = useTheme()?.color;
   const methods = useForm();
   const dispatch = useAppDispatch();
-  const { headData, detailData } = useSignPageData(formId as string);
+  const { headData, detailData } = useSignPageData();
   const tableData = useTableData(detailData, headData.createDate);
 
   const [toggleVoidModal] = useModalControl("void");

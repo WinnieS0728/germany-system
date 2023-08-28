@@ -1,0 +1,30 @@
+{
+  "detail": {
+    "PS": "ps",
+    "cusName": "customer name",
+    "date": "trip date",
+    "place": "trip place",
+    "purpose": "trip purpose"
+  },
+  "formInfo": {
+    "EmpId": "Emp. Id",
+    "comp": "company",
+    "date": "create date",
+    "dept": "department",
+    "id": "form id",
+    "name": "Emp. name"
+  },
+  "sign": {
+    "date": "Time",
+    "opinion": "Opinions",
+    "status": "Status",
+    "step": "Authorizer"
+  },
+  "sub title": "Business Apply",
+  "title": "Orange Electronic Co., ltd",
+  "transport": {
+    "amount": "advance amount",
+    "isLodging": "isLodging",
+    "transportation": "transportation"
+  }
+}

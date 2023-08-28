@@ -22,6 +22,7 @@ import { tripEvent } from "@/lib/api/event/get event";
 import { areaResType } from "@/lib/api/common/getArea";
 import { postcodeResType } from "@/lib/api/postal code/postal code";
 import { cusResType } from "@/lib/api/common/getCus";
+import { tripEvent as tripEvent_enum } from "@/types";
 
 interface trProps {
   label: string;
@@ -90,6 +91,11 @@ const NewDetailForm = () => {
   const [toggleErrorModal] = useModalControl("errors");
 
   const { options } = useOptions();
+
+  const watch_purpose = useWatch({
+    name: "purpose",
+    control,
+  });
 
   const watch_area = useWatch({
     name: "district",
@@ -308,7 +314,19 @@ const NewDetailForm = () => {
                       value='CustName'
                       filterFunction={(candidate: { data: cusResType }) => {
                         if (candidate.data.PostalCode === watch_postcode) {
-                          return true;
+                          if (watch_purpose === tripEvent_enum.atu) {
+                            if (candidate.data.CustName.startsWith("A.T.U")) {
+                              return true;
+                            } else {
+                              return false;
+                            }
+                          } else {
+                            if (candidate.data.CustName.startsWith("A.T.U")) {
+                              return false;
+                            } else {
+                              return true;
+                            }
+                          }
                         }
                         return false;
                       }}
@@ -355,4 +373,4 @@ const NewDetailForm = () => {
   );
 };
 
-export default NewDetailForm
+export default NewDetailForm;

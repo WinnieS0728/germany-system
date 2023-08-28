@@ -47,3 +47,7 @@ export enum tripEvent {
 }
 
 export type moneyType = "TWD" | "RMB" | "EUR" | "USD";
+
+export type sc_props = {
+  className?: string;
+};

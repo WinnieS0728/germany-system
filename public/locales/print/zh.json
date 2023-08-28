@@ -1,0 +1,30 @@
+{
+  "detail": {
+    "PS": "備註",
+    "cusName": "客戶名稱",
+    "date": "預計拜訪時間",
+    "place": "出差地點",
+    "purpose": "出差事由"
+  },
+  "formInfo": {
+    "EmpId": "員工工號",
+    "comp": "公司別",
+    "date": "建立日期",
+    "dept": "部門",
+    "id": "表單號碼",
+    "name": "員工姓名"
+  },
+  "sign": {
+    "date": "簽核時間",
+    "opinion": "簽核意見",
+    "status": "簽核狀態",
+    "step": "簽核程序"
+  },
+  "sub title": "出差申請書",
+  "title": "橙的電子股份有限公司",
+  "transport": {
+    "amount": "預支差旅費",
+    "isLodging": "是否住宿",
+    "transportation": "交通工具"
+  }
+}

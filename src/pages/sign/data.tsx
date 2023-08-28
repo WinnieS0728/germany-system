@@ -10,6 +10,8 @@ import {
   statusStringType,
   useSignStatusTranslate,
 } from "@/hooks/status translate";
+import { useId2transportation } from "@/hooks/id2transportation";
+import { useAppSelector } from "@/hooks/redux";
 
 const initData: signDataType = {
   id: "",
@@ -44,13 +46,15 @@ type detailData = {
   TripEvent: string;
 };
 
-export const useSignPageData = (formId: string) => {
+export const useSignPageData = () => {
   const { i18n, t } = useTranslation("sign page");
   const nowLang = i18n.language;
+  const formInfo = useAppSelector((state) => state.formInfo).body;
   const [headData, setData] = useState<signDataType>(initData);
   const [detailData, setData2] = useState<detailDataWithSingleData[][]>([]);
 
   const { id2name } = useId2name();
+  const { id2transportation } = useId2transportation();
   const { getFormStatus } = useSignStatusTranslate();
 
   const getHeaderData = useCallback(() => {
@@ -58,15 +62,15 @@ export const useSignPageData = (formId: string) => {
       const res = await api.getBusinessApplyHeader(id);
       return res;
     }
-    return getData(formId);
-  }, [formId]);
+    return getData(formInfo.formId);
+  }, [formInfo.formId]);
   const getDetailData = useCallback(() => {
     async function getData(id: string) {
       const res: detailData[] = await api.getBusinessApplyDetail(id);
       return res;
     }
-    return getData(formId);
-  }, [formId]);
+    return getData(formInfo.formId);
+  }, [formInfo.formId]);
   const getMemberInfo = useCallback((id: string) => {
     async function getData() {
       const res = await api.getMember(id);
@@ -78,7 +82,7 @@ export const useSignPageData = (formId: string) => {
   const { splitName } = useId2name();
 
   useEffect(() => {
-    async function a() {
+    async function qq() {
       const headerData = await getHeaderData();
       const detailData = await getDetailData();
 
@@ -128,7 +132,9 @@ export const useSignPageData = (formId: string) => {
           nowLang === "en" ? memberInfo[0].DeptName_E : memberInfo[0].DeptName,
         EmpId: memberInfo[0].EmpId,
         EmpName: splitName(memberInfo[0]),
-        transportation: headerData[0].ResourcesName_E,
+        transportation: (await id2transportation(
+          headerData[0].Transport
+        )) as string,
         isLodging: Lodging(headerData[0].IsLodging),
         stayDays: headerData[0].StayDays,
         days: headerData[0].Days,
@@ -176,14 +182,17 @@ export const useSignPageData = (formId: string) => {
 
       setData2(data3);
     }
-    a();
+    if (formInfo.formId) {
+      qq();
+    }
   }, [
-    formId,
+    formInfo.formId,
     getDetailData,
     getFormStatus,
     getHeaderData,
     getMemberInfo,
     id2name,
+    id2transportation,
     nowLang,
     splitName,
     t,

@@ -52,7 +52,7 @@ function App() {
           element={<SignPage />}
         />
         <Route
-          path='print'
+          path='print/:formId'
           element={<PrintPage />}
         />
         <Route
