@@ -7,7 +7,7 @@ import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch } from "@/hooks/redux";
 import api from "@/lib/api";
 import * as Btns from "@components/UI/buttons";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useTheme } from "styled-components";
 import { useOptions } from "../../../../hooks/options";
@@ -149,6 +149,39 @@ const NewDetailForm = () => {
     dispatch(pushData(d));
     toggleModal("off");
   }
+
+  const cusFilter = useCallback(
+    (candidate: { data: cusResType }): boolean => {
+
+      const isATU = candidate.data.CustName.startsWith("A.T.U");
+      const isOldCus = !!candidate.data.ErpNo;      
+
+      switch (watch_purpose) {
+        case tripEvent_enum.atu:
+          if (isATU) {
+            return true;
+          } else {
+            return false;
+          }
+        case tripEvent_enum.oldCus:
+          if (!isATU && isOldCus) {
+            return true;
+          } else {
+            return false;
+          }
+        case tripEvent_enum.newCus:
+          if (!isATU && !isOldCus) {
+            return true;
+          } else {
+            return false;
+          }
+
+        default:
+          return true;
+      }
+    },
+    [watch_purpose]
+  );
 
   return (
     <>
@@ -314,19 +347,7 @@ const NewDetailForm = () => {
                       value='CustName'
                       filterFunction={(candidate: { data: cusResType }) => {
                         if (candidate.data.PostalCode === watch_postcode) {
-                          if (watch_purpose === tripEvent_enum.atu) {
-                            if (candidate.data.CustName.startsWith("A.T.U")) {
-                              return true;
-                            } else {
-                              return false;
-                            }
-                          } else {
-                            if (candidate.data.CustName.startsWith("A.T.U")) {
-                              return false;
-                            } else {
-                              return true;
-                            }
-                          }
+                          return cusFilter(candidate)
                         }
                         return false;
                       }}

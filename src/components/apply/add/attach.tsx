@@ -99,7 +99,7 @@ export const AttachForm = ({ type }: component) => {
 
   const [attachList, setAttachList] = useState<File[]>([]);
 
-  const { name2mine, path2blob } = useFiles();
+  const { name2mime, path2blob } = useFiles();
 
   useEffect(() => {
     (async function () {
@@ -108,7 +108,7 @@ export const AttachForm = ({ type }: component) => {
           const blob = await path2blob(file.FilePath);
 
           return new File([blob], `${file.WebID} - ${index + 1}`, {
-            type: name2mine(file.FileName),
+            type: name2mime(file.FileName),
           });
         })
       );
@@ -118,7 +118,7 @@ export const AttachForm = ({ type }: component) => {
       }
       setAttachList(fileList);
     })();
-  }, [formAttach, name2mine, path2blob]);
+  }, [formAttach, name2mime, path2blob]);
 
   function deleteFiles(index: number) {
     dispatch(deleteFile(index));

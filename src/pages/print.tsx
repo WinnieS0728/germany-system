@@ -1,7 +1,10 @@
 import styled from "styled-components";
+import { useReactToPrint } from "react-to-print";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "@/hooks/redux";
 import { setFormId } from "@/data/reducers/sign/form info";
 import { setSignList } from "@/data/actions/sign/set sign list";
@@ -12,19 +15,12 @@ import FormInfo from "@components/print/form info";
 import Transport from "@components/print/transport";
 import Detail from "@components/print/detail";
 import SignTable from "@components/print/sign table";
-import api from "@/lib/api";
-import { table } from "console";
 
 type props = {
   className?: string;
 };
 const PrintPage = ({ className }: props) => {
   const { formId } = useParams();
-
-  // (async function(){
-  //   const cusList = await api.getCus('')
-  //   console.log(cusList.filter(i=>i.PostalCode.startsWith('50')));
-  // })()
 
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -33,22 +29,31 @@ const PrintPage = ({ className }: props) => {
     dispatch(setNextSigner(formId as string));
   }, [dispatch, formId]);
 
+  const printRef = useRef<HTMLElement>(null);
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    documentTitle: `${formId} 出差申請`,
+    onAfterPrint: window.close,
+  });
+
+  useEffect(() => {
+    const timeout = setTimeout(handlePrint, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [handlePrint]);
+
   return (
-    <section className={className}>
-      <div
-        data-space
-        className='header'
-      ></div>
-      <div
-        data-space
-        className='footer'
-      ></div>
+    <section
+      className={className}
+      ref={printRef}
+    >
       <table>
         <thead data-header>
           <tr>
-            <th className='no-border'>
-              <div data-space></div>
-            </th>
+            <th
+              className='no-border'
+              data-space
+            ></th>
           </tr>
         </thead>
         <tbody>
@@ -67,9 +72,10 @@ const PrintPage = ({ className }: props) => {
         </tbody>
         <tfoot data-footer>
           <tr>
-            <td className='no-border'>
-              <div data-space></div>
-            </td>
+            <td
+              className='no-border'
+              data-space
+            ></td>
           </tr>
         </tfoot>
       </table>
@@ -78,11 +84,15 @@ const PrintPage = ({ className }: props) => {
 };
 
 const styled_page = styled(PrintPage)`
+    body {
+      font-size: 12pt;
+      background-color: #fafafa;
+    }
     
     #printPage {
       width: 21cm;
       min-height: 29.7cm;
-      padding: 1cm;
+      padding: 2cm 1cm;
       margin: auto;
       border: 1px solid black;
       border-radius: 0.5rem;
@@ -93,26 +103,15 @@ const styled_page = styled(PrintPage)`
     }
 
     [data-space] {
-      height: var(--print-padding);
-    }
-
-    .header {
-      position: fixed;
-      top: 0mm;
-      width: 100%;
-    }
-
-    .footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
+      height: 2cm;
     }
 
     .no-border {
       border: 0;
+      padding: 0;
     }
 
-    thead {
+    table > * {
       background-color: transparent;
     }
 
@@ -125,28 +124,25 @@ const styled_page = styled(PrintPage)`
         margin: 0;
       }
 
-      body {
-        font-size: 12pt;
-        background-color: #fafafa;
-      }
       #printPage {
         width: initial;
         min-height: initial;
         margin: 0;
+        padding: 0 1cm;
         border: initial;
         border-radius: initial;
         break-after: always;
       }
-
-      thead[data-header]{
-        display: table-header-group;
-      }
-      tfoot[data-footer]{
-        display: table-footer-group;
-      }
     }
     p[data-formcode]{
       text-align: end;
+    }
+    #splitLine {
+      width: 100%;
+      height: 2px;
+      background-color: red;
+      position: absolute;
+      top: calc(29.7cm - 1cm * 2 + 2cm);
     }
 `;
 

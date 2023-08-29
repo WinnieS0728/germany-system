@@ -12,9 +12,10 @@ export type cusResType = {
   Empid: null;
   Assigned: "";
   CType: "";
+  ErpNo: string;
 };
 export function getCus(apiPath: string) {
-  return async function (name: string, country?: string) {
+  return async function (name?: string, country?: string) {
     const res: AxiosResponse<cusResType[]> = await axios({
       method: "POST",
       url: `${apiPath}/GetSaleCustomerList`,

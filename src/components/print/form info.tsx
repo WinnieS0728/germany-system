@@ -10,22 +10,28 @@ const FormInfo = ({ className }: sc_props) => {
   return (
     <section className={className}>
       <p>
-        {t("formInfo.id")} : {headData.id}
+        <span>{t("formInfo.id")} :</span>
+        <span>{headData.id}</span>
       </p>
       <p>
-        {t("formInfo.date")} : {headData.createDate}
+        <span>{t("formInfo.date")} :</span>
+        <span>{headData.createDate}</span>
       </p>
       <p>
-        {t("formInfo.dept")} : {headData.dept}
+        <span>{t("formInfo.dept")} :</span>
+        <span>{headData.dept}</span>
       </p>
       <p>
-        {t("formInfo.comp")} : {headData.company}
+        <span>{t("formInfo.comp")} :</span>
+        <span>{headData.company}</span>
       </p>
       <p>
-        {t("formInfo.EmpId")} : {headData.EmpId}
+        <span>{t("formInfo.EmpId")} :</span>
+        <span>{headData.EmpId}</span>
       </p>
       <p>
-        {t("formInfo.name")} : {headData.EmpName}
+        <span>{t("formInfo.name")} :</span>
+        <span>{headData.EmpName}</span>
       </p>
     </section>
   );
@@ -35,6 +41,15 @@ const styled_formInfo = styled(FormInfo)`
     display: grid;
     grid-template-columns: repeat(2,1fr);
     gap: .5em;
+
+    p {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+
+      span:first-child {
+        text-align: end;
+      }
+    }
 `;
 
 export default styled_formInfo;

@@ -15,5 +15,6 @@
     { "name": "sign modal", "path": "./public/locales/sign" },
     { "name": "toast", "path": "./public/locales/toast" },
     { "name": "print", "path": "./public/locales/print" },
+    { "name": "email", "path": "./public/locales/email" },
   ]
 }

@@ -16,7 +16,7 @@ export type tripEvent = {
   ResourcesName_E: string;
 };
 
-type eventResType = trafficEvent | tripEvent;
+export type eventResType = trafficEvent | tripEvent;
 
 export function getEvent(apiPath: string) {
   return async function (type: argType) {

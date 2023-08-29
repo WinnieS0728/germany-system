@@ -16,6 +16,7 @@ import { useSign } from "@/hooks/sign";
 import { useFiles } from "@/hooks/files";
 import { useTranslation } from "react-i18next";
 import api from "@/lib/api";
+import { useEmail } from "@/hooks/email";
 
 export type SignData = {
   agree: "yes" | "no";
@@ -51,7 +52,6 @@ const SignBlock = ({
     password: yup
       .string()
       .required(t("sign.password", { ns: "errors" }))
-      // TODO 密碼審核
       .test(
         "checkPassword",
         t("sign.wrong-psw", { ns: "errors" }),

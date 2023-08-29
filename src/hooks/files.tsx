@@ -14,7 +14,7 @@ interface id {
 interface type {
   type: Record<string, string>;
 }
-const mineObj: (id & type)[] = [
+const mimeObj: (id & type)[] = [
   {
     id: "word",
     type: {
@@ -84,8 +84,8 @@ export const useFiles = () => {
     type: string;
     src: string;
   } {
-    const target = mineObj.find((i) =>
-      Object.values(i.type).some((mine) => mine === fileType)
+    const target = mimeObj.find((i) =>
+      Object.values(i.type).some((mime) => mime === fileType)
     );
 
     if (!target) {
@@ -125,7 +125,7 @@ export const useFiles = () => {
   function getDropzoneAccept(typeList: string[]) {
     const typeObj: { [key: string]: string[] } = {};
     for (const type of typeList) {
-      const target = mineObj.find((i) => i.id === type);
+      const target = mimeObj.find((i) => i.id === type);
       if (!target) {
         return;
       }
@@ -137,19 +137,19 @@ export const useFiles = () => {
     return typeObj;
   }
 
-  const name2mine = useCallback((name: string) => {
-    function name2mine(name: string): string {
+  const name2mime = useCallback((name: string) => {
+    function name2mime(name: string): string {
       const nameType = name.split(".")[name.split(".").length - 1];
-      const target = mineObj.find((i) =>
+      const target = mimeObj.find((i) =>
         Object.keys(i.type).some((type) => type === nameType)
       );
       if (!target) {
         return "";
       }
-      const mine = target.type[nameType];
-      return mine;
+      const mime = target.type[nameType];
+      return mime;
     }
-    return name2mine(name);
+    return name2mime(name);
   }, []);
 
   const path2blob = useCallback((path: string) => {
@@ -166,6 +166,6 @@ export const useFiles = () => {
     getFileSize,
     getFileType,
     path2blob,
-    name2mine,
+    name2mime,
   };
 };

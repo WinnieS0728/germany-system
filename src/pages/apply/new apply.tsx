@@ -214,11 +214,8 @@ export const NewForm = () => {
 
   function pushData(data: tripDetailType[]) {
     api.pushNewData(data);
-    // console.log("建立出差明細元件", res);
-    // return 新增成功
   }
 
-  //  TODO 預防重新整理
   useLayoutEffect(() => {
     function alertUser(event: BeforeUnloadEvent) {
       event.preventDefault();
@@ -227,7 +224,7 @@ export const NewForm = () => {
     window.addEventListener("beforeunload", alertUser);
     return () => window.removeEventListener("beforeunload", alertUser);
   }, []);
-  
+
   useEffect(() => {
     if (spreadData.length === 0) {
       if (errors.tripData) {

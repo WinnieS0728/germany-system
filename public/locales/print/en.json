@@ -7,12 +7,12 @@
     "purpose": "trip purpose"
   },
   "formInfo": {
-    "EmpId": "Emp. Id",
+    "EmpId": "create Id",
     "comp": "company",
     "date": "create date",
     "dept": "department",
     "id": "form id",
-    "name": "Emp. name"
+    "name": "create name"
   },
   "sign": {
     "date": "Time",

@@ -27,7 +27,7 @@ const SignTable = ({ className }: sc_props) => {
             </tr>
             <tr key={`row2-${index}`}>
               <td>{t("sign.opinion")}</td>
-              <td colSpan={5}>{member.OPINION}</td>
+              <td colSpan={5}>{member.OPINION || '-'}</td>
             </tr>
           </Fragment>
         ))}

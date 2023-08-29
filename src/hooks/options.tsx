@@ -3,7 +3,16 @@ import { useAppSelector } from "./redux";
 import { useTranslation } from "react-i18next";
 import { useSignStatusTranslate } from "./status translate";
 import { memberResType } from "@/lib/api/member/getMember";
-import { moneyType } from "@/types";
+import { moneyType, tripEvent } from "@/types";
+import { eventResType } from "@/lib/api/event/get event";
+
+function moveElement(array: eventResType[], type: tripEvent): eventResType[] {
+  const targetIndex = array.findIndex((d) => d.ResourcesId === type);
+  const newArray = [...array];
+  newArray.splice(targetIndex, 1);
+  newArray.unshift(array[targetIndex]);
+  return newArray;
+}
 
 export const useOptions = () => {
   const { i18n, t } = useTranslation("new form");
@@ -33,10 +42,19 @@ export const useOptions = () => {
   async function getEventOptions(input: string) {
     const res = await api.getEvent("TripEvent");
 
-    return res.filter(
-      (o: { ResourcesName: string; ResourcesName_E: string }) =>
-        o.ResourcesName.toLowerCase().includes(input.toLowerCase()) ||
-        o.ResourcesName_E.toLowerCase().includes(input.toLowerCase())
+    const newArray = [...res];
+    const visitIndex = res.findIndex((d) => d.ResourcesId === "TripEvent-1");
+    newArray.splice(visitIndex, 1);
+    newArray.push(res[visitIndex]);
+
+    const moveNewCus = moveElement(newArray, tripEvent.newCus);
+    const moveOldCus = moveElement(moveNewCus, tripEvent.oldCus);
+    const moveAtu = moveElement(moveOldCus, tripEvent.atu);
+
+    return moveAtu.filter(
+      (event) =>
+        event.ResourcesName.toLowerCase().includes(input.toLowerCase()) ||
+        event.ResourcesName_E.toLowerCase().includes(input.toLowerCase())
     );
   }
 
@@ -44,14 +62,14 @@ export const useOptions = () => {
     const res = await api.getArea("DEU");
 
     return res.filter(
-      (o: { Country: string; Country_E: string }) =>
-        o.Country.toLowerCase().includes(input.toLowerCase()) ||
-        o.Country_E.toLowerCase().includes(input.toLowerCase())
+      (cus) =>
+        cus.Country.toLowerCase().includes(input.toLowerCase()) ||
+        cus.Country_E.toLowerCase().includes(input.toLowerCase())
     );
   }
 
   async function getPostalCodeOptions(input: string) {
-    const res: { zipcode: string; place: string }[] = await api.getPostCode();
+    const res = await api.getPostCode();
 
     const noRepeatData = [...new Set(res.map((i) => i.zipcode))];
 
@@ -68,9 +86,9 @@ export const useOptions = () => {
     const res = await api.getCus("", "DEU");
 
     return res.filter(
-      (o: { CustName: string; CustName_E: string }) =>
-        o.CustName.toLowerCase().includes(input.toLowerCase()) ||
-        o.CustName_E.toLowerCase().includes(input.toLowerCase())
+      (cus) =>
+        cus.CustName.toLowerCase().includes(input.toLowerCase()) ||
+        cus.CustName_E.toLowerCase().includes(input.toLowerCase())
     );
   }
 
@@ -78,32 +96,30 @@ export const useOptions = () => {
     const res = await api.getEvent("Traffic");
 
     return res.filter(
-      (o: { ResourcesName: string; ResourcesName_E: string }) =>
-        o.ResourcesName.toLowerCase().includes(input.toLowerCase()) ||
-        o.ResourcesName_E.toLowerCase().includes(input.toLowerCase())
+      (event) =>
+        event.ResourcesName.toLowerCase().includes(input.toLowerCase()) ||
+        event.ResourcesName_E.toLowerCase().includes(input.toLowerCase())
     );
   }
 
   async function getAgentOptions(input: string) {
     const res = await api.getMember("", nowUser.body.DeptId);
-    const notMe = res.filter(
-      (i: { EmpId: string }) => i.EmpId !== nowUser.body.EmpId
-    );
+    const notMe = res.filter((member) => member.EmpId !== nowUser.body.EmpId);
 
     return notMe.filter(
-      (o: { FullName: string; EmpId: string }) =>
-        o.FullName.toLowerCase().includes(input.toLowerCase()) ||
-        o.EmpId.toLowerCase().includes(input.toLowerCase())
+      (member) =>
+        member.FullName.toLowerCase().includes(input.toLowerCase()) ||
+        member.EmpId.toLowerCase().includes(input.toLowerCase())
     );
   }
 
   async function getDeptOptions(input: string) {
     const res = (await getDeptList()) as memberResType[];
     return res.filter(
-      (o: { DeptName: string; DeptName_E: string; DeptId: string }) =>
-        o.DeptName.toLowerCase().includes(input.toLowerCase()) ||
-        o.DeptName_E.toLowerCase().includes(input.toLowerCase()) ||
-        o.DeptId.includes(input)
+      (dept) =>
+        dept.DeptName.toLowerCase().includes(input.toLowerCase()) ||
+        dept.DeptName_E.toLowerCase().includes(input.toLowerCase()) ||
+        dept.DeptId.includes(input)
     );
   }
 
@@ -111,19 +127,17 @@ export const useOptions = () => {
     const res = await api.getMember();
 
     return res.filter(
-      (i: { FullName: string; EmpId: string }) =>
-        i.FullName.toLowerCase().includes(input.toLowerCase()) ||
-        i.EmpId.includes(input)
+      (member) =>
+        member.FullName.toLowerCase().includes(input.toLowerCase()) ||
+        member.EmpId.includes(input)
     );
   }
 
   async function getDeptList() {
     const res = await api.getMember();
-    const deptNoRepeat = [
-      ...new Set(res.map((i: { DeptId: string }) => i.DeptId)),
-    ];
+    const deptNoRepeat = [...new Set(res.map((member) => member.DeptId))];
     const deptArr = deptNoRepeat.map((i) =>
-      res.find((i2: { DeptId: string }) => i2.DeptId === i)
+      res.find((member) => member.DeptId === i)
     );
 
     return deptArr;
@@ -152,16 +166,16 @@ export const useOptions = () => {
       }
       if (input.startsWith("!")) {
         return i.options.some(
-          (d: { DeptName: string; DeptId: string }) =>
-            d.DeptName.toLowerCase().includes(
+          (member) =>
+            member.DeptName.toLowerCase().includes(
               input.toLowerCase().replace("!", "")
-            ) || d.DeptId.includes(input.replace("!", ""))
+            ) || member.DeptId.includes(input.replace("!", ""))
         );
       } else {
         return i.options.some(
-          (d: { FullName: string; EmpId: string }) =>
-            d.FullName.toLowerCase().includes(input.toLowerCase()) ||
-            d.EmpId.includes(input)
+          (member) =>
+            member.FullName.toLowerCase().includes(input.toLowerCase()) ||
+            member.EmpId.includes(input)
         );
       }
     });

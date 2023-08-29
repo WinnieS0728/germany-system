@@ -28,6 +28,7 @@ import api from "@/lib/api";
 import { Hamburger } from "@/layouts/hamburger";
 import { useTranslation } from "react-i18next";
 import { PopupLayer } from "@/layouts/popup";
+import { useEmail } from "@/hooks/email";
 
 const SignPage = () => {
   const { formId } = useParams();
@@ -46,13 +47,20 @@ const SignPage = () => {
   const [toggleOtherSignModal] = useModalControl("otherSign");
   const [toggleFileModal] = useModalControl("files");
 
-  const isNextSigner = useMemo(() => {
+  const isInSignList = useMemo<boolean>(() => {
+    if (formInfo.signList.some((member) => member.SIGNER === nowUser.EmpId)) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [formInfo.signList, nowUser.EmpId]);
+  const isNextSigner = useMemo<boolean>(() => {
     if ((formInfo.nextSign as nextSign)?.SIGNER === nowUser.EmpId) {
       return true;
     }
     return false;
-  }, [formInfo, nowUser]);
-  const isVoid = useMemo(() => {
+  }, [formInfo.nextSign, nowUser.EmpId]);
+  const isVoid = useMemo<boolean>(() => {
     if (headData.status === "作廢") {
       return true;
     }
@@ -84,8 +92,8 @@ const SignPage = () => {
     .sort((a, b) => timeSort(a.date) - timeSort(b.date));
 
   const tripTime = {
-    year: totalData[0]?.date[0].split("-")[0],
-    month: totalData[0]?.date[0].split("-")[1],
+    year: totalData[0]?.date[0]?.split("-")[0],
+    month: totalData[0]?.date[0]?.split("-")[1],
   };
 
   return (
@@ -144,20 +152,46 @@ const SignPage = () => {
                       {t("btn.attach", { ns: "sign page" })}
                     </Btns.IconBtn>
                   </button>
-                  <button type='button' disabled>
-                    <Btns.IconBtn
-                      icon={
-                        <Icons.Print
-                          size='1.5rem'
-                          color={color.black}
-                        />
-                      }
+                  <button type='button'>
+                    <Link
+                      to={`../../print/${formInfo.formId}?userID=${nowUser.EmpId}`}
+                      target='_blank'
                     >
-                      {t("btn.print", { ns: "sign page" })}
-                    </Btns.IconBtn>
+                      <Btns.IconBtn
+                        icon={
+                          <Icons.Print
+                            size='1.5rem'
+                            color={color.black}
+                          />
+                        }
+                      >
+                        {t("btn.print", { ns: "sign page" })}
+                      </Btns.IconBtn>
+                    </Link>
                   </button>
                 </>
               </Hamburger>
+            )}
+            {isInSignList && !isNextSigner && (
+              <button
+                type='button'
+              >
+                <Link
+                  to={`../../print/${formInfo.formId}?userID=${nowUser.EmpId}`}
+                  target='_blank'
+                >
+                  <Btns.IconBtn
+                    icon={
+                      <Icons.Print
+                        size='1.5rem'
+                        color={color.black}
+                      />
+                    }
+                  >
+                    {t("btn.print", { ns: "sign page" })}
+                  </Btns.IconBtn>
+                </Link>
+              </button>
             )}
             <button type='button'>
               <Link to={"https://esys.orange-electronic.com/Eform/List"}>
