@@ -1,11 +1,10 @@
-import { lazy, useEffect, useLayoutEffect } from "react";
+import { lazy, useLayoutEffect } from "react";
 import { Suspense } from "react";
 import { Route, Routes, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { setSalesList } from "@actions/member/setSalesList";
 import { setUser } from "@actions/member/setUser";
 import { useTranslation } from "react-i18next";
-import api from "./lib/api";
 
 const CustomRatePage = lazy(() => import("@pages/custom rate"));
 const EditPage = lazy(() => import("@pages/edit/edit"));
@@ -19,14 +18,6 @@ function App() {
   const { i18n } = useTranslation();
   const [search, setSearch] = useSearchParams();
   const usingLanguage = nowUser.Language?.split("-")[0];
-
-  // TODO erpno
-  useEffect(() => {
-    (async function () {
-      const res = await api.getCus();
-      console.log(res.filter((d) => d.ErpNo !== null));
-    })();
-  }, []);
 
   useLayoutEffect(() => {
     let EmpId: string;

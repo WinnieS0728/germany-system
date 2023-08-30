@@ -21,6 +21,7 @@ import { getFormAttach } from "./common/fetch sign attach";
 import { updateForm } from "./travel apply/update form";
 import { downloadFile } from "./common/download file";
 import { getGroup } from "./common/get group";
+import { sendEmail } from "./common/email";
 
 const apiPath = import.meta.env.VITE_API_PATH;
 
@@ -32,6 +33,7 @@ const api = {
   logIn: LogIn(apiPath),
   getMemberGroup: getGroup(apiPath),
   getFormAttach: getFormAttach(apiPath),
+  sendEmail: sendEmail(apiPath),
   //files
   uploadFileSign: uploadFileSign(apiPath),
   downloadFile: downloadFile(apiPath),

@@ -85,7 +85,7 @@ const NewDetailForm = () => {
     },
   });
 
-  const { newDetailRef, clearDetailSelect } = useSelectRef();
+  const { newDetailRef, clearDetailSelect, clearCusSelect,clearPostCodeSelect } = useSelectRef();
 
   const [toggleModal] = useModalControl("newDetail");
   const [toggleErrorModal] = useModalControl("errors");
@@ -129,6 +129,15 @@ const NewDetailForm = () => {
     setCity();
   }, [getCity, setValue]);
 
+  useEffect(()=>{
+    clearCusSelect()
+  },[clearCusSelect, watch_purpose])
+
+  useEffect(()=>{
+    clearPostCodeSelect()
+    clearCusSelect()
+  },[clearCusSelect, clearPostCodeSelect, watch_area])
+
   useEffect(() => {
     trigger();
   }, [trigger]);
@@ -152,9 +161,8 @@ const NewDetailForm = () => {
 
   const cusFilter = useCallback(
     (candidate: { data: cusResType }): boolean => {
-
       const isATU = candidate.data.CustName.startsWith("A.T.U");
-      const isOldCus = !!candidate.data.ErpNo;      
+      const isOldCus = !!candidate.data.ErpNo;
 
       switch (watch_purpose) {
         case tripEvent_enum.atu:
@@ -347,7 +355,7 @@ const NewDetailForm = () => {
                       value='CustName'
                       filterFunction={(candidate: { data: cusResType }) => {
                         if (candidate.data.PostalCode === watch_postcode) {
-                          return cusFilter(candidate)
+                          return cusFilter(candidate);
                         }
                         return false;
                       }}

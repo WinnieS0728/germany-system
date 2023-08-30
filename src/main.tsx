@@ -14,6 +14,7 @@ import theme from "@styles/theme.ts";
 import { Provider } from "react-redux";
 import store from "@/data/store";
 import { ToastContainer } from "react-toastify";
+// import { Email } from "./email.tsx";
 // import { AA } from "./test.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <ThemeProvider theme={theme}>
       <HashRouter>
         <App />
+        {/* <Email /> */}
         {/* <AA /> */}
         <ToastContainer
           position='top-center'

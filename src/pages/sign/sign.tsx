@@ -31,7 +31,7 @@ import { PopupLayer } from "@/layouts/popup";
 import { useEmail } from "@/hooks/email";
 
 const SignPage = () => {
-  const { formId } = useParams();
+  const {formId} = useParams();  
   const { t } = useTranslation(["common", "sign page", "new form"]);
   const formInfo = useAppSelector((state) => state.formInfo).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
@@ -41,6 +41,7 @@ const SignPage = () => {
   const dispatch = useAppDispatch();
   const { headData, detailData } = useSignPageData();
   const tableData = useTableData(detailData, headData.createDate);
+  useEmail()
 
   const [toggleVoidModal] = useModalControl("void");
   const [toggleSignModal] = useModalControl("sign");
