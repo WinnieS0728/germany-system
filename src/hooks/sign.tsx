@@ -10,11 +10,14 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { clearFile } from "@/data/reducers/files/attach";
 import { memberResType } from "@/lib/api/member/getMember";
+import { useEmail } from "./email";
 
 export const useSign = () => {
   const { t } = useTranslation("toast");
   const formInfo = useAppSelector((state) => state.formInfo).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
+  // TODO 設定如何寄信
+  const { sendEmail } = useEmail();
   const dispatch = useAppDispatch();
 
   const isFinalSigner = useMemo(() => {

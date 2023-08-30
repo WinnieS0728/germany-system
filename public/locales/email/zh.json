@@ -1,5 +1,17 @@
 {
   "done": {
+    "content": "<p>           您好 : <br />           <span style=\"margin-left: 2rem; line-height: 2;\">             您的出差申請 <b style=\"font-size: 1.25rem;\">已簽核完畢</b>, 表單號碼             <b style=\"font-size: 1.25rem;\">{{ formId }}</b>,           </span>           <br />           <span style=\"margin-left: 2rem;\">             可點選連結進入 E-system 查看 : <a href=\"{{ link }}\">表單連結</a>           </span>            <br /><br /><br />           ※ 此為系統自動通知，請勿直接回覆郵件，感謝您！         </p>",
+    "title": "E-system 系統通知 - 德國出差申請單, 表單號碼 : {{ formId }}, 簽核完成"
+  },
+  "other": {
+    "content": "<p>           您好 : <br />           <span style=\"margin-left: 2rem; line-height: 2;\">             請協助會簽             <b style=\"font-size: 1.25rem;\">⟪ {{ createName }} 的出差申請單 ⟫</b>, 表單號碼             <b style=\"font-size: 1.25rem;\">{{ formId }}</b>,           </span>           <br />           <span style=\"margin-left: 2rem;\">             可點選連結進入 E-system 查看 : <a href=\"{{ link }}\">表單連結</a>           </span>            <br /><br /><br />           ※ 此為系統自動通知，請勿直接回覆郵件，感謝您！         </p>",
+    "title": "E-system 系統通知 - 德國出差申請單, 表單號碼 : {{ formId }}, 待簽核 ( 會簽 )"
+  },
+  "return": {
+    "content": "<p>           您好 : <br />           <span style=\"margin-left: 2rem; line-height: 2;\">             您的出差申請 <b style=\"font-size: 1.25rem;\">不同意簽核</b>, 表單號碼             <b style=\"font-size: 1.25rem;\">{{ formId }}</b>,           </span>           <br />           <span style=\"margin-left: 2rem;\">             可點選連結進入 E-system 查看 : <a href=\"{{ link }}\">表單連結</a>           </span>            <br /><br /><br />           ※ 此為系統自動通知，請勿直接回覆郵件，感謝您！         </p>",
+    "title": "E-system 系統通知 - 德國出差申請單, 表單號碼 : {{ formId }}, 簽核失敗"
+  },
+  "wait": {
     "content": "<p>           您好 : <br />           <span style=\"margin-left: 2rem; line-height: 2;\">             請協助簽核             <b style=\"font-size: 1.25rem;\">⟪ {{ createName }} 的出差申請單 ⟫</b>, 表單號碼             <b style=\"font-size: 1.25rem;\">{{ formId }}</b>,           </span>           <br />           <span style=\"margin-left: 2rem;\">             可點選連結進入 E-system 查看 : <a href=\"{{ link }}\">表單連結</a>           </span>            <br /><br /><br />           ※ 此為系統自動通知，請勿直接回覆郵件，感謝您！         </p>",
     "title": "E-system 系統通知 - 德國出差申請單, 表單號碼 : {{ formId }}, 待簽核"
   }

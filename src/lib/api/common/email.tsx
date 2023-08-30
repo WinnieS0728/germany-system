@@ -1,17 +1,24 @@
 import axios from "axios";
 
 type emailData = {
-  Empid: string;
   Sub: string;
   Messg: string;
 };
 export function sendEmail(apiPath: string) {
-  return async function (data: emailData) {
-    const res = await axios<string>({
-      method: "POST",
-      url: `${apiPath}/MailSend`,
-      data: data,
+  return async function (EmpId: string, data: emailData) {
+    console.log({
+      Empid: EmpId,
+      ...data,
     });
-    return res.data;
+
+    // const res = await axios<string>({
+    //   method: "POST",
+    //   url: `${apiPath}/MailSend`,
+    //   data: {
+    //     Empid: EmpId,
+    //     ...data,
+    //   },
+    // });
+    // return res.data;
   };
 }

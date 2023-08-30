@@ -28,7 +28,6 @@ import api from "@/lib/api";
 import { Hamburger } from "@/layouts/hamburger";
 import { useTranslation } from "react-i18next";
 import { PopupLayer } from "@/layouts/popup";
-import { useEmail } from "@/hooks/email";
 
 const SignPage = () => {
   const {formId} = useParams();  
@@ -41,7 +40,6 @@ const SignPage = () => {
   const dispatch = useAppDispatch();
   const { headData, detailData } = useSignPageData();
   const tableData = useTableData(detailData, headData.createDate);
-  useEmail()
 
   const [toggleVoidModal] = useModalControl("void");
   const [toggleSignModal] = useModalControl("sign");

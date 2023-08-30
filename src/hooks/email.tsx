@@ -7,6 +7,7 @@ import { useSignPageData } from "@/pages/sign/data";
 
 export const useEmail = () => {
   const [lang, setLang] = useState<memberResType["Language"]>("en-US");
+  const [recipient, setRecipient] = useState<string>("");
   const { t } = useTranslation("email", {
     lng: lang.split("-")[0],
   });
@@ -31,8 +32,10 @@ export const useEmail = () => {
   useEffect(() => {
     if (!nextSigner) {
       getLang(signList[0]?.SIGNER);
+      setRecipient(signList[0]?.SIGNER);
     } else {
       getLang(nextSigner);
+      setRecipient(nextSigner);
     }
   }, [getLang, nextSigner, signList]);
 
@@ -50,20 +53,30 @@ export const useEmail = () => {
         Sub: t("done.title", getEmailData()),
         Messg: t("done.content", getEmailData()),
       },
-      wait: { Sub: t("done.title"), Messg: t("done.content") },
-      other: { Sub: t("done.title"), Messg: t("done.content") },
-      return: { Sub: t("done.title"), Messg: t("done.content") },
+      wait: {
+        Sub: t("wait.title", getEmailData()),
+        Messg: t("wait.content", getEmailData()),
+      },
+      other: {
+        Sub: t("other.title", getEmailData()),
+        Messg: t("other.content", getEmailData()),
+      },
+      return: {
+        Sub: t("return.title", getEmailData()),
+        Messg: t("return.content", getEmailData()),
+      },
     }),
     [getEmailData, t]
   );
 
   const sendEmail = useCallback(
     (type: emailType) => {
-      email[`${type}`];
+      api.sendEmail(recipient, email[`${type}`]);
     },
-    [email]
+    [email, recipient]
   );
-  sendEmail("done");
+
+  return { sendEmail };
 };
 
 type emailType = "done" | "wait" | "other" | "return";
