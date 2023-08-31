@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 
 type emailData = {
   Sub: string;
@@ -10,6 +10,7 @@ export function sendEmail(apiPath: string) {
       Empid: EmpId,
       ...data,
     });
+    apiPath;
 
     // TODO 打開api
     // const res = await axios<string>({

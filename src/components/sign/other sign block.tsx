@@ -14,6 +14,7 @@ import { useSign } from "@/hooks/sign";
 import { useTranslation } from "react-i18next";
 import { useId2name } from "@/hooks/id2name";
 import { memberResType } from "@/lib/api/member/getMember";
+import { cn } from "@/lib/utils/cn";
 
 const OtherSignBlock = ({ className }: { className?: string }) => {
   const color = useTheme()?.color;
@@ -65,7 +66,7 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
   }, [trigger]);
 
   return (
-    <article className={`modal ${className} space-y-4`}>
+    <article className={cn(`modal space-y-4`,className)}>
       <h3>{t("otherSign.title", { ns: "sign" })}</h3>
       <form
         id='otherSign'

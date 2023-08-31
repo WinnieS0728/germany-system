@@ -17,6 +17,7 @@ import { useFiles } from "@/hooks/files";
 import { useTranslation } from "react-i18next";
 import api from "@/lib/api";
 import { useEmail } from "@/hooks/email";
+import { cn } from "@/lib/utils/cn";
 
 export type SignData = {
   agree: "yes" | "no";
@@ -157,7 +158,7 @@ const SignBlock = ({
   }
 
   return (
-    <article className={`modal ${className}`}>
+    <article className={cn(`modal`, className)}>
       <h3>{t("title")}</h3>
       <ul className='ref-ul'>
         {type === "sign" ? (

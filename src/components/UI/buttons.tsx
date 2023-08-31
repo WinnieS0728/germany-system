@@ -6,6 +6,7 @@ interface propType {
   text: string;
   className?: string;
 }
+
 const SubmitBtn = ({ text, className }: propType) => {
   return (
     <button
@@ -149,3 +150,4 @@ export const PageControlBtn = (props: PageControlBtnProps) => {
     </button>
   );
 };
+

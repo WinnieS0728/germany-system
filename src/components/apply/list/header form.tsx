@@ -19,6 +19,7 @@ import { useId2name } from "@/hooks/id2name";
 import { dateFormatter } from "@/hooks/dateFormatter";
 import { memberResType } from "@/lib/api/member/getMember";
 import { fetchFormListBody } from "@/lib/api/travel apply/get list";
+import { cn } from "@/lib/utils/cn";
 
 export const HeaderForm = ({ className }: propsType) => {
   const color = useTheme()?.color;
@@ -107,7 +108,10 @@ export const HeaderForm = ({ className }: propsType) => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{ backgroundColor: color.headForm_bgc }}
-        className={`${className} flex flex-col items-center gap-4 rounded-xl px-16 py-4 md:flex-row`}
+        className={cn(
+          `flex flex-col items-center gap-4 rounded-xl px-16 py-4 md:flex-row`,
+          className
+        )}
       >
         <div className='form-body grid w-full gap-4'>
           <div className='member label-input'>

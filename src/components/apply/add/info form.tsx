@@ -1,6 +1,7 @@
 import { dateFormatter } from "@/hooks/dateFormatter";
 import { useId2name } from "@/hooks/id2name";
 import { useAppSelector } from "@/hooks/redux";
+import { cn } from "@/lib/utils/cn";
 import { component } from "@/types";
 import { useTranslation } from "react-i18next";
 
@@ -12,7 +13,10 @@ interface infoPropType {
 const Info = ({ title, content, className }: infoPropType) => {
   return (
     <div
-      className={`${className} grid grid-cols-2 items-center justify-center gap-2`}
+      className={cn(
+        `grid grid-cols-2 items-center justify-center gap-2`,
+        className
+      )}
     >
       <span className='text-end'>{title} :</span>
       <span>{content}</span>
@@ -71,9 +75,7 @@ export const InfoForm = ({ type, data }: component) => {
       <Info
         title={t("info.emp", { ns: "new form" })}
         content={
-          type === "addForm"
-            ? splitName(nowUser)
-            : (data?.EmpName as string)
+          type === "addForm" ? splitName(nowUser) : (data?.EmpName as string)
         }
       />
     </div>
