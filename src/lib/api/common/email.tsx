@@ -11,6 +11,7 @@ export function sendEmail(apiPath: string) {
       ...data,
     });
 
+    // TODO 打開api
     // const res = await axios<string>({
     //   method: "POST",
     //   url: `${apiPath}/MailSend`,

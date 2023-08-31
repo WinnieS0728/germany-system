@@ -65,21 +65,29 @@ export const useEmail = () => {
         Sub: t("return.title", getEmailData()),
         Messg: t("return.content", getEmailData()),
       },
+      void: {
+        Sub: t("return.title", getEmailData()),
+        Messg: t("return.content", getEmailData()),
+      },
     }),
     [getEmailData, t]
   );
 
   const sendEmail = useCallback(
-    (type: emailType) => {
-      api.sendEmail(recipient, email[`${type}`]);
+    (member = recipient, type: emailType) => {
+      send(member, email[`${type}`]);
     },
     [email, recipient]
   );
+  function send(member: string, content: emailContent) {
+    api.sendEmail(member, content);
+  }
+  sendEmail(undefined, "done");
 
   return { sendEmail };
 };
 
-type emailType = "done" | "wait" | "other" | "return";
+export type emailType = "done" | "wait" | "other" | "return" | "void";
 type emailContent = {
   Sub: string;
   Messg: string;

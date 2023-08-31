@@ -30,7 +30,7 @@ import { useTranslation } from "react-i18next";
 import { PopupLayer } from "@/layouts/popup";
 
 const SignPage = () => {
-  const {formId} = useParams();  
+  const { formId } = useParams();
   const { t } = useTranslation(["common", "sign page", "new form"]);
   const formInfo = useAppSelector((state) => state.formInfo).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
@@ -172,9 +172,7 @@ const SignPage = () => {
               </Hamburger>
             )}
             {isInSignList && !isNextSigner && (
-              <button
-                type='button'
-              >
+              <button type='button'>
                 <Link
                   to={`../../print/${formInfo.formId}?userID=${nowUser.EmpId}`}
                   target='_blank'
@@ -193,7 +191,7 @@ const SignPage = () => {
               </button>
             )}
             <button type='button'>
-              <Link to={"https://esys.orange-electronic.com/Eform/List"}>
+              <Link to={`/apply`}>
                 <Btns.IconBtn icon={<Icons.Back size='1.25rem' />}>
                   {t("btn.back", { ns: "sign page" })}
                 </Btns.IconBtn>

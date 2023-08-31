@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { setSalesList } from "@actions/member/setSalesList";
 import { setUser } from "@actions/member/setUser";
 import { useTranslation } from "react-i18next";
+import { useEmail } from "./hooks/email";
 
 const CustomRatePage = lazy(() => import("@pages/custom rate"));
 const EditPage = lazy(() => import("@pages/edit/edit"));
@@ -13,6 +14,8 @@ const SignPage = lazy(() => import("@pages/sign/sign"));
 const PrintPage = lazy(() => import("@pages/print"));
 
 function App() {
+
+  useEmail()
   const dispatch = useAppDispatch();
   const nowUser = useAppSelector((state) => state.nowUser).body;
   const { i18n } = useTranslation();

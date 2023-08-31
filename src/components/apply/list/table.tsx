@@ -70,7 +70,6 @@ export const ListTable = () => {
                     <td>
                       <Link
                         to={`../sign/${i.formId}/?userID=${nowUser.EmpId}`}
-                        target='__blank'
                         style={{ cursor: "pointer" }}
                       >
                         {i.formId}
