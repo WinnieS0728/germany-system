@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { setSalesList } from "@actions/member/setSalesList";
 import { setUser } from "@actions/member/setUser";
 import { useTranslation } from "react-i18next";
-import { useEmail } from "./hooks/email";
 
 const CustomRatePage = lazy(() => import("@pages/custom rate"));
 const EditPage = lazy(() => import("@pages/edit/edit"));
@@ -14,26 +13,25 @@ const SignPage = lazy(() => import("@pages/sign/sign"));
 const PrintPage = lazy(() => import("@pages/print"));
 
 function App() {
-
-  useEmail()
   const dispatch = useAppDispatch();
-  const nowUser = useAppSelector((state) => state.nowUser).body;
+  const { Language, EmpId } = useAppSelector((state) => state.nowUser).body;
   const { i18n } = useTranslation();
   const [search, setSearch] = useSearchParams();
-  const usingLanguage = nowUser.Language?.split("-")[0];
+  const usingLanguage = Language?.split("-")[0];
+  const nowUser_id = EmpId
 
   useLayoutEffect(() => {
     let EmpId: string;
     if (search.get("userID")) {
       EmpId = search.get("userID") as string;
     } else {
-      EmpId = nowUser.EmpId;
-      setSearch({ userID: nowUser.EmpId });
+      EmpId = nowUser_id;
+      setSearch({ userID: EmpId });
     }
     dispatch(setSalesList());
     dispatch(setUser(EmpId as string));
     i18n.changeLanguage(usingLanguage);
-  }, [dispatch, i18n, nowUser.EmpId, search, setSearch, usingLanguage]);
+  }, [dispatch, i18n, nowUser_id, search, setSearch, usingLanguage]);
 
   return (
     <Suspense fallback={<h1>那你網路很慢欸</h1>}>

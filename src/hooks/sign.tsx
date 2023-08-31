@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "./redux";
 import api from "@/lib/api";
 import { signFinalDataType } from "@/lib/api/sign/update sign";
@@ -10,29 +10,33 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { clearFile } from "@/data/reducers/files/attach";
 import { memberResType } from "@/lib/api/member/getMember";
+import { useEmail } from "./email";
 
 export const useSign = () => {
   const { t } = useTranslation("toast");
-  const formInfo = useAppSelector((state) => state.formInfo).body;
+  const { formId, nowOrder, signList,nextSign } = useAppSelector(
+    (state) => state.formInfo
+  ).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
   const dispatch = useAppDispatch();
+  const { sendEmail } = useEmail();
 
   const isFinalSigner = useMemo(() => {
-    const nowSign = formInfo.nowOrder;
-    const lastSign = formInfo.signList[formInfo.signList.length - 1]?.SIGNORDER;
+    const nowSign = nowOrder;
+    const lastSign = signList[signList.length - 1]?.SIGNORDER;
     if (nowSign === lastSign) {
       return true;
     } else {
       return false;
     }
-  }, [formInfo]);
+  }, [nowOrder, signList]);
 
   async function updateFormStatus(agree: "yes" | "no" | "delete") {
     let data: updateFormStatus | undefined;
     let popupText = "";
     if (agree === "delete") {
       data = {
-        BTPId: formInfo.formId,
+        BTPId: formId,
         Status: "4", // 作廢
         type: "1",
       };
@@ -40,14 +44,14 @@ export const useSign = () => {
       afterSign();
     } else if (agree === "no") {
       data = {
-        BTPId: formInfo.formId,
+        BTPId: formId,
         Status: "3", // 退簽
         type: "1",
       };
       popupText = t("formStatus.return");
     } else if (agree === "yes" && isFinalSigner) {
       data = {
-        BTPId: formInfo.formId,
+        BTPId: formId,
         Status: "2", // 完簽
         type: "1",
       };
@@ -59,7 +63,7 @@ export const useSign = () => {
     const request = api.updateForm(data);
     toast.promise(request, {
       pending: t("formStatus.pending"),
-      success: `${formInfo.formId} ${popupText}`,
+      success: `${formId} ${popupText}`,
       error: t("formStatus.fail"),
     });
   }
@@ -82,7 +86,7 @@ export const useSign = () => {
 
   async function sign(data: SignData) {
     const signFinalData: signFinalDataType = {
-      ...(formInfo.nextSign as {
+      ...(nextSign as {
         FORMNO: string;
         SIGNORDER: number;
         STEPNAME: string;
@@ -126,8 +130,8 @@ export const useSign = () => {
     const otherSignMemberList = otherSignMember.map(
       (member): otherSignFinalDataType => {
         return {
-          FORMNO: formInfo.formId,
-          SIGNORDER: formInfo.nowOrder,
+          FORMNO: formId,
+          SIGNORDER: nowOrder,
           STEPNAME: member.DeptName,
           SIGNER: member.EmpId,
           SIGNERNAME: member.EmpName,
@@ -144,12 +148,15 @@ export const useSign = () => {
       error: t("otherSign.fail"),
     });
 
+    const recipient = otherSignMember[0].EmpId;
+    sendEmail(recipient, "other");
+
     dispatch(clearFile());
     afterSign();
   }
 
   async function signOver() {
-    const restMember = formInfo.signList.slice(formInfo.nowOrder + 1);
+    const restMember = signList.slice(nowOrder + 1);
     // console.log(restMember);
 
     const data: signFinalDataType[] = restMember.map((member) => {
@@ -183,7 +190,6 @@ export const useSign = () => {
   }
 
   return {
-    isFinalSigner,
     sign,
     updateFormStatus,
     otherSign,

@@ -49,7 +49,7 @@ type detailData = {
 export const useSignPageData = () => {
   const { i18n, t } = useTranslation("sign page");
   const nowLang = i18n.language;
-  const formInfo = useAppSelector((state) => state.formInfo).body;
+  const { formId } = useAppSelector((state) => state.formInfo).body;
   const [headData, setData] = useState<signDataType>(initData);
   const [detailData, setData2] = useState<detailDataWithSingleData[][]>([]);
 
@@ -62,15 +62,15 @@ export const useSignPageData = () => {
       const res = await api.getBusinessApplyHeader(id);
       return res;
     }
-    return getData(formInfo.formId);
-  }, [formInfo.formId]);
+    return getData(formId);
+  }, [formId]);
   const getDetailData = useCallback(() => {
     async function getData(id: string) {
       const res: detailData[] = await api.getBusinessApplyDetail(id);
       return res;
     }
-    return getData(formInfo.formId);
-  }, [formInfo.formId]);
+    return getData(formId);
+  }, [formId]);
   const getMemberInfo = useCallback((id: string) => {
     async function getData() {
       const res = await api.getMember(id);
@@ -182,11 +182,11 @@ export const useSignPageData = () => {
 
       setData2(data3);
     }
-    if (formInfo.formId) {
+    if (formId) {
       qq();
     }
   }, [
-    formInfo.formId,
+    formId,
     getDetailData,
     getFormStatus,
     getHeaderData,

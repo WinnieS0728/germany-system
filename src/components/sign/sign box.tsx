@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Table } from "../table/table";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TextAreaAutosize from "react-textarea-autosize";
 import * as Btns from "@components/UI/buttons";
 import * as Icons from "@components/UI/icons";
@@ -16,6 +16,7 @@ import { useSign } from "@/hooks/sign";
 import { useFiles } from "@/hooks/files";
 import { useTranslation } from "react-i18next";
 import api from "@/lib/api";
+import { useEmail } from "@/hooks/email";
 
 export type SignData = {
   agree: "yes" | "no";
@@ -31,12 +32,26 @@ const SignBlock = ({
   type: "sign" | "otherSign";
 }) => {
   const { t } = useTranslation(["sign", "errors"]);
-  const formInfo = useAppSelector((state) => state.formInfo).body;
+  const { formId, signList, nowOrder } = useAppSelector(
+    (state) => state.formInfo
+  ).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
   const { sign, updateFormStatus, signOver } = useSign();
   const [showPassword, setPasswordShow] = useState<boolean>(false);
   const { uploadFile } = useFiles();
+  const { sendEmail } = useEmail();
   const dispatch = useAppDispatch();
+
+  const isFinalSigner = useMemo<boolean>(() => {
+    const nextSigner = signList.find(
+      (member) => member.SIGNORDER === nowOrder + 1
+    );
+    if (!nextSigner) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [nowOrder, signList]);
 
   const [toggleModal] = useModalControl("sign");
   const [toggleErrorModal] = useModalControl("errors");
@@ -120,8 +135,18 @@ const SignBlock = ({
 
   async function send(data: SignData) {
     sign(data);
+    uploadFile(formId);
     updateFormStatus(data.agree);
-    uploadFile(formInfo.formId);
+    if (data.agree === "no") {
+      const recipient = signList[0].SIGNER;
+      sendEmail(recipient, "return");
+    } else if (data.agree === "yes" && isFinalSigner) {
+      const recipient = signList[0].SIGNER;
+      sendEmail(recipient, "done");
+    } else {
+      const recipient = signList[nowOrder + 1].SIGNER;
+      sendEmail(recipient, "wait");
+    }
   }
 
   function validation() {

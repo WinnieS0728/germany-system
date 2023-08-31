@@ -32,7 +32,7 @@ import { PopupLayer } from "@/layouts/popup";
 const SignPage = () => {
   const { formId } = useParams();
   const { t } = useTranslation(["common", "sign page", "new form"]);
-  const formInfo = useAppSelector((state) => state.formInfo).body;
+  const { signList, nextSign } = useAppSelector((state) => state.formInfo).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const color = useTheme()?.color;
@@ -47,18 +47,18 @@ const SignPage = () => {
   const [toggleFileModal] = useModalControl("files");
 
   const isInSignList = useMemo<boolean>(() => {
-    if (formInfo.signList.some((member) => member.SIGNER === nowUser.EmpId)) {
+    if (signList.some((member) => member.SIGNER === nowUser.EmpId)) {
       return true;
     } else {
       return false;
     }
-  }, [formInfo.signList, nowUser.EmpId]);
+  }, [signList, nowUser.EmpId]);
   const isNextSigner = useMemo<boolean>(() => {
-    if ((formInfo.nextSign as nextSign)?.SIGNER === nowUser.EmpId) {
+    if ((nextSign as nextSign)?.SIGNER === nowUser.EmpId) {
       return true;
     }
     return false;
-  }, [formInfo.nextSign, nowUser.EmpId]);
+  }, [nextSign, nowUser.EmpId]);
   const isVoid = useMemo<boolean>(() => {
     if (headData.status === "作廢") {
       return true;
@@ -153,7 +153,7 @@ const SignPage = () => {
                   </button>
                   <button type='button'>
                     <Link
-                      to={`../../print/${formInfo.formId}?userID=${nowUser.EmpId}`}
+                      to={`../../print/${formId}?userID=${nowUser.EmpId}`}
                       target='_blank'
                     >
                       <Btns.IconBtn
@@ -174,7 +174,7 @@ const SignPage = () => {
             {isInSignList && !isNextSigner && (
               <button type='button'>
                 <Link
-                  to={`../../print/${formInfo.formId}?userID=${nowUser.EmpId}`}
+                  to={`../../print/${formId}?userID=${nowUser.EmpId}`}
                   target='_blank'
                 >
                   <Btns.IconBtn

@@ -8,9 +8,9 @@ import styled from "styled-components";
 
 const SignTable = ({ className }: sc_props) => {
   const { t } = useTranslation("print");
-  const signList = useAppSelector((state) => state.formInfo).body.signList;
+  const { signList } = useAppSelector((state) => state.formInfo).body;
 
-  const {getSignStatus} = useSignStatusTranslate()
+  const { getSignStatus } = useSignStatusTranslate();
 
   return (
     <table className={className}>
@@ -27,7 +27,7 @@ const SignTable = ({ className }: sc_props) => {
             </tr>
             <tr key={`row2-${index}`}>
               <td>{t("sign.opinion")}</td>
-              <td colSpan={5}>{member.OPINION || '-'}</td>
+              <td colSpan={5}>{member.OPINION || "-"}</td>
             </tr>
           </Fragment>
         ))}

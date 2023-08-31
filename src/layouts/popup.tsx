@@ -16,7 +16,7 @@ const ErrorsModal = lazy(() => import("@/components/apply/add/errors"));
 
 export const PopupLayer = () => {
   const errors = useAppSelector((state) => state.errors);
-  const formInfo = useAppSelector((state) => state.formInfo).body;
+  const { signType } = useAppSelector((state) => state.formInfo).body;
 
   const errorsState = useModalControl("errors")[1];
   const detailState = useModalControl("newDetail")[1];
@@ -62,7 +62,7 @@ export const PopupLayer = () => {
       )}
       {signState && (
         <Modal name='sign'>
-          <SignBlock type={formInfo.signType} />
+          <SignBlock type={signType} />
         </Modal>
       )}
       {otherSignState && (

@@ -1,88 +1,275 @@
-import { useTranslation } from "react-i18next";
-import { useAppSelector } from "./redux";
 import api from "@/lib/api";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { memberResType } from "@/lib/api/member/getMember";
 import { useSignPageData } from "@/pages/sign/data";
+import { useMemo } from "react";
+import { useAppSelector } from "./redux";
 
 export const useEmail = () => {
-  const [lang, setLang] = useState<memberResType["Language"]>("en-US");
-  const [recipient, setRecipient] = useState<string>("");
-  const { t } = useTranslation("email", {
-    lng: lang.split("-")[0],
-  });
-  const { formId, nowOrder, signList } = useAppSelector(
-    (state) => state.formInfo
-  ).body;
+  const { formId } = useAppSelector((state) => state.formInfo).body;
+  const link = `https://esys.orange-electronic.com/ODF/Sales_Travel?id=TravelAppDe&formN=index`;
   const { headData } = useSignPageData();
   const createName = headData.EmpName;
-
-  const nextSigner = signList.find(
-    (member) => member.SIGNORDER === nowOrder + 1
-  )?.SIGNER;
-
-  const getLang = useCallback((EmpId: string) => {
-    (async function () {
-      const res = await api.getMember(EmpId);
-      const usingLang = res[0].Language;
-      setLang(usingLang);
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (!nextSigner) {
-      getLang(signList[0]?.SIGNER);
-      setRecipient(signList[0]?.SIGNER);
-    } else {
-      getLang(nextSigner);
-      setRecipient(nextSigner);
-    }
-  }, [getLang, nextSigner, signList]);
-
-  const getEmailData: () => emailData = useCallback(() => {
+  const emailContent: email = useMemo(() => {
     return {
-      formId: formId,
-      createName: createName,
-      link: `https://esys.orange-electronic.com/ODF/Sales_Travel?id=TravelAppDe&formN=index`,
-    };
-  }, [createName, formId]);
-
-  const email: email = useMemo(
-    () => ({
       done: {
-        Sub: t("done.title", getEmailData()),
-        Messg: t("done.content", getEmailData()),
+        "zh-TW": {
+          Sub: `E-system 系統通知 - 德國出差申請單, 表單號碼 : ${formId}, 簽核完成`,
+          Messg: `
+          <p>您好 : <br />
+            <span style="margin-left: 2rem; line-height: 2;">
+              您的出差申請 
+              <b style="font-size: 1.25rem;">
+                已簽核完畢
+              </b>, 
+              表單號碼
+              <b style="font-size: 1.25rem;">
+              ${formId}
+              </b>,
+            </span> <br />
+            <span style="margin-left: 2rem">
+              可點選連結進入 E-system 查看 : 
+              <a href=${link}>
+                表單連結
+              </a>
+            </span> <br /><br /><br />
+            ※ 此為系統自動通知，請勿直接回覆郵件，感謝您！
+          </p>`,
+        },
+        "en-US": {
+          Sub: `E-system notification - Germany Business Trip Apply, formId : ${formId}, sign off completed`,
+          Messg: `
+            <p>Hi : <br />
+              <span style="margin-left: 2rem; line-height: 2;">
+                your business trip apply
+                <b style="font-size: 1.25rem;">
+                  is sign off complete
+                </b>, 
+                formId
+                <b style="font-size: 1.25rem;">
+                  ${formId}
+                </b>,
+              </span> <br />
+              <span style="margin-left: 2rem;">
+                Click the link to enter the E-system view : 
+                <a href=${link}>
+                  page link
+                </a>
+              </span> <br /><br /><br />
+              ※ This is an automatic notification from the system. Please do not reply to the email directly. Thank you !
+            </p>
+          `,
+        },
       },
       wait: {
-        Sub: t("wait.title", getEmailData()),
-        Messg: t("wait.content", getEmailData()),
+        "zh-TW": {
+          Sub: `E-system 系統通知 - 德國出差申請單, 表單號碼 : ${formId}, 待簽核`,
+          Messg: `
+          <p>您好 : <br />
+            <span style="margin-left: 2rem; line-height: 2;">
+              請協助簽核
+              <b style="font-size: 1.25rem;">
+                ⟪ ${createName} 的出差申請單 ⟫
+              </b>, 
+              表單號碼
+              <b style="font-size: 1.25rem;">
+                ${formId}
+              </b>,
+            </span> <br />           
+            <span style="margin-left: 2rem;">
+              可點選連結進入 E-system 查看 : 
+              <a href=${link}>
+                表單連結
+              </a>
+            </span> <br /><br /><br />
+            ※ 此為系統自動通知，請勿直接回覆郵件，感謝您！
+          </p>
+          `,
+        },
+        "en-US": {
+          Sub: `E-system notification - Germany Business Trip Apply, formId : ${formId}, sign off request`,
+          Messg: `
+          <p>Hi : <br />
+            <span style="margin-left: 2rem; line-height: 2;">
+              please help to sign
+              <b style="font-size: 1.25rem;">
+                ⟪ business trip apply from ${createName} ⟫
+              </b>, 
+              formId 
+              <b style="font-size: 1.25rem;">
+                ${formId}
+              </b>,
+            </span> <br />
+            <span style="margin-left: 2rem;">
+              Click the link to enter the E-system view :
+              <a href=${link}>
+                page link
+              </a>
+            </span> <br /><br /><br />
+            ※ This is an automatic notification from the system. Please do not reply to the email directly. Thank you !         
+          </p>
+          `,
+        },
       },
       other: {
-        Sub: t("other.title", getEmailData()),
-        Messg: t("other.content", getEmailData()),
+        "zh-TW": {
+          Sub: `E-system 系統通知 - 德國出差申請單, 表單號碼 : ${formId}, 待簽核 ( 會簽 )`,
+          Messg: `
+          <p>您好 : <br />
+            <span style="margin-left: 2rem; line-height: 2;">
+              請協助會簽
+              <b style="font-size: 1.25rem;">
+                ⟪ ${createName} 的出差申請單 ⟫
+              </b
+              >, 表單號碼 <b style="font-size: 1.25rem;">{{ formId }}</b>,
+            </span>
+            <br />
+            <span style="margin-left: 2rem;">
+              可點選連結進入 E-system 查看 : 
+              <a href=${link}>
+                表單連結
+              </a>
+            </span> <br /><br /><br />
+            ※ 此為系統自動通知，請勿直接回覆郵件，感謝您！
+          </p>
+          `,
+        },
+        "en-US": {
+          Sub: `E-system notification - Germany Business Trip Apply, formId : ${formId}, sign off request (countersign)`,
+          Messg: `
+          <p>Hi : <br />
+            <span style="margin-left: 2rem; line-height: 2;">
+              please help to countersign
+              <b style="font-size: 1.25rem;">
+                ⟪ business trip apply from ${createName} ⟫
+              </b>, 
+              formId
+              <b style="font-size: 1.25rem;">
+                ${formId}
+              </b>,
+            </span> <br />
+            <span style="margin-left: 2rem;">
+              Click the link to enter the E-system view :
+              <a href=${link}>
+                page link
+              </a>
+          </span> <br /><br /><br />
+          ※ This is an automatic notification from the system. Please do not
+          reply to the email directly. Thank you !
+        </p>
+          `,
+        },
       },
       return: {
-        Sub: t("return.title", getEmailData()),
-        Messg: t("return.content", getEmailData()),
+        "zh-TW": {
+          Sub: `E-system 系統通知 - 德國出差申請單, 表單號碼 : ${formId}, 簽核失敗`,
+          Messg: `
+          <p>您好 : <br />
+            <span style="margin-left: 2rem; line-height: 2;">
+              您的出差申請
+              <b style="font-size: 1.25rem;">
+                不同意簽核
+              </b>, 
+              表單號碼
+              <b style="font-size: 1.25rem;">
+                ${formId}
+              </b>,
+            </span> <br />
+            <span style="margin-left: 2rem;">
+              可點選連結進入 E-system 查看 : 
+              <a href=${link}>
+                表單連結
+              </a>
+            </span> <br /><br /><br />
+            ※ 此為系統自動通知，請勿直接回覆郵件，感謝您！
+          </p>
+          `,
+        },
+        "en-US": {
+          Sub: `E-system notification - Germany Business Trip Apply, formId : ${formId}, sign off failed`,
+          Messg: `
+          <p>Hi : <br />
+            <span style="margin-left: 2rem; line-height: 2;">
+              your business trip apply
+              <b style="font-size: 1.25rem;">
+                is sign off failed
+              </b>, 
+              formId
+              <b style="font-size: 1.25rem;">
+                ${formId}
+              </b>,
+            </span> <br />
+            <span style="margin-left: 2rem;">
+              Click the link to enter the E-system view :
+              <a href=${link}>
+                page link
+              </a>
+            </span> <br /><br /><br />
+            ※ This is an automatic notification from the system. Please do not reply to the email directly. Thank you !
+          </p>
+        `,
+        },
       },
       void: {
-        Sub: t("return.title", getEmailData()),
-        Messg: t("return.content", getEmailData()),
+        "zh-TW": {
+          Sub: `E-system 系統通知 - 德國出差申請單, 表單號碼 : ${formId}, 已作廢`,
+          Messg: `
+          <p>您好 : <br />
+            <span style="margin-left: 2rem; line-height: 2;">
+              您的出差申請
+              <b style="font-size: 1.25rem;">
+                已作廢
+              </b>,
+              表單號碼
+              <b style="font-size: 1.25rem;">
+                ${formId}
+              </b>,
+            </span> <br />
+            <span style="margin-left: 2rem;">
+              可點選連結進入 E-system 查看 : 
+                <a href=${link}>
+                  表單連結
+                </a>
+            </span> <br /><br /><br />
+            ※ 此為系統自動通知，請勿直接回覆郵件，感謝您！
+          </p>
+          `,
+        },
+        "en-US": {
+          Sub: `E-system notification - Germany Business Trip Apply, formId : ${formId}, Abolished`,
+          Messg: `
+          <p>Hi : <br />
+            <span style="margin-left: 2rem; line-height: 2;">
+              your business trip apply
+              <b style="font-size: 1.25rem;">
+                is abolished
+              </b>,
+              formId
+              <b style="font-size: 1.25rem;">
+                ${formId}
+              </b>,
+            </span> <br />
+            <span style="margin-left: 2rem;">
+              Click the link to enter the E-system view :
+              <a href=${link}>
+                page link
+              </a>
+            </span> <br /><br /><br />
+            ※ This is an automatic notification from the system. Please do not reply to the email directly. Thank you !
+          </p>
+        `,
+        },
       },
-    }),
-    [getEmailData, t]
-  );
+    };
+  }, [createName, formId, link]);
 
-  const sendEmail = useCallback(
-    (member = recipient, type: emailType) => {
-      send(member, email[`${type}`]);
-    },
-    [email, recipient]
-  );
-  function send(member: string, content: emailContent) {
-    api.sendEmail(member, content);
+  async function getContent(EmpId: string, type: emailType) {
+    const lang = (await api.getMember(EmpId))?.[0].Language;
+    const content = emailContent[`${type}`][`${lang}`];
+    return content;
   }
-  sendEmail(undefined, "done");
+
+  async function sendEmail(EmpId: string, type: emailType) {
+    api.sendEmail(EmpId, await getContent(EmpId, type));
+  }
 
   return { sendEmail };
 };
@@ -92,10 +279,5 @@ type emailContent = {
   Sub: string;
   Messg: string;
 };
-type email = Record<emailType, emailContent>;
-
-type emailData = {
-  formId: string;
-  createName: string;
-  link: string;
-};
+type lang = "zh-TW" | "en-US";
+type email = Record<emailType, Record<lang, emailContent>>;

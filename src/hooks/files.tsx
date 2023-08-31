@@ -55,7 +55,7 @@ const mimeObj: (id & type)[] = [
 export const useFiles = () => {
   const fileData = useAppSelector((state) => state.files).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
-  const formInfo = useAppSelector((state) => state.formInfo).body;
+  const {nowOrder} = useAppSelector((state) => state.formInfo).body;
 
   async function uploadFile(id: string) {
     for (const file of fileData.newFile) {
@@ -64,7 +64,7 @@ export const useFiles = () => {
       filePackage.append("EmpId", nowUser.EmpId);
       filePackage.append("fileName", file.name);
       filePackage.append("webName", "BusinessTrip");
-      filePackage.append("SIGNORDER", formInfo.nowOrder.toString());
+      filePackage.append("SIGNORDER", nowOrder.toString());
       filePackage.append("file", file);
       api.uploadFileSign(filePackage);
     }
