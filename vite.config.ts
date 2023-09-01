@@ -20,12 +20,12 @@ export default ({ mode }) => {
           globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
         },
         manifest: {
-          name: "pwa app create form vite",
-          short_name: "vite APP",
+          name: "Orange - germany system",
+          short_name: "germany system",
           description: "a pwa app create form vite_pwa",
           display: "standalone",
           theme_color: "#ffffff",
-          start_url: "/",
+          start_url: ".",
           icons: [
             {
               src: "./pwa/192.png",
