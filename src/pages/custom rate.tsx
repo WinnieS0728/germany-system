@@ -10,8 +10,8 @@ import { Step } from "react-joyride";
 
 const CustomRatePage = () => {
   const { t } = useTranslation(["customRatePage", "joyride"]);
-  const [JoyActive, setJoyActive] = useState(false);  
-  const steps:Step[] = [
+  const [JoyActive, setJoyActive] = useState(false);
+  const steps: Step[] = [
     {
       title: t("ratePage.step1.title", { ns: "joyride" }),
       target: "#joy-ratePage-1",
