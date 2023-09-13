@@ -77,7 +77,6 @@ const TableWhenAddForm = ({
         <td>{d.city}</td>
         <td>{d.purposeName}</td>
         <td>{d.cus}</td>
-        <td>{d.hotel}</td>
         <td>{d.PS}</td>
         <td
           className='cursor-pointer'
@@ -102,7 +101,6 @@ const TableWhenSign = ({ data }: { data: detailDataWithSingleData[] }) => {
       <td>{d.data.city}</td>
       <td>{d.data.purpose}</td>
       <td>{d.data.cus}</td>
-      <td>{d.data.hotel}</td>
       <td>{d.data.PS}</td>
     </tr>
   ));
@@ -157,7 +155,6 @@ export const DetailTable = ({ type, data, index }: detailTableProps) => {
               <td>{t("thead.city")}</td>
               <td>{t("thead.purpose")}</td>
               <td>{t("thead.cus")}</td>
-              <td>{t("thead.lodging")}</td>
               <td>{t("thead.PS")}</td>
               {type === "addForm" && <td>{t("thead.delete")}</td>}
             </tr>

@@ -1,11 +1,10 @@
 import { Required } from "@/components/form/required";
 import { useOptions } from "@/hooks/options";
-import { useAppSelector } from "@/hooks/redux";
 import { useSelectRef } from "@/hooks/select ref";
 import { trafficEvent } from "@/lib/api/event/get event";
 import { MySelect } from "@components/form/select";
 import { timeDay } from "d3-time";
-import { useEffect, useMemo } from "react";
+import { BaseSyntheticEvent, useEffect, useMemo, useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -16,10 +15,10 @@ interface date {
 export const TransportationForm = () => {
   const { i18n, t } = useTranslation("new form", { keyPrefix: "transport" });
   const nowLang = i18n.language;
-  const detailData = useAppSelector((state) => state.tripDetail).body;
 
   const { options } = useOptions();
   const { newFormRef } = useSelectRef();
+  const [stayDay, setStayDay] = useState<number | string>(0);
 
   const { register, control, setValue } = useFormContext();
   const watch_date: date[] = useWatch({
@@ -28,57 +27,17 @@ export const TransportationForm = () => {
     defaultValue: [],
   });
 
-  const stayList = detailData.map((d) => {
-    return d.data.map((i) => i.hotel);
+  const watch_isLodging = useWatch({
+    name: "IsLodging",
+    control,
   });
 
-  function getDays(date: { startDate: string; endDate: string }): number {
-    if (!date || !date.startDate || !date.endDate) {
-      return 0;
-    }
-    const start = new Date(`${date.startDate}:00:00:00`);
-    const end = new Date(`${date.endDate}:00:00:00`);
-
-    const days = timeDay.count(start, end);
-    return days + 1 || 0;
-  }
-
-  const stayDays = useMemo(() => {
-    const isStayList = stayList.map((d) => {
-      if (d.some((i) => i !== "")) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-
-    let isStay;
-    if (isStayList.some((i) => i)) {
-      isStay = "Yes";
-    } else {
-      isStay = "No";
-    }
-
-    const stayDayList = isStayList.map((i, index) => {
-      if (!i) {
-        return 0;
-      } else {
-        const days = getDays(watch_date[index]) - 1;
-        return days > 0 ? days : 0;
-      }
-    });
-    const stayDay = stayDayList.reduce((a, b) => a + b, 0);
-
-    return {
-      isStay: isStay,
-      day: stayDay,
-    };
-  }, [watch_date, stayList]);
-
   useEffect(() => {
-    setValue("IsLodging", stayDays.isStay);
-    setValue("StayDays", stayDays.day);
-  }, [stayDays, setValue]);
+    if (watch_isLodging === "No") {
+      setValue("StayDays", 0);
+      setStayDay(0);
+    }
+  }, [setValue, watch_isLodging]);
 
   const outDays = useMemo(() => {
     if (watch_date.length === 0) {
@@ -101,68 +60,100 @@ export const TransportationForm = () => {
     setValue("Days", outDays);
   }, [outDays, setValue]);
 
+  function onlyNumberFilter(e: BaseSyntheticEvent) {
+    const input = e.target.value;
+    const value = input.replace(/[^0-9]/gi, "");
+    setStayDay(value);
+  }
   return (
     <fieldset className='space-y-2'>
       <div className='transportation label-input'>
         <label>
           <Required />
           {t("transportation")} :
+          <Controller
+            control={control}
+            name='Transport'
+            render={({ field: { onChange } }) => (
+              <MySelect.Async
+                forwardRef={newFormRef.transport}
+                options={options.transport}
+                onChange={onChange}
+                getLabelFunction={(option: trafficEvent) => {
+                  if (nowLang === "en") {
+                    return option.ResourcesName_E;
+                  }
+                  return option.ResourcesName;
+                }}
+                getValueFunction={(option: trafficEvent) => option.ResourcesId}
+                value='ResourcesId'
+                placeholder={t("placeholder.transportation")}
+                multi
+                autoClose={false}
+              />
+            )}
+          />
         </label>
-        <Controller
-          control={control}
-          name='Transport'
-          render={({ field: { onChange } }) => (
-            <MySelect.Async
-              forwardRef={newFormRef.transport}
-              options={options.transport}
-              onChange={onChange}
-              getLabelFunction={(option: trafficEvent) => {
-                if (nowLang === "en") {
-                  return option.ResourcesName_E;
-                }
-                return option.ResourcesName;
-              }}
-              getValueFunction={(option: trafficEvent) => option.ResourcesId}
-              value='ResourcesId'
-              placeholder={t("placeholder.transportation")}
-            />
-          )}
-        />
       </div>
       <div className='grid grid-cols-1 sm:grid-cols-3'>
-        <div className='stay label-input justify-start'>
-          <label>{t("isStay")} :</label>
-          <input
-            type='text'
-            {...register("IsLodging")}
-            autoComplete='off'
-            className='noBorder w-[5em]'
-            readOnly
-          />
+        <div className='stay label-input flex items-center justify-start'>
+          <label>
+            {t("isStay")} :
+            <label>
+              <input
+                type='radio'
+                {...register("IsLodging")}
+                value={"Yes"}
+              />
+              Yes
+            </label>
+            <label>
+              <input
+                type='radio'
+                {...register("IsLodging")}
+                value={"No"}
+              />
+              No
+            </label>
+          </label>
         </div>
         <div className='stayDay label-input justify-start'>
-          <label>{t("stayDay")} :</label>
-          <input
-            type='text'
-            {...register("StayDays", {
-              valueAsNumber: true,
-            })}
-            autoComplete='off'
-            readOnly
-            className='noBorder w-[5em]'
-          />
+          <label>
+            {t("stayDay")} :
+            <input
+              type='text'
+              {...register("StayDays", {
+                valueAsNumber: true,
+              })}
+              autoComplete='off'
+              className='!w-[5em]'
+              onFocus={() => {
+                setStayDay("");
+              }}
+              onBlur={() => {
+                if (stayDay === "") {
+                  setStayDay(0);
+                }
+              }}
+              value={stayDay}
+              onChangeCapture={onlyNumberFilter}
+              disabled={watch_isLodging === "No"}
+            />
+          </label>
         </div>
         <div className='totalDay label-input justify-start'>
-          <label>{t("tripDay")} :</label>
-          <input
-            type='text'
-            {...register("Days", {
-              valueAsNumber: true,
-            })}
-            autoComplete='off'
-            readOnly
-            className='noBorder w-[5em]'
-          />
+          <label>
+            {t("tripDay")} :
+            <input
+              type='text'
+              {...register("Days", {
+                valueAsNumber: true,
+              })}
+              autoComplete='off'
+              readOnly
+              className='noBorder w-[5em]'
+            />
+          </label>
         </div>
       </div>
     </fieldset>

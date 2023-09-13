@@ -4,14 +4,15 @@ import { statusType } from "@/types/api";
 export interface detailData_date {
   startDate: "";
   endDate: "";
+  hotel: string;
 }
 export interface detailData_data {
   district: string;
   city: string;
   purpose: string;
   eventId?: string;
-  cus: string;
   hotel: string;
+  cus: string;
   PS: string;
 }
 export interface detailDataType {
@@ -30,6 +31,7 @@ const initData: detailDataType = {
   date: {
     startDate: "",
     endDate: "",
+    hotel: "",
   },
   data: [
     {

@@ -22,22 +22,22 @@ export const AgentForm = () => {
       <label>
         <Required />
         {t("deputy")} :
+        <Controller
+          control={control}
+          name='Deputy'
+          render={({ field: { onChange } }) => (
+            <MySelect.Async
+              forwardRef={newFormRef.deputy}
+              onChange={onChange}
+              options={options.agent}
+              getLabelFunction={(option: memberResType) => splitName(option)}
+              getValueFunction={(option: memberResType) => option.EmpId}
+              value='EmpId'
+              placeholder={t("placeholder.deputy")}
+            />
+          )}
+        />
       </label>
-      <Controller
-        control={control}
-        name='Deputy'
-        render={({ field: { onChange } }) => (
-          <MySelect.Async
-            forwardRef={newFormRef.deputy}
-            onChange={onChange}
-            options={options.agent}
-            getLabelFunction={(option: memberResType) => splitName(option)}
-            getValueFunction={(option: memberResType) => option.EmpId}
-            value='EmpId'
-            placeholder={t("placeholder.deputy")}
-          />
-        )}
-      />
     </div>
   );
 };

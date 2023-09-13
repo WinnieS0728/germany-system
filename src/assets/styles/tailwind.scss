@@ -12,10 +12,12 @@
   }
 
   .label-input {
-    @apply flex items-center justify-center gap-4;
-
     label {
-      @apply min-w-fit relative;
+      @apply flex relative whitespace-nowrap items-center gap-4;
+
+      input {
+        @apply w-full
+      }
     }
   }
 

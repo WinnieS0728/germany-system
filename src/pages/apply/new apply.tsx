@@ -127,7 +127,7 @@ export const NewForm = () => {
     setError,
     trigger,
     formState: { errors, isValid },
-  } = methods;
+  } = methods;  
 
   const watch_date = useWatch({
     name: "tripData",
@@ -216,14 +216,15 @@ export const NewForm = () => {
     api.pushNewData(data);
   }
 
-  useLayoutEffect(() => {
-    function alertUser(event: BeforeUnloadEvent) {
-      event.preventDefault();
-      event.returnValue = "";
-    }
-    window.addEventListener("beforeunload", alertUser);
-    return () => window.removeEventListener("beforeunload", alertUser);
-  }, []);
+  // FIXME 預防重新整理
+  // useLayoutEffect(() => {
+  //   function alertUser(event: BeforeUnloadEvent) {
+  //     event.preventDefault();
+  //     event.returnValue = "";
+  //   }
+  //   window.addEventListener("beforeunload", alertUser);
+  //   return () => window.removeEventListener("beforeunload", alertUser);
+  // }, []);
 
   useEffect(() => {
     if (spreadData.length === 0) {

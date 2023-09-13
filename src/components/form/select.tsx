@@ -83,8 +83,12 @@ const Async = ({
 }: selectProp<any>) => {
   function handleChange(e: any) {
     if (e) {
-      // console.log(e);
-      onChange(e[value as string]);
+      if (Array.isArray(e)) {
+        const a = e.map((option) => option[value as string]).join(",");
+        onChange(a);
+      } else {
+        onChange(e[value as string]);
+      }
     } else {
       onChange("");
     }

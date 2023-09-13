@@ -52,7 +52,15 @@ const schema = yup.object().shape({
   district: yup.string().required("地區沒填"),
   postalCode: yup.string().required("郵遞區號沒填"),
   city: yup.string(),
-  cus: yup.string().required("客戶沒填"),
+  cus: yup.string().when("purpose", {
+    is: (value: string) =>
+      value === "TripEvent-2" ||
+      value === "TripEvent-4" ||
+      value === "TripEvent-91" ||
+      value === "TripEvent-92",
+    then: () => yup.string(),
+    otherwise: () => yup.string().required("客戶沒填"),
+  }),
   hotel: yup.string(),
   PS: yup.string(),
 });
@@ -80,12 +88,16 @@ const NewDetailForm = () => {
       city: "",
       postalCode: "",
       cus: "",
-      hotel: "",
       PS: "",
     },
   });
 
-  const { newDetailRef, clearDetailSelect, clearCusSelect,clearPostCodeSelect } = useSelectRef();
+  const {
+    newDetailRef,
+    clearDetailSelect,
+    clearCusSelect,
+    clearPostCodeSelect,
+  } = useSelectRef();
 
   const [toggleModal] = useModalControl("newDetail");
   const [toggleErrorModal] = useModalControl("errors");
@@ -106,6 +118,18 @@ const NewDetailForm = () => {
     name: "postalCode",
     control,
   });
+
+  const isCusRequired = useMemo(() => {
+    if (
+      watch_purpose === "TripEvent-2" ||
+      watch_purpose === "TripEvent-4" ||
+      watch_purpose === "TripEvent-91" ||
+      watch_purpose === "TripEvent-92"
+    ) {
+      return false;
+    }
+    return true;
+  }, [watch_purpose]);
 
   const getCity = useMemo(
     async function () {
@@ -129,14 +153,14 @@ const NewDetailForm = () => {
     setCity();
   }, [getCity, setValue]);
 
-  useEffect(()=>{
-    clearCusSelect()
-  },[clearCusSelect, watch_purpose])
+  useEffect(() => {
+    clearCusSelect();
+  }, [clearCusSelect, watch_purpose]);
 
-  useEffect(()=>{
-    clearPostCodeSelect()
-    clearCusSelect()
-  },[clearCusSelect, clearPostCodeSelect, watch_area])
+  useEffect(() => {
+    clearPostCodeSelect();
+    clearCusSelect();
+  }, [clearCusSelect, clearPostCodeSelect, watch_area]);
 
   useEffect(() => {
     trigger();
@@ -228,7 +252,6 @@ const NewDetailForm = () => {
                 <Controller
                   control={control}
                   name='purpose'
-                  rules={{ required: "出差事由必填" }}
                   render={({ field: { onChange } }) => (
                     <MySelect.Async
                       forwardRef={newDetailRef.purpose}
@@ -256,7 +279,6 @@ const NewDetailForm = () => {
                 <Controller
                   control={control}
                   name='district'
-                  rules={{ required: "行政區必填" }}
                   render={({ field: { onChange } }) => (
                     <MySelect.Async
                       forwardRef={newDetailRef.country}
@@ -282,7 +304,6 @@ const NewDetailForm = () => {
                 <Controller
                   control={control}
                   name='postalCode'
-                  rules={{ required: "郵遞區號必填" }}
                   render={({ field: { onChange } }) => (
                     <MySelect.Async
                       forwardRef={newDetailRef.postalCode}
@@ -320,12 +341,11 @@ const NewDetailForm = () => {
               </Tr>
               <Tr
                 label={t("thead.cus")}
-                required
+                required={isCusRequired}
               >
                 <Controller
                   control={control}
                   name='cus'
-                  rules={{ required: "客戶必填" }}
                   render={({ field: { onChange } }) => (
                     <MySelect.Async
                       forwardRef={newDetailRef.cus}
@@ -361,15 +381,6 @@ const NewDetailForm = () => {
                       }}
                     />
                   )}
-                />
-              </Tr>
-              <Tr label={t("thead.lodging")}>
-                <input
-                  type='text'
-                  {...register("hotel")}
-                  className='w-full'
-                  autoComplete='off'
-                  placeholder={t("placeholder.lodging")}
                 />
               </Tr>
               <Tr label={t("thead.PS")}>

@@ -54,7 +54,7 @@ export const useTripDataProcessing = (
       data.push({
         ...obj,
         date: getDayList(obj.date as detailData_date),
-        data: { ...obj.data[i], eventId: obj.data[i].purpose },
+        data: { ...obj.data[i], eventId: obj.data[i].purpose, Hotel:(obj.date as detailData_date).hotel },
       });
     }
     return data;

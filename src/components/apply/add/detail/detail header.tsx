@@ -96,45 +96,47 @@ export const DetailHeader = ({ data, index }: headerProps) => {
           <label style={{ whiteSpace: "nowrap" }}>
             <Required />
             {t("detail.startDate")}
+
+            <input
+              {...register(`tripData.${index}.startDate`)}
+              className='date w-full'
+              style={{
+                cursor: "pointer",
+                backgroundColor: color?.white,
+                color: color?.black,
+              }}
+              autoComplete='off'
+              value={getTime(range?.from as Date)}
+              onClickCapture={() => {
+                setShow((prev) => !prev);
+              }}
+              readOnly
+              placeholder={t("detail.placeholder.startDate")}
+            />
           </label>
-          <input
-            {...register(`tripData.${index}.startDate`)}
-            className='date w-full'
-            style={{
-              cursor: "pointer",
-              backgroundColor: color?.white,
-              color: color?.black,
-            }}
-            autoComplete='off'
-            value={getTime(range?.from as Date)}
-            onClickCapture={() => {
-              setShow((prev) => !prev);
-            }}
-            readOnly
-            placeholder={t("detail.placeholder.startDate")}
-          />
         </div>
         <div className='endDate label-input flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center'>
           <label style={{ whiteSpace: "nowrap" }}>
             <Required />
             {t("detail.endDate")}
+
+            <input
+              {...register(`tripData.${index}.endDate`)}
+              className='date w-full'
+              style={{
+                cursor: "pointer",
+                backgroundColor: color?.white,
+                color: color?.black,
+              }}
+              autoComplete='off'
+              value={getTime(range?.to as Date)}
+              onClickCapture={() => {
+                setShow((prev) => !prev);
+              }}
+              readOnly
+              placeholder={t("detail.placeholder.endDate")}
+            />
           </label>
-          <input
-            {...register(`tripData.${index}.endDate`)}
-            className='date w-full'
-            style={{
-              cursor: "pointer",
-              backgroundColor: color?.white,
-              color: color?.black,
-            }}
-            autoComplete='off'
-            value={getTime(range?.to as Date)}
-            onClickCapture={() => {
-              setShow((prev) => !prev);
-            }}
-            readOnly
-            placeholder={t("detail.placeholder.endDate")}
-          />
         </div>
         <DayPicker
           mode='range'
@@ -167,6 +169,16 @@ export const DetailHeader = ({ data, index }: headerProps) => {
             },
           }}
         />
+        <div className='label-input'>
+          <label>
+            {t("detailTable.thead.lodging")}
+            <input
+              autoComplete='off'
+              type='text'
+              {...register(`tripData.${index}.hotel`)}
+            />
+          </label>
+        </div>
       </div>
     </div>
   );
