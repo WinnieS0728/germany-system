@@ -32,6 +32,8 @@ import { useTripDataProcessing } from "@/components/apply/add/confirm/data";
 import { PopupLayer } from "@/layouts/popup";
 import { dataFromForm } from "@/lib/api/travel apply/create new form";
 import { moneyType } from "@/types";
+import { lang, useEmail } from "@/hooks/email";
+import { emailData } from "@/lib/api/common/email";
 
 export interface infoForm {
   DeptId: string;
@@ -66,7 +68,7 @@ export const NewForm = () => {
   const { t } = useTranslation(["common", "new form", "errors", "toast"]);
   const timeData = useAppSelector((state) => state.time);
   const tripDetail = useAppSelector((state) => state.tripDetail).body;
-  const nowUser = useAppSelector((state) => state.nowUser).body;
+  const { EmpId, DeptId } = useAppSelector((state) => state.nowUser).body;
 
   const { clearNewFormSelect } = useSelectRef();
   const dateRange = getNextWeekStartEnd();
@@ -108,8 +110,8 @@ export const NewForm = () => {
     mode: "onChange",
     resolver: yupResolver(schema),
     defaultValues: {
-      DeptId: nowUser.DeptId,
-      CreateId: nowUser.EmpId,
+      DeptId: DeptId,
+      CreateId: EmpId,
       Transport: "",
       IsLodging: "No",
       StayDays: 0,
@@ -127,7 +129,7 @@ export const NewForm = () => {
     setError,
     trigger,
     formState: { errors, isValid },
-  } = methods;  
+  } = methods;
 
   const watch_date = useWatch({
     name: "tripData",
@@ -174,6 +176,9 @@ export const NewForm = () => {
 
   async function send(data: dataFromForm) {
     const formId = await createNewForm(data);
+    const signList = await api.getSignList(formId);
+    const recipient = signList[1].SIGNER;
+    const recipientUseLang = (await api.getMember(recipient))[0].Language;
 
     const newData: tripDetailType[] = await Promise.all(
       spreadData.map(async (item, index) => {
@@ -196,6 +201,57 @@ export const NewForm = () => {
 
     pushData(newData);
     uploadFile(formId);
+    const emailData: Record<lang, emailData> = {
+      "zh-TW": {
+        Sub: `E-system 系統通知 - 德國出差申請單, 表單號碼 : ${formId}, 待簽核`,
+        Messg: `<p>您好 : <br />
+          <span style="margin-left: 2rem; line-height: 2;">
+            請協助簽核
+            <b style="font-size: 1.25rem;">
+              ⟪ ${EmpId} 的出差申請單 ⟫
+            </b>, 
+            表單號碼
+            <b style="font-size: 1.25rem;">
+              ${formId}
+            </b>,
+          </span> <br />           
+          <span style="margin-left: 2rem;">
+            可點選連結進入 E-system 查看 : 
+            <a href="https://esys.orange-electronic.com/ODF/Sales_Travel?id=TravelAppDe&formN=index">
+              表單連結
+            </a>
+          </span> <br /><br /><br />
+          ※ 此為系統自動通知，請勿直接回覆郵件，感謝您！
+        </p>`,
+      },
+      "en-US": {
+        Sub: `E-system notification - Germany Business Trip Apply, formId : ${formId}, sign off completed`,
+        Messg: `
+        <p>Hi : <br />
+          <span style="margin-left: 2rem; line-height: 2;">
+            your business trip apply
+            <b style="font-size: 1.25rem;">
+              is sign off complete
+            </b>, 
+            formId
+            <b style="font-size: 1.25rem;">
+              ${formId}
+            </b>,
+          </span> <br />
+          <span style="margin-left: 2rem;">
+            Click the link to enter the E-system view : 
+            <a href="https://esys.orange-electronic.com/ODF/Sales_Travel?id=TravelAppDe&formN=index">
+              page link
+            </a>
+          </span> <br /><br /><br />
+          ※ This is an automatic notification from the system. Please do not reply to the email directly. Thank you !
+        </p>
+      `,
+      },
+    };
+
+    const emailDataFinal = emailData[`${recipientUseLang}`];
+    api.sendEmail(recipient, emailDataFinal);
 
     clearNewFormSelect();
     dispatch(clearData());

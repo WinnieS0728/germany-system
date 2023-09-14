@@ -83,7 +83,7 @@ export const useSignPageData = () => {
 
   useEffect(() => {
     async function qq() {
-      const headerData = await getHeaderData();
+      const headerData = await getHeaderData();      
       const detailData = await getDetailData();
 
       const memberInfo = await getMemberInfo(headerData[0].Createid);
@@ -119,7 +119,7 @@ export const useSignPageData = () => {
         }
         return dayList;
       }
-
+      
       const data: signDataType = {
         id: headerData[0].BTPId,
         createDate: dateFormatter(headerData[0].Createdate.split(" ")[0]),

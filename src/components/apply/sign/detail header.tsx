@@ -6,7 +6,6 @@ interface props {
 }
 
 export const DetailHeaderBlock = ({ data }: props) => {
-  console.log(data);
 
   const { t } = useTranslation("list page");
   const dateList = data[0].date as string[];

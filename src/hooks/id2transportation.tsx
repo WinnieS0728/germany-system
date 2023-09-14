@@ -9,12 +9,20 @@ export const useId2transportation = () => {
     (id: string) => {
       return (async function () {
         const res = await api.getEvent("Traffic");
-        const target = res.find((item) => item.ResourcesId === id);
-        if (nowLang === "en") {
-          return target?.ResourcesName_E;
-        } else {
-          return target?.ResourcesName;
-        }
+        const idArray = id.split(",");
+        const transportationArray = (
+          await Promise.all(
+            idArray.map(async (id) => {
+              const target = res.find((item) => item.ResourcesId === id);
+              if (nowLang === "en") {
+                return target?.ResourcesName_E;
+              } else {
+                return target?.ResourcesName;
+              }
+            })
+          )
+        ).join(",");
+        return transportationArray;
       })();
     },
     [nowLang]

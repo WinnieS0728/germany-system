@@ -2,6 +2,7 @@ import api from "@/lib/api";
 import { useSignPageData } from "@/pages/sign/data";
 import { useMemo } from "react";
 import { useAppSelector } from "./redux";
+import { emailData } from "@/lib/api/common/email";
 
 export const useEmail = () => {
   const { formId } = useAppSelector((state) => state.formInfo).body;
@@ -275,9 +276,6 @@ export const useEmail = () => {
 };
 
 export type emailType = "done" | "wait" | "other" | "return" | "void";
-type emailContent = {
-  Sub: string;
-  Messg: string;
-};
-type lang = "zh-TW" | "en-US";
-type email = Record<emailType, Record<lang, emailContent>>;
+
+export type lang = "zh-TW" | "en-US";
+type email = Record<emailType, Record<lang, emailData>>;

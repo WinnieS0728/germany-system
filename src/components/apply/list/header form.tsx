@@ -114,55 +114,52 @@ export const HeaderForm = ({ className }: propsType) => {
         )}
       >
         <div className='form-body grid w-full gap-4'>
-          <div className='member label-input'>
-            <label>
-              {t("label.member")}
-              <div className='flex w-full flex-col gap-2 sm:flex-row'>
-                <Controller
-                  control={control}
-                  name='dept'
-                  render={({ field: { onChange } }) => (
-                    <MySelect.Async
-                      options={options.dept}
-                      onChange={onChange}
-                      placeholder={t("placeholder.dept")}
-                      getLabelFunction={(option: memberResType) => {
-                        if (nowLang === "en") {
-                          return option.DeptName_E;
-                        }
-                        return option.DeptName;
-                      }}
-                      getValueFunction={(option: memberResType) =>
-                        option.DeptId
+          <div className='member label-input flex gap-4'>
+            <label>{t("label.member")}</label>
+
+            <div className='flex w-full flex-col gap-2 sm:flex-row'>
+              <Controller
+                control={control}
+                name='dept'
+                render={({ field: { onChange } }) => (
+                  <MySelect.Async
+                    options={options.dept}
+                    onChange={onChange}
+                    placeholder={t("placeholder.dept")}
+                    getLabelFunction={(option: memberResType) => {
+                      if (nowLang === "en") {
+                        return option.DeptName_E;
                       }
-                      value='DeptId'
-                    />
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name='EmpId'
-                  render={({ field: { onChange } }) => (
-                    <MySelect.Async
-                      options={options.member}
-                      onChange={onChange}
-                      placeholder={t("placeholder.emp")}
-                      getLabelFunction={(option: memberResType) =>
-                        splitName(option)
+                      return option.DeptName;
+                    }}
+                    getValueFunction={(option: memberResType) => option.DeptId}
+                    value='DeptId'
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name='EmpId'
+                render={({ field: { onChange } }) => (
+                  <MySelect.Async
+                    options={options.member}
+                    onChange={onChange}
+                    placeholder={t("placeholder.emp")}
+                    getLabelFunction={(option: memberResType) =>
+                      splitName(option)
+                    }
+                    getValueFunction={(option: memberResType) => option.EmpId}
+                    value='EmpId'
+                    filterFunction={(candidate: { data: memberResType }) => {
+                      if (candidate.data.DeptId === watch_dept) {
+                        return true;
                       }
-                      getValueFunction={(option: memberResType) => option.EmpId}
-                      value='EmpId'
-                      filterFunction={(candidate: { data: memberResType }) => {
-                        if (candidate.data.DeptId === watch_dept) {
-                          return true;
-                        }
-                        return false;
-                      }}
-                    />
-                  )}
-                />
-              </div>
-            </label>
+                      return false;
+                    }}
+                  />
+                )}
+              />
+            </div>
           </div>
           <div className='status label-input'>
             <label>
