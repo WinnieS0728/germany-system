@@ -11,6 +11,7 @@
   },
   "detailTable": {
     "add": "add",
+    "noCus": "No data found, please create customer information",
     "placeholder": {
       "code": "select postal code...",
       "cus": "select customer...",

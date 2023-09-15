@@ -366,7 +366,7 @@ const NewDetailForm = () => {
                               backgroundColor: color.createCus,
                             }}
                           >
-                            查無資料，請建立客戶資訊
+                            {t('noCus')}
                           </button>
                         </a>
                       }

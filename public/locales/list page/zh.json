@@ -11,6 +11,7 @@
   },
   "detailTable": {
     "add": "新增",
+    "noCus": "查無資料，請建立客戶資訊",
     "placeholder": {
       "code": "選擇郵遞區號...",
       "cus": "選擇客戶...",

@@ -32,7 +32,7 @@ import { useTripDataProcessing } from "@/components/apply/add/confirm/data";
 import { PopupLayer } from "@/layouts/popup";
 import { dataFromForm } from "@/lib/api/travel apply/create new form";
 import { moneyType } from "@/types";
-import { lang, useEmail } from "@/hooks/email";
+import { lang } from "@/hooks/email";
 import { emailData } from "@/lib/api/common/email";
 
 export interface infoForm {
@@ -272,15 +272,14 @@ export const NewForm = () => {
     api.pushNewData(data);
   }
 
-  // FIXME 預防重新整理
-  // useLayoutEffect(() => {
-  //   function alertUser(event: BeforeUnloadEvent) {
-  //     event.preventDefault();
-  //     event.returnValue = "";
-  //   }
-  //   window.addEventListener("beforeunload", alertUser);
-  //   return () => window.removeEventListener("beforeunload", alertUser);
-  // }, []);
+  useLayoutEffect(() => {
+    function alertUser(event: BeforeUnloadEvent) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+    window.addEventListener("beforeunload", alertUser);
+    return () => window.removeEventListener("beforeunload", alertUser);
+  }, []);
 
   useEffect(() => {
     if (spreadData.length === 0) {
