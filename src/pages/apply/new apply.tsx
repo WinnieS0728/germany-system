@@ -96,7 +96,7 @@ export const NewForm = () => {
       then: () => yup.string().required(t("newForm.curr", { ns: "errors" })),
       otherwise: () => yup.string(),
     }),
-    Deputy: yup.string().required(t("newForm.deputy", { ns: "errors" })),
+    Deputy: yup.string(),
     tripData: yup.array().of(
       yup.object().shape({
         startDate: yup.string().required(t("newForm.date", { ns: "errors" })),
