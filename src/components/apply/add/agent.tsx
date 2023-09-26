@@ -1,4 +1,3 @@
-import { Required } from "@/components/form/required";
 import { MySelect } from "@/components/form/select";
 import { useId2name } from "@/hooks/id2name";
 import { useOptions } from "@/hooks/options";
