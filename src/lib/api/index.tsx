@@ -22,6 +22,7 @@ import { updateForm } from "./travel apply/update form";
 import { downloadFile } from "./common/download file";
 import { getGroup } from "./common/get group";
 import { sendEmail } from "./common/email";
+import { getTxKpi, setTxKpi } from "./kpi tx/tx";
 
 const apiPath = import.meta.env.VITE_API_PATH;
 
@@ -42,6 +43,7 @@ const api = {
   // analyze
   getVisitData: getVisitData(apiPath),
   threshold: { fetch: GetThresHold(apiPath), post: SetThresHold(apiPath) },
+  tx: { fetch: getTxKpi(apiPath), post: setTxKpi(apiPath) },
   // trip
   getPostCode: getPostCalCode(), // * local file
   getBusinessApplyList: getBusinessApplyList(apiPath),

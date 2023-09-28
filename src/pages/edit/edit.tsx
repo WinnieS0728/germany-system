@@ -6,7 +6,8 @@ import { Suspense, lazy } from "react";
 
 const Coming = lazy(() => import("@layouts/coming"));
 
-const ThresholdPage = lazy(() => import("@pages/edit/threshold"));
+const TxPage = lazy(() => import("./tx"));
+const ThresholdPage = lazy(() => import("./threshold"));
 
 const EditPage = () => {
   const { t } = useTranslation(["settingPage"]);
@@ -18,7 +19,7 @@ const EditPage = () => {
         <Routes>
           <Route
             path='tx'
-            element={<Coming />}
+            element={<TxPage />}
           />
           <Route
             path='threshold'
