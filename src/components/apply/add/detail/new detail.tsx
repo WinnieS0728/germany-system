@@ -7,7 +7,7 @@ import { useModalControl } from "@/hooks/modal control";
 import { useAppDispatch } from "@/hooks/redux";
 import api from "@/lib/api";
 import * as Btns from "@components/UI/buttons";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useTheme } from "styled-components";
 import { useOptions } from "../../../../hooks/options";
@@ -215,6 +215,16 @@ const NewDetailForm = () => {
     [watch_purpose]
   );
 
+  const tableRef = useRef<HTMLTableElement>(null);
+  // console.log(tableRef.current?.scrollHeight);
+
+  // useEffect(() => {
+  //   if (!tableRef.current) {
+  //     return;
+  //   }
+  //   tableRef.current.style.height = `${tableRef.current.scrollHeight}px`;
+  // }, [tableRef]);
+
   return (
     <>
       <form
@@ -229,7 +239,7 @@ const NewDetailForm = () => {
         style={{ backgroundColor: color.white }}
       >
         <Table>
-          <table>
+          <table ref={tableRef}>
             <thead>
               <tr>
                 <th
@@ -366,7 +376,7 @@ const NewDetailForm = () => {
                               backgroundColor: color.createCus,
                             }}
                           >
-                            {t('noCus')}
+                            {t("noCus")}
                           </button>
                         </a>
                       }

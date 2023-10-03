@@ -112,6 +112,7 @@ const Async = ({
       placeholder={placeholder}
       className='w-full'
       noOptionsMessage={() => noOptionComponent}
+      menuPosition='fixed'
     />
   );
 };
