@@ -11,6 +11,7 @@ const EditPage = lazy(() => import("@pages/edit/edit"));
 const ApplyPage = lazy(() => import("@pages/apply/apply"));
 const SignPage = lazy(() => import("@pages/sign/sign"));
 const PrintPage = lazy(() => import("@pages/print"));
+const SalesAnalyze = lazy(() => import("@pages/sales analyze"));
 
 function App() {
   const dispatch = useAppDispatch();
@@ -18,7 +19,7 @@ function App() {
   const { i18n } = useTranslation();
   const [search, setSearch] = useSearchParams();
   const usingLanguage = Language?.split("-")[0];
-  const nowUser_id = EmpId
+  const nowUser_id = EmpId;
 
   useLayoutEffect(() => {
     let EmpId: string;
@@ -55,6 +56,10 @@ function App() {
         <Route
           path='print/:formId'
           element={<PrintPage />}
+        />
+        <Route
+          path='salesAnalyze/*'
+          Component={SalesAnalyze}
         />
         <Route
           path='*'
