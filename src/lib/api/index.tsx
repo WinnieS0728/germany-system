@@ -23,6 +23,9 @@ import { downloadFile } from "./common/download file";
 import { getGroup } from "./common/get group";
 import { sendEmail } from "./common/email";
 import { getTxKpi, setTxKpi } from "./kpi tx/tx";
+import { getSalesQty } from "./sales analyze/sales qty";
+import { getSalesDetailQty } from "./sales analyze/sales detail qty";
+import { getOrderDateList } from "./sales analyze/order date list";
 
 const apiPath = import.meta.env.VITE_API_PATH;
 
@@ -58,6 +61,11 @@ const api = {
   getNextSigner: getNextSigner(apiPath),
   updateSignStatus: updateSignStatus(apiPath),
   postOtherSign: postOtherSign(apiPath),
+
+  // sales analyze
+  getSalesQty: getSalesQty(apiPath),
+  getSalesDetailQty: getSalesDetailQty(apiPath),
+  getOrderDateList: getOrderDateList(apiPath),
 };
 
 export default api;

@@ -28,7 +28,7 @@ export function SalesAnalyzeNav() {
   return (
     <>
       <nav className='bg-navBgc'>
-        <ul className='no-scrollBar flex gap-2 overflow-x-scroll py-2'>
+        <ul className='no-scrollBar flex gap-2 overflow-x-scroll p-2'>
           {salesAnalyzeNavRoutes.map((nav) => (
             <li
               key={nav.path}

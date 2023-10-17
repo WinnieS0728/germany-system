@@ -40,7 +40,7 @@
   }
 
   .navBtn {
-    @apply whitespace-nowrap rounded-md border-2 px-4 py-2 text-white;
+    @apply whitespace-pre rounded-md border-2 px-4 py-1 text-white;
 
     &.active {
       @apply bg-navActive;

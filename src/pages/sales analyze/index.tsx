@@ -1,7 +1,9 @@
 import { Header } from "@/layouts/header";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import { SalesAnalyzeNav } from "./nav";
+
+const SalesAnalyze_overviewPage = lazy(()=>import('./overview'))
 
 export default function SalesAnalyze() {
   return (
@@ -12,7 +14,7 @@ export default function SalesAnalyze() {
         <Routes>
           <Route
             index
-            element={<>123</>}
+            Component={SalesAnalyze_overviewPage}
           />
         </Routes>
       </Suspense>
