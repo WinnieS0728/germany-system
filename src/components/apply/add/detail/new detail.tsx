@@ -4,8 +4,8 @@ import {
   pushData,
 } from "@/data/reducers/trip detail/trip detail";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch } from "@/hooks/redux";
-import api from "@/lib/api";
+import { useAppDispatch } from "@/utils/redux";
+import api from "@/api";
 import * as Btns from "@components/UI/buttons";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
@@ -18,10 +18,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Table } from "@/components/table/table";
 import { useTranslation } from "react-i18next";
-import { tripEvent } from "@/lib/api/event/get event";
-import { areaResType } from "@/lib/api/common/getArea";
-import { postcodeResType } from "@/lib/api/postal code/postal code";
-import { cusResType } from "@/lib/api/common/getCus";
+import { tripEvent } from "@/api/event/get event";
+import { areaResType } from "@/api/common/getArea";
+import { postcodeResType } from "@/api/postal code/postal code";
+import { cusResType } from "@/api/common/getCus";
 import { tripEvent as tripEvent_enum } from "@/types";
 
 interface trProps {

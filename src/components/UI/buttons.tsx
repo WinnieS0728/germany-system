@@ -2,6 +2,7 @@ import { styled, useTheme } from "styled-components";
 import * as Icons from "@components/UI/icons";
 import { useTranslation } from "react-i18next";
 import { formId } from "@/layouts/setting layout";
+import { cn } from "@/utils/cn";
 
 interface propType {
   text: string;
@@ -9,30 +10,21 @@ interface propType {
   formId: formId;
 }
 
-const SettingSubmitBtn = ({ text, className, formId }: propType) => {
+export const SettingSubmitBtn = ({ text, className, formId }: propType) => {
   return (
     <button
       type='submit'
       form={formId}
-      className={className}
+      className={cn(
+        "bg-submitBtn rounded-lg flex gap-2 justify-center items-center mb-2 px-8 py-2",
+        className
+      )}
     >
       <Icons.Save size='1.5rem' />
       {text}
     </button>
   );
 };
-
-const styled_submitBtn = styled(SettingSubmitBtn)`
-  background-color: ${(props) => props.theme.color.submitBtn};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  margin-block: 0.5rem;
-  padding: 0.5rem 2rem;
-`;
-
-export { styled_submitBtn as SettingSubmitBtn };
 
 interface IconBtnProp {
   children: JSX.Element | string;

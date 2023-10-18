@@ -1,9 +1,9 @@
 import axios from "axios"
 
 interface props {
-    EmpId: string,
+    EmpId?: string,
     year: string,
-    month: string
+    month?: string
 }
 
 type salesDetailQty_res = {

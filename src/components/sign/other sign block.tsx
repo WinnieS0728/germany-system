@@ -4,7 +4,7 @@ import { useOptions } from "@/hooks/options";
 import * as Btns from "@components/UI/buttons";
 import { Controller, useForm } from "react-hook-form";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch } from "@/utils/redux";
 import { setErrors } from "@/data/reducers/error/errors";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -13,8 +13,8 @@ import { useSelectRef } from "@/hooks/select ref";
 import { useSign } from "@/hooks/sign";
 import { useTranslation } from "react-i18next";
 import { useId2name } from "@/hooks/id2name";
-import { memberResType } from "@/lib/api/member/getMember";
-import { cn } from "@/lib/utils/cn";
+import { memberResType } from "@/api/member/getMember";
+import { cn } from "@/utils/cn";
 
 const OtherSignBlock = ({ className }: { className?: string }) => {
   const color = useTheme()?.color;

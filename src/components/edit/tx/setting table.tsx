@@ -7,9 +7,9 @@ import {
 } from "react-hook-form";
 import { TxDataType, useTxData } from "./data";
 import { useEffect } from "react";
-import { cn } from "@/lib/utils/cn";
-import { useAppSelector } from "@/hooks/redux";
-import api from "@/lib/api";
+import { cn } from "@/utils/cn";
+import { useAppSelector } from "@/utils/redux";
+import api from "@/api";
 import { toast } from "react-toastify";
 
 interface inputProps {

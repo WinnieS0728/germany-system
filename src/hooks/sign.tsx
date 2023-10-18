@@ -1,15 +1,15 @@
 import { useMemo } from "react";
-import { useAppDispatch, useAppSelector } from "./redux";
-import api from "@/lib/api";
-import { signFinalDataType } from "@/lib/api/sign/update sign";
+import { useAppDispatch, useAppSelector } from "../utils/redux";
+import api from "@/api";
+import { signFinalDataType } from "@/api/sign/update sign";
 import { SignData } from "@/components/sign/sign box";
-import { otherSignFinalDataType } from "@/lib/api/sign/post otherSign";
-import { updateFormStatus } from "@/lib/api/travel apply/update form";
+import { otherSignFinalDataType } from "@/api/sign/post otherSign";
+import { updateFormStatus } from "@/api/travel apply/update form";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { clearFile } from "@/data/reducers/files/attach";
-import { memberResType } from "@/lib/api/member/getMember";
+import { memberResType } from "@/api/member/getMember";
 import { useEmail } from "./email";
 
 export const useSign = () => {

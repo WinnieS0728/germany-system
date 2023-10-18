@@ -6,11 +6,11 @@ import {
   setTarget,
 } from "@/data/reducers/trip detail/trip detail";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch } from "@/utils/redux";
 import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 import * as Icons from "@components/UI/icons";
-import api from "@/lib/api";
+import api from "@/api";
 import { useTranslation } from "react-i18next";
 import { newDetailType } from "./new detail";
 

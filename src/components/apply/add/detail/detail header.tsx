@@ -1,6 +1,6 @@
 import { Required } from "@/components/form/required";
 import { addDisabledDays } from "@/data/reducers/day picker/dayPickerControl";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/utils/redux";
 import { NewFormDefaultValue } from "@/pages/apply/new apply";
 import { timeFormat } from "d3";
 import { isValid } from "date-fns";
@@ -92,8 +92,8 @@ export const DetailHeader = ({ data, index }: headerProps) => {
   return (
     <div className='flex items-center justify-between'>
       <div className='relative flex flex-col gap-4 lg:flex-row lg:gap-8'>
-        <div className='startDate label-input flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center'>
-          <label style={{ whiteSpace: "nowrap" }}>
+        <div className='startDate  flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center'>
+          <label className='label-input whitespace-nowrap'>
             <Required />
             {t("detail.startDate")}
 
@@ -115,8 +115,8 @@ export const DetailHeader = ({ data, index }: headerProps) => {
             />
           </label>
         </div>
-        <div className='endDate label-input flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center'>
-          <label style={{ whiteSpace: "nowrap" }}>
+        <div className='endDate flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center'>
+          <label className='label-input whitespace-normal'>
             <Required />
             {t("detail.endDate")}
 
@@ -169,16 +169,14 @@ export const DetailHeader = ({ data, index }: headerProps) => {
             },
           }}
         />
-        <div className='label-input'>
-          <label>
-            {t("detailTable.thead.lodging")}
-            <input
-              autoComplete='off'
-              type='text'
-              {...register(`tripData.${index}.hotel`)}
-            />
-          </label>
-        </div>
+        <label className='label-input'>
+          {t("detailTable.thead.lodging")}
+          <input
+            autoComplete='off'
+            type='text'
+            {...register(`tripData.${index}.hotel`)}
+          />
+        </label>
       </div>
     </div>
   );

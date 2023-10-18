@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { setSalesList } from "@actions/member/setSalesList";
 import { statusType } from "types/api";
-import { memberResType } from "@/lib/api/member/getMember";
+import { memberResType } from "@/api/member/getMember";
 
 const data: memberResType[] = [];
 

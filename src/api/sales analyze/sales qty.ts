@@ -4,7 +4,7 @@ import { z } from 'zod'
 interface props {
     EmpId: string,
     year: string,
-    month: string
+    month?: string
 }
 
 const getSalesQty_schema = z.object({

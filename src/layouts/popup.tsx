@@ -1,5 +1,5 @@
 import { Modal } from "./modal";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/utils/redux";
 import { useModalControl } from "@/hooks/modal control";
 import { useScroll } from "@/hooks/scroll control";
 import { Suspense, lazy } from "react";

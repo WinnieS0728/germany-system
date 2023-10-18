@@ -1,5 +1,5 @@
-import { useAppSelector } from "@/hooks/redux";
-import { memberResType } from "@/lib/api/member/getMember";
+import { useAppSelector } from "@/utils/redux";
+import { memberResType } from "@/api/member/getMember";
 import { monthType } from "@/types";
 
 export type thresholdList_emp = Pick<memberResType, "EmpId" | "EmpName">;

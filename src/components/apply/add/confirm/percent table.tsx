@@ -1,7 +1,7 @@
 import { Table } from "@/components/table/table";
 import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
-import api from "@/lib/api";
-import { thresholdResType } from "@/lib/api/kpi threshold/threshold";
+import api from "@/api";
+import { thresholdResType } from "@/api/kpi threshold/threshold";
 import { tripEvent } from "@/types";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

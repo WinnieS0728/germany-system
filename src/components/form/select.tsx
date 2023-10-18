@@ -35,13 +35,15 @@ const Normal = ({
   disable,
   placeholder,
   noOptionComponent,
+  getLabelFunction,
+  getValueFunction,
   forwardRef,
   multi,
+  value,
 }: selectProp<any>) => {
-  function handleChange(e: any) {
-    // console.log(e);
+  function handleChange(e: any) {    
     if (e) {
-      onChange(e.value);
+      onChange(e[`${value || "value"}`]);
     } else {
       onChange("");
     }
@@ -61,6 +63,8 @@ const Normal = ({
         placeholder={placeholder}
         className='w-full'
         noOptionsMessage={() => noOptionComponent}
+        getOptionLabel={getLabelFunction}
+        getOptionValue={getValueFunction}
       />
     </>
   );
@@ -81,7 +85,7 @@ const Async = ({
   forwardRef,
   multi,
 }: selectProp<any>) => {
-  function handleChange(e: any) {
+  function handleChange(e: any) {    
     if (e) {
       if (Array.isArray(e)) {
         const a = e.map((option) => option[value as string]).join(",");

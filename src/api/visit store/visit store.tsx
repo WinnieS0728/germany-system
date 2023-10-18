@@ -1,4 +1,4 @@
-import { dateFormatter } from "@/hooks/dateFormatter";
+import { dateFormatter } from "@/utils/dateFormatter";
 import axios, { AxiosResponse } from "axios";
 import { timeDay } from "d3-time";
 
@@ -32,6 +32,7 @@ function week(apiPath: string) {
       url: `${apiPath}/GetSalesVisit`,
       data: { EmpId: "", Startdt: date, Enddt: endDate, type: "Week" },
     });
+    
     return res.data;
   };
 }

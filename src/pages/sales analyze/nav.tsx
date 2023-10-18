@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils/cn";
+import { cn } from "@/utils/cn";
 import { NavLink } from "react-router-dom";
 import { useTheme } from "styled-components";
 

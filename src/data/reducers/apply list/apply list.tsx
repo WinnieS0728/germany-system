@@ -1,5 +1,5 @@
 import { setListData } from "@/data/actions/apply list/set data";
-import { tripListResType } from "@/lib/api/travel apply/get list";
+import { tripListResType } from "@/api/travel apply/get list";
 import { statusType } from "@/types/api";
 import { createSlice } from "@reduxjs/toolkit";
 

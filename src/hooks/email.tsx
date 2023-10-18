@@ -1,8 +1,8 @@
-import api from "@/lib/api";
+import api from "@/api";
 import { useSignPageData } from "@/pages/sign/data";
 import { useMemo } from "react";
-import { useAppSelector } from "./redux";
-import { emailData } from "@/lib/api/common/email";
+import { useAppSelector } from "../utils/redux";
+import { emailData } from "@/api/common/email";
 
 export const useEmail = () => {
   const { formId } = useAppSelector((state) => state.formInfo).body;

@@ -1,7 +1,7 @@
 import { Required } from "@/components/form/required";
 import { useOptions } from "@/hooks/options";
 import { useSelectRef } from "@/hooks/select ref";
-import { trafficEvent } from "@/lib/api/event/get event";
+import { trafficEvent } from "@/api/event/get event";
 import { MySelect } from "@components/form/select";
 import { timeDay } from "d3-time";
 import { BaseSyntheticEvent, useEffect, useMemo, useState } from "react";
@@ -67,8 +67,8 @@ export const TransportationForm = () => {
   }
   return (
     <fieldset className='space-y-2'>
-      <div className='transportation label-input'>
-        <label>
+      <div className='transportation'>
+        <label className="label-input">
           <Required />
           {t("transportation")} :
           <Controller
@@ -96,8 +96,8 @@ export const TransportationForm = () => {
         </label>
       </div>
       <div className='grid grid-cols-1 sm:grid-cols-3'>
-        <div className='stay label-input flex items-center justify-start'>
-          <label>
+        <div className='stay flex items-center justify-start'>
+          <label className="label-input">
             {t("isStay")} :
             <label>
               <input
@@ -117,8 +117,8 @@ export const TransportationForm = () => {
             </label>
           </label>
         </div>
-        <div className='stayDay label-input justify-start'>
-          <label>
+        <div className='stayDay  justify-start'>
+          <label className="label-input">
             {t("stayDay")} :
             <input
               type='text'
@@ -141,8 +141,8 @@ export const TransportationForm = () => {
             />
           </label>
         </div>
-        <div className='totalDay label-input justify-start'>
-          <label>
+        <div className='totalDay  justify-start'>
+          <label className="label-input">
             {t("tripDay")} :
             <input
               type='text'

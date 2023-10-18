@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/utils/redux";
 
 export function GetData() {
   const visitData = useAppSelector((state) => state.personVisit);

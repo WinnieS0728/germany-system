@@ -5,7 +5,7 @@ import { Tbody } from "@/components/table/tbody";
 import { usePageControl } from "./page control";
 import * as Btns from "@components/UI/buttons";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/utils/redux";
 import { useTranslation } from "react-i18next";
 import { useSignStatusTranslate } from "@/hooks/status translate";
 

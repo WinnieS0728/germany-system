@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import api from "@/lib/api";
-import { dateFormatter } from "@/hooks/dateFormatter";
+import api from "@/api";
+import { dateFormatter } from "@/utils/dateFormatter";
 import { signDataType } from "@/types";
 import { timeDay } from "d3-time";
 import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
@@ -11,7 +11,7 @@ import {
   useSignStatusTranslate,
 } from "@/hooks/status translate";
 import { useId2transportation } from "@/hooks/id2transportation";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/utils/redux";
 
 const initData: signDataType = {
   id: "",

@@ -12,13 +12,12 @@
   }
 
   .label-input {
-    label {
       @apply relative flex items-center gap-4 whitespace-nowrap;
 
       input {
         @apply w-full;
       }
-    }
+    
   }
 
   .main-section-gap {

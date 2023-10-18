@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { statusType } from "types/api";
 
 import { setWeekVisitData } from "@actions/visit data/set week visit";
-import { visit_otherResType } from "@/lib/api/visit store/visit store";
+import { visit_otherResType } from "@/api/visit store/visit store";
 
 const data: visit_otherResType[] = [];
 

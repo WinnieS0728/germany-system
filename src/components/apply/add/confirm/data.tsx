@@ -3,7 +3,7 @@ import {
   detailDataWithSingleData,
   detailData_date,
 } from "@/data/reducers/trip detail/trip detail";
-import { dateFormatter } from "@/hooks/dateFormatter";
+import { dateFormatter } from "@/utils/dateFormatter";
 import { timeFormat } from "d3";
 import { timeDay, timeMonday } from "d3-time";
 

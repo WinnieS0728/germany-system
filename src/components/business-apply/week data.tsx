@@ -1,7 +1,7 @@
 import { setThreshold } from "@/data/actions/kpi threshold/threshold";
-import { thresholdResType } from "@/lib/api/kpi threshold/threshold";
-import { visit_otherResType } from "@/lib/api/visit store/visit store";
-import { useAppDispatch, useAppSelector } from "@hooks/redux";
+import { thresholdResType } from "@/api/kpi threshold/threshold";
+import { visit_otherResType } from "@/api/visit store/visit store";
+import { useAppDispatch, useAppSelector } from "@/utils/redux";
 import { useEffect } from "react";
 
 
@@ -12,7 +12,7 @@ export type salesThresholdData = {
 };
 
 export function GetData() {
-  const visitData = useAppSelector((state) => state.weekVisit);
+  const visitData = useAppSelector((state) => state.weekVisit);  
   const salesData = useAppSelector((state) => state.salesList);
   const timeData = useAppSelector((state) => state.time);
   const threshold = useAppSelector((state) => state.threshold);

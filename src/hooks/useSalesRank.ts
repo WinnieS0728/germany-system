@@ -1,5 +1,5 @@
-import api from "@/lib/api";
-import { useAppSelector } from "./redux";
+import api from "@/api";
+import { useAppSelector } from "../utils/redux";
 import { useEffect, useState } from "react";
 
 type salesRankType = {

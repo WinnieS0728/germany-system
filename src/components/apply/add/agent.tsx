@@ -2,7 +2,7 @@ import { MySelect } from "@/components/form/select";
 import { useId2name } from "@/hooks/id2name";
 import { useOptions } from "@/hooks/options";
 import { useSelectRef } from "@/hooks/select ref";
-import { memberResType } from "@/lib/api/member/getMember";
+import { memberResType } from "@/api/member/getMember";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -17,8 +17,8 @@ export const AgentForm = () => {
   const { splitName } = useId2name();
 
   return (
-    <div className='label-input'>
-      <label>
+    <>
+      <label className='label-input'>
         {t("deputy")} :
         <Controller
           control={control}
@@ -36,6 +36,6 @@ export const AgentForm = () => {
           )}
         />
       </label>
-    </div>
+    </>
   );
 };

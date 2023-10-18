@@ -1,6 +1,6 @@
-import { useAppSelector } from "@/hooks/redux";
-import api from "@/lib/api";
-import { TxReqType } from "@/lib/api/kpi tx/tx";
+import { useAppSelector } from "@/utils/redux";
+import api from "@/api";
+import { TxReqType } from "@/api/kpi tx/tx";
 import { useEffect, useState } from "react";
 
 export type TxDataType = TxReqType & {

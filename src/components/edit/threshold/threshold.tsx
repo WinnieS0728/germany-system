@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/utils/redux";
 import { Table } from "@components/table/table";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -11,7 +11,7 @@ import {
   threshold_number,
 } from "./data";
 import { useEffect, useRef, useState } from "react";
-import api from "@/lib/api";
+import api from "@/api";
 import { setThreshold } from "@/data/actions/kpi threshold/threshold";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";

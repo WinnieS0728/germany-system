@@ -1,5 +1,5 @@
 import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
-import api from "@/lib/api";
+import api from "@/api";
 import { useSignPageData } from "@/pages/sign/data";
 import { sc_props } from "@/types";
 import { useCallback, useEffect, useState } from "react";

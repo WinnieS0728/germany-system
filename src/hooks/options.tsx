@@ -1,10 +1,10 @@
-import api from "@/lib/api";
-import { useAppSelector } from "./redux";
+import api from "@/api";
+import { useAppSelector } from "../utils/redux";
 import { useTranslation } from "react-i18next";
 import { useSignStatusTranslate } from "./status translate";
-import { memberResType } from "@/lib/api/member/getMember";
+import { memberResType } from "@/api/member/getMember";
 import { moneyType, tripEvent } from "@/types";
-import { eventResType } from "@/lib/api/event/get event";
+import { eventResType } from "@/api/event/get event";
 
 function moveElement(array: eventResType[], type: tripEvent): eventResType[] {
   const targetIndex = array.findIndex((d) => d.ResourcesId === type);

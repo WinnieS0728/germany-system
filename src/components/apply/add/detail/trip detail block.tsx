@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/utils/redux";
 import { Collapse } from "@/layouts/collapse";
 import { DetailTable } from "./detail table";
 import { DetailHeader } from "./detail header";

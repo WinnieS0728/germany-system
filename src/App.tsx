@@ -1,7 +1,7 @@
 import { lazy, useLayoutEffect } from "react";
 import { Suspense } from "react";
 import { Route, Routes, useSearchParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/utils/redux";
 import { setSalesList } from "@actions/member/setSalesList";
 import { setUser } from "@actions/member/setUser";
 import { useTranslation } from "react-i18next";

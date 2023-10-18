@@ -1,10 +1,10 @@
-import { dateFormatter } from "@/hooks/dateFormatter";
+import { dateFormatter } from "@/utils/dateFormatter";
 import { useId2name } from "@/hooks/id2name";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/utils/redux";
 import { statusStringType } from "@/hooks/status translate";
-import api from "@/lib/api";
-import { tripDetailResType } from "@/lib/api/travel apply/get detail";
-import { tripListResType } from "@/lib/api/travel apply/get list";
+import api from "@/api";
+import { tripDetailResType } from "@/api/travel apply/get detail";
+import { tripListResType } from "@/api/travel apply/get list";
 import { tripEvent } from "@/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

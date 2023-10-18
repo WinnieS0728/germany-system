@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import api from "@api/index";
+import api from "@/api/index";
 
 const salesMemberList = [
   // "223001",

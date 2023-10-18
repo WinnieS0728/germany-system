@@ -9,15 +9,15 @@ import { Required } from "../form/required";
 import { useModalControl } from "@/hooks/modal control";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/utils/redux";
 import { DevTool } from "@hookform/devtools";
 import { setErrors } from "@/data/reducers/error/errors";
 import { useSign } from "@/hooks/sign";
 import { useFiles } from "@/hooks/files";
 import { useTranslation } from "react-i18next";
-import api from "@/lib/api";
+import api from "@/api";
 import { useEmail } from "@/hooks/email";
-import { cn } from "@/lib/utils/cn";
+import { cn } from "@/utils/cn";
 
 export type SignData = {
   agree: "yes" | "no";

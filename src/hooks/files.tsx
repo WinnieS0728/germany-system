@@ -1,5 +1,5 @@
-import api from "@/lib/api";
-import { useAppSelector } from "./redux";
+import api from "@/api";
+import { useAppSelector } from "../utils/redux";
 import excel from "@img/files/excel_icon.svg";
 import word from "@img/files/word_icon.svg";
 import ppt from "@img/files/ppt_icon.svg";

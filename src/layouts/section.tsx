@@ -5,7 +5,7 @@ interface propsType {
 
 export const Section = ({ children, title }: propsType) => {
     return (
-        <section className="mb-4">
+        <section>
             {title && <h4 className="bg-sectionHeader text-myWhite p-2 text-lg">{title}</h4>}
             {children}
         </section>

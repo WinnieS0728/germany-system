@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/utils/redux";
 import { Table } from "@components/table/table";
 import { getWeek, isSunday, isValid } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import { timeFormat } from "d3";
 import { setWeekVisitData } from "@actions/visit data/set week visit";
 import { GetData, salesThresholdData } from "./week data";
 import { useTranslation } from "react-i18next";
-import { thresholdResType } from "@/lib/api/kpi threshold/threshold";
+import { thresholdResType } from "@/api/kpi threshold/threshold";
 
 export const WeekTable = () => {
   const { t } = useTranslation(["common", "customRatePage"]);
@@ -87,7 +87,7 @@ export const WeekTable = () => {
 
       const value = `${m} - ${s} (w${w})`;
       setValue(value);
-
+      
       if (firstTime === true) {
         dispatch(setWeekVisitData(m));
         setFirstTime(false);

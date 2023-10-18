@@ -5,7 +5,7 @@ interface props {
     ErpNo: string
 }
 
-type orderDateList_res = {
+export type orderDateList_res = {
     cu_no: string
 } & Record<string, string>
 

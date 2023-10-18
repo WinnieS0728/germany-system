@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import api from "@api/index";
+import api from "@/api/index";
 
 export const setSignList = createAsyncThunk(
   "formInfo/setSignList",

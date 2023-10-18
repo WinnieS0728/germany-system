@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils/cn";
+import { cn } from "@/utils/cn";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 

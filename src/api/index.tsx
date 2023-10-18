@@ -1,4 +1,4 @@
-import { getMemberList } from "@api/member/getMember";
+import { getMemberList } from "@/api/member/getMember";
 import { getVisitData } from "./visit store/visit store";
 import { getEvent } from "./event/get event";
 import { GetThresHold } from "./kpi threshold/threshold";

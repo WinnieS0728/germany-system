@@ -1,5 +1,5 @@
 import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
-import { dateFormatter } from "@/hooks/dateFormatter";
+import { dateFormatter } from "@/utils/dateFormatter";
 import { timeDay, timeMonday } from "d3";
 import { dataForTable } from "@/components/apply/add/confirm/data";
 

@@ -7,7 +7,7 @@ import {
   DayPicker,
   SelectRangeEventHandler,
 } from "react-day-picker";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/utils/redux";
 import { isValid } from "date-fns";
 import * as Icons from "@components/UI/icons";
 import { useOptions } from "@/hooks/options";
@@ -16,10 +16,10 @@ import { setListData } from "@/data/actions/apply list/set data";
 import * as Btns from "@components/UI/buttons";
 import { useTranslation } from "react-i18next";
 import { useId2name } from "@/hooks/id2name";
-import { dateFormatter } from "@/hooks/dateFormatter";
-import { memberResType } from "@/lib/api/member/getMember";
-import { fetchFormListBody } from "@/lib/api/travel apply/get list";
-import { cn } from "@/lib/utils/cn";
+import { dateFormatter } from "@/utils/dateFormatter";
+import { memberResType } from "@/api/member/getMember";
+import { fetchFormListBody } from "@/api/travel apply/get list";
+import { cn } from "@/utils/cn";
 
 export const HeaderForm = ({ className }: propsType) => {
   const color = useTheme()?.color;
@@ -114,55 +114,58 @@ export const HeaderForm = ({ className }: propsType) => {
         )}
       >
         <div className='form-body grid w-full gap-4'>
-          <div className='member label-input flex gap-4'>
-            <label>{t("label.member")}</label>
-
-            <div className='flex w-full flex-col gap-2 sm:flex-row'>
-              <Controller
-                control={control}
-                name='dept'
-                render={({ field: { onChange } }) => (
-                  <MySelect.Async
-                    options={options.dept}
-                    onChange={onChange}
-                    placeholder={t("placeholder.dept")}
-                    getLabelFunction={(option: memberResType) => {
-                      if (nowLang === "en") {
-                        return option.DeptName_E;
+          <div className='member flex gap-4'>
+            <label className='label-input w-full'>
+              {t("label.member")}
+              <div className="flex gap-4 w-full">
+                <Controller
+                  control={control}
+                  name='dept'
+                  render={({ field: { onChange } }) => (
+                    <MySelect.Async
+                      options={options.dept}
+                      onChange={onChange}
+                      placeholder={t("placeholder.dept")}
+                      getLabelFunction={(option: memberResType) => {
+                        if (nowLang === "en") {
+                          return option.DeptName_E;
+                        }
+                        return option.DeptName;
+                      }}
+                      getValueFunction={(option: memberResType) =>
+                        option.DeptId
                       }
-                      return option.DeptName;
-                    }}
-                    getValueFunction={(option: memberResType) => option.DeptId}
-                    value='DeptId'
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name='EmpId'
-                render={({ field: { onChange } }) => (
-                  <MySelect.Async
-                    options={options.member}
-                    onChange={onChange}
-                    placeholder={t("placeholder.emp")}
-                    getLabelFunction={(option: memberResType) =>
-                      splitName(option)
-                    }
-                    getValueFunction={(option: memberResType) => option.EmpId}
-                    value='EmpId'
-                    filterFunction={(candidate: { data: memberResType }) => {
-                      if (candidate.data.DeptId === watch_dept) {
-                        return true;
+                      value='DeptId'
+                    />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name='EmpId'
+                  render={({ field: { onChange } }) => (
+                    <MySelect.Async
+                      options={options.member}
+                      onChange={onChange}
+                      placeholder={t("placeholder.emp")}
+                      getLabelFunction={(option: memberResType) =>
+                        splitName(option)
                       }
-                      return false;
-                    }}
-                  />
-                )}
-              />
-            </div>
+                      getValueFunction={(option: memberResType) => option.EmpId}
+                      value='EmpId'
+                      filterFunction={(candidate: { data: memberResType }) => {
+                        if (candidate.data.DeptId === watch_dept) {
+                          return true;
+                        }
+                        return false;
+                      }}
+                    />
+                  )}
+                />
+              </div>
+            </label>
           </div>
-          <div className='status label-input'>
-            <label>
+          <div className='status'>
+            <label className='label-input'>
               {t("label.status")}
               <Controller
                 control={control}
@@ -177,8 +180,8 @@ export const HeaderForm = ({ className }: propsType) => {
               />
             </label>
           </div>
-          <div className='date label-input'>
-            <label>
+          <div className='date'>
+            <label className='label-input'>
               {t("label.date")}
               <span className='relative flex w-full flex-col items-center gap-2 sm:flex-row'>
                 <input

@@ -1,5 +1,5 @@
 import { IconBtn } from "@/components/UI/buttons";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/utils/redux";
 import * as Icons from "@components/UI/icons";
 import styled from "styled-components";
 import { deleteFile } from "@/data/reducers/files/attach";
