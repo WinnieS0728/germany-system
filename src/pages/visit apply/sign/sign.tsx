@@ -1,7 +1,6 @@
 import * as Btns from "@/components/UI/buttons";
 import { InfoForm } from "@/components/apply/add/info form";
 import { Block } from "@/layouts/block";
-import { Header } from "@/layouts/header";
 import { Main } from "@/layouts/main";
 import * as Icons from "@components/UI/icons";
 import { FormProvider, useForm } from "react-hook-form";
@@ -18,7 +17,7 @@ import { WeekTable } from "@/components/apply/add/confirm/week tabel";
 import { useModalControl } from "@/hooks/modal control";
 import { SignTable } from "@/components/sign/sign table";
 import { AttachForm } from "@/components/apply/add/attach";
-import { useAppDispatch, useAppSelector } from "@/utils/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import { useEffect, useMemo, useState } from "react";
 import { nextSign, setFormId } from "@/data/reducers/sign/form info";
 import { setSignList } from "@/data/actions/sign/set sign list";
@@ -29,7 +28,7 @@ import { Hamburger } from "@/layouts/hamburger";
 import { useTranslation } from "react-i18next";
 import { PopupLayer } from "@/layouts/popup";
 
-const SignPage = () => {
+export default function SignPage() {
   const { formId } = useParams();
   const { t } = useTranslation(["common", "sign page", "new form"]);
   const { signList, nextSign } = useAppSelector((state) => state.formInfo).body;
@@ -95,10 +94,11 @@ const SignPage = () => {
     month: totalData[0]?.date[0]?.split("-")[1],
   };
 
+  const printPageSrc = location.href.split("#")[1].replace("sign", "print");
+
   return (
     <>
       <PopupLayer />
-      <Header title={t("title.businessTripApply", { ns: "common" })} />
       <Main className='main-section-gap'>
         <>
           <div className='top-btn-list'>
@@ -153,7 +153,7 @@ const SignPage = () => {
                   </button>
                   <button type='button'>
                     <Link
-                      to={`../../print/${formId}?userID=${nowUser.EmpId}`}
+                      to={`../print/${formId}?userID=${nowUser.EmpId}`}
                       target='_blank'
                     >
                       <Btns.IconBtn
@@ -174,7 +174,7 @@ const SignPage = () => {
             {isInSignList && !isNextSigner && (
               <button type='button'>
                 <Link
-                  to={`../../print/${formId}?userID=${nowUser.EmpId}`}
+                  to={printPageSrc}
                   target='_blank'
                 >
                   <Btns.IconBtn
@@ -198,16 +198,18 @@ const SignPage = () => {
               </Link>
             </button>
             {isAdmin && !isVoid && (
-              <button
-                type='button'
-                onClick={() => {
-                  toggleVoidModal("on");
-                }}
-              >
-                <Btns.IconBtn icon={<Icons.Void size='1.25rem' />}>
-                  {t("btn.void", { ns: "sign page" })}
-                </Btns.IconBtn>
-              </button>
+              <>
+                <button
+                  type='button'
+                  onClick={() => {
+                    toggleVoidModal("on");
+                  }}
+                >
+                  <Btns.IconBtn icon={<Icons.Void size='1.25rem' />}>
+                    {t("btn.void", { ns: "sign page" })}
+                  </Btns.IconBtn>
+                </button>
+              </>
             )}
           </div>
           <FormProvider {...methods}>
@@ -264,6 +266,4 @@ const SignPage = () => {
       </Main>
     </>
   );
-};
-
-export default SignPage;
+}

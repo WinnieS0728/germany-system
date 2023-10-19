@@ -11,7 +11,7 @@ import {
   useSignStatusTranslate,
 } from "@/hooks/status translate";
 import { useId2transportation } from "@/hooks/id2transportation";
-import { useAppSelector } from "@/utils/redux";
+import { useAppSelector } from "@data/store";
 
 const initData: signDataType = {
   id: "",

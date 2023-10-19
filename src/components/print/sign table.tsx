@@ -1,5 +1,5 @@
 import { dateFormatter } from "@/utils/dateFormatter";
-import { useAppSelector } from "@/utils/redux";
+import { useAppSelector } from "@data/store";
 import { useSignStatusTranslate } from "@/hooks/status translate";
 import { sc_props } from "@/types";
 import { Fragment } from "react";

@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/utils/redux";
+import { useAppSelector } from "@data/store";
 import api from "@/api";
 import { TxReqType } from "@/api/kpi tx/tx";
 import { useEffect, useState } from "react";

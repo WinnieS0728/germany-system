@@ -1,11 +1,12 @@
 import api from "@/api";
 import { orderDateList_res } from "@/api/sales analyze/order date list";
 import { dateFormatter } from "@/utils/dateFormatter";
-import { useAppSelector } from "@/utils/redux";
-import { useEffect, useMemo, useState } from "react";
+import { useAppSelector } from "@data/store";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type salesListData = {
     id: number,
+    EmpId: string
     sa_name: string,
     cu_name: string,
     tx: number,
@@ -15,35 +16,56 @@ type salesListData = {
     salesArray: string[]
 }
 
-function getLastDate(dateObj: orderDateList_res) {
-    const lastDate = Object.values(dateObj).at(-1)
-    const isFirstOrder = Object.values(dateObj).length <= 2 ? true : false
-
-    return { isFirstOrder, lastDate }
-}
-
-function addEmptyData(array: string[], maxNumber: number) {
-    const newArray = [...array];
-
-    for (let i = 0; i < maxNumber - array.length; i++) {
-        newArray.push("");
-    }
-
-    return newArray;
-}
-
 export function useSalesList() {
     const { thisYear, thisMonth } = useAppSelector(state => state.time)
+    const filterData = useAppSelector(state => state.salesAnalyzeFilter).body
     const [salesListData, setSalesListData] = useState<salesListData[]>([])
 
-    useEffect(() => {
-        (async function () {
-            const salesListRes = (await api.getSalesDetailQty({ year: thisYear })).filter(data=>data.cu_sale !== "ER221001")
+    const getLastDate = useCallback((dateObj: orderDateList_res) => {
+        const lastDate = Object.values(dateObj).at(-1)
+        const isFirstOrder = Object.values(dateObj).length <= 2 ? true : false
 
-            const data: salesListData[] = (await Promise.all(salesListRes.map(async (data, index) => {
+        return { isFirstOrder, lastDate }
+    }, [])
+
+    useEffect(() => {
+        const month = filterData.month;
+        (async function () {
+            const res = month ? (
+                await Promise.all(
+                    month.map(
+                        async (month) =>
+                            await api.getSalesDetailQty({ year: thisYear, month: month })
+                    )
+                )
+            ) : ([await api.getSalesDetailQty({ year: thisYear })])
+
+            const salesListRes = res
+                .reduce((a, b) => a.concat(b), [])
+                .filter((data) => data.cu_sale !== "ER221001");
+            const allData: typeof salesListRes = salesListRes.map((res) => {
+                const sameCus = salesListRes.filter((data) => data.cu_no === res.cu_no);
+                const tx_sum = sameCus
+                    .map((data) => data.sqty)
+                    .reduce((a, b) => a + b, 0);
+                const o_sum = sameCus
+                    .map((data) => data.oqty)
+                    .reduce((a, b) => a + b, 0);
+                return {
+                    ...res,
+                    sqty: tx_sum,
+                    oqty: o_sum,
+                };
+            });
+            const onlyId = [...new Set(allData.map((data) => data.cu_no))];
+
+            const array = onlyId.map((id) => allData.find((data) => data.cu_no === id)) as typeof salesListRes
+
+            const data: salesListData[] = (await Promise.all(array.map(async (data, index) => {
                 const orderDateList = await api.getOrderDateList({ ErpNo: data.cu_no })
                 return {
                     id: index,
+                    EmpId: data.cu_sale,
                     sa_name: data.pa_ena,
                     cu_name: data.cu_na,
                     tx: Number(data.sqty),
@@ -54,10 +76,24 @@ export function useSalesList() {
                 }
             })))
 
+            if (filterData.EmpId) {
+                setSalesListData(data.filter(data => data.EmpId === filterData.EmpId))
+            } else {
+                setSalesListData(data)
+            }
 
-            setSalesListData(data)
         })()
-    }, [thisMonth, thisYear])
+    }, [filterData.EmpId, filterData.month, getLastDate, thisMonth, thisYear])
+
+    function addEmptyData(array: string[], maxNumber: number) {
+        const newArray = [...array];
+
+        for (let i = 0; i < maxNumber - array.length; i++) {
+            newArray.push("");
+        }
+
+        return newArray;
+    }
 
     const maxLength = salesListData.sort(
         (a, b) => b.salesArray.length - a.salesArray.length

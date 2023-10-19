@@ -1,6 +1,6 @@
 import { dateFormatter } from "@/utils/dateFormatter";
 import { useId2name } from "@/hooks/id2name";
-import { useAppSelector } from "@/utils/redux";
+import { useAppSelector } from "@data/store";
 import { statusStringType } from "@/hooks/status translate";
 import api from "@/api";
 import { tripDetailResType } from "@/api/travel apply/get detail";

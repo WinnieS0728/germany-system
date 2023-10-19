@@ -1,6 +1,4 @@
-import { cn } from "@/utils/cn";
 import { NavLink } from "react-router-dom";
-import { useTheme } from "styled-components";
 
 type navBtn = {
   label: string;

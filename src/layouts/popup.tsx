@@ -1,8 +1,9 @@
 import { Modal } from "./modal";
-import { useAppSelector } from "@/utils/redux";
+import { useAppSelector } from "@data/store";
 import { useModalControl } from "@/hooks/modal control";
 import { useScroll } from "@/hooks/scroll control";
-import { Suspense, lazy } from "react";
+import { lazy } from "react";
+import { MySuspense } from "./suspense";
 
 const NewDetailForm = lazy(
   () => import("@/components/apply/add/detail/new detail")
@@ -44,42 +45,44 @@ export const PopupLayer = () => {
   }
 
   return (
-    <Suspense>
-      {detailState && (
-        <Modal name='newDetail'>
-          <NewDetailForm />
-        </Modal>
-      )}
-      {reviewState && (
-        <Modal name='review'>
-          <Confirm />
-        </Modal>
-      )}
-      {filesState && (
-        <Modal name='files'>
-          <UploadFiles />
-        </Modal>
-      )}
-      {signState && (
-        <Modal name='sign'>
-          <SignBlock type={signType} />
-        </Modal>
-      )}
-      {otherSignState && (
-        <Modal name='otherSign'>
-          <OtherSignBlock />
-        </Modal>
-      )}
-      {voidState && (
-        <Modal name='void'>
-          <VoidModal />
-        </Modal>
-      )}
-      {errorsState && (
-        <Modal name='errors'>
-          <ErrorsModal errors={errors.body} />
-        </Modal>
-      )}
-    </Suspense>
+    <MySuspense>
+      <>
+        {detailState && (
+          <Modal name='newDetail'>
+            <NewDetailForm />
+          </Modal>
+        )}
+        {reviewState && (
+          <Modal name='review'>
+            <Confirm />
+          </Modal>
+        )}
+        {filesState && (
+          <Modal name='files'>
+            <UploadFiles />
+          </Modal>
+        )}
+        {signState && (
+          <Modal name='sign'>
+            <SignBlock type={signType} />
+          </Modal>
+        )}
+        {otherSignState && (
+          <Modal name='otherSign'>
+            <OtherSignBlock />
+          </Modal>
+        )}
+        {voidState && (
+          <Modal name='void'>
+            <VoidModal />
+          </Modal>
+        )}
+        {errorsState && (
+          <Modal name='errors'>
+            <ErrorsModal errors={errors.body} />
+          </Modal>
+        )}
+      </>
+    </MySuspense>
   );
 };

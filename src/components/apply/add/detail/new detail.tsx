@@ -4,7 +4,7 @@ import {
   pushData,
 } from "@/data/reducers/trip detail/trip detail";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch } from "@/utils/redux";
+import { useAppDispatch } from "@data/store";
 import api from "@/api";
 import * as Btns from "@components/UI/buttons";
 import { useCallback, useEffect, useMemo, useRef } from "react";

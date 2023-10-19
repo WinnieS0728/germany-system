@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/utils/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import { Table } from "@components/table/table";
 import { getWeek, isSunday, isValid } from "date-fns";
 import { useCallback, useEffect, useState } from "react";

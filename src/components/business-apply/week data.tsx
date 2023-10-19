@@ -1,7 +1,7 @@
 import { setThreshold } from "@/data/actions/kpi threshold/threshold";
 import { thresholdResType } from "@/api/kpi threshold/threshold";
 import { visit_otherResType } from "@/api/visit store/visit store";
-import { useAppDispatch, useAppSelector } from "@/utils/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import { useEffect } from "react";
 
 

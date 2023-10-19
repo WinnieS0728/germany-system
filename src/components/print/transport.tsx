@@ -1,4 +1,4 @@
-import { useSignPageData } from "@/pages/sign/data";
+import { useSignPageData } from "@/pages/visit apply/sign/data";
 import { sc_props } from "@/types";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";

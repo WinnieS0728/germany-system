@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/utils/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import { Collapse } from "@/layouts/collapse";
 import { DetailTable } from "./detail table";
 import { DetailHeader } from "./detail header";
@@ -9,7 +9,7 @@ import { useTheme } from "styled-components";
 import { addData } from "@/data/reducers/trip detail/trip detail";
 import { Block } from "@/layouts/block";
 import { useTranslation } from "react-i18next";
-import { NewFormDefaultValue } from "@/pages/apply/new apply";
+import { NewFormDefaultValue } from "@/pages/visit apply/apply/new apply";
 
 export const TripDetailForm = () => {
   const { t } = useTranslation("new form");

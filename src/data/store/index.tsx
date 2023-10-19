@@ -14,6 +14,8 @@ import listFormStateSlice from "@reducers/apply list/apply list";
 import fileSlice from "@reducers/files/attach";
 import errorSlice from "@reducers/error/errors";
 import formInfoSlice from "../reducers/sign/form info";
+import filterSlice from "@reducers/sales analyze filter";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 const store = configureStore({
   reducer: {
@@ -29,7 +31,8 @@ const store = configureStore({
     listFormState: listFormStateSlice,
     files: fileSlice,
     errors: errorSlice,
-    formInfo:formInfoSlice
+    formInfo:formInfoSlice,
+    salesAnalyzeFilter : filterSlice
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({
@@ -40,6 +43,8 @@ const store = configureStore({
 
 export default store;
 
-export type RootState = ReturnType<typeof store.getState>;
+type RootState = ReturnType<typeof store.getState>;
+type AppDispatch = typeof store.dispatch;
 
-export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

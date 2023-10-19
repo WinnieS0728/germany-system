@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/utils/redux";
+import { useAppSelector } from "@data/store";
 
 export function GetData() {
   const visitData = useAppSelector((state) => state.personVisit);

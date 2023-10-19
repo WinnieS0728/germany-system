@@ -8,7 +8,7 @@ import {
 import { TxDataType, useTxData } from "./data";
 import { useEffect } from "react";
 import { cn } from "@/utils/cn";
-import { useAppSelector } from "@/utils/redux";
+import { useAppSelector } from "@data/store";
 import api from "@/api";
 import { toast } from "react-toastify";
 

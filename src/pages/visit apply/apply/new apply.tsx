@@ -2,16 +2,16 @@ import { IconBtn } from "@/components/UI/buttons";
 import { Main } from "@/layouts/main";
 import * as Icons from "@components/UI/icons";
 import { Link, useNavigate } from "react-router-dom";
-import { InfoForm } from "../../components/apply/add/info form";
-import { TransportationForm } from "../../components/apply/add/trafic";
+import { InfoForm } from "../../../components/apply/add/info form";
+import { TransportationForm } from "../../../components/apply/add/trafic";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { MoneyForm } from "../../components/apply/add/money";
-import { AgentForm } from "../../components/apply/add/agent";
-import { AttachForm } from "../../components/apply/add/attach";
+import { MoneyForm } from "../../../components/apply/add/money";
+import { AgentForm } from "../../../components/apply/add/agent";
+import { AttachForm } from "../../../components/apply/add/attach";
 import { useEffect, useLayoutEffect } from "react";
-import { TripDetailForm } from "../../components/apply/add/detail/trip detail block";
+import { TripDetailForm } from "../../../components/apply/add/detail/trip detail block";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch, useAppSelector } from "@/utils/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import { clearData, setDate } from "@/data/reducers/trip detail/trip detail";
 import { useSelectRef } from "@/hooks/select ref";
 import { timeDay, timeMonday } from "d3-time";
@@ -63,7 +63,7 @@ export type NewFormDefaultValue = infoForm &
   deputy &
   Record<"tripData", tripData>;
 
-export const NewForm = () => {
+export default function NewForm () {
   const color = useTheme()?.color;
   const { t } = useTranslation(["common", "new form", "errors", "toast"]);
   const timeData = useAppSelector((state) => state.time);
@@ -384,4 +384,4 @@ export const NewForm = () => {
       </Main>
     </>
   );
-};
+}

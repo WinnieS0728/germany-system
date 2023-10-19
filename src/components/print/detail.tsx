@@ -1,6 +1,6 @@
 import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
 import api from "@/api";
-import { useSignPageData } from "@/pages/sign/data";
+import { useSignPageData } from "@/pages/visit apply/sign/data";
 import { sc_props } from "@/types";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

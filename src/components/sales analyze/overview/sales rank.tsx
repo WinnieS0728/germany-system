@@ -6,6 +6,7 @@ import { getLocaleString } from "@/utils/get localeString";
 
 export function SalesRank (){
     const rankData = useSalesRank()
+    
     return <>
         <Section title="業務銷售排名 (不含ATU)">
             <Table>

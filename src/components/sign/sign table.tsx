@@ -1,7 +1,7 @@
 import { useTheme } from "styled-components";
 import { Table } from "../table/table";
 import { dateFormatter } from "@/utils/dateFormatter";
-import { useAppSelector } from "@/utils/redux";
+import { useAppSelector } from "@data/store";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useId2name } from "@/hooks/id2name";

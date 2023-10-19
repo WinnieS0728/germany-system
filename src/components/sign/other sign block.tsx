@@ -4,7 +4,7 @@ import { useOptions } from "@/hooks/options";
 import * as Btns from "@components/UI/buttons";
 import { Controller, useForm } from "react-hook-form";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch } from "@/utils/redux";
+import { useAppDispatch } from "@data/store";
 import { setErrors } from "@/data/reducers/error/errors";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";

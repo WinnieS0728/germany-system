@@ -3,7 +3,7 @@ import { useReactToPrint } from "react-to-print";
 
 import { useParams } from "react-router-dom";
 import { useEffect, useRef } from "react";
-import { useAppDispatch } from "@/utils/redux";
+import { useAppDispatch } from "@data/store";
 import { setFormId } from "@/data/reducers/sign/form info";
 import { setSignList } from "@/data/actions/sign/set sign list";
 import { setNextSigner } from "@/data/actions/sign/set next sign";
@@ -17,7 +17,7 @@ import SignTable from "@components/print/sign table";
 type props = {
   className?: string;
 };
-const PrintPage = ({ className }: props) => {
+function PrintPage ({ className }: props) {
   const { formId } = useParams();
 
   const dispatch = useAppDispatch();

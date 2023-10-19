@@ -1,8 +1,9 @@
 import api from "@/api";
-import { useAppSelector } from "../utils/redux";
+import { useAppSelector } from "@data/store";
 import { useEffect, useState } from "react";
 
 type salesRankType = {
+    EmpId: string
     name: string,
     tx: number,
     og: number,
@@ -15,35 +16,71 @@ type salesRankType = {
 }
 
 export function useSalesRank() {
-    const salesList = useAppSelector(state => state.salesList).body
-    const { thisYear, thisMonth } = useAppSelector(state => state.time)
+    const salesList = useAppSelector(state => state.salesList).body;
+    const { thisYear, thisMonth } = useAppSelector(state => state.time);
+    const filterData = useAppSelector(state => state.salesAnalyzeFilter).body;
 
     const [data, setData] = useState<salesRankType[]>([])
 
     useEffect(() => {
+        const month = filterData.month;
         (async function () {
-            const data = await Promise.all(salesList.map(async (member) => {
-                const salesQty = await api.getSalesQty({
+            const salesRankRes = month
+                ? (await Promise.all(month.map(async (month) =>
+                    await Promise.all(salesList.map(async (member) => await api.getSalesQty({
+                        EmpId: member.EmpId,
+                        year: thisYear,
+                        month: month
+                    })))
+                ))).reduce((a, b) => a.concat(b), []).filter(data => data)
+                : await Promise.all(salesList.map(async (member) => await api.getSalesQty({
                     EmpId: member.EmpId,
                     year: thisYear,
-                    month: thisMonth
-                })
+                })))
+
+            const allData = salesRankRes.map(res => {
+                const sameCus = salesRankRes.filter(data => data.cu_sale === res.cu_sale)
+                const tx_sum = sameCus.map(data => data.sqty).reduce((a, b) => a + b, 0)
+                const og_sum = sameCus.map(data => data.ogqty).reduce((a, b) => a + b, 0)
+                const total_sum = sameCus.map(data => data.oqty).reduce((a, b) => a + b, 0)
+                const firstOrder_sum = sameCus.map(data => data.cqty).reduce((a, b) => a + b, 0)
+
                 return {
-                    name: salesQty.pa_ena,
-                    tx: salesQty.sqty,
-                    og: salesQty.ogqty,
-                    total: salesQty.oqty,
-                    first_order: salesQty.cqty,
-                    first_order_rate: salesQty.cqty / salesQty.oqty * 100,
-                    other_order: salesQty.oqty - salesQty.cqty,
-                    other_order_rate: (salesQty.oqty - salesQty.cqty) / salesQty.oqty * 100,
+                    ...res,
+                    sqty: tx_sum,
+                    ogqty: og_sum,
+                    oqty: total_sum,
+                    cqty: firstOrder_sum
+                }
+            })
+
+            const onlyId = [...new Set(allData.map(data => data.cu_sale))]
+
+            const salesRankData = onlyId.map(id => allData.find(data => data.cu_sale === id)) as typeof salesRankRes
+
+            const data = (await Promise.all(salesRankData.map(async (data) => {
+                return {
+                    EmpId: data.cu_sale,
+                    name: data.pa_ena,
+                    tx: data.sqty,
+                    og: data.ogqty,
+                    total: data.oqty,
+                    first_order: data.cqty,
+                    first_order_rate: data.cqty / data.oqty * 100,
+                    other_order: data.oqty - data.cqty,
+                    other_order_rate: (data.oqty - data.cqty) / data.oqty * 100,
                     atu: 0
                 }
-            }))
+            }))).sort((a, b) => b.tx - a.tx)
 
-            setData(data.sort((a, b) => b.tx - a.tx))
+            if (filterData.EmpId) {
+                setData(data.filter(data => data.EmpId === filterData.EmpId))
+            } else {
+                setData(data)
+            }
+
         })()
-    }, [salesList, thisMonth, thisYear])
+    }, [filterData.EmpId, filterData.month, salesList, thisMonth, thisYear])
 
     return data
 }

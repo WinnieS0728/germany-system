@@ -14,7 +14,7 @@ export const Nav = ({ className }: propsType) => {
         <ul className='flex gap-2 overflow-x-auto p-2'>
           <NavLink
             end
-            to={"tx"}
+            to={""}
             className={"navBtn"}
           >
             {t("nav.tx")}

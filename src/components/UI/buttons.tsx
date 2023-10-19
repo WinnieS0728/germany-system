@@ -1,7 +1,7 @@
-import { styled, useTheme } from "styled-components";
+import { useTheme } from "styled-components";
 import * as Icons from "@components/UI/icons";
 import { useTranslation } from "react-i18next";
-import { formId } from "@/layouts/setting layout";
+import { formId } from "@/pages/kpi/setting/setting layout";
 import { cn } from "@/utils/cn";
 
 interface propType {

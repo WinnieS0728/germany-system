@@ -1,4 +1,5 @@
 import axios from "axios"
+import z from "zod"
 
 interface props {
     EmpId?: string,
@@ -6,18 +7,20 @@ interface props {
     month?: string
 }
 
-type salesDetailQty_res = {
-    cu_sale: string,
-    pa_ena: string,
-    cu_no: string,
-    cu_na: string,
-    sqty: string,
-    oqty: string
-}
+const salesDetailQty_schema = z.array(z.object({
+    cu_sale: z.string(),
+    pa_ena: z.string(),
+    cu_no: z.string(),
+    cu_na: z.string(),
+    sqty: z.coerce.number(),
+    oqty: z.coerce.number()
+}))
+
+type salesDetailQty_res = z.infer<typeof salesDetailQty_schema>
 
 export function getSalesDetailQty(apiPath: string) {
     return async function ({ EmpId, year, month }: props) {
-        const res = await axios<salesDetailQty_res[]>({
+        const res = await axios<salesDetailQty_res>({
             url: `${apiPath}/GetSaleDetailQty`,
             method: "POST",
             data: {
@@ -27,6 +30,12 @@ export function getSalesDetailQty(apiPath: string) {
             }
         })
 
-        return res.data
+        const validRes = salesDetailQty_schema.safeParse(res.data)
+
+        if (!validRes.success) {
+            throw new Error('銷售列表該月無資料')
+        }
+
+        return validRes.data
     }
 }

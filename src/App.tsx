@@ -1,16 +1,14 @@
 import { lazy, useLayoutEffect } from "react";
-import { Suspense } from "react";
 import { Route, Routes, useSearchParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/utils/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import { setSalesList } from "@actions/member/setSalesList";
 import { setUser } from "@actions/member/setUser";
 import { useTranslation } from "react-i18next";
+import { MySuspense } from "./layouts/suspense";
 
-const CustomRatePage = lazy(() => import("@pages/custom rate"));
-const EditPage = lazy(() => import("@pages/edit/edit"));
-const ApplyPage = lazy(() => import("@pages/apply/apply"));
-const SignPage = lazy(() => import("@pages/sign/sign"));
-const PrintPage = lazy(() => import("@pages/print"));
+const CustomRatePage = lazy(() => import("@/pages/kpi"));
+const SettingPage = lazy(() => import("@/pages/kpi/setting"));
+const ApplyPage = lazy(() => import("@/pages/visit apply"));
 const SalesAnalyze = lazy(() => import("@pages/sales analyze"));
 
 function App() {
@@ -35,27 +33,19 @@ function App() {
   }, [dispatch, i18n, nowUser_id, search, setSearch, usingLanguage]);
 
   return (
-    <Suspense fallback={<h1>那你網路很慢欸</h1>}>
+    <MySuspense >
       <Routes>
         <Route
-          index
+          path="kpi"
           element={<CustomRatePage />}
         />
         <Route
-          path='setting/*'
-          element={<EditPage />}
+          path='kpiSetting/*'
+          element={<SettingPage />}
         />
         <Route
-          path='apply/*'
+          path='VisitApply/*'
           element={<ApplyPage />}
-        />
-        <Route
-          path='sign/:formId'
-          element={<SignPage />}
-        />
-        <Route
-          path='print/:formId'
-          element={<PrintPage />}
         />
         <Route
           path='salesAnalyze/*'
@@ -66,7 +56,7 @@ function App() {
           element={<h1>欸不是啊怎麼沒有這頁R</h1>}
         />
       </Routes>
-    </Suspense>
+    </MySuspense>
   );
 }
 

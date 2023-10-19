@@ -1,13 +1,13 @@
 import { Main } from "@/layouts/main";
 import { NavLink } from "react-router-dom";
-import { IconBtn } from "../../components/UI/buttons";
+import { IconBtn } from "../../../components/UI/buttons";
 import * as Icons from "@components/UI/icons";
-import { HeaderForm } from "../../components/apply/list/header form";
+import { HeaderForm } from "../../../components/apply/list/header form";
 import { ListTable } from "@/components/apply/list/table";
 import { useTheme } from "styled-components";
 import { useTranslation } from "react-i18next";
 
-export const ListPage = () => {
+export default function ListPage() {
   const color = useTheme()?.color;
   const { t } = useTranslation(["list page"]);
   return (
@@ -33,4 +33,4 @@ export const ListPage = () => {
       </>
     </Main>
   );
-};
+}

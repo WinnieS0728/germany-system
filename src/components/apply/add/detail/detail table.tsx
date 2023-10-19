@@ -6,7 +6,7 @@ import {
   setTarget,
 } from "@/data/reducers/trip detail/trip detail";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch } from "@/utils/redux";
+import { useAppDispatch } from "@data/store";
 import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 import * as Icons from "@components/UI/icons";

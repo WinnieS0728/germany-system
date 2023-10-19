@@ -1,5 +1,5 @@
 import { TxSettingTable } from "@/components/edit/tx/setting table";
-import { SettingLayout } from "@/layouts/setting layout";
+import { SettingLayout } from "@/pages/kpi/setting/setting layout";
 
 function TxPage() {
   return (

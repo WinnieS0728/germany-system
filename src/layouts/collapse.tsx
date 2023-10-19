@@ -1,7 +1,7 @@
 import { useState } from "react";
 import * as Icons from "@components/UI/icons";
 import { useTheme } from "styled-components";
-import { useAppDispatch } from "@/utils/redux";
+import { useAppDispatch } from "@data/store";
 import { deleteItem } from "@/data/reducers/trip detail/trip detail";
 import { useTranslation } from "react-i18next";
 

@@ -7,7 +7,7 @@ import {
   DayPicker,
   SelectRangeEventHandler,
 } from "react-day-picker";
-import { useAppDispatch, useAppSelector } from "@/utils/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import { isValid } from "date-fns";
 import * as Icons from "@components/UI/icons";
 import { useOptions } from "@/hooks/options";

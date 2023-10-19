@@ -1,5 +1,5 @@
 import api from "@/api";
-import { useSignPageData } from "@/pages/sign/data";
+import { useSignPageData } from "@/pages/visit apply/sign/data";
 import { useMemo } from "react";
 import { useAppSelector } from "../utils/redux";
 import { emailData } from "@/api/common/email";

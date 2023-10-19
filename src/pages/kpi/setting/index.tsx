@@ -1,11 +1,11 @@
 import { Header } from "@layouts/header";
 import { Outlet, Route, Routes } from "react-router-dom";
-import { Nav } from "@/pages/edit/edit nav";
+import { Nav } from "@/pages/kpi/setting/setting nav";
 import { useTranslation } from "react-i18next";
-import { Suspense, lazy } from "react";
+import { lazy } from "react";
+import { MySuspense } from "@/layouts/suspense";
 
 const Coming = lazy(() => import("@layouts/coming"));
-
 const TxPage = lazy(() => import("./tx"));
 const ThresholdPage = lazy(() => import("./threshold"));
 
@@ -15,10 +15,10 @@ const EditPage = () => {
     <>
       <Header title={t("title")} />
       <Nav />
-      <Suspense fallback={<h1>欸你等一下啦</h1>}>
+      <MySuspense >
         <Routes>
           <Route
-            path='tx'
+            index
             element={<TxPage />}
           />
           <Route
@@ -31,10 +31,10 @@ const EditPage = () => {
           />
           <Route
             path='osom'
-            element={<Coming />}
+            Component={Coming }
           />
         </Routes>
-      </Suspense>
+      </MySuspense>
       <Outlet />
     </>
   );

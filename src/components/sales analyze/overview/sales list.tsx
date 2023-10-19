@@ -17,7 +17,6 @@ function Cu_type(isFirstOrder: boolean) {
 
 export function SalesList() {
   const { salesListData, indexArray } = useSalesList(); 
-
   return (
     <>
       <Section title='輪胎店銷售列表'>
@@ -43,7 +42,7 @@ export function SalesList() {
             <tbody>
               {salesListData.map((data) => (
                 <tr key={data.id}>
-                  <td>{data.sa_name}</td>
+                  <td className="whitespace-pre">{data.sa_name}</td>
                   <td>{Cu_type(data.isFirstOrder)}</td>
                   <td>{data.cu_name}</td>
                   <td>{getLocaleString(data.tx)}</td>

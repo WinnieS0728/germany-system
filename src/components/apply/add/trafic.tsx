@@ -68,7 +68,7 @@ export const TransportationForm = () => {
   return (
     <fieldset className='space-y-2'>
       <div className='transportation'>
-        <label className="label-input">
+        <label className='label-input'>
           <Required />
           {t("transportation")} :
           <Controller
@@ -97,28 +97,30 @@ export const TransportationForm = () => {
       </div>
       <div className='grid grid-cols-1 sm:grid-cols-3'>
         <div className='stay flex items-center justify-start'>
-          <label className="label-input">
+          <label className='label-input'>
             {t("isStay")} :
-            <label>
-              <input
-                type='radio'
-                {...register("IsLodging")}
-                value={"Yes"}
-              />
-              Yes
-            </label>
-            <label>
-              <input
-                type='radio'
-                {...register("IsLodging")}
-                value={"No"}
-              />
-              No
-            </label>
+            <div className="flex gap-4">
+              <label className='label-input'>
+                <input
+                  type='radio'
+                  {...register("IsLodging")}
+                  value={"Yes"}
+                />
+                Yes
+              </label>
+              <label className='label-input'>
+                <input
+                  type='radio'
+                  {...register("IsLodging")}
+                  value={"No"}
+                />
+                No
+              </label>
+            </div>
           </label>
         </div>
         <div className='stayDay  justify-start'>
-          <label className="label-input">
+          <label className='label-input'>
             {t("stayDay")} :
             <input
               type='text'
@@ -142,7 +144,7 @@ export const TransportationForm = () => {
           </label>
         </div>
         <div className='totalDay  justify-start'>
-          <label className="label-input">
+          <label className='label-input'>
             {t("tripDay")} :
             <input
               type='text'

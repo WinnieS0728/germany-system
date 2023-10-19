@@ -1,7 +1,7 @@
 import { Required } from "@/components/form/required";
 import { addDisabledDays } from "@/data/reducers/day picker/dayPickerControl";
-import { useAppDispatch, useAppSelector } from "@/utils/redux";
-import { NewFormDefaultValue } from "@/pages/apply/new apply";
+import { useAppDispatch, useAppSelector } from "@data/store";
+import { NewFormDefaultValue } from "@/pages/visit apply/apply/new apply";
 import { timeFormat } from "d3";
 import { isValid } from "date-fns";
 import { useEffect, useState } from "react";

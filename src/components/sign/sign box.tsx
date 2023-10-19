@@ -9,7 +9,7 @@ import { Required } from "../form/required";
 import { useModalControl } from "@/hooks/modal control";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useAppDispatch, useAppSelector } from "@/utils/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import { DevTool } from "@hookform/devtools";
 import { setErrors } from "@/data/reducers/error/errors";
 import { useSign } from "@/hooks/sign";

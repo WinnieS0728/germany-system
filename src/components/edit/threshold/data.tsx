@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/utils/redux";
+import { useAppSelector } from "@data/store";
 import { memberResType } from "@/api/member/getMember";
 import { monthType } from "@/types";
 

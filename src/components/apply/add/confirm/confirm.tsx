@@ -3,7 +3,7 @@ import { WeekTable } from "./week tabel";
 import { PerCentTable } from "./percent table";
 import * as Btns from "@components/UI/buttons";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppSelector } from "@/utils/redux";
+import { useAppSelector } from "@data/store";
 import { useTripDataProcessing } from "./data";
 import { useTranslation } from "react-i18next";
 

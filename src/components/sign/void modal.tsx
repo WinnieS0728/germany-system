@@ -3,7 +3,7 @@ import * as Btns from "@components/UI/buttons";
 import { useModalControl } from "@/hooks/modal control";
 import { useSign } from "@/hooks/sign";
 import { useTranslation } from "react-i18next";
-import { useAppSelector } from "@/utils/redux";
+import { useAppSelector } from "@data/store";
 import { useEmail } from "@/hooks/email";
 
 const VoidModal = () => {
