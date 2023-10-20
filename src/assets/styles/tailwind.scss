@@ -12,12 +12,11 @@
   }
 
   .label-input {
-      @apply relative flex items-center gap-4 whitespace-nowrap;
+    @apply relative flex justify-center items-center gap-4 whitespace-nowrap w-full;
 
-      input {
-        @apply w-full;
-      }
-    
+    input {
+      @apply w-full;
+    }
   }
 
   .main-section-gap {
@@ -43,6 +42,14 @@
 
     &.active {
       @apply bg-navActive;
+    }
+  }
+
+  .headerFilter {
+    @apply p-4 bg-tableBgc rounded-lg border-2 border-slate-300 flex flex-col lg:flex-row gap-4 justify-center;
+
+    .submitBtn {
+      @apply bg-sectionHeader text-myWhite px-6 py-2 rounded-md cursor-pointer
     }
   }
 }
