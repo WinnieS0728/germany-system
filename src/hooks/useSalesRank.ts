@@ -1,6 +1,7 @@
 import api from "@/api";
 import { useAppSelector } from "@data/store";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 type salesRankType = {
     EmpId: string
@@ -18,12 +19,34 @@ type salesRankType = {
 export function useSalesRank() {
     const salesList = useAppSelector(state => state.salesList).body;
     const { thisYear, thisMonth } = useAppSelector(state => state.time);
-    const filterData = useAppSelector(state => state.salesAnalyzeFilter).body;
+    const [search] = useSearchParams()
+    const searchMonth = search.get('month')
+    const searchEmpId = search.get("EmpId")
+    const getMonthArray = useCallback(() => {
+        if (!searchMonth) {
+            return undefined
+        }
+        const startMonth = searchMonth.split('_')[0]
+        const endMonth = searchMonth.split('_')[1]
+        if (!endMonth) {
+            return [startMonth]
+        }
+        const monthArray: string[] = []
+
+        for (let month = Number(startMonth); month <= Number(endMonth); month++) {
+            const MM = month < 10 ? `0${month}` : String(month)
+
+            monthArray.push(MM)
+        }
+
+        return monthArray
+    }, [searchMonth])
 
     const [data, setData] = useState<salesRankType[]>([])
 
     useEffect(() => {
-        const month = filterData.month;
+        const month = getMonthArray();
+
         (async function () {
             const salesRankRes = month
                 ? (await Promise.all(month.map(async (month) =>
@@ -73,14 +96,14 @@ export function useSalesRank() {
                 }
             }))).sort((a, b) => b.tx - a.tx)
 
-            if (filterData.EmpId) {
-                setData(data.filter(data => data.EmpId === filterData.EmpId))
+            if (searchEmpId) {
+                setData(data.filter(data => data.EmpId === searchEmpId))
             } else {
                 setData(data)
             }
 
         })()
-    }, [filterData.EmpId, filterData.month, salesList, thisMonth, thisYear])
+    }, [getMonthArray, salesList, searchEmpId, thisMonth, thisYear])
 
     return data
 }

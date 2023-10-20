@@ -25,7 +25,13 @@ function App() {
       EmpId = search.get("userID") as string;
     } else {
       EmpId = nowUser_id;
-      setSearch({ userID: EmpId });
+      setSearch(
+        (prev) => {
+          prev.set("userID", EmpId);
+          return prev;
+        },
+        { replace: true }
+      );
     }
     dispatch(setSalesList());
     dispatch(setUser(EmpId as string));
@@ -33,10 +39,16 @@ function App() {
   }, [dispatch, i18n, nowUser_id, search, setSearch, usingLanguage]);
 
   return (
-    <MySuspense >
+    <MySuspense>
       <Routes>
         <Route
-          path="kpi"
+          index
+          element={
+            <h1 className='h-screen grid place-items-center'>德國業務系統</h1>
+          }
+        />
+        <Route
+          path='kpi'
           element={<CustomRatePage />}
         />
         <Route

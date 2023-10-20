@@ -1,13 +1,8 @@
-import { memberResType } from "@/api/member/getMember";
 import { MySelect } from "@/components/form/select";
-import {
-  salesAnalyzeHeader,
-  setFilter,
-} from "@/data/reducers/sales analyze filter";
 import { cn } from "@/utils/cn";
-import { useAppDispatch, useAppSelector } from "@data/store";
+import { useAppSelector } from "@data/store";
 import { timeFormat } from "d3";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { DateRange, DayPicker } from "react-day-picker";
 import {
   Controller,
@@ -15,6 +10,15 @@ import {
   useForm,
   useFormContext,
 } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
+import z from "zod";
+
+const filterForm_schema = z.object({
+  EmpId: z.string().optional(),
+  month: z.string().optional(),
+});
+
+type filterForm = z.infer<typeof filterForm_schema>;
 
 type timeType = "thisYear" | "thisMonth" | "cusTime";
 interface radioProps {
@@ -57,11 +61,9 @@ function TimePicker({ active }: timePickerProps) {
   const { thisYear } = useAppSelector((state) => state.time);
   const [range, setRange] = useState<DateRange>();
   const [show, setShow] = useState<boolean>(false);
-  const [inputValue, setInputValue] = useState<string>("");
 
   useEffect(() => {
     if (!active) {
-      setInputValue("");
       setValue("month", undefined);
       setShow(false);
     }
@@ -69,32 +71,44 @@ function TimePicker({ active }: timePickerProps) {
 
   useEffect(() => {
     if (range && range.from && range.to) {
-      setValue("month", getMonthArray(range));
-      setInputValue(getInputValue(range));
+      setValue("month", getMonth(range));
       setShow(false);
     }
 
-    function getMonthArray(obj: DateRange): string[] {
-      const monthArray: string[] = [];
-
+    function getMonth(obj: DateRange): string {
       if (obj.from && obj.to) {
-        for (let i = obj.from.getMonth(); i <= obj.to.getMonth(); i++) {
-          monthArray.push(timeFormat("%m")(new Date(new Date().setMonth(i))));
-        }
-
-        return monthArray;
-      }
-      return [""];
-    }
-    function getInputValue(obj: DateRange): string {
-      if (obj.from && obj.to) {
-        const fromMonth = obj.from.getMonth() + 1;
-        const toMonth = obj.to.getMonth() + 1;
-        return `2023 - ${fromMonth}月 ~ 2023 - ${toMonth}月`;
+        const startMonth = timeFormat("%m")(obj.from);
+        const endMonth = timeFormat("%m")(obj.to);
+        return `${startMonth}_${endMonth}`;
       }
       return "";
     }
   }, [range, setValue]);
+
+  function getInputValue(obj: DateRange | undefined): string {
+    if (obj && obj.from && obj.to) {
+      const fromMonth = obj.from.getMonth() + 1;
+      const toMonth = obj.to.getMonth() + 1;
+      return `2023 - ${fromMonth}月 ~ 2023 - ${toMonth}月`;
+    }
+    return "";
+  }
+
+  function Footer() {
+    return (
+      <>
+        <button
+          type='button'
+          onClick={() => {
+            setRange(undefined);
+            setValue("month", undefined);
+          }}
+        >
+          clear
+        </button>
+      </>
+    );
+  }
 
   return (
     <label className='label-input w-full'>
@@ -109,7 +123,7 @@ function TimePicker({ active }: timePickerProps) {
         }}
         placeholder={active ? "請選擇時間..." : ""}
         disabled={!active}
-        value={inputValue}
+        value={getInputValue(range)}
         autoComplete='off'
       />
       {show && (
@@ -123,6 +137,7 @@ function TimePicker({ active }: timePickerProps) {
           toYear={Number(thisYear)}
           selected={range}
           onSelect={setRange}
+          footer={<Footer />}
           styles={{
             root: {
               backgroundColor: "white",
@@ -145,8 +160,8 @@ export function OverviewHeader() {
   const salesList = useAppSelector((state) => state.salesList).body;
   const { thisMonth } = useAppSelector((state) => state.time);
   const [type, setType] = useState<timeType>("thisYear");
-  const dispatch = useAppDispatch();
-  const methods = useForm<salesAnalyzeHeader>({
+  const [search, setSearch] = useSearchParams();
+  const methods = useForm<filterForm>({
     shouldUnregister: false,
     defaultValues: {
       EmpId: undefined,
@@ -160,20 +175,52 @@ export function OverviewHeader() {
     formState: { isSubmitting },
   } = methods;
 
+  type options = {
+    label: string;
+    value: string | undefined;
+  };
+
+  const options = useMemo(() => {
+    const emptyOption: options = { label: "all", value: undefined };
+    const restOption: options[] = salesList.map((data) => ({
+      label: data.EmpName,
+      value: data.EmpId,
+    }));
+    return [emptyOption].concat(restOption);
+  }, [salesList]);
+
   useEffect(() => {
     switch (type) {
       case "thisYear":
         setValue("month", undefined);
         break;
       case "thisMonth":
-        setValue("month", [thisMonth]);
+        setValue("month", thisMonth);
         break;
       default:
         break;
     }
   }, [setValue, thisMonth, type]);
-  function onSubmit(data: salesAnalyzeHeader) {
-    dispatch(setFilter(data));
+  function onSubmit(data: filterForm) {
+    const dataArray = Object.entries(data);
+    for (const data of dataArray) {
+      setSearch(
+        (prev) => {
+          prev.delete(data[0]);
+          return prev;
+        },
+        { replace: true }
+      );
+      if (data[1]) {
+        setSearch(
+          (prev) => {
+            prev.set(data[0], data[1] as string);
+            return prev;
+          },
+          { replace: true }
+        );
+      }
+    }
   }
   return (
     <>
@@ -189,10 +236,10 @@ export function OverviewHeader() {
               <label className='label-input w-full'>
                 業務
                 <MySelect.Normal
-                  options={salesList}
-                  getLabelFunction={(option: memberResType) => option.EmpName}
-                  getValueFunction={(option: memberResType) => option.EmpName}
-                  value='EmpId'
+                  options={options}
+                  // getLabelFunction={(option: memberResType) => option.EmpName}
+                  // getValueFunction={(option: memberResType) => option.EmpName}
+                  // value='EmpId'
                   onChange={onChange}
                 />
               </label>

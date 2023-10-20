@@ -3,6 +3,7 @@ import { orderDateList_res } from "@/api/sales analyze/order date list";
 import { dateFormatter } from "@/utils/dateFormatter";
 import { useAppSelector } from "@data/store";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 type salesListData = {
     id: number,
@@ -18,8 +19,30 @@ type salesListData = {
 
 export function useSalesList() {
     const { thisYear, thisMonth } = useAppSelector(state => state.time)
-    const filterData = useAppSelector(state => state.salesAnalyzeFilter).body
     const [salesListData, setSalesListData] = useState<salesListData[]>([])
+    const [search] = useSearchParams()
+    const searchMonth = search.get('month')
+    const searchEmpId = search.get('EmpId')
+
+    const getMonthArray = useCallback(() => {
+        if (!searchMonth) {
+            return undefined
+        }
+        const startMonth = searchMonth.split('_')[0]
+        const endMonth = searchMonth.split('_')[1]
+        if (!endMonth) {
+            return [startMonth]
+        }
+        const monthArray: string[] = []
+
+        for (let month = Number(startMonth); month <= Number(endMonth); month++) {
+            const MM = month < 10 ? `0${month}` : String(month)
+
+            monthArray.push(MM)
+        }
+
+        return monthArray
+    }, [searchMonth])
 
     const getLastDate = useCallback((dateObj: orderDateList_res) => {
         const lastDate = Object.values(dateObj).at(-1)
@@ -29,7 +52,7 @@ export function useSalesList() {
     }, [])
 
     useEffect(() => {
-        const month = filterData.month;
+        const month = getMonthArray();
         (async function () {
             const res = month ? (
                 await Promise.all(
@@ -76,14 +99,14 @@ export function useSalesList() {
                 }
             })))
 
-            if (filterData.EmpId) {
-                setSalesListData(data.filter(data => data.EmpId === filterData.EmpId))
+            if (searchEmpId) {
+                setSalesListData(data.filter(data => data.EmpId === searchEmpId))
             } else {
                 setSalesListData(data)
             }
 
         })()
-    }, [filterData.EmpId, filterData.month, getLastDate, thisMonth, thisYear])
+    }, [searchEmpId, getLastDate, thisMonth, thisYear, getMonthArray])
 
     function addEmptyData(array: string[], maxNumber: number) {
         const newArray = [...array];

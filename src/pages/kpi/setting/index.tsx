@@ -19,15 +19,15 @@ const EditPage = () => {
         <Routes>
           <Route
             index
-            element={<TxPage />}
+            Component={TxPage}
           />
           <Route
             path='threshold'
-            element={<ThresholdPage />}
+            Component={ThresholdPage}
           />
           <Route
             path='store'
-            element={<Coming />}
+            Component={Coming}
           />
           <Route
             path='osom'
