@@ -1,4 +1,4 @@
-import { monthType } from "@/types";
+import { month_shortName } from "@/types";
 import { FieldArrayWithId, UseFormRegister } from "react-hook-form";
 import { useTheme } from "styled-components";
 import { thresholdList_emp, threshold_data } from "./data";
@@ -24,20 +24,6 @@ export const TrList = ({
   setSelectNumber,
 }: propsType) => {
   const color = useTheme()?.color;
-  const months: monthType[] = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
 
   function inputFormat(e: React.ChangeEvent<HTMLInputElement>) {
     const e_value = e.target.value;
@@ -75,7 +61,7 @@ export const TrList = ({
         <td rowSpan={2}>{index + 1}</td>
         <td rowSpan={2}>{field.EmpName}</td>
         <td>ATU & 既有客戶</td>
-        {months.map((m) => (
+        {month_shortName.map((m) => (
           <td
             key={m}
             style={{ whiteSpace: "nowrap" }}
@@ -103,7 +89,7 @@ export const TrList = ({
       </tr>
       <tr>
         <td>新客戶</td>
-        {months.map((m) => (
+        {month_shortName.map((m) => (
           <td
             key={m}
             style={{ whiteSpace: "nowrap" }}

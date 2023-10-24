@@ -1,7 +1,7 @@
 import { Modal } from "./modal";
 import { useAppSelector } from "@data/store";
 import { useModalControl } from "@/hooks/modal control";
-import { useScroll } from "@/hooks/scroll control";
+import { useScroll } from "@/hooks/use scroll control";
 import { lazy } from "react";
 import { MySuspense } from "./suspense";
 

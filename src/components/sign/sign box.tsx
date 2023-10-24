@@ -12,11 +12,11 @@ import * as yup from "yup";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { DevTool } from "@hookform/devtools";
 import { setErrors } from "@/data/reducers/error/errors";
-import { useSign } from "@/hooks/sign";
-import { useFiles } from "@/hooks/files";
+import { useSign } from "@/hooks/useSign";
+import { useFiles } from "@/hooks/useFiles";
 import { useTranslation } from "react-i18next";
 import api from "@/api";
-import { useEmail } from "@/hooks/email";
+import { useEmail } from "@/hooks/useEmail";
 import { cn } from "@/utils/cn";
 
 export type SignData = {

@@ -10,7 +10,7 @@ import * as Btns from "@components/UI/buttons";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useTheme } from "styled-components";
-import { useOptions } from "../../../../hooks/options";
+import { useOptions } from "../../../../hooks/useOptions";
 import { useSelectRef } from "@/hooks/select ref";
 import { Required } from "@/components/form/required";
 import { setErrors } from "@/data/reducers/error/errors";

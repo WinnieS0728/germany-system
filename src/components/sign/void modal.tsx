@@ -1,10 +1,10 @@
 import { useTheme } from "styled-components";
 import * as Btns from "@components/UI/buttons";
 import { useModalControl } from "@/hooks/modal control";
-import { useSign } from "@/hooks/sign";
+import { useSign } from "@/hooks/useSign";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "@data/store";
-import { useEmail } from "@/hooks/email";
+import { useEmail } from "@/hooks/useEmail";
 
 const VoidModal = () => {
   const color = useTheme()?.color;

@@ -1,6 +1,7 @@
 import api from "@/api";
 import { orderDateList_res } from "@/api/sales analyze/order date list";
 import { dateFormatter } from "@/utils/dateFormatter";
+import { getMonthArray } from "@/utils/get month_MM array";
 import { useAppSelector } from "@data/store";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -24,26 +25,6 @@ export function useSalesList() {
     const searchMonth = search.get('month')
     const searchEmpId = search.get('EmpId')
 
-    const getMonthArray = useCallback(() => {
-        if (!searchMonth) {
-            return undefined
-        }
-        const startMonth = searchMonth.split('_')[0]
-        const endMonth = searchMonth.split('_')[1]
-        if (!endMonth) {
-            return [startMonth]
-        }
-        const monthArray: string[] = []
-
-        for (let month = Number(startMonth); month <= Number(endMonth); month++) {
-            const MM = month < 10 ? `0${month}` : String(month)
-
-            monthArray.push(MM)
-        }
-
-        return monthArray
-    }, [searchMonth])
-
     const getLastDate = useCallback((dateObj: orderDateList_res) => {
         const lastDate = Object.values(dateObj).at(-1)
         const isFirstOrder = Object.values(dateObj).length <= 2 ? true : false
@@ -52,7 +33,7 @@ export function useSalesList() {
     }, [])
 
     useEffect(() => {
-        const month = getMonthArray();
+        const month = getMonthArray(searchMonth);
         (async function () {
             const res = month ? (
                 await Promise.all(
@@ -106,7 +87,7 @@ export function useSalesList() {
             }
 
         })()
-    }, [searchEmpId, getLastDate, thisMonth, thisYear, getMonthArray])
+    }, [searchEmpId, getLastDate, thisMonth, thisYear, searchMonth])
 
     function addEmptyData(array: string[], maxNumber: number) {
         const newArray = [...array];

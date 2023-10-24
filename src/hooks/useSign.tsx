@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useAppDispatch, useAppSelector } from "../utils/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import api from "@/api";
 import { signFinalDataType } from "@/api/sign/update sign";
 import { SignData } from "@/components/sign/sign box";
@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { clearFile } from "@/data/reducers/files/attach";
 import { memberResType } from "@/api/member/getMember";
-import { useEmail } from "./email";
+import { useEmail } from "./useEmail";
 
 export const useSign = () => {
   const { t } = useTranslation("toast");

@@ -1,4 +1,4 @@
-import { monthType } from "@/types";
+import { month_shortName } from "@/types";
 import axios, { AxiosResponse } from "axios";
 
 export type thresholdResType = {
@@ -43,7 +43,7 @@ export function SetThresHold(apiPath: string) {
   return async function (
     year: string,
     id: string,
-    data: Record<monthType, number | undefined>,
+    data: Record<typeof month_shortName[number], number | undefined>,
     type: boolean,
     nowUser: string
   ) {

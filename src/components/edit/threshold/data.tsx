@@ -1,13 +1,13 @@
 import { useAppSelector } from "@data/store";
 import { memberResType } from "@/api/member/getMember";
-import { monthType } from "@/types";
+import { month_shortName } from "@/types";
 
 export type thresholdList_emp = Pick<memberResType, "EmpId" | "EmpName">;
 export type threshold_number = {
   existCus: number;
   newCus: number;
 };
-export type threshold_data = Record<monthType, threshold_number>;
+export type threshold_data = Record<typeof month_shortName[number], threshold_number>;
 
 export function GetData() {
   const salesList = useAppSelector((state) => state.salesList);

@@ -1,7 +1,7 @@
 import api from "@/api";
 import { useSignPageData } from "@/pages/visit apply/sign/data";
 import { useMemo } from "react";
-import { useAppSelector } from "../utils/redux";
+import { useAppSelector } from "@data/store";
 import { emailData } from "@/api/common/email";
 
 export const useEmail = () => {

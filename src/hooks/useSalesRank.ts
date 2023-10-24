@@ -1,6 +1,7 @@
 import api from "@/api";
+import { getMonthArray } from "@/utils/get month_MM array";
 import { useAppSelector } from "@data/store";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 type salesRankType = {
@@ -19,33 +20,14 @@ type salesRankType = {
 export function useSalesRank() {
     const salesList = useAppSelector(state => state.salesList).body;
     const { thisYear, thisMonth } = useAppSelector(state => state.time);
-    const [search] = useSearchParams()
+    const [search] = useSearchParams()    
     const searchMonth = search.get('month')
     const searchEmpId = search.get("EmpId")
-    const getMonthArray = useCallback(() => {
-        if (!searchMonth) {
-            return undefined
-        }
-        const startMonth = searchMonth.split('_')[0]
-        const endMonth = searchMonth.split('_')[1]
-        if (!endMonth) {
-            return [startMonth]
-        }
-        const monthArray: string[] = []
-
-        for (let month = Number(startMonth); month <= Number(endMonth); month++) {
-            const MM = month < 10 ? `0${month}` : String(month)
-
-            monthArray.push(MM)
-        }
-
-        return monthArray
-    }, [searchMonth])
 
     const [data, setData] = useState<salesRankType[]>([])
 
     useEffect(() => {
-        const month = getMonthArray();
+        const month = getMonthArray(searchMonth);
 
         (async function () {
             const salesRankRes = month
@@ -103,7 +85,7 @@ export function useSalesRank() {
             }
 
         })()
-    }, [getMonthArray, salesList, searchEmpId, thisMonth, thisYear])
+    }, [salesList, searchEmpId, searchMonth, thisMonth, thisYear])
 
     return data
 }

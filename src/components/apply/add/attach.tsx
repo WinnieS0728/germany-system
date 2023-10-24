@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { deleteFile } from "@/data/reducers/files/attach";
 import { component } from "@/types";
 import { useEffect, useState } from "react";
-import { useFiles } from "@/hooks/files";
+import { useFiles } from "@/hooks/useFiles";
 import { useTranslation } from "react-i18next";
 
 const FileItem_o = ({

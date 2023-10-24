@@ -21,7 +21,7 @@ import * as yup from "yup";
 import { useTheme } from "styled-components";
 import { Block } from "@/layouts/block";
 import { setErrors } from "@/data/reducers/error/errors";
-import { useFiles } from "@/hooks/files";
+import { useFiles } from "@/hooks/useFiles";
 import { Hamburger } from "@/layouts/hamburger";
 import { tripDetailType } from "@/api/travel apply/push details";
 import { toast } from "react-toastify";
@@ -32,7 +32,7 @@ import { useTripDataProcessing } from "@/components/apply/add/confirm/data";
 import { PopupLayer } from "@/layouts/popup";
 import { dataFromForm } from "@/api/travel apply/create new form";
 import { moneyType } from "@/types";
-import { lang } from "@/hooks/email";
+import { lang } from "@/hooks/useEmail";
 import { emailData } from "@/api/common/email";
 
 export interface infoForm {
@@ -47,7 +47,7 @@ export interface transportation {
 }
 export interface money {
   Advance_Amount: string;
-  Curr: moneyType | "";
+  Curr: typeof moneyType[number] | "";
 }
 export interface deputy {
   Deputy: string;

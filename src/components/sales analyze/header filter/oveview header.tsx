@@ -6,6 +6,7 @@ import { useSearchParams } from "react-router-dom";
 import z from "zod";
 import { TimePicker } from "./time picker";
 import { filterTimeType, RadioBtn } from "./radio";
+import { FilterSubmit } from "./filter submit";
 
 const filterForm_schema = z.object({
   EmpId: z.string().optional(),
@@ -72,7 +73,7 @@ export function OverviewHeader() {
       if (data[1]) {
         setSearch(
           (prev) => {
-            prev.set(data[0], data[1] as string);
+            prev.append(data[0], data[1] as string);
             return prev;
           },
           { replace: true }
@@ -127,12 +128,7 @@ export function OverviewHeader() {
               <TimePicker active={type === "cusTime"} />
             </div>
           </label>
-          <input
-            type='submit'
-            value='Search'
-            className=' submitBtn'
-            disabled={isSubmitting}
-          />
+          <FilterSubmit disable={isSubmitting} />
         </form>
       </FormProvider>
     </>

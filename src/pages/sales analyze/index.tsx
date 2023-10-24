@@ -9,7 +9,9 @@ const YearSalesPage = lazy(()=>import('./year sales'))
 const tireShopVisitPage = lazy(()=>import('./tire shop visit'))
 const AtuVisitPage = lazy(()=>import('./atu visit'))
 const UnVisitTireShop = lazy(()=>import('./unVisit tire shop'))
+const UnOrderTireShop = lazy(()=>import('./unOrder tire shop'))
 const KpiAchievementPage = lazy(()=>import('./kpi achievement'))
+const SalesCharts = lazy(()=>import('./chart'))
 
 export default function SalesAnalyze() {
   return (
@@ -39,8 +41,16 @@ export default function SalesAnalyze() {
             Component={UnVisitTireShop}
           />
           <Route
+            path="unOrderTireShop"
+            Component={UnOrderTireShop}
+          />
+          <Route
             path="kpiAchievement"
             Component={KpiAchievementPage}
+          />
+          <Route
+            path="salesCharts"
+            Component={SalesCharts}
           />
         </Routes>
       </MySuspense>

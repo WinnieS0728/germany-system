@@ -18,7 +18,7 @@ type tripHeaderResType = {
   Createid: string;
   EmpName: string;
   Createdate: string;
-  Curr: moneyType;
+  Curr: typeof moneyType[number];
   Days: string;
   StayDays: string;
 };

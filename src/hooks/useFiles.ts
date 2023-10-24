@@ -1,5 +1,5 @@
 import api from "@/api";
-import { useAppSelector } from "../utils/redux";
+import { useAppSelector } from "@data/store";
 import excel from "@img/files/excel_icon.svg";
 import word from "@img/files/word_icon.svg";
 import ppt from "@img/files/ppt_icon.svg";
@@ -8,13 +8,12 @@ import img from "@img/files/img_icon.svg";
 import normal from "@img/files/file_icon.svg";
 import { useCallback } from "react";
 
-interface id {
-  id: string;
-}
-interface type {
+type fileType = "word" | "ppt" | "excel" | "pdf" | "img" | "normal";
+type mimeObj = {
+  id: fileType;
   type: Record<string, string>;
-}
-const mimeObj: (id & type)[] = [
+};
+const mimeObj: mimeObj[] = [
   {
     id: "word",
     type: {
@@ -34,7 +33,7 @@ const mimeObj: (id & type)[] = [
     type: {
       xls: "application/vnd.ms-excel",
       xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      numbers: "application/x-iwork-numbers-sffnumbers"
+      numbers: "application/x-iwork-numbers-sffnumbers",
     },
   },
   {
@@ -55,7 +54,7 @@ const mimeObj: (id & type)[] = [
 export const useFiles = () => {
   const fileData = useAppSelector((state) => state.files).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
-  const {nowOrder} = useAppSelector((state) => state.formInfo).body;
+  const { nowOrder } = useAppSelector((state) => state.formInfo).body;
 
   async function uploadFile(id: string) {
     for (const file of fileData.newFile) {
@@ -70,7 +69,7 @@ export const useFiles = () => {
     }
   }
 
-  function getFileSize(num: number): string {
+  const getFileSize = useCallback((num: number): string => {
     if (num <= 1000) {
       return `${num} Byte`;
     } else if (num <= 1000 * 1000) {
@@ -78,25 +77,18 @@ export const useFiles = () => {
     } else {
       return `${(num / 1024 / 1024).toFixed(1)} MB`;
     }
-  }
+  }, [])
 
-  function getFileType(fileType: string): {
-    type: string;
+  const getFileType = useCallback((fileType: string): {
+    type: fileType;
     src: string;
-  } {
+  } => {
     const target = mimeObj.find((i) =>
       Object.values(i.type).some((mime) => mime === fileType)
     );
 
-    if (!target) {
-      return {
-        type: "",
-        src: "",
-      };
-    }
-
     let imgSrc;
-    switch (target.id) {
+    switch (target?.id) {
       case "img":
         imgSrc = img;
         break;
@@ -119,45 +111,38 @@ export const useFiles = () => {
         imgSrc = normal;
         break;
     }
-    return { type: target.id, src: imgSrc };
-  }
+    return { type: target?.id || "normal", src: imgSrc };
+  }, [])
 
-  function getDropzoneAccept(typeList: string[]) {
-    const typeObj: { [key: string]: string[] } = {};
+  const getDropzoneAccept = useCallback((typeList: string[]) => {
+    const typeObj: Record<string, string[]> = {};
     for (const type of typeList) {
       const target = mimeObj.find((i) => i.id === type);
       if (!target) {
         return;
       }
-      const a = Object.entries(target.type);
-      for (const s of a) {
-        typeObj[s[1]] = [`.${s[0]}`];
+      const mimeTypeArray = Object.entries(target.type);
+      for (const [fileName, mimeType] of mimeTypeArray) {
+        typeObj[`${mimeType}`] = [`.${fileName}`];
       }
     }
     return typeObj;
-  }
+  }, [])  
 
   const name2mime = useCallback((name: string) => {
-    function name2mime(name: string): string {
-      const nameType = name.split(".")[name.split(".").length - 1];
-      const target = mimeObj.find((i) =>
-        Object.keys(i.type).some((type) => type === nameType)
-      );
-      if (!target) {
-        return "";
-      }
-      const mime = target.type[nameType];
-      return mime;
+    const nameType = name.split(".")[name.split(".").length - 1];
+    const target = mimeObj.find((i) =>
+      Object.keys(i.type).some((type) => type === nameType)
+    );
+    if (!target) {
+      return "";
     }
-    return name2mime(name);
+    const mime = target.type[nameType];
+    return mime;
   }, []);
 
-  const path2blob = useCallback((path: string) => {
-    async function path2blob(path: string) {
-      const res = await api.downloadFile(path);
-      return res;
-    }
-    return path2blob(path);
+  const path2blob = useCallback(async (path: string) => {
+    return await api.downloadFile(path);
   }, []);
 
   return {

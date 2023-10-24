@@ -15,7 +15,7 @@ import api from "@/api";
 import { setThreshold } from "@/data/actions/kpi threshold/threshold";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { monthType } from "@/types";
+import { month_shortName } from "@/types";
 
 export type thresholdData = Record<
   "threshold",
@@ -37,21 +37,6 @@ export const ThresholdSettingTable = () => {
   useEffect(() => {
     dispatch(setThreshold(timeData.thisYear));
   }, [dispatch, timeData]);
-
-  const monthAry: monthType[] = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
 
   const initData = dataSet;
 
@@ -94,7 +79,7 @@ export const ThresholdSettingTable = () => {
   const { fields, replace } = useFieldArray({
     name: `threshold`,
     control,
-  });  
+  });
 
   // if (Object.keys(errors).length !== 0) {
   //   console.log(errors);
@@ -151,8 +136,8 @@ export const ThresholdSettingTable = () => {
     const postStatus = Promise.all(
       data.map(async (d, index: number) => {
         const monthData: Record<string, number> = {};
-        for (const m of monthAry) {
-          monthData[m] = d?.[m as monthType]?.newCus;
+        for (const m of month_shortName) {
+          monthData[m] = d?.[m]?.newCus;
         }
 
         return {
