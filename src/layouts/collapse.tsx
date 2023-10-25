@@ -27,7 +27,7 @@ export const Collapse = ({ type, main, sub, remove, index }: collapseProp) => {
     <div className='flex flex-col'>
       <div className='header flex justify-between'>
         {main}
-        <div className='flex flex-col sm:flex-row-reverse justify-center'>
+        <div className='flex flex-col sm:flex-row-reverse justify-center gap-4'>
           {type === "addForm" && (
             <button
               type='button'

@@ -98,7 +98,7 @@ export const LongBtn = (props: longBtn) => {
     <button
       type={props.type}
       form={props.type !== "button" ? props.form : ""}
-      className={"rounded-md px-16"}
+      className={"rounded-md px-16 py-2"}
       style={css}
       onClick={() => {
         if (!props.onClick) {

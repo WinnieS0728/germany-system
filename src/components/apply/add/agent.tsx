@@ -19,7 +19,7 @@ export const AgentForm = () => {
   return (
     <>
       <label className='label-input'>
-        {t("deputy")} :
+        <p>{t("deputy")} :</p>
         <Controller
           control={control}
           name='Deputy'

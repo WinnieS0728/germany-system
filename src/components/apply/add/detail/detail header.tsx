@@ -92,11 +92,12 @@ export const DetailHeader = ({ data, index }: headerProps) => {
   return (
     <div className='flex items-center justify-between'>
       <div className='relative flex flex-col gap-4 lg:flex-row lg:gap-8'>
-        <div className='startDate  flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center'>
-          <label className='label-input whitespace-nowrap'>
-            <Required />
-            {t("detail.startDate")}
-
+        <div className='startDate  flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center w-full'>
+          <label className='label-input'>
+            <p>
+              <Required />
+              {t("detail.startDate")}
+            </p>
             <input
               {...register(`tripData.${index}.startDate`)}
               className='date w-full'
@@ -115,10 +116,12 @@ export const DetailHeader = ({ data, index }: headerProps) => {
             />
           </label>
         </div>
-        <div className='endDate flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center'>
-          <label className='label-input whitespace-normal'>
-            <Required />
-            {t("detail.endDate")}
+        <div className='endDate flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center w-full'>
+          <label className='label-input'>
+            <p>
+              <Required />
+              {t("detail.endDate")}
+            </p>
 
             <input
               {...register(`tripData.${index}.endDate`)}
@@ -170,7 +173,7 @@ export const DetailHeader = ({ data, index }: headerProps) => {
           }}
         />
         <label className='label-input'>
-          {t("detailTable.thead.lodging")}
+          <p>{t("detailTable.thead.lodging")}</p>
           <input
             autoComplete='off'
             type='text'

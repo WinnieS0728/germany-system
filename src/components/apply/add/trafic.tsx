@@ -69,8 +69,10 @@ export const TransportationForm = () => {
     <fieldset className='space-y-2'>
       <div className='transportation'>
         <label className='label-input'>
-          <Required />
-          {t("transportation")} :
+          <p>
+            <Required />
+            {t("transportation")} :
+          </p>
           <Controller
             control={control}
             name='Transport'
@@ -98,15 +100,15 @@ export const TransportationForm = () => {
       <div className='grid grid-cols-1 sm:grid-cols-3'>
         <div className='stay flex items-center justify-start'>
           <label className='label-input'>
-            {t("isStay")} :
-            <div className="flex gap-4">
+            <p>{t("isStay")} :</p>
+            <div className='flex gap-4'>
               <label className='label-input'>
                 <input
                   type='radio'
                   {...register("IsLodging")}
                   value={"Yes"}
                 />
-                Yes
+                <p>Yes</p>
               </label>
               <label className='label-input'>
                 <input
@@ -114,14 +116,14 @@ export const TransportationForm = () => {
                   {...register("IsLodging")}
                   value={"No"}
                 />
-                No
+                <p>No</p>
               </label>
             </div>
           </label>
         </div>
         <div className='stayDay  justify-start'>
           <label className='label-input'>
-            {t("stayDay")} :
+            <p>{t("stayDay")} :</p>
             <input
               type='text'
               {...register("StayDays", {
@@ -145,7 +147,7 @@ export const TransportationForm = () => {
         </div>
         <div className='totalDay  justify-start'>
           <label className='label-input'>
-            {t("tripDay")} :
+            <p>{t("tripDay")} :</p>
             <input
               type='text'
               {...register("Days", {

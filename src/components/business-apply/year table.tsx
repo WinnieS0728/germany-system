@@ -30,8 +30,11 @@ export const YearTable = () => {
 
     return (
       <>
-        <label style={{ display: "flex", gap: "1rem", alignItems: "center" }} id="joy-ratePage-1">
-          {t("sales table.filter label", { ns: "customRatePage" })} :
+        <label
+          style={{ display: "flex", gap: "1rem", alignItems: "center" }}
+          id='joy-ratePage-1'
+        >
+          <p>{t("sales table.filter label", { ns: "customRatePage" })} :</p>
           <select
             onChange={(e) => handleChange(e.target.value)}
             value={id}
@@ -61,40 +64,40 @@ export const YearTable = () => {
   const dataSet = GetData();
 
   return (
-      <Table
-        title={t("sales table.title", { ns: "customRatePage" })}
-        filter={<Filter />}
-      >
-        <table>
-          <thead style={{ color: color?.black }}>
-            <tr>
-              <td>{t("sales table.type.title", { ns: "customRatePage" })}</td>
-              {monthAry.map((i) => (
-                <td key={i}>{i}</td>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>ATU</td>
-              {dataSet.atu.map((i, index) => (
-                <td key={index}>{i ? i + "%" : ""}</td>
-              ))}
-            </tr>
-            <tr>
-              <td>{t("cus type.exist cus", { ns: "customRatePage" })}</td>
-              {dataSet.existCus.map((i, index) => (
-                <td key={index}>{i ? i + "%" : ""}</td>
-              ))}
-            </tr>
-            <tr>
-              <td>{t("cus type.new cus", { ns: "customRatePage" })}</td>
-              {dataSet.newCus.map((i, index) => (
-                <td key={index}>{i ? i + "%" : ""}</td>
-              ))}
-            </tr>
-          </tbody>
-        </table>
-      </Table>
+    <Table
+      title={t("sales table.title", { ns: "customRatePage" })}
+      filter={<Filter />}
+    >
+      <table>
+        <thead style={{ color: color?.black }}>
+          <tr>
+            <td>{t("sales table.type.title", { ns: "customRatePage" })}</td>
+            {monthAry.map((i) => (
+              <td key={i}>{i}</td>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ATU</td>
+            {dataSet.atu.map((i, index) => (
+              <td key={index}>{i ? i + "%" : ""}</td>
+            ))}
+          </tr>
+          <tr>
+            <td>{t("cus type.exist cus", { ns: "customRatePage" })}</td>
+            {dataSet.existCus.map((i, index) => (
+              <td key={index}>{i ? i + "%" : ""}</td>
+            ))}
+          </tr>
+          <tr>
+            <td>{t("cus type.new cus", { ns: "customRatePage" })}</td>
+            {dataSet.newCus.map((i, index) => (
+              <td key={index}>{i ? i + "%" : ""}</td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    </Table>
   );
 };

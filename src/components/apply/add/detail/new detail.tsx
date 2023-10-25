@@ -38,8 +38,10 @@ const Tr = ({ label, children, required }: trProps) => {
     <tr>
       <td style={{ backgroundColor: color.tableBgc }}>
         <label className='relative'>
-          {required && <Required />}
-          {label}
+          <p>
+            {required && <Required />}
+            {label}
+          </p>
         </label>
       </td>
       <td>{children}</td>
@@ -370,7 +372,7 @@ const NewDetailForm = () => {
                         >
                           <button
                             type='button'
-                            className='w-full'
+                            className='w-full py-2 rounded-md'
                             style={{
                               color: color.white,
                               backgroundColor: color.createCus,

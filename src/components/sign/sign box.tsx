@@ -195,7 +195,7 @@ const SignBlock = ({
                       disabled={inputDisable}
                       {...register("agree")}
                     />
-                    {t("radio.yes")}
+                    <p>{t("radio.yes")}</p>
                   </label>
                 </td>
               </tr>
@@ -208,22 +208,28 @@ const SignBlock = ({
                       disabled={inputDisable}
                       {...register("agree")}
                     />
-                    {type === "sign"
-                      ? t("radio.sign-no")
-                      : t("radio.otherSign-no")}
+                    <p>
+                      {type === "sign"
+                        ? t("radio.sign-no")
+                        : t("radio.otherSign-no")}
+                    </p>
                   </label>
                 </td>
               </tr>
               <tr>
                 <td className='title'>
-                  <span className='relative py-1'>
+                  <label
+                    htmlFor='sign-password'
+                    className='relative py-1'
+                  >
                     <Required />
                     {t("label.password")}
-                  </span>
+                  </label>
                 </td>
                 <td>
                   <div className='flex'>
                     <input
+                      id='sign-password'
                       className='w-full'
                       type={showPassword ? "text" : "password"}
                       autoComplete='off'
@@ -248,15 +254,19 @@ const SignBlock = ({
               </tr>
               <tr>
                 <td className='title'>
-                  <span className='relative p-1'>
-                    {(watch_agree === "no" || type === "otherSign") && (
-                      <Required />
-                    )}
-                    {t("label.opinion")}
-                  </span>
+                  <label
+                    htmlFor='sign-opinion'
+                    className='relative p-1'
+                  >
+                      {(watch_agree === "no" || type === "otherSign") && (
+                        <Required />
+                      )}
+                      {t("label.opinion")}
+                  </label>
                 </td>
                 <td>
                   <TextAreaAutosize
+                    id='sign-opinion'
                     className='w-full'
                     {...register("opinion", {
                       setValueAs: (value: string) =>
@@ -288,33 +298,33 @@ const SignBlock = ({
 };
 
 const styled_sign = styled(SignBlock)`
-    background-color: ${(props) => props.theme.color.white};
-    h3{
-        text-align: center;
-        font-size: 1.25rem;
-        padding: 0.5rem;
-        background-color: ${(props) => props.theme.color.sign_header};
-    }
-    .ref-ul{
-        background-color: ${(props) => props.theme.color.sign_content};
-        padding: 1rem;
-    }
-    .title{
-        background-color: ${(props) => props.theme.color.tableBgc};
-    }
-    td:not(.title){
-        text-align: start;
-    }
-    label {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
+  background-color: ${(props) => props.theme.color.white};
+  h3 {
+    text-align: center;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    background-color: ${(props) => props.theme.color.sign_header};
+  }
+  .ref-ul {
+    background-color: ${(props) => props.theme.color.sign_content};
+    padding: 1rem;
+  }
+  .title {
+    background-color: ${(props) => props.theme.color.tableBgc};
+  }
+  td:not(.title) {
+    text-align: start;
+  }
+  label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 
-        input[type='radio']{
-            border-radius: 50%;
-            border: 10px solid red;
-        }
+    input[type="radio"] {
+      border-radius: 50%;
+      border: 10px solid red;
     }
+  }
 `;
 
 export default styled_sign;

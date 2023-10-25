@@ -87,7 +87,7 @@ export const WeekTable = () => {
 
       const value = `${m} - ${s} (w${w})`;
       setValue(value);
-      
+
       if (firstTime === true) {
         dispatch(setWeekVisitData(m));
         setFirstTime(false);
@@ -108,7 +108,7 @@ export const WeekTable = () => {
           className='relative flex flex-col  items-center gap-2 sm:flex-row'
           id='joy-ratePage-2'
         >
-          {t("week table.filter label", { ns: "customRatePage" })} :
+          <p>{t("week table.filter label", { ns: "customRatePage" })} :</p>
           <input
             name={"week"}
             style={{

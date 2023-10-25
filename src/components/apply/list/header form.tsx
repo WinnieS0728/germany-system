@@ -116,8 +116,8 @@ export const HeaderForm = ({ className }: propsType) => {
         <div className='form-body grid w-full gap-4'>
           <div className='member flex gap-4'>
             <label className='label-input w-full'>
-              {t("label.member")}
-              <div className="flex gap-4 w-full">
+              <p>{t("label.member")}</p>
+              <div className='flex gap-4 w-full'>
                 <Controller
                   control={control}
                   name='dept'
@@ -166,7 +166,7 @@ export const HeaderForm = ({ className }: propsType) => {
           </div>
           <div className='status'>
             <label className='label-input'>
-              {t("label.status")}
+              <p>{t("label.status")}</p>
               <Controller
                 control={control}
                 name='formStatus'
@@ -182,7 +182,7 @@ export const HeaderForm = ({ className }: propsType) => {
           </div>
           <div className='date'>
             <label className='label-input'>
-              {t("label.date")}
+              <p>{t("label.date")}</p>
               <span className='relative flex w-full flex-col items-center gap-2 sm:flex-row'>
                 <input
                   className='w-full'

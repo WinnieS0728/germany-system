@@ -30,7 +30,7 @@ export const MoneyForm = () => {
   return (
     <div className='flex flex-col gap-4 sm:flex-row sm:gap-8'>
       <label className='label-input'>
-        {t("amount")} :
+        <p>{t("amount")} :</p>
         <input
           type='text'
           className='w-full'
@@ -57,8 +57,10 @@ export const MoneyForm = () => {
       </label>
 
       <label className='label-input'>
-        {watch_money !== "0" && <Required />}
-        {t("curr")} :
+        <p>
+          {watch_money !== "0" && <Required />}
+          {t("curr")} :
+        </p>
         <Controller
           control={control}
           name='Curr'

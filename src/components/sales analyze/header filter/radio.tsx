@@ -35,7 +35,7 @@ export function RadioBtn({
         }
       )}
     >
-      {text}
+      <p>{text}</p>
       <input
         type='radio'
         name='type'

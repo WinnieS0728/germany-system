@@ -93,7 +93,7 @@ export function OverviewHeader() {
             name='EmpId'
             render={({ field: { onChange } }) => (
               <label className='label-input w-full'>
-                業務
+                <p>業務</p>
                 <MySelect.Normal
                   options={options}
                   onChange={onChange}
@@ -102,7 +102,7 @@ export function OverviewHeader() {
             )}
           />
           <label className='label-input w-full'>
-            時間
+            <p>時間</p>
             <div className='w-full grid grid-cols-1 sm:grid-cols-2 lg:flex gap-2'>
               <RadioBtn
                 as='time'

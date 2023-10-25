@@ -12,7 +12,7 @@
   }
 
   .label-input {
-    @apply relative flex justify-center items-center gap-4 whitespace-nowrap w-full;
+    @apply relative flex items-center gap-4 whitespace-nowrap w-full;
 
     input {
       @apply w-full;
