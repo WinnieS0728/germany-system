@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import api from "@api/index";
-import { fetchFormListBody } from "@/lib/api/travel apply/get list";
+import api from "@/api/index";
+import { fetchFormListBody } from "@/api/travel apply/get list";
 
 export const setListData = createAsyncThunk(
   "listTable/setListData",

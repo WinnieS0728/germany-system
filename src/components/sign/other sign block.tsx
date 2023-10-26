@@ -1,19 +1,20 @@
 import styled, { useTheme } from "styled-components";
 import AsyncSelect from "react-select/async";
-import { useOptions } from "@/hooks/options";
+import { useOptions } from "@/hooks/useOptions";
 import * as Btns from "@components/UI/buttons";
 import { Controller, useForm } from "react-hook-form";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch } from "@data/store";
 import { setErrors } from "@/data/reducers/error/errors";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useEffect } from "react";
 import { useSelectRef } from "@/hooks/select ref";
-import { useSign } from "@/hooks/sign";
+import { useSign } from "@/hooks/useSign";
 import { useTranslation } from "react-i18next";
 import { useId2name } from "@/hooks/id2name";
-import { memberResType } from "@/lib/api/member/getMember";
+import { memberResType } from "@/api/member/getMember";
+import { cn } from "@/utils/cn";
 
 const OtherSignBlock = ({ className }: { className?: string }) => {
   const color = useTheme()?.color;
@@ -65,7 +66,7 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
   }, [trigger]);
 
   return (
-    <article className={`modal ${className} space-y-4`}>
+    <article className={cn(`modal space-y-4`,className)}>
       <h3>{t("otherSign.title", { ns: "sign" })}</h3>
       <form
         id='otherSign'
@@ -149,11 +150,6 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
       </form>
       <div className='submit-btns'>
         <Btns.LongBtn
-          type='reset'
-          style='cancel'
-          form='otherSign'
-        />
-        <Btns.LongBtn
           type='submit'
           style='confirm'
           form='otherSign'
@@ -163,6 +159,11 @@ const OtherSignBlock = ({ className }: { className?: string }) => {
               toggleErrorModal("on");
             }
           }}
+        />
+        <Btns.LongBtn
+          type='reset'
+          style='cancel'
+          form='otherSign'
         />
       </div>
     </article>

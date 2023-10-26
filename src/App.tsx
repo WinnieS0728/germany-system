@@ -1,66 +1,74 @@
 import { lazy, useLayoutEffect } from "react";
-import { Suspense } from "react";
 import { Route, Routes, useSearchParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@hooks/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import { setSalesList } from "@actions/member/setSalesList";
 import { setUser } from "@actions/member/setUser";
 import { useTranslation } from "react-i18next";
+import { MySuspense } from "./layouts/suspense";
 
-const CustomRatePage = lazy(() => import("@pages/custom rate"));
-const EditPage = lazy(() => import("@pages/edit/edit"));
-const ApplyPage = lazy(() => import("@pages/apply/apply"));
-const SignPage = lazy(() => import("@pages/sign/sign"));
-const PrintPage = lazy(() => import("@pages/print"));
+const CustomRatePage = lazy(() => import("@/pages/kpi"));
+const SettingPage = lazy(() => import("@/pages/kpi/setting"));
+const ApplyPage = lazy(() => import("@/pages/visit apply"));
+const SalesAnalyze = lazy(() => import("@pages/sales analyze"));
 
 function App() {
   const dispatch = useAppDispatch();
-  const nowUser = useAppSelector((state) => state.nowUser).body;
+  const { Language, EmpId } = useAppSelector((state) => state.nowUser).body;
   const { i18n } = useTranslation();
   const [search, setSearch] = useSearchParams();
-  const usingLanguage = nowUser.Language?.split("-")[0];
+  const usingLanguage = Language?.split("-")[0];
+  const nowUser_id = EmpId;
 
-  useLayoutEffect(() => {    
+  useLayoutEffect(() => {
     let EmpId: string;
     if (search.get("userID")) {
       EmpId = search.get("userID") as string;
     } else {
-      EmpId = nowUser.EmpId;
-      setSearch({ userID: nowUser.EmpId });
+      EmpId = nowUser_id;
+      setSearch(
+        (prev) => {
+          prev.set("userID", EmpId);
+          return prev;
+        },
+        { replace: true }
+      );
     }
     dispatch(setSalesList());
     dispatch(setUser(EmpId as string));
     i18n.changeLanguage(usingLanguage);
-  }, [dispatch, i18n, nowUser.EmpId, search, setSearch, usingLanguage]);
+  }, [dispatch, i18n, nowUser_id, search, setSearch, usingLanguage]);
 
   return (
-    <Suspense fallback={<h1>那你網路很慢欸</h1>}>
+    <MySuspense>
       <Routes>
         <Route
           index
+          element={
+            <h1 className='h-screen grid place-items-center'>德國業務系統</h1>
+          }
+        />
+        <Route
+          path='kpi'
           element={<CustomRatePage />}
         />
         <Route
-          path='setting/*'
-          element={<EditPage />}
+          path='kpiSetting/*'
+          element={<SettingPage />}
         />
         <Route
-          path='apply/*'
+          path='VisitApply/*'
           element={<ApplyPage />}
         />
         <Route
-          path='sign/:formId'
-          element={<SignPage />}
-        />
-        <Route
-          path='print'
-          element={<PrintPage />}
+          path='salesAnalyze/*'
+          Component={SalesAnalyze}
         />
         <Route
           path='*'
           element={<h1>欸不是啊怎麼沒有這頁R</h1>}
         />
       </Routes>
-    </Suspense>
+    </MySuspense>
   );
 }
 

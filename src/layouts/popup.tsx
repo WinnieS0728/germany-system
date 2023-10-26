@@ -1,8 +1,9 @@
 import { Modal } from "./modal";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@data/store";
 import { useModalControl } from "@/hooks/modal control";
-import { useScroll } from "@/hooks/scroll control";
-import { Suspense, lazy } from "react";
+import { useScroll } from "@/hooks/use scroll control";
+import { lazy } from "react";
+import { MySuspense } from "./suspense";
 
 const NewDetailForm = lazy(
   () => import("@/components/apply/add/detail/new detail")
@@ -16,7 +17,7 @@ const ErrorsModal = lazy(() => import("@/components/apply/add/errors"));
 
 export const PopupLayer = () => {
   const errors = useAppSelector((state) => state.errors);
-  const formInfo = useAppSelector((state) => state.formInfo).body;
+  const { signType } = useAppSelector((state) => state.formInfo).body;
 
   const errorsState = useModalControl("errors")[1];
   const detailState = useModalControl("newDetail")[1];
@@ -44,42 +45,44 @@ export const PopupLayer = () => {
   }
 
   return (
-    <Suspense>
-      {detailState && (
-        <Modal name='newDetail'>
-          <NewDetailForm />
-        </Modal>
-      )}
-      {reviewState && (
-        <Modal name='review'>
-          <Confirm />
-        </Modal>
-      )}
-      {filesState && (
-        <Modal name='files'>
-          <UploadFiles />
-        </Modal>
-      )}
-      {signState && (
-        <Modal name='sign'>
-          <SignBlock type={formInfo.signType} />
-        </Modal>
-      )}
-      {otherSignState && (
-        <Modal name='otherSign'>
-          <OtherSignBlock />
-        </Modal>
-      )}
-      {voidState && (
-        <Modal name='void'>
-          <VoidModal />
-        </Modal>
-      )}
-      {errorsState && (
-        <Modal name='errors'>
-          <ErrorsModal errors={errors.body} />
-        </Modal>
-      )}
-    </Suspense>
+    <MySuspense>
+      <>
+        {detailState && (
+          <Modal name='newDetail'>
+            <NewDetailForm />
+          </Modal>
+        )}
+        {reviewState && (
+          <Modal name='review'>
+            <Confirm />
+          </Modal>
+        )}
+        {filesState && (
+          <Modal name='files'>
+            <UploadFiles />
+          </Modal>
+        )}
+        {signState && (
+          <Modal name='sign'>
+            <SignBlock type={signType} />
+          </Modal>
+        )}
+        {otherSignState && (
+          <Modal name='otherSign'>
+            <OtherSignBlock />
+          </Modal>
+        )}
+        {voidState && (
+          <Modal name='void'>
+            <VoidModal />
+          </Modal>
+        )}
+        {errorsState && (
+          <Modal name='errors'>
+            <ErrorsModal errors={errors.body} />
+          </Modal>
+        )}
+      </>
+    </MySuspense>
   );
 };

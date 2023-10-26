@@ -27,7 +27,7 @@ export const JoyRide = ({ steps, active, restart }: propsType) => {
           last: t("btn.done"),
           skip: t("btn.skip"),
         }}
-        callback={(d) => {
+        callback={(d: { action: string; }) => {
           if (d.action === "reset" || d.action === "close") {
             restart();
           }

@@ -4,13 +4,13 @@ import {
   pushData,
 } from "@/data/reducers/trip detail/trip detail";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch } from "@/hooks/redux";
-import api from "@/lib/api";
+import { useAppDispatch } from "@data/store";
+import api from "@/api";
 import * as Btns from "@components/UI/buttons";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useTheme } from "styled-components";
-import { useOptions } from "../../../../hooks/options";
+import { useOptions } from "../../../../hooks/useOptions";
 import { useSelectRef } from "@/hooks/select ref";
 import { Required } from "@/components/form/required";
 import { setErrors } from "@/data/reducers/error/errors";
@@ -18,10 +18,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Table } from "@/components/table/table";
 import { useTranslation } from "react-i18next";
-import { tripEvent } from "@/lib/api/event/get event";
-import { areaResType } from "@/lib/api/common/getArea";
-import { postcodeResType } from "@/lib/api/postal code/postal code";
-import { cusResType } from "@/lib/api/common/getCus";
+import { tripEvent } from "@/api/event/get event";
+import { areaResType } from "@/api/common/getArea";
+import { postcodeResType } from "@/api/postal code/postal code";
+import { cusResType } from "@/api/common/getCus";
+import { tripEvent as tripEvent_enum } from "@/types";
 
 interface trProps {
   label: string;
@@ -37,8 +38,10 @@ const Tr = ({ label, children, required }: trProps) => {
     <tr>
       <td style={{ backgroundColor: color.tableBgc }}>
         <label className='relative'>
-          {required && <Required />}
-          {label}
+          <p>
+            {required && <Required />}
+            {label}
+          </p>
         </label>
       </td>
       <td>{children}</td>
@@ -51,7 +54,15 @@ const schema = yup.object().shape({
   district: yup.string().required("地區沒填"),
   postalCode: yup.string().required("郵遞區號沒填"),
   city: yup.string(),
-  cus: yup.string().required("客戶沒填"),
+  cus: yup.string().when("purpose", {
+    is: (value: string) =>
+      value === "TripEvent-2" ||
+      value === "TripEvent-4" ||
+      value === "TripEvent-91" ||
+      value === "TripEvent-92",
+    then: () => yup.string(),
+    otherwise: () => yup.string().required("客戶沒填"),
+  }),
   hotel: yup.string(),
   PS: yup.string(),
 });
@@ -79,17 +90,26 @@ const NewDetailForm = () => {
       city: "",
       postalCode: "",
       cus: "",
-      hotel: "",
       PS: "",
     },
   });
 
-  const { newDetailRef, clearDetailSelect } = useSelectRef();
+  const {
+    newDetailRef,
+    clearDetailSelect,
+    clearCusSelect,
+    clearPostCodeSelect,
+  } = useSelectRef();
 
   const [toggleModal] = useModalControl("newDetail");
   const [toggleErrorModal] = useModalControl("errors");
 
   const { options } = useOptions();
+
+  const watch_purpose = useWatch({
+    name: "purpose",
+    control,
+  });
 
   const watch_area = useWatch({
     name: "district",
@@ -100,6 +120,18 @@ const NewDetailForm = () => {
     name: "postalCode",
     control,
   });
+
+  const isCusRequired = useMemo(() => {
+    if (
+      watch_purpose === "TripEvent-2" ||
+      watch_purpose === "TripEvent-4" ||
+      watch_purpose === "TripEvent-91" ||
+      watch_purpose === "TripEvent-92"
+    ) {
+      return false;
+    }
+    return true;
+  }, [watch_purpose]);
 
   const getCity = useMemo(
     async function () {
@@ -124,6 +156,15 @@ const NewDetailForm = () => {
   }, [getCity, setValue]);
 
   useEffect(() => {
+    clearCusSelect();
+  }, [clearCusSelect, watch_purpose]);
+
+  useEffect(() => {
+    clearPostCodeSelect();
+    clearCusSelect();
+  }, [clearCusSelect, clearPostCodeSelect, watch_area]);
+
+  useEffect(() => {
     trigger();
   }, [trigger]);
 
@@ -144,6 +185,48 @@ const NewDetailForm = () => {
     toggleModal("off");
   }
 
+  const cusFilter = useCallback(
+    (candidate: { data: cusResType }): boolean => {
+      const isATU = candidate.data.CustName.startsWith("A.T.U");
+      const isOldCus = !!candidate.data.ErpNo;
+
+      switch (watch_purpose) {
+        case tripEvent_enum.atu:
+          if (isATU) {
+            return true;
+          } else {
+            return false;
+          }
+        case tripEvent_enum.oldCus:
+          if (!isATU && isOldCus) {
+            return true;
+          } else {
+            return false;
+          }
+        case tripEvent_enum.newCus:
+          if (!isATU && !isOldCus) {
+            return true;
+          } else {
+            return false;
+          }
+
+        default:
+          return true;
+      }
+    },
+    [watch_purpose]
+  );
+
+  const tableRef = useRef<HTMLTableElement>(null);
+  // console.log(tableRef.current?.scrollHeight);
+
+  // useEffect(() => {
+  //   if (!tableRef.current) {
+  //     return;
+  //   }
+  //   tableRef.current.style.height = `${tableRef.current.scrollHeight}px`;
+  // }, [tableRef]);
+
   return (
     <>
       <form
@@ -158,7 +241,7 @@ const NewDetailForm = () => {
         style={{ backgroundColor: color.white }}
       >
         <Table>
-          <table>
+          <table ref={tableRef}>
             <thead>
               <tr>
                 <th
@@ -181,7 +264,6 @@ const NewDetailForm = () => {
                 <Controller
                   control={control}
                   name='purpose'
-                  rules={{ required: "出差事由必填" }}
                   render={({ field: { onChange } }) => (
                     <MySelect.Async
                       forwardRef={newDetailRef.purpose}
@@ -209,7 +291,6 @@ const NewDetailForm = () => {
                 <Controller
                   control={control}
                   name='district'
-                  rules={{ required: "行政區必填" }}
                   render={({ field: { onChange } }) => (
                     <MySelect.Async
                       forwardRef={newDetailRef.country}
@@ -235,7 +316,6 @@ const NewDetailForm = () => {
                 <Controller
                   control={control}
                   name='postalCode'
-                  rules={{ required: "郵遞區號必填" }}
                   render={({ field: { onChange } }) => (
                     <MySelect.Async
                       forwardRef={newDetailRef.postalCode}
@@ -273,12 +353,11 @@ const NewDetailForm = () => {
               </Tr>
               <Tr
                 label={t("thead.cus")}
-                required
+                required={isCusRequired}
               >
                 <Controller
                   control={control}
                   name='cus'
-                  rules={{ required: "客戶必填" }}
                   render={({ field: { onChange } }) => (
                     <MySelect.Async
                       forwardRef={newDetailRef.cus}
@@ -293,13 +372,13 @@ const NewDetailForm = () => {
                         >
                           <button
                             type='button'
-                            className='w-full'
+                            className='w-full py-2 rounded-md'
                             style={{
                               color: color.white,
                               backgroundColor: color.createCus,
                             }}
                           >
-                            查無資料，請建立客戶資訊
+                            {t("noCus")}
                           </button>
                         </a>
                       }
@@ -308,21 +387,12 @@ const NewDetailForm = () => {
                       value='CustName'
                       filterFunction={(candidate: { data: cusResType }) => {
                         if (candidate.data.PostalCode === watch_postcode) {
-                          return true;
+                          return cusFilter(candidate);
                         }
                         return false;
                       }}
                     />
                   )}
-                />
-              </Tr>
-              <Tr label={t("thead.lodging")}>
-                <input
-                  type='text'
-                  {...register("hotel")}
-                  className='w-full'
-                  autoComplete='off'
-                  placeholder={t("placeholder.lodging")}
                 />
               </Tr>
               <Tr label={t("thead.PS")}>
@@ -339,15 +409,15 @@ const NewDetailForm = () => {
         </Table>
         <div className='submit-btns'>
           <Btns.LongBtn
-            type='reset'
-            style='cancel'
-            form='new detail'
-          />
-          <Btns.LongBtn
             type='submit'
             style='confirm'
             form='new detail'
             onClick={validate}
+          />
+          <Btns.LongBtn
+            type='reset'
+            style='cancel'
+            form='new detail'
           />
         </div>
       </form>
@@ -355,4 +425,4 @@ const NewDetailForm = () => {
   );
 };
 
-export default NewDetailForm
+export default NewDetailForm;

@@ -5,9 +5,9 @@ import styled, { useTheme } from "styled-components";
 import * as Btns from "@components/UI/buttons";
 import * as Icons from "@components/UI/icons";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch } from "@data/store";
 import { addFile } from "@/data/reducers/files/attach";
-import { useFiles } from "@/hooks/files";
+import { useFiles } from "@/hooks/useFiles";
 import { useTranslation } from "react-i18next";
 
 type styleProp = {
@@ -152,16 +152,16 @@ function UploadFiles() {
       <div className='submit-btns'>
         <Btns.LongBtn
           type='button'
+          style='confirm'
+          onClick={sendFile}
+        />
+        <Btns.LongBtn
+          type='button'
           style='cancel'
           onClick={() => {
             setFileList([]);
             toggleFileModal("off");
           }}
-        />
-        <Btns.LongBtn
-          type='button'
-          style='confirm'
-          onClick={sendFile}
         />
       </div>
     </article>

@@ -1,7 +1,7 @@
 import { useTheme } from "styled-components";
 import { Table } from "../table/table";
-import { dateFormatter } from "@/hooks/dateFormatter";
-import { useAppSelector } from "@/hooks/redux";
+import { dateFormatter } from "@/utils/dateFormatter";
+import { useAppSelector } from "@data/store";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useId2name } from "@/hooks/id2name";
@@ -9,12 +9,12 @@ import { useSignStatusTranslate } from "@/hooks/status translate";
 
 const FileList = ({ order }: { order: number }) => {
   const data = useAppSelector((state) => state.files).body.formAttach;
-  const formData = useAppSelector((state) => state.formInfo).body;
+  const { formId } = useAppSelector((state) => state.formInfo).body;
   const myFile = data
     .map((d, i) => {
       return {
         ...d,
-        show: `${formData.formId}-${i + 1}`,
+        show: `${formId}-${i + 1}`,
       };
     })
     .filter((d) => parseInt(d.SIGNORDER) === order);
@@ -35,8 +35,8 @@ const FileList = ({ order }: { order: number }) => {
 export const SignTable = () => {
   const { t } = useTranslation("sign page");
   const color = useTheme()?.color;
-  const formInfo = useAppSelector((state) => state.formInfo).body;
-  const [newData, setData] = useState(formInfo.signList);
+  const { signList } = useAppSelector((state) => state.formInfo).body;
+  const [newData, setData] = useState(signList);
   const { id2name } = useId2name();
   const { getSignStatus } = useSignStatusTranslate();
 
@@ -50,7 +50,7 @@ export const SignTable = () => {
   useEffect(() => {
     (async function () {
       const data = await Promise.all(
-        formInfo.signList.map(async (i) => {
+        signList.map(async (i) => {
           return {
             ...i,
             SIGNERNAME: await id2name(i.SIGNER),
@@ -59,7 +59,7 @@ export const SignTable = () => {
       );
       setData(data);
     })();
-  }, [formInfo.signList, id2name]);
+  }, [signList, id2name]);
 
   return (
     <section>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import * as Icons from "@components/UI/icons";
 import { useTheme } from "styled-components";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch } from "@data/store";
 import { deleteItem } from "@/data/reducers/trip detail/trip detail";
 import { useTranslation } from "react-i18next";
 
@@ -27,7 +27,7 @@ export const Collapse = ({ type, main, sub, remove, index }: collapseProp) => {
     <div className='flex flex-col'>
       <div className='header flex justify-between'>
         {main}
-        <div className='flex flex-col sm:flex-row-reverse justify-center'>
+        <div className='flex flex-col sm:flex-row-reverse justify-center gap-4'>
           {type === "addForm" && (
             <button
               type='button'

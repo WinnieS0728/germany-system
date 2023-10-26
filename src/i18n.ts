@@ -10,7 +10,7 @@ i18n
   .init<HttpBackendOptions>({
     load: "languageOnly",
     backend: {
-      loadPath: "./locales/{{ns}}/{{lng}}.json",
+      loadPath: `./locales/{{ns}}/{{lng}}.json`,
     },
     // debug: true,
     fallbackLng: "zh",

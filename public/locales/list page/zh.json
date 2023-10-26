@@ -11,6 +11,7 @@
   },
   "detailTable": {
     "add": "新增",
+    "noCus": "查無資料，請建立客戶資訊",
     "placeholder": {
       "code": "選擇郵遞區號...",
       "cus": "選擇客戶...",
@@ -27,7 +28,7 @@
       "delete": "刪除",
       "dist": "行政區",
       "index": "項次",
-      "lodging": "住宿飯店 or 地點",
+      "lodging": "住宿地點",
       "purpose": "出差事由"
     },
     "title": "出差地點明細"

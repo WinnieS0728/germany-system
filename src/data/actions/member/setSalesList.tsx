@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import api from "@api/index";
+import api from "@/api/index";
 
 const salesMemberList = [
   // "223001",
@@ -7,8 +7,6 @@ const salesMemberList = [
   "ER221003",
   "ER222003",
   "ER219003",
-  "ER222002",
-  "ER223002",
 ];
 
 export const setSalesList = createAsyncThunk(

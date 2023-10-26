@@ -12,10 +12,10 @@
   }
 
   .label-input {
-    @apply flex items-center justify-center gap-4;
+    @apply relative flex items-center gap-4 whitespace-nowrap w-full;
 
-    label {
-      @apply min-w-fit relative;
+    input {
+      @apply w-full;
     }
   }
 
@@ -25,15 +25,31 @@
 
   .error-ul {
     li {
-      @apply leading-8
+      @apply leading-8;
     }
   }
 
   .modal {
-    @apply w-full rounded-xl px-8 py-6
+    @apply w-full rounded-xl px-8 py-6;
   }
 
-  .submit-btns{
-    @apply flex items-center justify-center gap-4 flex-col-reverse sm:flex-row
+  .submit-btns {
+    @apply flex flex-col-reverse items-center justify-center gap-4 sm:flex-row;
+  }
+
+  .navBtn {
+    @apply whitespace-pre rounded-md border-2 px-4 py-1 text-white;
+
+    &.active {
+      @apply bg-navActive;
+    }
+  }
+
+  .headerFilter {
+    @apply p-4 bg-tableBgc rounded-lg border-2 border-slate-300 flex flex-col lg:flex-row gap-4 justify-center;
+
+    .submitBtn {
+      @apply bg-sectionHeader text-myWhite px-6 py-2 rounded-md cursor-pointer
+    }
   }
 }

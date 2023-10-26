@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+// import { VitePWA } from "vite-plugin-pwa";
 
 function resolve(dir: string) {
   return path.join(__dirname, "/", dir);
@@ -11,7 +12,47 @@ export default ({ mode }) => {
 
   // https://vitejs.dev/config/
   return defineConfig({
-    plugins: [react()],
+    plugins: [
+      react(),
+      // VitePWA({
+      //   includeAssets: "**/*.{png}",
+      //   workbox: {
+      //     globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+      //   },
+      //   manifest: {
+      //     name: "Orange - germany system",
+      //     short_name: "germany system",
+      //     description: "a pwa app create form vite_pwa",
+      //     display: "standalone",
+      //     theme_color: "#ffffff",
+      //     start_url: ".",
+      //     icons: [
+      //       {
+      //         src: "./pwa/192.png",
+      //         sizes: "192x192",
+      //         type: "image/png",
+      //       },
+      //       {
+      //         src: "./pwa/512.png",
+      //         sizes: "512x512",
+      //         type: "image/png",
+      //       },
+      //       {
+      //         src: "./pwa/512.png",
+      //         sizes: "512x512",
+      //         type: "image/png",
+      //         purpose: "any",
+      //       },
+      //       {
+      //         src: "./pwa/512.png",
+      //         sizes: "512x512",
+      //         type: "image/png",
+      //         purpose: "maskable",
+      //       },
+      //     ],
+      //   },
+      // }),
+    ],
     base: "./",
     resolve: {
       alias: {
@@ -23,7 +64,8 @@ export default ({ mode }) => {
         "@data": resolve("src/data"),
         "@reducers": resolve("src/data/reducers"),
         "@actions": resolve("src/data/actions"),
-        "@api": resolve("src/lib/api"),
+        "@api": resolve("src/api"),
+        "@utils": resolve("src/utils"),
         "@hooks": resolve("src/hooks"),
         "@layouts": resolve("src/layouts"),
         "@buttons": resolve("src/components/UI/buttons"),

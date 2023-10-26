@@ -1,35 +1,30 @@
-import { styled, useTheme } from "styled-components";
+import { useTheme } from "styled-components";
 import * as Icons from "@components/UI/icons";
 import { useTranslation } from "react-i18next";
+import { formId } from "@/pages/kpi/setting/setting layout";
+import { cn } from "@/utils/cn";
 
 interface propType {
   text: string;
   className?: string;
+  formId: formId;
 }
-const SubmitBtn = ({ text, className }: propType) => {
+
+export const SettingSubmitBtn = ({ text, className, formId }: propType) => {
   return (
     <button
       type='submit'
-      form='threshold'
-      className={className}
+      form={formId}
+      className={cn(
+        "bg-submitBtn rounded-lg flex gap-2 justify-center items-center mb-2 px-8 py-2",
+        className
+      )}
     >
       <Icons.Save size='1.5rem' />
       {text}
     </button>
   );
 };
-
-const styled_submitBtn = styled(SubmitBtn)`
-    background-color: ${(props) => props.theme.color.submitBtn};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: .5rem;
-    margin-block: .5rem;
-    padding: .5rem 2rem;
-`;
-
-export { styled_submitBtn as SubmitBtn };
 
 interface IconBtnProp {
   children: JSX.Element | string;
@@ -103,7 +98,7 @@ export const LongBtn = (props: longBtn) => {
     <button
       type={props.type}
       form={props.type !== "button" ? props.form : ""}
-      className={"rounded-md px-16"}
+      className={"rounded-md px-16 py-2"}
       style={css}
       onClick={() => {
         if (!props.onClick) {

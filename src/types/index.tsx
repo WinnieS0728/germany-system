@@ -1,16 +1,17 @@
-export type monthType =
-  | "Jan"
-  | "Feb"
-  | "Mar"
-  | "Apr"
-  | "May"
-  | "Jun"
-  | "Jul"
-  | "Aug"
-  | "Sep"
-  | "Oct"
-  | "Nov"
-  | "Dec";
+export const month_shortName = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+] as const;
 
 export interface signDataType {
   id: string;
@@ -46,4 +47,8 @@ export enum tripEvent {
   "newCus" = "TripEvent-7",
 }
 
-export type moneyType = "TWD" | "RMB" | "EUR" | "USD";
+export const moneyType = ["TWD", "RMB", "EUR", "USD"] as const;
+
+export type sc_props = {
+  className?: string;
+};

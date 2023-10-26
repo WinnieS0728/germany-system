@@ -1,11 +1,11 @@
 import { IconBtn } from "@/components/UI/buttons";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import * as Icons from "@components/UI/icons";
 import styled from "styled-components";
 import { deleteFile } from "@/data/reducers/files/attach";
 import { component } from "@/types";
 import { useEffect, useState } from "react";
-import { useFiles } from "@/hooks/files";
+import { useFiles } from "@/hooks/useFiles";
 import { useTranslation } from "react-i18next";
 
 const FileItem_o = ({
@@ -24,6 +24,10 @@ const FileItem_o = ({
   const { getFileSize, getFileType } = useFiles();
 
   const url = URL.createObjectURL(file);
+
+  useEffect(() => {
+    return () => URL.revokeObjectURL(url);
+  }, [url]);
 
   return (
     <section className={className}>
@@ -69,11 +73,11 @@ const FileItem = styled(FileItem_o)`
   img {
     width: 4rem;
   }
-  .content{
+  .content {
     display: flex;
     flex-flow: column;
     justify-content: space-between;
-    gap: .5rem;
+    gap: 0.5rem;
   }
   .title {
     font-size: 1.25rem;
@@ -99,7 +103,7 @@ export const AttachForm = ({ type }: component) => {
 
   const [attachList, setAttachList] = useState<File[]>([]);
 
-  const { name2mine, path2blob } = useFiles();
+  const { name2mime, path2blob } = useFiles();
 
   useEffect(() => {
     (async function () {
@@ -108,7 +112,7 @@ export const AttachForm = ({ type }: component) => {
           const blob = await path2blob(file.FilePath);
 
           return new File([blob], `${file.WebID} - ${index + 1}`, {
-            type: name2mine(file.FileName),
+            type: name2mime(file.FileName),
           });
         })
       );
@@ -118,7 +122,7 @@ export const AttachForm = ({ type }: component) => {
       }
       setAttachList(fileList);
     })();
-  }, [formAttach, name2mine, path2blob]);
+  }, [formAttach, name2mime, path2blob]);
 
   function deleteFiles(index: number) {
     dispatch(deleteFile(index));

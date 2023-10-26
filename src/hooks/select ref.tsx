@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { SelectInstance } from "react-select";
 
 export const useSelectRef = () => {
@@ -13,6 +13,13 @@ export const useSelectRef = () => {
     postalCode: postalCodeRef,
     cus: cusRef,
   };
+
+  const clearCusSelect = useCallback(() => {
+    cusRef.current?.clearValue();
+  }, []);
+  const clearPostCodeSelect = useCallback(() => {
+    postalCodeRef.current?.clearValue();
+  }, []);
 
   function clearDetailSelect() {
     purposeRef.current?.clearValue();
@@ -39,6 +46,8 @@ export const useSelectRef = () => {
 
   const otherSignRef = useRef<SelectInstance>(null);
   return {
+    clearPostCodeSelect,
+    clearCusSelect,
     newDetailRef,
     clearDetailSelect,
     newFormRef,

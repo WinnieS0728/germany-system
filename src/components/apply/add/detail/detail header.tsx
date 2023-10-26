@@ -1,7 +1,7 @@
 import { Required } from "@/components/form/required";
 import { addDisabledDays } from "@/data/reducers/day picker/dayPickerControl";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { NewFormDefaultValue } from "@/pages/apply/new apply";
+import { useAppDispatch, useAppSelector } from "@data/store";
+import { NewFormDefaultValue } from "@/pages/visit apply/apply/new apply";
 import { timeFormat } from "d3";
 import { isValid } from "date-fns";
 import { useEffect, useState } from "react";
@@ -92,49 +92,54 @@ export const DetailHeader = ({ data, index }: headerProps) => {
   return (
     <div className='flex items-center justify-between'>
       <div className='relative flex flex-col gap-4 lg:flex-row lg:gap-8'>
-        <div className='startDate label-input flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center'>
-          <label style={{ whiteSpace: "nowrap" }}>
-            <Required />
-            {t("detail.startDate")}
+        <div className='startDate  flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center w-full'>
+          <label className='label-input'>
+            <p>
+              <Required />
+              {t("detail.startDate")}
+            </p>
+            <input
+              {...register(`tripData.${index}.startDate`)}
+              className='date w-full'
+              style={{
+                cursor: "pointer",
+                backgroundColor: color?.white,
+                color: color?.black,
+              }}
+              autoComplete='off'
+              value={getTime(range?.from as Date)}
+              onClickCapture={() => {
+                setShow((prev) => !prev);
+              }}
+              readOnly
+              placeholder={t("detail.placeholder.startDate")}
+            />
           </label>
-          <input
-            {...register(`tripData.${index}.startDate`)}
-            className='date w-full'
-            style={{
-              cursor: "pointer",
-              backgroundColor: color?.white,
-              color: color?.black,
-            }}
-            autoComplete='off'
-            value={getTime(range?.from as Date)}
-            onClickCapture={() => {
-              setShow((prev) => !prev);
-            }}
-            readOnly
-            placeholder={t("detail.placeholder.startDate")}
-          />
         </div>
-        <div className='endDate label-input flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center'>
-          <label style={{ whiteSpace: "nowrap" }}>
-            <Required />
-            {t("detail.endDate")}
+        <div className='endDate flex-col items-start gap-1 space-x-2 sm:flex-row sm:items-center w-full'>
+          <label className='label-input'>
+            <p>
+              <Required />
+              {t("detail.endDate")}
+            </p>
+
+            <input
+              {...register(`tripData.${index}.endDate`)}
+              className='date w-full'
+              style={{
+                cursor: "pointer",
+                backgroundColor: color?.white,
+                color: color?.black,
+              }}
+              autoComplete='off'
+              value={getTime(range?.to as Date)}
+              onClickCapture={() => {
+                setShow((prev) => !prev);
+              }}
+              readOnly
+              placeholder={t("detail.placeholder.endDate")}
+            />
           </label>
-          <input
-            {...register(`tripData.${index}.endDate`)}
-            className='date w-full'
-            style={{
-              cursor: "pointer",
-              backgroundColor: color?.white,
-              color: color?.black,
-            }}
-            autoComplete='off'
-            value={getTime(range?.to as Date)}
-            onClickCapture={() => {
-              setShow((prev) => !prev);
-            }}
-            readOnly
-            placeholder={t("detail.placeholder.endDate")}
-          />
         </div>
         <DayPicker
           mode='range'
@@ -167,6 +172,14 @@ export const DetailHeader = ({ data, index }: headerProps) => {
             },
           }}
         />
+        <label className='label-input'>
+          <p>{t("detailTable.thead.lodging")}</p>
+          <input
+            autoComplete='off'
+            type='text'
+            {...register(`tripData.${index}.hotel`)}
+          />
+        </label>
       </div>
     </div>
   );

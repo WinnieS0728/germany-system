@@ -1,10 +1,10 @@
-import { dateFormatter } from "@/hooks/dateFormatter";
+import { dateFormatter } from "@/utils/dateFormatter";
 import { useId2name } from "@/hooks/id2name";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@data/store";
 import { statusStringType } from "@/hooks/status translate";
-import api from "@/lib/api";
-import { tripDetailResType } from "@/lib/api/travel apply/get detail";
-import { tripListResType } from "@/lib/api/travel apply/get list";
+import api from "@/api";
+import { tripDetailResType } from "@/api/travel apply/get detail";
+import { tripListResType } from "@/api/travel apply/get list";
 import { tripEvent } from "@/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -29,9 +29,10 @@ export const useFetchApplyList = () => {
   const { i18n } = useTranslation();
   const nowLang = i18n.language;
   const tableProps = useAppSelector((state) => state.listFormState);
-  const [data, setData] = useState<dataSet[]>([]);
-
+  const { props, body } = tableProps;
   const status = tableProps.status;
+
+  const [data, setData] = useState<dataSet[]>([]);
 
   function getTimeStamp(d: string) {
     return new Date(d).getTime();
@@ -57,7 +58,6 @@ export const useFetchApplyList = () => {
   }, []);
 
   const asyncData = useMemo(() => {
-    const { props, body } = tableProps;
     async function fetchData() {
       const empFilter = empProcess(body);
       if (!empFilter) {
@@ -85,9 +85,11 @@ export const useFetchApplyList = () => {
             name: await id2name(list.Createid),
             formStatus: list.Status,
             nextSign:
-              nowLang === "en"
-                ? list.SName?.split("/")[0].replace(/ /g, "")
-                : list.SName?.split("/")[1].replace(/ /g, ""),
+              list.Status === "簽核中"
+                ? nowLang === "en"
+                  ? list.SName?.split("/")[0]?.replace(/ /g, "")
+                  : list.SName?.split("/")[1]?.replace(/ /g, "")
+                : "",
           };
         })
       );
@@ -129,7 +131,7 @@ export const useFetchApplyList = () => {
       }
     }
     return fetchData();
-  }, [getDays, id2name, nowLang, tableProps]);
+  }, [body, getDays, id2name, nowLang, props.EmpId, props.date]);
 
   useEffect(() => {
     (async function () {

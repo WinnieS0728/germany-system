@@ -6,11 +6,11 @@ import {
   setTarget,
 } from "@/data/reducers/trip detail/trip detail";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch } from "@data/store";
 import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 import * as Icons from "@components/UI/icons";
-import api from "@/lib/api";
+import api from "@/api";
 import { useTranslation } from "react-i18next";
 import { newDetailType } from "./new detail";
 
@@ -30,7 +30,7 @@ const TableWhenAddForm = ({
   const { i18n } = useTranslation();
   const nowLang = i18n.language;
   const dispatch = useAppDispatch();
-  console.log(data);
+  // console.log(data);
 
   const [dataSet, setNewData] = useState<newDetailType[]>([]);
   const getEventName = useCallback(
@@ -77,7 +77,6 @@ const TableWhenAddForm = ({
         <td>{d.city}</td>
         <td>{d.purposeName}</td>
         <td>{d.cus}</td>
-        <td>{d.hotel}</td>
         <td>{d.PS}</td>
         <td
           className='cursor-pointer'
@@ -102,7 +101,6 @@ const TableWhenSign = ({ data }: { data: detailDataWithSingleData[] }) => {
       <td>{d.data.city}</td>
       <td>{d.data.purpose}</td>
       <td>{d.data.cus}</td>
-      <td>{d.data.hotel}</td>
       <td>{d.data.PS}</td>
     </tr>
   ));
@@ -157,7 +155,6 @@ export const DetailTable = ({ type, data, index }: detailTableProps) => {
               <td>{t("thead.city")}</td>
               <td>{t("thead.purpose")}</td>
               <td>{t("thead.cus")}</td>
-              <td>{t("thead.lodging")}</td>
               <td>{t("thead.PS")}</td>
               {type === "addForm" && <td>{t("thead.delete")}</td>}
             </tr>

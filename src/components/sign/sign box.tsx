@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Table } from "../table/table";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TextAreaAutosize from "react-textarea-autosize";
 import * as Btns from "@components/UI/buttons";
 import * as Icons from "@components/UI/icons";
@@ -9,13 +9,15 @@ import { Required } from "../form/required";
 import { useModalControl } from "@/hooks/modal control";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import { DevTool } from "@hookform/devtools";
 import { setErrors } from "@/data/reducers/error/errors";
-import { useSign } from "@/hooks/sign";
-import { useFiles } from "@/hooks/files";
+import { useSign } from "@/hooks/useSign";
+import { useFiles } from "@/hooks/useFiles";
 import { useTranslation } from "react-i18next";
-import api from "@/lib/api";
+import api from "@/api";
+import { useEmail } from "@/hooks/useEmail";
+import { cn } from "@/utils/cn";
 
 export type SignData = {
   agree: "yes" | "no";
@@ -31,12 +33,26 @@ const SignBlock = ({
   type: "sign" | "otherSign";
 }) => {
   const { t } = useTranslation(["sign", "errors"]);
-  const formInfo = useAppSelector((state) => state.formInfo).body;
+  const { formId, signList, nowOrder } = useAppSelector(
+    (state) => state.formInfo
+  ).body;
   const nowUser = useAppSelector((state) => state.nowUser).body;
   const { sign, updateFormStatus, signOver } = useSign();
   const [showPassword, setPasswordShow] = useState<boolean>(false);
   const { uploadFile } = useFiles();
+  const { sendEmail } = useEmail();
   const dispatch = useAppDispatch();
+
+  const isFinalSigner = useMemo<boolean>(() => {
+    const nextSigner = signList.find(
+      (member) => member.SIGNORDER === nowOrder + 1
+    );
+    if (!nextSigner) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [nowOrder, signList]);
 
   const [toggleModal] = useModalControl("sign");
   const [toggleErrorModal] = useModalControl("errors");
@@ -51,7 +67,6 @@ const SignBlock = ({
     password: yup
       .string()
       .required(t("sign.password", { ns: "errors" }))
-      // TODO 密碼審核
       .test(
         "checkPassword",
         t("sign.wrong-psw", { ns: "errors" }),
@@ -121,8 +136,18 @@ const SignBlock = ({
 
   async function send(data: SignData) {
     sign(data);
+    uploadFile(formId);
     updateFormStatus(data.agree);
-    uploadFile(formInfo.formId);
+    if (data.agree === "no") {
+      const recipient = signList[0].SIGNER;
+      sendEmail(recipient, "return");
+    } else if (data.agree === "yes" && isFinalSigner) {
+      const recipient = signList[0].SIGNER;
+      sendEmail(recipient, "done");
+    } else {
+      const recipient = signList[nowOrder + 1].SIGNER;
+      sendEmail(recipient, "wait");
+    }
   }
 
   function validation() {
@@ -133,7 +158,7 @@ const SignBlock = ({
   }
 
   return (
-    <article className={`modal ${className}`}>
+    <article className={cn(`modal`, className)}>
       <h3>{t("title")}</h3>
       <ul className='ref-ul'>
         {type === "sign" ? (
@@ -170,7 +195,7 @@ const SignBlock = ({
                       disabled={inputDisable}
                       {...register("agree")}
                     />
-                    {t("radio.yes")}
+                    <p>{t("radio.yes")}</p>
                   </label>
                 </td>
               </tr>
@@ -183,22 +208,28 @@ const SignBlock = ({
                       disabled={inputDisable}
                       {...register("agree")}
                     />
-                    {type === "sign"
-                      ? t("radio.sign-no")
-                      : t("radio.otherSign-no")}
+                    <p>
+                      {type === "sign"
+                        ? t("radio.sign-no")
+                        : t("radio.otherSign-no")}
+                    </p>
                   </label>
                 </td>
               </tr>
               <tr>
                 <td className='title'>
-                  <span className='relative py-1'>
+                  <label
+                    htmlFor='sign-password'
+                    className='relative py-1'
+                  >
                     <Required />
                     {t("label.password")}
-                  </span>
+                  </label>
                 </td>
                 <td>
                   <div className='flex'>
                     <input
+                      id='sign-password'
                       className='w-full'
                       type={showPassword ? "text" : "password"}
                       autoComplete='off'
@@ -223,15 +254,19 @@ const SignBlock = ({
               </tr>
               <tr>
                 <td className='title'>
-                  <span className='relative p-1'>
-                    {(watch_agree === "no" || type === "otherSign") && (
-                      <Required />
-                    )}
-                    {t("label.opinion")}
-                  </span>
+                  <label
+                    htmlFor='sign-opinion'
+                    className='relative p-1'
+                  >
+                      {(watch_agree === "no" || type === "otherSign") && (
+                        <Required />
+                      )}
+                      {t("label.opinion")}
+                  </label>
                 </td>
                 <td>
                   <TextAreaAutosize
+                    id='sign-opinion'
                     className='w-full'
                     {...register("opinion", {
                       setValueAs: (value: string) =>
@@ -245,15 +280,15 @@ const SignBlock = ({
         </Table>
         <div className='submit-btns'>
           <Btns.LongBtn
-            type='reset'
-            style='cancel'
-            form='sign'
-          />
-          <Btns.LongBtn
             type='submit'
             style='confirm'
             form='sign'
             onClick={validation}
+          />
+          <Btns.LongBtn
+            type='reset'
+            style='cancel'
+            form='sign'
           />
         </div>
       </form>
@@ -263,33 +298,33 @@ const SignBlock = ({
 };
 
 const styled_sign = styled(SignBlock)`
-    background-color: ${(props) => props.theme.color.white};
-    h3{
-        text-align: center;
-        font-size: 1.25rem;
-        padding: 0.5rem;
-        background-color: ${(props) => props.theme.color.sign_header};
-    }
-    .ref-ul{
-        background-color: ${(props) => props.theme.color.sign_content};
-        padding: 1rem;
-    }
-    .title{
-        background-color: ${(props) => props.theme.color.tableBgc};
-    }
-    td:not(.title){
-        text-align: start;
-    }
-    label {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
+  background-color: ${(props) => props.theme.color.white};
+  h3 {
+    text-align: center;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    background-color: ${(props) => props.theme.color.sign_header};
+  }
+  .ref-ul {
+    background-color: ${(props) => props.theme.color.sign_content};
+    padding: 1rem;
+  }
+  .title {
+    background-color: ${(props) => props.theme.color.tableBgc};
+  }
+  td:not(.title) {
+    text-align: start;
+  }
+  label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 
-        input[type='radio']{
-            border-radius: 50%;
-            border: 10px solid red;
-        }
+    input[type="radio"] {
+      border-radius: 50%;
+      border: 10px solid red;
     }
+  }
 `;
 
 export default styled_sign;

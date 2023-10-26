@@ -3,7 +3,7 @@ import {
   detailDataWithSingleData,
   detailData_date,
 } from "@/data/reducers/trip detail/trip detail";
-import { dateFormatter } from "@/hooks/dateFormatter";
+import { dateFormatter } from "@/utils/dateFormatter";
 import { timeFormat } from "d3";
 import { timeDay, timeMonday } from "d3-time";
 
@@ -54,7 +54,7 @@ export const useTripDataProcessing = (
       data.push({
         ...obj,
         date: getDayList(obj.date as detailData_date),
-        data: { ...obj.data[i], eventId: obj.data[i].purpose },
+        data: { ...obj.data[i], eventId: obj.data[i].purpose, hotel:(obj.date as detailData_date).hotel },
       });
     }
     return data;

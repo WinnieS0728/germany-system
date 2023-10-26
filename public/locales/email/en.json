@@ -1,0 +1,22 @@
+{
+  "done": {
+    "content": "<p>           Hi : <br />           <span style=\"margin-left: 2rem; line-height: 2;\">             your business trip apply             <b style=\"font-size: 1.25rem;\">is sign off complete</b             >, formId <b style=\"font-size: 1.25rem;\">{{ formId }}</b>,           </span>           <br />           <span style=\"margin-left: 2rem;\">             Click the link to enter the E-system view : <a href=\"{{ link }}\">page link</a>           </span>            <br /><br /><br />           ※ This is an automatic notification from the system. Please do not reply to the email directly. Thank you !         </p>",
+    "title": "E-system notification - Germany Business Trip Apply, formId : {{             formId }}, sign off completed"
+  },
+  "other": {
+    "content": "<p>           Hi : <br />           <span style=\"margin-left: 2rem; line-height: 2;\">             please help to countersign             <b style=\"font-size: 1.25rem;\">⟪ business trip apply from {{ createName }} ⟫</b             >, formId <b style=\"font-size: 1.25rem;\">{{ formId }}</b>,           </span>           <br />           <span style=\"margin-left: 2rem;\">             Click the link to enter the E-system view : <a href=\"{{ link }}\">page link</a>           </span>            <br /><br /><br />           ※ This is an automatic notification from the system. Please do not reply to the email directly. Thank you !         </p>",
+    "title": "E-system notification - Germany Business Trip Apply, formId : {{             formId }}, sign off request (countersign)"
+  },
+  "return": {
+    "content": "<p>           Hi : <br />           <span style=\"margin-left: 2rem; line-height: 2;\">             your business trip apply             <b style=\"font-size: 1.25rem;\">is sign off failed</b             >, formId <b style=\"font-size: 1.25rem;\">{{ formId }}</b>,           </span>           <br />           <span style=\"margin-left: 2rem;\">             Click the link to enter the E-system view : <a href=\"{{ link }}\">page link</a>           </span>            <br /><br /><br />           ※ This is an automatic notification from the system. Please do not reply to the email directly. Thank you !         </p>",
+    "title": "E-system notification - Germany Business Trip Apply, formId : {{             formId }}, sign off failed"
+  },
+  "void": {
+    "content": "<p>           Hi : <br />           <span style=\"margin-left: 2rem; line-height: 2;\">             your business trip apply             <b style=\"font-size: 1.25rem;\">is abolished</b>, formId             <b style=\"font-size: 1.25rem;\">{{ formId }}</b>,           </span>           <br />           <span style=\"margin-left: 2rem;\">             Click the link to enter the E-system view :             <a href=\"{{ link }}\">page link</a>           </span>            <br /><br /><br />           ※ This is an automatic notification from the system. Please do not           reply to the email directly. Thank you !         </p>",
+    "title": "E-system notification - Germany Business Trip Apply, formId : {{           formId }}, Abolished"
+  },
+  "wait": {
+    "content": "<p>           Hi : <br />           <span style=\"margin-left: 2rem; line-height: 2;\">             please help to sign             <b style=\"font-size: 1.25rem;\"               >⟪ business trip apply from {{ createName }} ⟫</b             >, formId <b style=\"font-size: 1.25rem;\">{{ formId }}</b>,           </span>           <br />           <span style=\"margin-left: 2rem;\">             Click the link to enter the E-system view :             <a href=\"{{ link }}\">page link</a>           </span>            <br /><br /><br />           ※ This is an automatic notification from the system. Please do not reply to the email directly. Thank you !         </p>",
+    "title": "E-system notification - Germany Business Trip Apply, formId : {{           formId }}, sign off request"
+  }
+}

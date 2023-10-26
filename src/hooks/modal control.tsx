@@ -1,8 +1,9 @@
-import { useAppDispatch, useAppSelector } from "./redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import {
   modalList,
   toggleModal,
 } from "@/data/reducers/modal control/modalControl";
+import { useCallback } from "react";
 
 export const useModalControl = (
   name: keyof modalList
@@ -13,20 +14,23 @@ export const useModalControl = (
 
   const dispatch = useAppDispatch();
 
-  function modalControl(control: "on" | "off") {
-    let b;
-    if (control === "on") {
-      b = true;
-    } else if (control === "off") {
-      b = false;
-    }
-    dispatch(
-      toggleModal({
-        name: name,
-        status: b,
-      })
-    );
-  }
+  const modalControl = useCallback(
+    (control: "on" | "off") => {
+      let b;
+      if (control === "on") {
+        b = true;
+      } else if (control === "off") {
+        b = false;
+      }
+      dispatch(
+        toggleModal({
+          name: name,
+          status: b,
+        })
+      );
+    },
+    [dispatch, name]
+  );
 
   return [modalControl, isShow];
 };

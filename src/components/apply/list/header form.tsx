@@ -7,18 +7,19 @@ import {
   DayPicker,
   SelectRangeEventHandler,
 } from "react-day-picker";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import { isValid } from "date-fns";
 import * as Icons from "@components/UI/icons";
-import { useOptions } from "@/hooks/options";
+import { useOptions } from "@/hooks/useOptions";
 import { setProps } from "@/data/reducers/apply list/apply list";
 import { setListData } from "@/data/actions/apply list/set data";
 import * as Btns from "@components/UI/buttons";
 import { useTranslation } from "react-i18next";
 import { useId2name } from "@/hooks/id2name";
-import { dateFormatter } from "@/hooks/dateFormatter";
-import { memberResType } from "@/lib/api/member/getMember";
-import { fetchFormListBody } from "@/lib/api/travel apply/get list";
+import { dateFormatter } from "@/utils/dateFormatter";
+import { memberResType } from "@/api/member/getMember";
+import { fetchFormListBody } from "@/api/travel apply/get list";
+import { cn } from "@/utils/cn";
 
 export const HeaderForm = ({ className }: propsType) => {
   const color = useTheme()?.color;
@@ -107,131 +108,142 @@ export const HeaderForm = ({ className }: propsType) => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{ backgroundColor: color.headForm_bgc }}
-        className={`${className} flex flex-col items-center gap-4 rounded-xl px-16 py-4 md:flex-row`}
+        className={cn(
+          `flex flex-col items-center gap-4 rounded-xl px-16 py-4 md:flex-row`,
+          className
+        )}
       >
         <div className='form-body grid w-full gap-4'>
-          <div className='member label-input'>
-            <label>{t("label.member")}</label>
-            <div className='flex w-full flex-col gap-2 sm:flex-row'>
-              <Controller
-                control={control}
-                name='dept'
-                render={({ field: { onChange } }) => (
-                  <MySelect.Async
-                    options={options.dept}
-                    onChange={onChange}
-                    placeholder={t("placeholder.dept")}
-                    getLabelFunction={(option: memberResType) => {
-                      if (nowLang === "en") {
-                        return option.DeptName_E;
+          <div className='member flex gap-4'>
+            <label className='label-input w-full'>
+              <p>{t("label.member")}</p>
+              <div className='flex gap-4 w-full'>
+                <Controller
+                  control={control}
+                  name='dept'
+                  render={({ field: { onChange } }) => (
+                    <MySelect.Async
+                      options={options.dept}
+                      onChange={onChange}
+                      placeholder={t("placeholder.dept")}
+                      getLabelFunction={(option: memberResType) => {
+                        if (nowLang === "en") {
+                          return option.DeptName_E;
+                        }
+                        return option.DeptName;
+                      }}
+                      getValueFunction={(option: memberResType) =>
+                        option.DeptId
                       }
-                      return option.DeptName;
-                    }}
-                    getValueFunction={(option: memberResType) => option.DeptId}
-                    value='DeptId'
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name='EmpId'
-                render={({ field: { onChange } }) => (
-                  <MySelect.Async
-                    options={options.member}
-                    onChange={onChange}
-                    placeholder={t("placeholder.emp")}
-                    getLabelFunction={(option: memberResType) =>
-                      splitName(option)
-                    }
-                    getValueFunction={(option: memberResType) => option.EmpId}
-                    value='EmpId'
-                    filterFunction={(candidate: { data: memberResType }) => {
-                      if (candidate.data.DeptId === watch_dept) {
-                        return true;
-                      }
-                      return false;
-                    }}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className='status label-input'>
-            <label>{t("label.status")}</label>
-            <Controller
-              control={control}
-              name='formStatus'
-              render={({ field: { onChange } }) => (
-                <MySelect.Normal
-                  options={options.status}
-                  onChange={onChange}
-                  placeholder={t("placeholder.status")}
+                      value='DeptId'
+                    />
+                  )}
                 />
-              )}
-            />
+                <Controller
+                  control={control}
+                  name='EmpId'
+                  render={({ field: { onChange } }) => (
+                    <MySelect.Async
+                      options={options.member}
+                      onChange={onChange}
+                      placeholder={t("placeholder.emp")}
+                      getLabelFunction={(option: memberResType) =>
+                        splitName(option)
+                      }
+                      getValueFunction={(option: memberResType) => option.EmpId}
+                      value='EmpId'
+                      filterFunction={(candidate: { data: memberResType }) => {
+                        if (candidate.data.DeptId === watch_dept) {
+                          return true;
+                        }
+                        return false;
+                      }}
+                    />
+                  )}
+                />
+              </div>
+            </label>
           </div>
-          <div className='date label-input'>
-            <label>{t("label.date")}</label>
-            <span className='relative flex w-full flex-col items-center gap-2 sm:flex-row'>
-              <input
-                className='w-full'
-                style={{
-                  cursor: "pointer",
-                  backgroundColor: color?.white,
-                  color: color?.black,
-                }}
-                autoComplete='off'
-                value={dateFormatter(range?.from as Date)}
-                onClickCapture={() => {
-                  setShow((prev) => !prev);
-                }}
-                readOnly
-                placeholder={t("placeholder.startDate")}
+          <div className='status'>
+            <label className='label-input'>
+              <p>{t("label.status")}</p>
+              <Controller
+                control={control}
+                name='formStatus'
+                render={({ field: { onChange } }) => (
+                  <MySelect.Normal
+                    options={options.status}
+                    onChange={onChange}
+                    placeholder={t("placeholder.status")}
+                  />
+                )}
               />
-              <span className='hidden sm:inline-block'>~</span>
-              <input
-                className='w-full'
-                style={{
-                  cursor: "pointer",
-                  backgroundColor: color?.white,
-                  color: color?.black,
-                }}
-                autoComplete='off'
-                value={dateFormatter(range?.to as Date)}
-                onClickCapture={() => {
-                  setShow((prev) => !prev);
-                }}
-                readOnly
-                {...register("date.end")}
-                placeholder={t("placeholder.endDate")}
-              />
-              <DayPicker
-                mode='range'
-                footer={<Footer />}
-                selected={range as DateRange}
-                onSelect={handleSelect as SelectRangeEventHandler}
-                fromYear={2022}
-                toYear={+timeData.thisYear + 1}
-                month={month}
-                onMonthChange={setMonth}
-                captionLayout='dropdown-buttons'
-                style={{
-                  position: "absolute",
-                  top: "100%",
-                  right: 0,
-                  zIndex: 99,
-                  display: isShow ? "block" : "none",
-                  color: color?.white,
-                }}
-                styles={{
-                  months: { backgroundColor: color?.black },
-                  cell: { border: 0 },
-                }}
-                modifiersStyles={{
-                  selected: { backgroundColor: color.blue },
-                }}
-              />
-            </span>
+            </label>
+          </div>
+          <div className='date'>
+            <label className='label-input'>
+              <p>{t("label.date")}</p>
+              <span className='relative flex w-full flex-col items-center gap-2 sm:flex-row'>
+                <input
+                  className='w-full'
+                  style={{
+                    cursor: "pointer",
+                    backgroundColor: color?.white,
+                    color: color?.black,
+                  }}
+                  autoComplete='off'
+                  value={dateFormatter(range?.from as Date)}
+                  onClickCapture={() => {
+                    setShow((prev) => !prev);
+                  }}
+                  readOnly
+                  placeholder={t("placeholder.startDate")}
+                />
+                <span className='hidden sm:inline-block'>~</span>
+                <input
+                  className='w-full'
+                  style={{
+                    cursor: "pointer",
+                    backgroundColor: color?.white,
+                    color: color?.black,
+                  }}
+                  autoComplete='off'
+                  value={dateFormatter(range?.to as Date)}
+                  onClickCapture={() => {
+                    setShow((prev) => !prev);
+                  }}
+                  readOnly
+                  {...register("date.end")}
+                  placeholder={t("placeholder.endDate")}
+                />
+                <DayPicker
+                  mode='range'
+                  footer={<Footer />}
+                  selected={range as DateRange}
+                  onSelect={handleSelect as SelectRangeEventHandler}
+                  fromYear={2022}
+                  toYear={+timeData.thisYear + 1}
+                  month={month}
+                  onMonthChange={setMonth}
+                  captionLayout='dropdown-buttons'
+                  style={{
+                    position: "absolute",
+                    top: "100%",
+                    right: 0,
+                    zIndex: 99,
+                    display: isShow ? "block" : "none",
+                    color: color?.white,
+                  }}
+                  styles={{
+                    months: { backgroundColor: color?.black },
+                    cell: { border: 0 },
+                  }}
+                  modifiersStyles={{
+                    selected: { backgroundColor: color.blue },
+                  }}
+                />
+              </span>
+            </label>
           </div>
         </div>
         <button

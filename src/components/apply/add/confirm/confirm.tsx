@@ -3,7 +3,7 @@ import { WeekTable } from "./week tabel";
 import { PerCentTable } from "./percent table";
 import * as Btns from "@components/UI/buttons";
 import { useModalControl } from "@/hooks/modal control";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@data/store";
 import { useTripDataProcessing } from "./data";
 import { useTranslation } from "react-i18next";
 
@@ -35,16 +35,16 @@ const Confirm = () => {
       />
       <div className='submit-btns'>
         <Btns.LongBtn
+          type='submit'
+          style='confirm'
+          form='business apply'
+        />
+        <Btns.LongBtn
           type='button'
           style='cancel'
           onClick={() => {
             toggleModal("off");
           }}
-        />
-        <Btns.LongBtn
-          type='submit'
-          style='confirm'
-          form='business apply'
         />
       </div>
     </article>

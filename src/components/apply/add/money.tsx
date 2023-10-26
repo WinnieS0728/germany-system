@@ -1,6 +1,6 @@
 import { Required } from "@/components/form/required";
 import { MySelect } from "@/components/form/select";
-import { useOptions } from "@/hooks/options";
+import { useOptions } from "@/hooks/useOptions";
 import { useSelectRef } from "@/hooks/select ref";
 import { useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
@@ -29,8 +29,8 @@ export const MoneyForm = () => {
 
   return (
     <div className='flex flex-col gap-4 sm:flex-row sm:gap-8'>
-      <div className='label-input'>
-        <label>{t("amount")} :</label>
+      <label className='label-input'>
+        <p>{t("amount")} :</p>
         <input
           type='text'
           className='w-full'
@@ -54,12 +54,13 @@ export const MoneyForm = () => {
             }
           }}
         />
-      </div>
-      <div className='label-input'>
-        <label>
+      </label>
+
+      <label className='label-input'>
+        <p>
           {watch_money !== "0" && <Required />}
           {t("curr")} :
-        </label>
+        </p>
         <Controller
           control={control}
           name='Curr'
@@ -72,7 +73,7 @@ export const MoneyForm = () => {
             />
           )}
         />
-      </div>
+      </label>
     </div>
   );
 };

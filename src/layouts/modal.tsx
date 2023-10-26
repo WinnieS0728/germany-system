@@ -17,7 +17,7 @@ export const Modal = ({ name, children }: modalProps) => {
   return (
     <div
       id={`${name}-background`}
-      className={`px-2 fixed inset-0 z-10 flex h-full w-full items-start justify-center overflow-auto bg-stone-800/75 pt-[15vh]`}
+      className={`fixed inset-0 z-10 flex h-full w-full items-start justify-center overflow-auto bg-stone-800/75 px-2 pt-[15vh]`}
       style={{
         display: isModalShow ? "flex" : "none",
       }}

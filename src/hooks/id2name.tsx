@@ -1,4 +1,4 @@
-import api from "@/lib/api";
+import api from "@/api";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -8,7 +8,7 @@ type splitNameType = {
   FullName: string;
 } & Record<string, unknown>;
 export function useId2name() {
-  const { i18n, t } = useTranslation("sign page");
+  const { i18n } = useTranslation("sign page");
   const nowLang = i18n.language;
 
   const splitName = useCallback(
@@ -24,14 +24,14 @@ export function useId2name() {
   const getName = useCallback(
     (id: string) => {
       if (!id) {
-        return t("noDeputy");
+        return '';
       }
       return (async function (): Promise<string> {
         const res = await api.getMember(id);
         return splitName(res[0]);
       })();
     },
-    [splitName, t]
+    [splitName]
   );
 
   return { id2name: getName, splitName };

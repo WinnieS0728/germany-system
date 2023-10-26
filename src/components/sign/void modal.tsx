@@ -1,17 +1,21 @@
 import { useTheme } from "styled-components";
 import * as Btns from "@components/UI/buttons";
 import { useModalControl } from "@/hooks/modal control";
-import { useSign } from "@/hooks/sign";
+import { useSign } from "@/hooks/useSign";
 import { useTranslation } from "react-i18next";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@data/store";
+import { useEmail } from "@/hooks/useEmail";
 
 const VoidModal = () => {
   const color = useTheme()?.color;
   const { t } = useTranslation("sign");
   const [toggleModal] = useModalControl("void");
-  const formInfo = useAppSelector((state) => state.formInfo).body;
+  const { formId, signList } = useAppSelector((state) => state.formInfo).body;
 
   const { updateFormStatus } = useSign();
+  const { sendEmail } = useEmail();
+
+  const recipient = signList[0].SIGNER;
 
   return (
     <article
@@ -20,21 +24,22 @@ const VoidModal = () => {
     >
       <h2 className='border-b-4 py-4 text-center text-3xl'>
         {t("void-title")}
-        {` ${formInfo.formId}`}
+        {` ${formId}`}
       </h2>
       <div className='submit-btns'>
         <Btns.LongBtn
           type='button'
-          style='cancel'
+          style='confirm'
           onClick={() => {
+            sendEmail(recipient, "void");
+            updateFormStatus("delete");
             toggleModal("off");
           }}
         />
         <Btns.LongBtn
           type='button'
-          style='confirm'
+          style='cancel'
           onClick={() => {
-            updateFormStatus("delete");
             toggleModal("off");
           }}
         />
@@ -43,4 +48,4 @@ const VoidModal = () => {
   );
 };
 
-export default VoidModal
+export default VoidModal;

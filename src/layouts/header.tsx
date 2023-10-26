@@ -1,20 +1,13 @@
-import { useTheme } from "styled-components";
-
 interface propsType {
   title: string;
   showJoyride?: boolean;
   joyrideStart?: () => void;
 }
 export const Header = ({ title, showJoyride, joyrideStart }: propsType) => {
-  const color = useTheme()?.color;
 
   return (
     <header
-      className={`flex items-center justify-between p-2 text-xl`}
-      style={{
-        backgroundColor: color?.sectionHeader,
-        color: color?.white,
-      }}
+      className={`flex items-center justify-between p-2 text-xl bg-sectionHeader text-myWhite`}
     >
       {title}
       {showJoyride && <button
