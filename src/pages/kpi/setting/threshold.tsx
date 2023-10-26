@@ -1,4 +1,4 @@
-import { ThresholdSettingTable } from "@/components/edit/threshold/threshold";
+import { ThresholdSettingTable } from "@/components/kpi setting/threshold/threshold";
 import { SettingLayout } from "@/pages/kpi/setting/setting layout";
 
 const ThresholdPage = () => {

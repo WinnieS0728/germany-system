@@ -1,5 +1,5 @@
-import { WeekTable } from "@/components/business-apply/week table";
-import { YearTable } from "@/components/business-apply/year table";
+import { WeekTable } from "@/components/kpi/week table";
+import { YearTable } from "@/components/kpi/year table";
 import { JoyRide } from "@/layouts/joyride";
 import { Main } from "@/layouts/main";
 import { Section } from "@/layouts/section";

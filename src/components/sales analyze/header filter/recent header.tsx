@@ -21,7 +21,6 @@ interface props {
 
 export function RecentHeader({ as }: props) {
   const salesList = useAppSelector((state) => state.salesList).body;
-  const { thisMonth } = useAppSelector((state) => state.time);
   const [type, setType] = useState<filterZoneType>("recent");
   const setSearch = useSearchParams()[1];
   const methods = useForm<filterForm>({

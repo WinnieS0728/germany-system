@@ -30,6 +30,9 @@ function InputOnlyNumber({ index, value, className }: inputProps) {
       e.target.value = value;
     }
   }
+  function clearValue(e: React.ChangeEvent<HTMLInputElement>) {
+    e.target.value = "";
+  }
   function resetValue(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.value) {
       e.target.value = "0";
@@ -43,6 +46,7 @@ function InputOnlyNumber({ index, value, className }: inputProps) {
       {...register(`tx.${index}.${value}`, {
         setValueAs: (value: string) => value.replace(/,/gi, ""),
       })}
+      onFocusCapture={clearValue}
       onBlurCapture={resetValue}
       autoComplete='off'
     />

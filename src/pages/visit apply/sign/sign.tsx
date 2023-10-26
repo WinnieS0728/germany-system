@@ -191,7 +191,7 @@ export default function SignPage() {
               </button>
             )}
             <button type='button'>
-              <Link to={`/apply`}>
+              <Link to={`/visitApply`}>
                 <Btns.IconBtn icon={<Icons.Back size='1.25rem' />}>
                   {t("btn.back", { ns: "sign page" })}
                 </Btns.IconBtn>

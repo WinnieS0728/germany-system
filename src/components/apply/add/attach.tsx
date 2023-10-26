@@ -25,6 +25,10 @@ const FileItem_o = ({
 
   const url = URL.createObjectURL(file);
 
+  useEffect(() => {
+    return () => URL.revokeObjectURL(url);
+  }, [url]);
+
   return (
     <section className={className}>
       <img
@@ -69,11 +73,11 @@ const FileItem = styled(FileItem_o)`
   img {
     width: 4rem;
   }
-  .content{
+  .content {
     display: flex;
     flex-flow: column;
     justify-content: space-between;
-    gap: .5rem;
+    gap: 0.5rem;
   }
   .title {
     font-size: 1.25rem;

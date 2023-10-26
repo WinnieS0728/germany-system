@@ -1,4 +1,4 @@
-import { TxSettingTable } from "@/components/edit/tx/setting table";
+import { TxSettingTable } from "@/components/kpi setting/tx/setting table";
 import { SettingLayout } from "@/pages/kpi/setting/setting layout";
 
 function TxPage() {

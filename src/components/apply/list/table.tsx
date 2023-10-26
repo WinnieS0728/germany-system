@@ -5,7 +5,6 @@ import { Tbody } from "@/components/table/tbody";
 import { usePageControl } from "./page control";
 import * as Btns from "@components/UI/buttons";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "@data/store";
 import { useTranslation } from "react-i18next";
 import { useSignStatusTranslate } from "@/hooks/status translate";
 
@@ -17,7 +16,6 @@ const DateSpan = (props: { date: string }) => {
 export const ListTable = () => {
   const color = useTheme()?.color;
   const { t } = useTranslation("list page");
-  const nowUser = useAppSelector((state) => state.nowUser).body;
   const { data, status } = useFetchApplyList();
 
   const howManyDataShowInOnePage = 10;
@@ -69,8 +67,11 @@ export const ListTable = () => {
                     </td>
                     <td>
                       <Link
-                        to={`../sign/${i.formId}/?userID=${nowUser.EmpId}`}
-                        style={{ cursor: "pointer" }}
+                        to={{
+                          pathname:`./sign/${i.formId}`,
+                          search: location.search
+                        }}
+                        className="curser-pointer text-blue-500"
                       >
                         {i.formId}
                       </Link>
