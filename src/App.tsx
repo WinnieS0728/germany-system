@@ -56,7 +56,7 @@ function App() {
           element={<SettingPage />}
         />
         <Route
-          path='VisitApply/*'
+          path='visitApply/*'
           element={<ApplyPage />}
         />
         <Route
