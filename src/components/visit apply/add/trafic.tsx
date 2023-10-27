@@ -101,8 +101,8 @@ export const TransportationForm = () => {
         <div className='stay flex items-center justify-start'>
           <label className='label-input'>
             <p>{t("isStay")} :</p>
-            <div className='flex gap-4'>
-              <label className='label-input'>
+            <div className='flex gap-3'>
+              <label className='label-input gap-1'>
                 <input
                   type='radio'
                   {...register("IsLodging")}
@@ -110,7 +110,7 @@ export const TransportationForm = () => {
                 />
                 <p>Yes</p>
               </label>
-              <label className='label-input'>
+              <label className='label-input gap-1'>
                 <input
                   type='radio'
                   {...register("IsLodging")}

@@ -60,6 +60,7 @@ const ErrorsModal = ({ errors }: { errors: FieldErrors }) => {
       <div className='flex items-center justify-center'>
         <button
           type='button'
+          className="px-6 py-2 rounded-md"
           style={{ backgroundColor: color.sectionHeader, color: color.white }}
           onClick={() => {
             toggleModal("off");
