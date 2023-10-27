@@ -36,6 +36,7 @@ const EditPage = () => {
         </Routes>
       </MySuspense>
       <Outlet />
+      <scroll-to-top />
     </>
   );
 };

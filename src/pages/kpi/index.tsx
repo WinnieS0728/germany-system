@@ -60,6 +60,7 @@ const CustomRatePage = () => {
           <Section>
             <WeekTable />
           </Section>
+          <scroll-to-top />
         </>
       </Main>
     </>

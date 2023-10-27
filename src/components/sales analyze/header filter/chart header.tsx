@@ -75,7 +75,7 @@ export function ChartHeader() {
             control={control}
             name='EmpId'
             render={({ field: { onChange } }) => (
-              <label className='label-input w-full'>
+              <label className='label-input'>
                 <p>業務</p>
                 <MySelect.Normal
                   options={options}

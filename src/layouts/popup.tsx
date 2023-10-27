@@ -6,14 +6,14 @@ import { lazy } from "react";
 import { MySuspense } from "./suspense";
 
 const NewDetailForm = lazy(
-  () => import("@/components/apply/add/detail/new detail")
+  () => import("@/components/visit apply/add/detail/new detail")
 );
-const Confirm = lazy(() => import("@/components/apply/add/confirm/confirm"));
-const UploadFiles = lazy(() => import("@/components/apply/add/upload files"));
+const Confirm = lazy(() => import("@/components/visit apply/add/confirm/confirm"));
+const UploadFiles = lazy(() => import("@/components/visit apply/add/upload files"));
 const SignBlock = lazy(() => import("@/components/sign/sign box"));
 const OtherSignBlock = lazy(() => import("@/components/sign/other sign block"));
 const VoidModal = lazy(() => import("@/components/sign/void modal"));
-const ErrorsModal = lazy(() => import("@/components/apply/add/errors"));
+const ErrorsModal = lazy(() => import("@/components/visit apply/add/errors"));
 
 export const PopupLayer = () => {
   const errors = useAppSelector((state) => state.errors);
