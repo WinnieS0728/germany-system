@@ -26,6 +26,7 @@ const mimeObj: mimeObj[] = [
     type: {
       ppt: "application/vnd.ms-powerpoint",
       pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      key: "application/vnd.apple.keynote"
     },
   },
   {
