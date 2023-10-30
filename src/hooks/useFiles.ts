@@ -86,7 +86,7 @@ export const useFiles = () => {
   } => {
     const target = mimeObj.find((i) =>
       Object.values(i.type).some((mime) => mime === fileType)
-    );
+    );    
 
     let imgSrc;
     switch (target?.id) {

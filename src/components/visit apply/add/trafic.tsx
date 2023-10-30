@@ -97,7 +97,7 @@ export const TransportationForm = () => {
           />
         </label>
       </div>
-      <div className='grid grid-cols-1 sm:grid-cols-3'>
+      <div className='grid grid-cols-1 sm:grid-cols-3 items-center'>
         <div className='stay flex items-center justify-start'>
           <label className='label-input'>
             <p>{t("isStay")} :</p>
@@ -121,7 +121,7 @@ export const TransportationForm = () => {
             </div>
           </label>
         </div>
-        <div className='stayDay  justify-start'>
+        <div className='stayDay items-center justify-start'>
           <label className='label-input'>
             <p>{t("stayDay")} :</p>
             <input
@@ -145,7 +145,7 @@ export const TransportationForm = () => {
             />
           </label>
         </div>
-        <div className='totalDay  justify-start'>
+        <div className='totalDay justify-start'>
           <label className='label-input'>
             <p>{t("tripDay")} :</p>
             <input
