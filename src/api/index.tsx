@@ -26,6 +26,9 @@ import { getTxKpi, setTxKpi } from "./kpi tx/tx";
 import { getSalesQty } from "./sales analyze/sales qty";
 import { getSalesDetailQty } from "./sales analyze/sales detail qty";
 import { getOrderDateList } from "./sales analyze/order date list";
+import { getBasicSetting } from "./basic setting/get basic setting";
+import { setBasicSetting } from "./basic setting/set basic setting";
+import { updateBasicSetting } from "./basic setting/update basic setting";
 
 const apiPath = import.meta.env.VITE_API_PATH;
 
@@ -38,6 +41,11 @@ const api = {
   getMemberGroup: getGroup(apiPath),
   getFormAttach: getFormAttach(apiPath),
   sendEmail: sendEmail(apiPath),
+  basicSetting: {
+    get: getBasicSetting(apiPath),
+    set: setBasicSetting(apiPath),
+    update: updateBasicSetting(apiPath),
+  },
   //files
   uploadFileSign: uploadFileSign(apiPath),
   downloadFile: downloadFile(apiPath),

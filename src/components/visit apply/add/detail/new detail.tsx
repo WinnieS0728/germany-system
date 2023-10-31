@@ -37,11 +37,9 @@ const Tr = ({ label, children, required }: trProps) => {
   return (
     <tr>
       <td style={{ backgroundColor: color.tableBgc }}>
-        <label className='relative'>
-          <p>
-            {required && <Required />}
-            {label}
-          </p>
+        <label className="py-2 relative">
+          {required && <Required />}
+          {label}
         </label>
       </td>
       <td>{children}</td>

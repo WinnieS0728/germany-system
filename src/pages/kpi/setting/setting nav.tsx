@@ -11,7 +11,7 @@ export const Nav = ({ className }: propsType) => {
   return (
     <>
       <nav className={cn("bg-navBgc",className)}>
-        <ul className='flex gap-2 overflow-x-auto p-2'>
+        <ul className='flex gap-2 overflow-x-auto p-2 no-scrollBar'>
           <NavLink
             end
             to={""}

@@ -2,7 +2,7 @@ import { SettingSubmitBtn } from "@/components/UI/buttons";
 import { Main } from "../../../layouts/main";
 import { useTranslation } from "react-i18next";
 
-export type formId = "tx" | "threshold";
+export type formId = "tx" | "threshold" | "store" | 'osom';
 
 interface props {
   formId: formId;

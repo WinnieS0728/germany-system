@@ -1,7 +1,7 @@
 import { detailDataWithSingleData } from "@/data/reducers/trip detail/trip detail";
 import { dateFormatter } from "@/utils/dateFormatter";
 import { timeDay, timeMonday } from "d3";
-import { dataForTable } from "@/components/apply/add/confirm/data";
+import { dataForTable } from "@/components/visit apply/add/confirm/data";
 
 export const useTableData = (
   data: detailDataWithSingleData[][],

@@ -5,9 +5,10 @@ import { useTranslation } from "react-i18next";
 import { lazy } from "react";
 import { MySuspense } from "@/layouts/suspense";
 
-const Coming = lazy(() => import("@layouts/coming"));
 const TxPage = lazy(() => import("./tx"));
 const ThresholdPage = lazy(() => import("./threshold"));
+const VisitStorePage = lazy(() => import("./visit store"));
+const OsomPage = lazy(() => import("./osom"));
 
 const EditPage = () => {
   const { t } = useTranslation(["settingPage"]);
@@ -27,15 +28,16 @@ const EditPage = () => {
           />
           <Route
             path='store'
-            Component={Coming}
+            Component={VisitStorePage}
           />
           <Route
             path='osom'
-            Component={Coming }
+            Component={OsomPage}
           />
         </Routes>
       </MySuspense>
       <Outlet />
+      <scroll-to-top />
     </>
   );
 };

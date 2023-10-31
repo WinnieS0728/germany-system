@@ -85,7 +85,7 @@ input.noBorder {
   }
 }
 
-.ref-ul {
+.reference_mark {
   list-style: "\203B  "inside;
 }
 
@@ -95,5 +95,13 @@ input.noBorder {
 
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+input[type="submit"] {
+  cursor: pointer;
+
+  &[disabled] {
+    cursor: not-allowed;
   }
 }

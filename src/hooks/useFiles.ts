@@ -26,6 +26,7 @@ const mimeObj: mimeObj[] = [
     type: {
       ppt: "application/vnd.ms-powerpoint",
       pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      key: "application/vnd.apple.keynote"
     },
   },
   {
@@ -85,7 +86,7 @@ export const useFiles = () => {
   } => {
     const target = mimeObj.find((i) =>
       Object.values(i.type).some((mime) => mime === fileType)
-    );
+    );    
 
     let imgSrc;
     switch (target?.id) {

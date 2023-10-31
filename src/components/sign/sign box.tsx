@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import { Table } from "../table/table";
-import styled from "styled-components";
 import { useEffect, useMemo, useState } from "react";
 import TextAreaAutosize from "react-textarea-autosize";
 import * as Btns from "@components/UI/buttons";
@@ -158,9 +157,9 @@ const SignBlock = ({
   }
 
   return (
-    <article className={cn(`modal`, className)}>
-      <h3>{t("title")}</h3>
-      <ul className='ref-ul'>
+    <article className={cn(`modal bg-myWhite`, className)}>
+      <h3 className='text-center text-xl p-2 bg-sign_header'>{t("title")}</h3>
+      <ul className='bg-sign_content p-4 reference_mark'>
         {type === "sign" ? (
           <li>{t("sign-warn")}</li>
         ) : (
@@ -180,7 +179,7 @@ const SignBlock = ({
               <tr>
                 <td
                   rowSpan={2}
-                  className='title'
+                  className='bg-tableBgc'
                 >
                   <span className='relative py-1'>
                     {type === "sign" && <Required />}
@@ -188,7 +187,7 @@ const SignBlock = ({
                   </span>
                 </td>
                 <td>
-                  <label>
+                  <label className='flex gap-2'>
                     <input
                       type='radio'
                       value={"yes"}
@@ -201,7 +200,7 @@ const SignBlock = ({
               </tr>
               <tr>
                 <td>
-                  <label>
+                  <label className='flex gap-2'>
                     <input
                       type='radio'
                       value={"no"}
@@ -217,13 +216,15 @@ const SignBlock = ({
                 </td>
               </tr>
               <tr>
-                <td className='title'>
+                <td className='bg-tableBgc'>
                   <label
                     htmlFor='sign-password'
                     className='relative py-1'
                   >
-                    <Required />
-                    {t("label.password")}
+                    <span>
+                      <Required />
+                      {t("label.password")}
+                    </span>
                   </label>
                 </td>
                 <td>
@@ -253,15 +254,15 @@ const SignBlock = ({
                 </td>
               </tr>
               <tr>
-                <td className='title'>
+                <td className='bg-tableBgc'>
                   <label
                     htmlFor='sign-opinion'
                     className='relative p-1'
                   >
-                      {(watch_agree === "no" || type === "otherSign") && (
-                        <Required />
-                      )}
-                      {t("label.opinion")}
+                    {(watch_agree === "no" || type === "otherSign") && (
+                      <Required />
+                    )}
+                    {t("label.opinion")}
                   </label>
                 </td>
                 <td>
@@ -297,34 +298,4 @@ const SignBlock = ({
   );
 };
 
-const styled_sign = styled(SignBlock)`
-  background-color: ${(props) => props.theme.color.white};
-  h3 {
-    text-align: center;
-    font-size: 1.25rem;
-    padding: 0.5rem;
-    background-color: ${(props) => props.theme.color.sign_header};
-  }
-  .ref-ul {
-    background-color: ${(props) => props.theme.color.sign_content};
-    padding: 1rem;
-  }
-  .title {
-    background-color: ${(props) => props.theme.color.tableBgc};
-  }
-  td:not(.title) {
-    text-align: start;
-  }
-  label {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    input[type="radio"] {
-      border-radius: 50%;
-      border: 10px solid red;
-    }
-  }
-`;
-
-export default styled_sign;
+export default SignBlock;

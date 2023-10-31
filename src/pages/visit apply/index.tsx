@@ -34,6 +34,7 @@ const ApplyPage = () => {
           />
         </Routes>
       </MySuspense>
+      <scroll-to-top />
     </>
   );
 };

@@ -54,6 +54,7 @@ export default function SalesAnalyze() {
           />
         </Routes>
       </MySuspense>
+      <scroll-to-top />
     </>
   );
 }

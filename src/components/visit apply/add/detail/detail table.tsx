@@ -135,7 +135,7 @@ export const DetailTable = ({ type, data, index }: detailTableProps) => {
         {type === "addForm" && (
           <button
             type='button'
-            className='px-4 py-1 ring-1'
+            className='rounded-md px-4 py-1 ring-1 ring-myWhite'
             style={{ borderColor: color.white }}
             onClick={() => {
               dispatch(setTarget((index || 0) + 1));
