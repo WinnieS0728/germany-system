@@ -97,3 +97,11 @@ input.noBorder {
     display: none;
   }
 }
+
+input[type="submit"] {
+  cursor: pointer;
+
+  &[disabled] {
+    cursor: not-allowed;
+  }
+}

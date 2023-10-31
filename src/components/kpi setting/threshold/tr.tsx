@@ -44,7 +44,6 @@ export const TrList = ({
     borderStyle: "solid",
     backgroundColor: color?.white,
     color: color?.black,
-    border: `1px solid ${color?.black}`,
   };
 
   function handleBlur(e: React.BaseSyntheticEvent) {

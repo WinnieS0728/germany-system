@@ -123,6 +123,16 @@ export const useOptions = () => {
     [DeptId, EmpId]
   );
 
+    const getDeptList = useCallback(async () => {
+    const res = await api.getMember();
+    const deptNoRepeat = [...new Set(res.map((member) => member.DeptId))];
+    const deptArr = deptNoRepeat.map((i) =>
+      res.find((member) => member.DeptId === i)
+    );
+
+    return deptArr;
+  }, []);
+
   const getDeptOptions = useCallback(async (input: string) => {
     const res = (await getDeptList()) as memberResType[];
     return res.filter(
@@ -131,7 +141,7 @@ export const useOptions = () => {
         dept.DeptName_E.toLowerCase().includes(input.toLowerCase()) ||
         dept.DeptId.includes(input)
     );
-  }, []);
+  }, [getDeptList]);
 
   const getMemberOptions = useCallback(async (input: string) => {
     const res = await api.getMember();
@@ -141,16 +151,6 @@ export const useOptions = () => {
         member.FullName.toLowerCase().includes(input.toLowerCase()) ||
         member.EmpId.includes(input)
     );
-  }, []);
-
-  const getDeptList = useCallback(async () => {
-    const res = await api.getMember();
-    const deptNoRepeat = [...new Set(res.map((member) => member.DeptId))];
-    const deptArr = deptNoRepeat.map((i) =>
-      res.find((member) => member.DeptId === i)
-    );
-
-    return deptArr;
   }, []);
 
   const getDeptMemberOptions = useCallback(async(input: string) => {

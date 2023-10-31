@@ -47,7 +47,7 @@ export function YearSalesHeader() {
     return options;
   }, [salesList]);
 
-  const { handleSubmit, control } = useForm<yearFilter>({
+  const { handleSubmit, control, formState:{isSubmitting} } = useForm<yearFilter>({
     mode: "onSubmit",
     defaultValues: {
       year: thisYear,
@@ -107,6 +107,7 @@ export function YearSalesHeader() {
           type='submit'
           value='search'
           className='submitBtn'
+          disabled={isSubmitting}
         />
       </form>
     </>
