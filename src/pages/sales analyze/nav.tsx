@@ -14,12 +14,12 @@ const salesAnalyzeNavRoutes: navBtn[] = [
     label: "年度業績列表",
     path: "yearSales",
   },
-  // { label: "輪胎店拜訪紀錄", path: "tireShopVisit" },
-  // { label: "ATU 拜訪紀錄", path: "atuVisit" },
-  // { label: "未拜訪輪胎店查詢", path: "unVisitTireShop" },
-  // { label: "未下單輪胎店查詢", path: "unOrderTireShop" },
-  // { label: "KPI 執行進度查詢", path: "kpiAchievement" },
-  // { label: "各項指標趨勢圖", path: "salesCharts" },
+  { label: "輪胎店拜訪紀錄", path: "tireShopVisit" },
+  { label: "ATU 拜訪紀錄", path: "atuVisit" },
+  { label: "未拜訪輪胎店查詢", path: "unVisitTireShop" },
+  { label: "未下單輪胎店查詢", path: "unOrderTireShop" },
+  { label: "KPI 執行進度查詢", path: "kpiAchievement" },
+  { label: "各項指標趨勢圖", path: "salesCharts" },
 ];
 
 export function SalesAnalyzeNav() {

@@ -76,7 +76,7 @@ export function useSalesList() {
                     isFirstOrder: getLastDate(orderDateList).isFirstOrder,
                     lastDate: dateFormatter(getLastDate(orderDateList).lastDate as string),
                     orderTime: Object.values(orderDateList).length - 1,
-                    salesArray: Object.values(orderDateList).slice(1)
+                    salesArray: Object.values(orderDateList).slice(1).map(date=>date.replace(/\//gi,'-')).sort((a,b)=> new Date(b).getTime() - new Date(a).getTime())
                 }
             })))
 
