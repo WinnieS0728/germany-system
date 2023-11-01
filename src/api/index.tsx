@@ -29,6 +29,8 @@ import { getOrderDateList } from "./sales analyze/order date list";
 import { getBasicSetting } from "./basic setting/get basic setting";
 import { setBasicSetting } from "./basic setting/set basic setting";
 import { updateBasicSetting } from "./basic setting/update basic setting";
+import { getAtuVisit } from "./sales analyze/atu visit";
+import { getCusVisitList } from "./sales analyze/custom visit list";
 
 const apiPath = import.meta.env.VITE_API_PATH;
 
@@ -74,6 +76,8 @@ const api = {
   getSalesQty: getSalesQty(apiPath),
   getSalesDetailQty: getSalesDetailQty(apiPath),
   getOrderDateList: getOrderDateList(apiPath),
+  getAtuVisit: getAtuVisit(),
+  getCusVisitList: getCusVisitList(apiPath),
 };
 
 export default api;

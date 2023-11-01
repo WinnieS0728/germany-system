@@ -49,7 +49,7 @@ export function SalesList() {
                   <td>{getLocaleString(data.orderTime)}</td>
                   <td>{data.lastDate}</td>
                   {data.salesArray.map((data, index) => (
-                    <td key={index}>{data}</td>
+                    <td key={index} className="whitespace-nowrap">{data}</td>
                   ))}
                 </tr>
               ))}
