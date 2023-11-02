@@ -35,9 +35,9 @@ export function useAtuVisit() {
                 month: month
             }))) : [await api.getAtuVisit({
                 year: thisYear,
-            })]
+            })]            
 
-            const dataSet = res.reduce((a, b) => a.concat(b), [])
+            const dataSet = res.reduce((a, b) => a.concat(b), []).filter(data=>data.Empname !== 'Marcus.Rosenzweig')
 
             const allData: typeof dataSet = dataSet.map((res) => {
                 const sameCus = dataSet.filter((data) => data.Custid === res.Custid);

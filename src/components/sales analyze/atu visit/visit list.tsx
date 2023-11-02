@@ -48,7 +48,9 @@ export function AtuVisitList() {
                   <td>{data.visitList[0].StartDT}</td>
                   {data.visitList.map((date, index) => (
                     <td key={index} className="whitespace-nowrap">
+                      <a href={`https://esys.orange-electronic.com/TravelRep/Edit/${date.BTRId}`} target="_blank" className="text-blue-500">
                         {date.StartDT}
+                      </a>
                     </td>
                   ))}
                 </tr>
