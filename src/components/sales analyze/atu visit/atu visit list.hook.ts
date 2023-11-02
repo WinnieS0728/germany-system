@@ -4,7 +4,7 @@ import { useAppSelector } from "@/data/store"
 import { getMonthArray } from "@/utils/get month_MM array"
 import { useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import { useId2name } from "./id2name"
+import { useId2name } from "../../../hooks/id2name"
 
 type visitData = {
     id: number

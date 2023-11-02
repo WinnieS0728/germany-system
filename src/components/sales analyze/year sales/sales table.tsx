@@ -1,7 +1,8 @@
 import { Table } from "@/components/table/table";
 import { Month_MM } from "@/const";
-import { useYearSales } from "@/hooks/useYearSales";
+import { useYearSales } from "@/components/sales analyze/year sales/year sales.hook";
 import { Section } from "@/layouts/section";
+import { cn } from "@/utils/cn";
 import { getLocaleString } from "@/utils/get localeString";
 import { Fragment } from "react";
 
@@ -62,7 +63,9 @@ export function YearSalesTable() {
                   <tr>
                     <td className='whitespace-nowrap'>銷售達成率</td>
                     {data.salesRate.map((number, index) => (
-                      <td key={index}>{`${getLocaleString(number)}%`}</td>
+                      <td key={index} className={cn('',{
+                        'text-green-600': number > 100
+                      })}>{`${getLocaleString(number)}%`}</td>
                     ))}
                   </tr>
                 </Fragment>

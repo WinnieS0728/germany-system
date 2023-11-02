@@ -21,11 +21,11 @@ const atuVisit_res_schema = z.array(z.object({
     "Sqty": z.coerce.number()
 }))
 
-type atuVisit = z.infer<typeof atuVisit_res_schema>
+export type atuVisit_res = z.infer<typeof atuVisit_res_schema>
 
 export function getAtuVisit() {
     return async function ({ year, month }: atuVisit_req) {
-        const res = await axios<atuVisit>({
+        const res = await axios<atuVisit_res>({
             url: 'https://orangeosomapi.orange-electronic.com/api/GetAtuSV',
             method: "POST",
             data: {

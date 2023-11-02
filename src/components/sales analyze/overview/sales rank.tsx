@@ -1,5 +1,5 @@
 import { Table } from "@/components/table/table";
-import { useSalesRank } from "@/hooks/useSalesRank";
+import { useSalesRank } from "@/components/sales analyze/overview/sales rank.hook";
 import { Section } from "@/layouts/section";
 import { getLocaleString } from "@/utils/get localeString";
 

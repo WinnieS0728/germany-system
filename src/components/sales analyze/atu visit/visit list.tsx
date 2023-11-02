@@ -1,5 +1,5 @@
 import { Table } from "@/components/table/table";
-import { useAtuVisit } from "@/hooks/use atu visit";
+import { useAtuVisit } from "@/components/sales analyze/atu visit/atu visit list.hook";
 import { Section } from "@/layouts/section";
 
 export function AtuVisitList() {
@@ -13,7 +13,7 @@ export function AtuVisitList() {
             <thead>
               <tr>
                 <th
-                  colSpan={6}
+                  colSpan={5}
                   className='text-start bg-sectionHeader text-myWhite'
                 >
                   拜訪紀錄列表
@@ -28,8 +28,7 @@ export function AtuVisitList() {
               <tr>
                 <th>負責業務</th>
                 <th>店家名稱</th>
-                <th>累計對帳數量</th>
-                <th>本週對帳數量</th>
+                <th>TX 對帳數</th>
                 <th>拜訪次數</th>
                 <th>近期拜訪日期</th>
                 {indexArray.map((index) => (
@@ -43,7 +42,6 @@ export function AtuVisitList() {
                   <td>{data.EmpName}</td>
                   <td>{data.cusName}</td>
                   <td>{data.payNumber}</td>
-                  <td>{data.payThisWeek}</td>
                   <td>{data.visitNumber}</td>
                   <td>{data.visitList[0].StartDT}</td>
                   {data.visitList.map((date, index) => (
