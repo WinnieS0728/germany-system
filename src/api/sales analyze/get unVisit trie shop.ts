@@ -20,7 +20,7 @@ const unVisitTS_res_schema = z.array(z.object({
     "LastDate": z.string()
 }))
 
-type unVisitTS_res = z.infer<typeof unVisitTS_res_schema>
+export type unVisitTS_res = z.infer<typeof unVisitTS_res_schema>
 
 export function getUnVisitTireShop(apiPath: string) {
     return async function ({

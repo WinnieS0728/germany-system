@@ -1,9 +1,8 @@
 import { Table } from "@/components/table/table";
 import { useAtuVisit } from "@/components/sales analyze/atu visit/atu visit list.hook";
 import { Section } from "@/layouts/section";
-
 export function AtuVisitList() {
-  const { visitData, indexArray } = useAtuVisit();
+  const { visitData, indexArray } = useAtuVisit()  
 
   return (
     <>
