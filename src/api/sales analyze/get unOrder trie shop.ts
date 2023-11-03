@@ -6,7 +6,7 @@ interface unVisitTS_req {
     endDate: string
 }
 
-const unVisitTS_res_schema = z.array(z.object({
+const unOrderTS_res_schema = z.array(z.object({
     "Empname": z.string(),
     "custid": z.string(),
     "Custname": z.string(),
@@ -17,29 +17,29 @@ const unVisitTS_res_schema = z.array(z.object({
     "City": z.string(),
     "PostalCode": z.string(),
     "State": z.string(),
-    "Vqty": z.coerce.number(),
+    "Sqty": z.coerce.number(),
     "LastDate": z.string()
 }))
 
-export type unVisitTS_res = z.infer<typeof unVisitTS_res_schema>
+export type unOrderTS_res = z.infer<typeof unOrderTS_res_schema>
 
-export function getUnVisitTireShop(apiPath: string) {
+export function getUnOrderTireShop(apiPath: string) {
     return async function ({
         startDate, endDate
     }: unVisitTS_req) {
-        // TODO apiPath
-        const res = await axios<unVisitTS_res>({
+        const res = await axios<unOrderTS_res>({
+            // TODO apiPath
             url: `https://orangeapi.orange-electronic.com/api/GetSalesVisitDe`,
             method: "POST",
             data: {
                 "Startdt": startDate,
                 "Enddt": endDate,
-                "type": "0"
+                "type": "1"
             }
         })
 
-        const validData = unVisitTS_res_schema.safeParse(res.data)        
-        
+        const validData = unOrderTS_res_schema.safeParse(res.data)
+
         if (!validData.success) {
             throw new Error(validData.error.message)
         }

@@ -27,7 +27,7 @@ export function AtuVisitList() {
               <tr>
                 <th>負責業務</th>
                 <th>店家名稱</th>
-                <th>TX 對帳數</th>
+                <th>累計對帳數量</th>
                 <th>拜訪次數</th>
                 <th>近期拜訪日期</th>
                 {indexArray.map((index) => (

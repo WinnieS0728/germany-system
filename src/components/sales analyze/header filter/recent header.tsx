@@ -107,7 +107,7 @@ export function RecentHeader({ as }: props) {
             <div className='w-full grid grid-cols-1 justify-start items-center sm:grid-cols-2 lg:flex gap-2'>
               <RadioBtn
                 as='recent'
-                text={as === "visit" ? "最近 6 個月" : "最近 4 個月"}
+                text={as === "visit" ? "最近 6 個月" : "最近 12 個月"}
                 active={type === "recent"}
                 setType={setType}
                 value='recent'

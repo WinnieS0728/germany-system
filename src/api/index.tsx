@@ -32,6 +32,7 @@ import { updateBasicSetting } from "./basic setting/update basic setting";
 import { getAtuVisit } from "./sales analyze/atu visit";
 import { getCusVisitList } from "./sales analyze/custom visit list";
 import { getUnVisitTireShop } from "./sales analyze/get unVisit trie shop";
+import { getUnOrderTireShop } from "./sales analyze/get unOrder trie shop";
 
 const apiPath = import.meta.env.VITE_API_PATH;
 
@@ -80,6 +81,7 @@ const api = {
   getAtuVisit: getAtuVisit(),
   getCusVisitList: getCusVisitList(apiPath),
   getUnVisitTireShop: getUnVisitTireShop(apiPath),
+  getUnOrderTireShop: getUnOrderTireShop(apiPath),
 };
 
 export default api;

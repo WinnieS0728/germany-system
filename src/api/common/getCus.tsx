@@ -14,13 +14,19 @@ export type cusResType = {
   CType: "";
   ErpNo: string;
 };
+
+interface request {
+  name?: string;
+  country?: string;
+  id?: string;
+}
 export function getCus(apiPath: string) {
-  return async function (name?: string, country?: string) {
+  return async function ({ name, country, id }: request) {
     const res: AxiosResponse<cusResType[]> = await axios({
       method: "POST",
       url: `${apiPath}/GetSaleCustomerList`,
       data: {
-        CustId: "", //客戶代號
+        CustId: id || "", //客戶代號
         CustName: name || "", //客戶名稱
         CustName_E: "", //客戶英文名
         PostalCode: "", // 郵遞區號
