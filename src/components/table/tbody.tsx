@@ -15,7 +15,7 @@ export const Tbody = (props: props) => {
             colSpan={100}
             className='p-1'
           >
-            <Loading />
+            <Loading.block />
           </td>
         </tr>
       </tbody>

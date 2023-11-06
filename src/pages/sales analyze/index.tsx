@@ -3,19 +3,22 @@ import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import { SalesAnalyzeNav } from "./nav";
 import { MySuspense } from "@/layouts/suspense";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const SalesAnalyze_overviewPage = lazy(()=>import('./overview'))
-const YearSalesPage = lazy(()=>import('./year sales'))
-const tireShopVisitPage = lazy(()=>import('./tire shop visit'))
-const AtuVisitPage = lazy(()=>import('./atu visit'))
-const UnVisitTireShop = lazy(()=>import('./unVisit tire shop'))
-const UnOrderTireShop = lazy(()=>import('./unOrder tire shop'))
-const KpiAchievementPage = lazy(()=>import('./kpi achievement'))
-const SalesCharts = lazy(()=>import('./chart'))
+const SalesAnalyze_overviewPage = lazy(() => import("./overview"));
+const YearSalesPage = lazy(() => import("./year sales"));
+const tireShopVisitPage = lazy(() => import("./tire shop visit"));
+const AtuVisitPage = lazy(() => import("./atu visit"));
+const UnVisitTireShop = lazy(() => import("./unVisit tire shop"));
+const UnOrderTireShop = lazy(() => import("./unOrder tire shop"));
+const KpiAchievementPage = lazy(() => import("./kpi achievement"));
+const SalesCharts = lazy(() => import("./chart"));
+
+const queryClient = new QueryClient();
 
 export default function SalesAnalyze() {
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <Header title='國外業務銷售報表' />
       <SalesAnalyzeNav />
       <MySuspense>
@@ -25,36 +28,36 @@ export default function SalesAnalyze() {
             Component={SalesAnalyze_overviewPage}
           />
           <Route
-            path="tireShopVisit"
+            path='tireShopVisit'
             Component={tireShopVisitPage}
           />
           <Route
-            path="yearSales"
+            path='yearSales'
             Component={YearSalesPage}
           />
           <Route
-            path="atuVisit"
+            path='atuVisit'
             Component={AtuVisitPage}
           />
           <Route
-            path="unVisitTireShop"
+            path='unVisitTireShop'
             Component={UnVisitTireShop}
           />
           <Route
-            path="unOrderTireShop"
+            path='unOrderTireShop'
             Component={UnOrderTireShop}
           />
           <Route
-            path="kpiAchievement"
+            path='kpiAchievement'
             Component={KpiAchievementPage}
           />
           <Route
-            path="salesCharts"
+            path='salesCharts'
             Component={SalesCharts}
           />
         </Routes>
       </MySuspense>
       <scroll-to-top />
-    </>
+    </QueryClientProvider>
   );
 }

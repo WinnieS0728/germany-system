@@ -4,20 +4,11 @@ import { Section } from "@/layouts/section";
 import { cn } from "@/utils/cn";
 import { getLocaleString } from "@/utils/get localeString";
 
-function Cu_type(isFirstOrder: boolean) {
-  return (
-    <>
-      {isFirstOrder ? (
-        <p className='text-green-600'>首購客戶</p>
-      ) : (
-        <p>既有客戶</p>
-      )}
-    </>
-  );
-}
-
 export function SalesList() {
-  const { salesListData, indexArray } = useSalesList(); 
+  const { status, salesListData, indexArray } = useSalesList();
+  console.log(salesListData);
+  
+
   return (
     <>
       <Section title='輪胎店銷售列表'>
@@ -25,8 +16,18 @@ export function SalesList() {
           <table>
             <thead>
               <tr>
-                <th className="text-start bg-sectionHeader text-myWhite" colSpan={4}>店家列表</th>
-                <th className="text-start bg-sectionHeader text-myWhite" colSpan={indexArray.length}>訂單記錄</th>
+                <th
+                  className='text-start bg-sectionHeader text-myWhite'
+                  colSpan={4}
+                >
+                  店家列表
+                </th>
+                <th
+                  className='text-start bg-sectionHeader text-myWhite'
+                  colSpan={indexArray.length}
+                >
+                  訂單記錄
+                </th>
               </tr>
               <tr>
                 <th>業務人員</th>
@@ -41,14 +42,23 @@ export function SalesList() {
             <tbody>
               {salesListData.map((data) => (
                 <tr key={data.id}>
-                  <td className="whitespace-pre">{data.sa_name}</td>
-                  <td className={cn('',{
-                    'text-green-600': data.isFirstOrder
-                  })}>{data.cu_name}</td>
+                  <td className='whitespace-pre'>{data.sa_name}</td>
+                  <td
+                    className={cn("", {
+                      "text-green-600": data.isFirstOrder,
+                    })}
+                  >
+                    {data.cu_name}
+                  </td>
                   <td>{getLocaleString(data.tx)}</td>
                   <td>{getLocaleString(data.orderTime)}</td>
                   {data.salesArray.map((data, index) => (
-                    <td key={index} className="whitespace-nowrap">{data}</td>
+                    <td
+                      key={index}
+                      className='whitespace-nowrap'
+                    >
+                      {data}
+                    </td>
                   ))}
                 </tr>
               ))}

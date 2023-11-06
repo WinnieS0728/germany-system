@@ -14,28 +14,29 @@ import theme from "@styles/theme.ts";
 import { Provider } from "react-redux";
 import store from "@/data/store";
 import { ToastContainer } from "react-toastify";
-import '@winnies0728/orange-component'
+import "@winnies0728/orange-component";
+
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
-  <Provider store={store}>
-    <ThemeProvider theme={theme}>
-      <HashRouter>
-        <App />
-        <ToastContainer
-          position='top-center'
-          autoClose={2000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme='colored'
-        />
-      </HashRouter>
-    </ThemeProvider>
-  </Provider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <HashRouter>
+          <App />
+          <ToastContainer
+            position='top-center'
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme='colored'
+          />
+        </HashRouter>
+      </ThemeProvider>
+    </Provider>
   // </React.StrictMode>
 );
