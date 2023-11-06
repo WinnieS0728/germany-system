@@ -19,7 +19,7 @@ type salesListData = {
 }
 
 type salesListReturn = {
-    status: 'pending' | 'error' | 'success',
+    status: 'idle' | 'pending' | 'error' | 'success',
     salesListData: salesListData[],
     indexArray: number[]
 }
@@ -48,19 +48,19 @@ export function useSalesList(): salesListReturn {
             }]
     })
 
-    if (salesListQueries.some(query => query.isLoading)) {
-        return {
-            status: 'pending',
-            salesListData: [],
-            indexArray: []
-        }
-    } else if (salesListQueries.some(query => query.isError)) {
-        return {
-            status: 'error',
-            salesListData: [],
-            indexArray: []
-        }
-    }
+    // if (salesListQueries.some(query => query.isLoading)) {
+    //     return {
+    //         status: 'pending',
+    //         salesListData: [],
+    //         indexArray: []
+    //     }
+    // } else if (salesListQueries.some(query => query.isError)) {
+    //     return {
+    //         status: 'error',
+    //         salesListData: [],
+    //         indexArray: []
+    //     }
+    // }
     const salesListRes = salesListQueries.map(query => query.data as NonNullable<typeof query.data>)
         .reduce((a, b) => a.concat(b), [])
         .filter((data) => data.cu_sale !== "ER221001");
@@ -80,86 +80,77 @@ export function useSalesList(): salesListReturn {
     });
     const onlyId = [...new Set(allData.map((data) => data.cu_no))];
 
-    const array = onlyId.map((id) => allData.find((data) => data.cu_no === id)) as typeof salesListRes
+    const array = onlyId.map((id) => allData.find((data) => data.cu_no === id)) as typeof salesListRes;
 
-    try {
-        (async function () {
-            const salesListData = await Promise.all(array.map(async (data, index) => {
-                const orderDateList = await api.getOrderDateList({ ErpNo: data.cu_no })
-                return {
-                    id: index,
-                    EmpId: data.cu_sale,
-                    sa_name: data.pa_ena,
-                    cu_name: data.cu_na,
-                    tx: Number(data.sqty),
-                    isFirstOrder: getLastDate(orderDateList).isFirstOrder,
-                    lastDate: dateFormatter(getLastDate(orderDateList).lastDate as string),
-                    orderTime: Object.values(orderDateList).length - 1,
-                    salesArray: Object.values(orderDateList).slice(1).map(date => date.replace(/\//gi, '-')).sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
-                }
-            }))
+    const orderDateQueries = useQueries({
+        queries: array.map(data => ({
+            queryKey: ["orderDate"],
+            queryFn: api.getOrderDateList({ ErpNo: data.cu_no })
+        }))
+    });
 
-            const maxLength = salesListData.sort(
-                (a, b) => b.salesArray.length - a.salesArray.length
-            )[0]?.salesArray.length || 0;
-
-            const salesListData_fullData = salesListData.map((data) => ({
-                ...data,
-                salesArray: addEmptyData(data.salesArray, maxLength),
-            })).sort((a, b) => new Date(b.lastDate).getTime() - new Date(a.lastDate).getTime())
-
-            if (searchEmpId) {
-                return {
-                    status: 'success',
-                    salesListData: salesListData_fullData.filter(data => data.EmpId === searchEmpId),
-                    indexArray: getIndexArray(maxLength)
-                }
+    (async function () {
+        const salesListData = await Promise.all(array.map(async (data, index) => {
+            const orderDateList = await api.getOrderDateList({ ErpNo: data.cu_no })
+            return {
+                id: index,
+                EmpId: data.cu_sale,
+                sa_name: data.pa_ena,
+                cu_name: data.cu_na,
+                tx: Number(data.sqty),
+                isFirstOrder: getLastDate(orderDateList).isFirstOrder,
+                lastDate: dateFormatter(getLastDate(orderDateList).lastDate as string),
+                orderTime: Object.values(orderDateList).length - 1,
+                salesArray: Object.values(orderDateList).slice(1).map(date => date.replace(/\//gi, '-')).sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
             }
-            console.log({
+        }))
+        const maxLength = salesListData.sort(
+            (a, b) => b.salesArray.length - a.salesArray.length
+        )[0]?.salesArray.length || 0;
+
+        const salesListData_fullData = salesListData.map((data) => ({
+            ...data,
+            salesArray: addEmptyData(data.salesArray, maxLength),
+        })).sort((a, b) => new Date(b.lastDate).getTime() - new Date(a.lastDate).getTime())
+
+        if (searchEmpId) {
+            return {
                 status: 'success',
-                salesListData: salesListData_fullData,
+                salesListData: salesListData_fullData.filter(data => data.EmpId === searchEmpId),
                 indexArray: getIndexArray(maxLength)
-            });
-            
+            }
+        } else {
             return {
                 status: 'success',
                 salesListData: salesListData_fullData,
                 indexArray: getIndexArray(maxLength)
             }
-
-        })()
-    } catch (error) {
-        console.log(error);
-        return {
-            status: 'error',
-            salesListData: [],
-            indexArray: []
         }
-    }
-}
+    })()
 
-function getLastDate(dateObj: orderDateList_res) {
-    const lastDate = Object.values(dateObj).at(-1)
-    const isFirstOrder = Object.values(dateObj).length <= 2 ? true : false
+    function getLastDate(dateObj: orderDateList_res) {
+        const lastDate = Object.values(dateObj).at(-1)
+        const isFirstOrder = Object.values(dateObj).length <= 2 ? true : false
 
-    return { isFirstOrder, lastDate }
-}
-
-function addEmptyData(array: string[], maxNumber: number) {
-    const newArray = [...array];
-
-    for (let i = 0; i < maxNumber - array.length; i++) {
-        newArray.push("");
+        return { isFirstOrder, lastDate }
     }
 
-    return newArray;
-}
+    function addEmptyData(array: string[], maxNumber: number) {
+        const newArray = [...array];
 
-function getIndexArray(maxNumber: number) {
-    const indexArray: number[] = []
-    for (let i = 1; i <= maxNumber; i++) {
-        indexArray.push(i)
+        for (let i = 0; i < maxNumber - array.length; i++) {
+            newArray.push("");
+        }
+
+        return newArray;
     }
 
-    return indexArray
+    function getIndexArray(maxNumber: number) {
+        const indexArray: number[] = []
+        for (let i = 1; i <= maxNumber; i++) {
+            indexArray.push(i)
+        }
+
+        return indexArray
+    }
 }

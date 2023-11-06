@@ -1,18 +1,20 @@
+import { cn } from "@/utils/cn";
 import Skeleton from "react-loading-skeleton";
 
 interface blockLoadingProps {
   height?: number;
+  className?: string
 }
 interface circleLoadingProps {
   r?: number;
 }
 
-function BlockLoading({ height }: blockLoadingProps) {
+function BlockLoading({ height, className }: blockLoadingProps) {
   return (
     <Skeleton
       count={1}
       height={height || 16 * 3}
-      className='rounded-md'
+      className={cn('rounded-md',className)}
     />
   );
 }
