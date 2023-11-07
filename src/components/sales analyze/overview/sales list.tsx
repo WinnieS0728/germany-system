@@ -5,14 +5,11 @@ import { cn } from "@/utils/cn";
 import { getLocaleString } from "@/utils/get localeString";
 
 export function SalesList() {
-  const data = useSalesList();
+  const { salesListData, indexArray } = useSalesList();
 
   return (
     <>
-      {data &&
-        data.status === "success" &&
-        data.salesListData &&
-        data.indexArray && (
+      
           <Section title='輪胎店銷售列表'>
             <Table>
               <table>
@@ -26,7 +23,7 @@ export function SalesList() {
                     </th>
                     <th
                       className='text-start bg-sectionHeader text-myWhite'
-                      colSpan={data.indexArray.length}
+                      colSpan={indexArray.length}
                     >
                       訂單記錄
                     </th>
@@ -36,13 +33,13 @@ export function SalesList() {
                     <th>店家名稱</th>
                     <th>TX數量</th>
                     <th>下單次數</th>
-                    {data.indexArray.map((index) => (
+                    {indexArray.map((index) => (
                       <th key={index}>{index}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {data.salesListData.map((data) => (
+                  {salesListData.map((data) => (
                     <tr key={data.id}>
                       <td className='whitespace-pre'>{data.sa_name}</td>
                       <td
@@ -68,7 +65,7 @@ export function SalesList() {
               </table>
             </Table>
           </Section>
-        )}
+  
     </>
   );
 }
