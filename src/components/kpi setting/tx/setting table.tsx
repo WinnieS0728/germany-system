@@ -41,7 +41,7 @@ function InputOnlyNumber({ index, value, className }: inputProps) {
   return (
     <input
       type='text'
-      className={cn("", className)}
+      className={cn("text-end max-w-[10rem]", className)}
       onChangeCapture={onlyNumber}
       {...register(`tx.${index}.${value}`, {
         setValueAs: (value: string) => value.replace(/,/gi, ""),

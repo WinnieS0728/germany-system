@@ -2,9 +2,10 @@ import api from "@/api"
 import { cusVisitList_res } from "@/api/sales analyze/custom visit list"
 import { useAppSelector } from "@/data/store"
 import { getMonthArray } from "@/utils/get month_MM array"
-import { useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useId2name } from "../../../hooks/id2name"
+import { useQuery } from "@tanstack/react-query"
+import { queryStatus } from "@/types"
 
 type visitData = {
     id: number
@@ -16,28 +17,32 @@ type visitData = {
     visitList: cusVisitList_res,
 }
 
-export function useAtuVisit() {
-    const { thisYear, thisMonth } = useAppSelector(state => state.time)
-    const [visitData, setVisitData] = useState<visitData[]>([])
-    const {id2name} = useId2name()
+interface atuVisitReturn extends queryStatus {
+    visitData: visitData[],
+    indexArray: number[]
+}
+
+export function useAtuVisit(): atuVisitReturn {
+    const { thisYear } = useAppSelector(state => state.time)
+    const { id2name } = useId2name()
     const search = useSearchParams()[0]
 
     const search_month = search.get('month')
     const search_EmpId = search.get('EmpId')
 
+    const month = getMonthArray(search_month);
 
-    useEffect(() => {
-        const month = getMonthArray(search_month);
-
-        (async function () {
+    const atuVisitQuery = useQuery({
+        queryKey: ['overview', 'atuVisit',{type: "list"}],
+        queryFn: async () => {
             const res = month ? await Promise.all(month.map(async (month) => await api.getAtuVisit({
                 year: thisYear,
                 month: month
             }))) : [await api.getAtuVisit({
                 year: thisYear,
-            })]            
+            })]
 
-            const dataSet = res.reduce((a, b) => a.concat(b), []).filter(data=>data.Empname !== 'Marcus.Rosenzweig')
+            const dataSet = res.reduce((a, b) => a.concat(b), []).filter(data => data.Empname !== 'Marcus.Rosenzweig')
 
             const allData: typeof dataSet = dataSet.map((res) => {
                 const sameCus = dataSet.filter((data) => data.Custid === res.Custid);
@@ -71,15 +76,52 @@ export function useAtuVisit() {
                 }
             }))
 
-            if (search_EmpId) {
-                const EmpName = await id2name(search_EmpId)
-                setVisitData(atuVisit.filter(data=>data.EmpName === EmpName))
-            }else {
-                setVisitData(atuVisit)
-            }
+            return atuVisit
+        }
+    })
 
-        })()
-    }, [id2name, search_EmpId, search_month, thisMonth, thisYear])
+    const { data: EmpName } = useQuery({
+        queryKey: ["overview", 'atuVisit', search_EmpId],
+        enabled: !!search_EmpId,
+        queryFn: () => id2name(search_EmpId as string),
+    })
+
+    if (atuVisitQuery.isPending) {
+        return {
+            status: 'pending',
+            visitData: [],
+            indexArray: []
+        }
+    }
+    if (atuVisitQuery.isError) {
+        return {
+            status: 'error',
+            visitData: [],
+            indexArray: []
+        }
+    }
+
+    const maxLength = atuVisitQuery.data.sort(
+        (a, b) => b.visitList.length - a.visitList.length
+    )[0]?.visitList.length;
+
+    const visitData_fullData = atuVisitQuery.data.map((data) => ({
+        ...data,
+        visitList: addEmptyData(data.visitList, maxLength),
+    })).sort((a, b) => new Date(b.visitList[0].StartDT).getTime() - new Date(a.visitList[0].StartDT).getTime())
+
+    if (EmpName) {
+        return {
+            status: 'success',
+            visitData: visitData_fullData.filter(data => data.EmpName === EmpName),
+            indexArray: getIndexArray(maxLength)
+        }
+    }
+    return {
+        status: 'success',
+        visitData: visitData_fullData,
+        indexArray: getIndexArray(maxLength)
+    }
 
     function addEmptyData(array: cusVisitList_res, maxNumber: number) {
         const newArray = [...array];
@@ -95,22 +137,11 @@ export function useAtuVisit() {
         return newArray;
     }
 
-    const maxLength = visitData.sort(
-        (a, b) => b.visitList.length - a.visitList.length
-    )[0]?.visitList.length;
-
-    const visitData_fullData = useMemo(() => visitData.map((data) => ({
-        ...data,
-        visitList: addEmptyData(data.visitList, maxLength),
-    })).sort((a, b) => new Date(b.visitList[0].StartDT).getTime() - new Date(a.visitList[0].StartDT).getTime()), [maxLength, visitData]);
-
-    const indexArray = useMemo(() => {
+    function getIndexArray(maxNumber: number) {
         const array: number[] = []
-        for (let i = 1; i <= maxLength; i++) {
+        for (let i = 1; i <= maxNumber; i++) {
             array.push(i)
         }
         return array
-    }, [maxLength])
-
-    return { visitData: visitData_fullData, indexArray }
+    }
 }

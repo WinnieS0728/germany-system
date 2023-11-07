@@ -1,6 +1,7 @@
 import { Table } from "@/components/table/table";
 import { Section } from "@/layouts/section";
 import { atuVisitTableData, useAtuVisitTotal } from "./visit total.hook";
+import { Loading } from "@/components/UI/loading";
 
 function TableHeader() {
   return (
@@ -22,7 +23,19 @@ function TableTd({ dataNumber }: { dataNumber: atuVisitTableData }) {
 }
 
 export function VisitTotalTable() {
-  const visitData = useAtuVisitTotal();
+  const { status, atuVisitData } = useAtuVisitTotal();
+
+  if (status === "pending") {
+    return (
+      <Section>
+        <>
+          <Loading.block />
+          <Loading.block height={16 * 10} />
+        </>
+      </Section>
+    );
+  }
+
   return (
     <>
       <Section title='ATU 拜訪統計'>
@@ -44,16 +57,14 @@ export function VisitTotalTable() {
               </tr>
             </thead>
             <tbody>
-              {visitData.map((visitData) => (
-                <>
-                  <tr key={visitData.EmpId}>
-                    <td>{visitData.EmpName}</td>
-                    <TableTd dataNumber={visitData.totalData}/>
-                    <TableTd dataNumber={visitData.hasVisitData}/>
-                    <TableTd dataNumber={visitData.firstVisitData}/>
-                    <TableTd dataNumber={visitData.multiVisitData}/>
-                  </tr>
-                </>
+              {atuVisitData.map((visitData, index) => (
+                <tr key={index}>
+                  <td>{visitData.EmpName}</td>
+                  <TableTd dataNumber={visitData.totalData} />
+                  <TableTd dataNumber={visitData.hasVisitData} />
+                  <TableTd dataNumber={visitData.firstVisitData} />
+                  <TableTd dataNumber={visitData.multiVisitData} />
+                </tr>
               ))}
             </tbody>
           </table>

@@ -1,8 +1,20 @@
 import { Table } from "@/components/table/table";
 import { useAtuVisit } from "@/components/sales analyze/atu visit/atu visit list.hook";
 import { Section } from "@/layouts/section";
+import { Loading } from "@/components/UI/loading";
 export function AtuVisitList() {
-  const { visitData, indexArray } = useAtuVisit()  
+  const { status, visitData, indexArray } = useAtuVisit();
+
+  if (status === "pending") {
+    return (
+      <Section>
+        <>
+          <Loading.block />
+          <Loading.block height={16 * 30} />
+        </>
+      </Section>
+    );
+  }
 
   return (
     <>
@@ -44,8 +56,15 @@ export function AtuVisitList() {
                   <td>{data.visitNumber}</td>
                   <td>{data.visitList[0].StartDT}</td>
                   {data.visitList.map((date, index) => (
-                    <td key={index} className="whitespace-nowrap">
-                      <a href={`https://esys.orange-electronic.com/TravelRep/Edit/${date.BTRId}`} target="_blank" className="text-blue-500">
+                    <td
+                      key={index}
+                      className='whitespace-nowrap'
+                    >
+                      <a
+                        href={`https://esys.orange-electronic.com/TravelRep/Edit/${date.BTRId}`}
+                        target='_blank'
+                        className='text-blue-500'
+                      >
                         {date.StartDT}
                       </a>
                     </td>

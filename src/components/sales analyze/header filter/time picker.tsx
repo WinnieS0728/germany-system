@@ -4,7 +4,6 @@ import { timeFormat } from "d3";
 import { useState, useEffect } from "react";
 import { DateRange, DayPicker } from "react-day-picker";
 import { useFormContext } from "react-hook-form";
-import axios  from 'axios'
 
 interface timePickerProps {
   active: boolean;

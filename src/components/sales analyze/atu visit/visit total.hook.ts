@@ -1,8 +1,10 @@
 import api from "@/api"
 import { atuVisit_res } from "@/api/sales analyze/atu visit"
 import { useAppSelector } from "@/data/store"
+import { queryStatus } from "@/types"
 import { getMonthArray } from "@/utils/get month_MM array"
-import { useCallback, useEffect, useState } from "react"
+import { useQueries } from "@tanstack/react-query"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 
 export type atuVisitTableData = {
@@ -20,8 +22,12 @@ type atuVisitData = {
     multiVisitData: atuVisitTableData
 }
 
+interface atuVisitReturn extends queryStatus {
+    atuVisitData: atuVisitData[]
+}
 
-export function useAtuVisitTotal() {
+
+export function useAtuVisitTotal(): atuVisitReturn {
     const salesList = useAppSelector(state => state.salesList).body
 
     const { thisYear } = useAppSelector(state => state.time)
@@ -29,9 +35,53 @@ export function useAtuVisitTotal() {
     const search_month = search.get('month')
     const search_EmpId = search.get('EmpId')
 
-    const [atuVisitData, setAtuVisitData] = useState<atuVisitData[]>([])
+    const atuVisitQueries = useQueries({
+        queries: salesList.map((sales) => ({
+            queryKey: ["overview", 'atuVisit', { type: 'list' }, sales.EmpId],
+            queryFn: async () => {
+                const thisSalesVisitData = await getSalesVisitData(sales.EmpName)
+                const totalData = await getTableData(thisSalesVisitData)
 
-    const getSalesVisitData = useCallback(async (EmpName: string) => {
+                const hasVisitData = await getTableData(thisSalesVisitData.filter(data => data.vqty !== 0))
+
+                const firstVisitData = await getTableData(thisSalesVisitData.filter(data => data.vqty === 1))
+
+                const multiVisitData = await getTableData(thisSalesVisitData.filter(data => data.vqty > 1))
+
+                return {
+                    EmpId: sales.EmpId,
+                    EmpName: sales.EmpName,
+                    totalData,
+                    hasVisitData,
+                    firstVisitData,
+                    multiVisitData
+                }
+            }
+        }))
+    })
+
+
+    if (atuVisitQueries.some(query => query.isPending)) {
+        return {
+            status: 'pending',
+            atuVisitData: []
+        }
+    }
+    if (atuVisitQueries.some(query => query.isError)) {
+        return {
+            status: 'error',
+            atuVisitData: []
+        }
+    }
+    return {
+        status: 'success',
+        atuVisitData: atuVisitQueries.map(query => query.data as atuVisitData)
+    }
+
+
+
+
+    async function getSalesVisitData(EmpName: string) {
         const month = getMonthArray(search_month)
         if (!month) {
             const res = await api.getAtuVisit({
@@ -54,9 +104,9 @@ export function useAtuVisitTotal() {
             return dataSet.filter(data => data.Empname === EmpName)
         }
 
-    }, [search_month, thisYear])
+    }
 
-    const getTableData = useCallback(async (visitData: atuVisit_res) => {
+    async function getTableData(visitData: atuVisit_res) {
         const storeNumber = visitData.length
         const payNumber = visitData.filter(data => data.Sqty !== 0).length
         const txNumber = visitData.map(data => data.Sqty).reduce((a, b) => a + b, 0)
@@ -66,37 +116,36 @@ export function useAtuVisitTotal() {
             payNumber,
             txNumber
         }
-    }, [])
+    }
 
-    useEffect(() => {
-        (async function () {
-            const salesVisitData = await Promise.all(salesList.map(async (sales) => {
-                const thisSalesVisitData = await getSalesVisitData(sales.EmpName)
-                const totalData = await getTableData(thisSalesVisitData)
+    // useEffect(() => {
+    //     (async function () {
+    //         const salesVisitData = await Promise.all(salesList.map(async (sales) => {
+    //             const thisSalesVisitData = await getSalesVisitData(sales.EmpName)
+    //             const totalData = await getTableData(thisSalesVisitData)
 
-                const hasVisitData = await getTableData(thisSalesVisitData.filter(data => data.vqty !== 0))
+    //             const hasVisitData = await getTableData(thisSalesVisitData.filter(data => data.vqty !== 0))
 
-                const firstVisitData = await getTableData(thisSalesVisitData.filter(data => data.vqty === 1))
+    //             const firstVisitData = await getTableData(thisSalesVisitData.filter(data => data.vqty === 1))
 
-                const multiVisitData = await getTableData(thisSalesVisitData.filter(data => data.vqty > 1))
+    //             const multiVisitData = await getTableData(thisSalesVisitData.filter(data => data.vqty > 1))
 
-                return {
-                    EmpId: sales.EmpId,
-                    EmpName: sales.EmpName,
-                    totalData,
-                    hasVisitData,
-                    firstVisitData,
-                    multiVisitData
-                }
-            }))
+    //             return {
+    //                 EmpId: sales.EmpId,
+    //                 EmpName: sales.EmpName,
+    //                 totalData,
+    //                 hasVisitData,
+    //                 firstVisitData,
+    //                 multiVisitData
+    //             }
+    //         }))
 
-            if (search_EmpId) {
-                setAtuVisitData(salesVisitData.filter(data=>data.EmpId === search_EmpId))
-            }else {
-                setAtuVisitData(salesVisitData)
-            }
-        })()
-    }, [getSalesVisitData, getTableData, salesList, search_EmpId])
+    //         if (search_EmpId) {
+    //             setAtuVisitData(salesVisitData.filter(data => data.EmpId === search_EmpId))
+    //         } else {
+    //             setAtuVisitData(salesVisitData)
+    //         }
+    //     })()
+    // }, [getSalesVisitData, getTableData, salesList, search_EmpId])
 
-    return atuVisitData
 }

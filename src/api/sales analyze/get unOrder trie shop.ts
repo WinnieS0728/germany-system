@@ -24,12 +24,13 @@ const unOrderTS_res_schema = z.array(z.object({
 export type unOrderTS_res = z.infer<typeof unOrderTS_res_schema>
 
 export function getUnOrderTireShop(apiPath: string) {
+
     return async function ({
         startDate, endDate
     }: unVisitTS_req) {
         const res = await axios<unOrderTS_res>({
             // TODO apiPath
-            url: `https://orangeapi.orange-electronic.com/api/GetSalesVisitDe`,
+            url: `${apiPath}/GetSalesVisitDe`,
             method: "POST",
             data: {
                 "Startdt": startDate,

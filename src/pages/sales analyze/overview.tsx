@@ -8,8 +8,8 @@ export default function SalesAnalyze_overviewPage() {
     <>
       <Main>
         <>
-          {/* <OverviewHeader /> */}
-          {/* <SalesRank /> */}
+          <OverviewHeader />
+          <SalesRank />
           <SalesList />
         </>
       </Main>

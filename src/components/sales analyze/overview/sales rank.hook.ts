@@ -1,4 +1,5 @@
 import api from "@/api";
+import { queryStatus } from "@/types";
 import { getMonthArray } from "@/utils/get month_MM array";
 import { useAppSelector } from "@data/store";
 import { useQueries } from "@tanstack/react-query";
@@ -16,8 +17,7 @@ type salesRankType = {
     other_order_rate: number,
 }
 
-interface returnType {
-    status: 'pending' | 'error' | 'success',
+interface returnType extends queryStatus {
     salesRankData: salesRankType[]
 }
 
@@ -47,7 +47,7 @@ export function useSalesRank(): returnType {
         }]
     })
 
-    if (salesRankQueries.some(query => query.isLoading)) {
+    if (salesRankQueries.some(query => query.isPending)) {
         return { status: 'pending', salesRankData: [] }
     } else if (salesRankQueries.some(query => query.isError)) {
         return { status: 'error', salesRankData: [] }

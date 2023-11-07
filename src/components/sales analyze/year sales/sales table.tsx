@@ -5,9 +5,21 @@ import { Section } from "@/layouts/section";
 import { cn } from "@/utils/cn";
 import { getLocaleString } from "@/utils/get localeString";
 import { Fragment } from "react";
+import { Loading } from "@/components/UI/loading";
 
 export function YearSalesTable() {
-  const yearSalesData = useYearSales();
+  const { status, yearSalesData } = useYearSales();
+
+  if (status === "pending") {
+    return (
+      <Section>
+        <>
+          <Loading.block height={16 * 5} />
+          <Loading.block height={16 * 20} />
+        </>
+      </Section>
+    );
+  }
 
   return (
     <>
@@ -63,9 +75,12 @@ export function YearSalesTable() {
                   <tr>
                     <td className='whitespace-nowrap'>銷售達成率</td>
                     {data.salesRate.map((number, index) => (
-                      <td key={index} className={cn('',{
-                        'text-green-600': number > 100
-                      })}>{`${getLocaleString(number)}%`}</td>
+                      <td
+                        key={index}
+                        className={cn("", {
+                          "text-green-600": number > 100,
+                        })}
+                      >{`${getLocaleString(number)}%`}</td>
                     ))}
                   </tr>
                 </Fragment>

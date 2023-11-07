@@ -29,7 +29,7 @@ export function getUnVisitTireShop(apiPath: string) {
     }: unVisitTS_req) {
         // TODO apiPath
         const res = await axios<unVisitTS_res>({
-            url: `https://orangeapi.orange-electronic.com/api/GetSalesVisitDe`,
+            url: `${apiPath}/GetSalesVisitDe`,
             method: "POST",
             data: {
                 "Startdt": startDate,

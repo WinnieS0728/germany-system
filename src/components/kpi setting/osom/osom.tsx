@@ -36,7 +36,7 @@ function InputOnlyNumber({ name, className }: inputProps) {
   return (
     <input
       type='text'
-      className={cn("", className)}
+      className={cn("text-center", className)}
       onChangeCapture={onlyNumber}
       {...register(name, {
         setValueAs: (value: string) => value.replace(/,/gi, ""),

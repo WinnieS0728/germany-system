@@ -52,3 +52,7 @@ export const moneyType = ["TWD", "RMB", "EUR", "USD"] as const;
 export type sc_props = {
   className?: string;
 };
+
+export interface queryStatus {
+  status: 'idle' | 'pending' | 'error' | 'success'
+}

@@ -1,6 +1,5 @@
 import { month_shortName } from "@/types";
 import { FieldArrayWithId, UseFormRegister } from "react-hook-form";
-import { useTheme } from "styled-components";
 import { thresholdList_emp, threshold_data } from "./data";
 
 interface propsType {
@@ -23,8 +22,6 @@ export const TrList = ({
   setSelected,
   setSelectNumber,
 }: propsType) => {
-  const color = useTheme()?.color;
-
   function inputFormat(e: React.ChangeEvent<HTMLInputElement>) {
     const e_value = e.target.value;
     const value = e_value.replace(/[^\d]/g, "");
@@ -38,13 +35,6 @@ export const TrList = ({
 
     setSelectNumber(parseInt(e.target.value) | 0);
   }
-
-  const inputCss = {
-    width: "3em",
-    borderStyle: "solid",
-    backgroundColor: color?.white,
-    color: color?.black,
-  };
 
   function handleBlur(e: React.BaseSyntheticEvent) {
     if (e.target.value === "") {
@@ -74,7 +64,7 @@ export const TrList = ({
               })}
               placeholder='...'
               autoComplete='off'
-              style={inputCss}
+              className="w-12 text-end"
               onChangeCapture={inputFormat}
               onFocusCapture={(e) => {
                 e.target.value = "";
@@ -102,14 +92,15 @@ export const TrList = ({
               })}
               placeholder='...'
               autoComplete='off'
-              style={inputCss}
-              onChangeCapture={inputFormat}
-              onFocusCapture={(e) => {
-                e.target.value = "";
-                setSelected(e.target.name);
-              }}
+              className="w-12 noBorder text-end"
+              // onChangeCapture={inputFormat}
+              // onFocusCapture={(e) => {
+              //   e.target.value = "";
+              //   setSelected(e.target.name);
+              // }}
               onBlurCapture={handleBlur}
               tabIndex={-1}
+              readOnly
             />
             <span style={{ marginLeft: ".2em" }}>%</span>
           </td>

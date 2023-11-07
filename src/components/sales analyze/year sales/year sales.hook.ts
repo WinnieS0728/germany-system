@@ -1,8 +1,9 @@
 import api from "@/api";
 import { Month_MM } from "@/const";
 import { useAppSelector } from "@/data/store";
+import { queryStatus } from "@/types";
 import { getPercent } from "@/utils/get percent";
-import { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
 type data = {
@@ -15,40 +16,22 @@ type data = {
     total: number
 }
 
+interface yearSalesReturn extends queryStatus {
+    yearSalesData: data[]
+}
 
-export function useYearSales() {
+
+export function useYearSales(): yearSalesReturn {
     const salesList = useAppSelector(state => state.salesList).body
     const { thisYear } = useAppSelector(state => state.time)
-    const [search] = useSearchParams()
-    const year = search.get('year')
-    const EmpId = search.get("EmpId")
+    const search = useSearchParams()[0]
+    const search_year = search.get('year')
+    const search_EmpId = search.get("EmpId")
 
-    const [data, setData] = useState<data[]>([])
-
-    const getTxNumber = useCallback(async (EmpId: string, month: string) => {
-        const res = await api.getSalesQty({
-            EmpId,
-            year: year || thisYear,
-            month
-        })
-
-        return res?.sqty || 0
-    }, [thisYear, year])
-
-    const getTxThreshold = useCallback(async (EmpId: string) => {
-        const res = await api.tx.fetch(year || thisYear, EmpId)
-
-        return [
-            Number(res[0]?.Jan) || 0,
-            Number(res[0]?.Feb) || 0,
-            Number(res[0]?.Mar) || 0,
-            Number(res[0]?.Apr) || 0
-        ]
-    }, [thisYear, year])
-
-    useEffect(() => {
-        (async function () {
-            const data = await Promise.all(salesList.map(async (member) => {
+    const { data, isPending, isError } = useQuery({
+        queryKey: ['overview', 'yearSales'],
+        queryFn: () => {
+            const data = Promise.all(salesList.map(async (member) => {
                 const txNumber = await Promise.all(Month_MM.map(async (month) => {
                     return await getTxNumber(member.EmpId, month)
                 }))
@@ -79,14 +62,53 @@ export function useYearSales() {
                     total
                 }
             }))
+            return data
+        }
+    })
 
-            setData(data)
-        })()
-    }, [getTxNumber, getTxThreshold, salesList])
-
-    if (EmpId) {
-        return data.filter(data => data.id === EmpId)
+    if (isPending) {
+        return {
+            status: 'pending',
+            yearSalesData: []
+        }
+    } else if (isError) {
+        return {
+            status: 'error',
+            yearSalesData: []
+        }
     }
 
-    return data
+    if (search_EmpId) {
+        return {
+            status: 'success',
+            yearSalesData: data.filter(data => data.id === search_EmpId)
+        }
+    }
+    return {
+        status: 'success',
+        yearSalesData: data
+    }
+
+    async function getTxNumber(EmpId: string, month: string) {
+        const res = await api.getSalesQty({
+            EmpId,
+            year: search_year || thisYear,
+            month
+        })
+
+        return res?.sqty || 0
+    }
+
+    async function getTxThreshold(EmpId: string) {
+        const res = await api.tx.fetch(search_year || thisYear, EmpId)
+
+        return [
+            Number(res[0]?.Jan) || 0,
+            Number(res[0]?.Feb) || 0,
+            Number(res[0]?.Mar) || 0,
+            Number(res[0]?.Apr) || 0
+        ]
+    }
+
+
 }
