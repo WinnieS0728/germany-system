@@ -2,8 +2,9 @@ import { Table } from "@/components/table/table";
 import { useAtuVisit } from "@/components/sales analyze/atu visit/atu visit list.hook";
 import { Section } from "@/layouts/section";
 import { Loading } from "@/components/UI/loading";
+import { Error } from "@/components/UI/error";
 export function AtuVisitList() {
-  const { status, visitData, indexArray } = useAtuVisit();
+  const { status, visitData, indexArray, message } = useAtuVisit();
 
   if (status === "pending") {
     return (
@@ -14,6 +15,12 @@ export function AtuVisitList() {
         </>
       </Section>
     );
+  }
+
+  if (status === 'error') {
+    return <Section>
+      <Error.block message={message} className="h-96" />
+    </Section>
   }
 
   return (

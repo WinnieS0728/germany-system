@@ -54,5 +54,6 @@ export type sc_props = {
 };
 
 export interface queryStatus {
-  status: 'idle' | 'pending' | 'error' | 'success'
+  status: "idle" | "pending" | "error" | "success";
+  message?: string;
 }

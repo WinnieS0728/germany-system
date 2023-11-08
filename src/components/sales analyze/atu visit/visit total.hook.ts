@@ -4,7 +4,6 @@ import { useAppSelector } from "@/data/store"
 import { queryStatus } from "@/types"
 import { getMonthArray } from "@/utils/get month_MM array"
 import { useQueries } from "@tanstack/react-query"
-import { useCallback, useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 
 export type atuVisitTableData = {
@@ -58,7 +57,7 @@ export function useAtuVisitTotal(): atuVisitReturn {
                 }
             }
         }))
-    })
+    })    
 
 
     if (atuVisitQueries.some(query => query.isPending)) {
@@ -70,9 +69,18 @@ export function useAtuVisitTotal(): atuVisitReturn {
     if (atuVisitQueries.some(query => query.isError)) {
         return {
             status: 'error',
-            atuVisitData: []
+            message: atuVisitQueries[0].error?.message,
+            atuVisitData: [],
         }
     }
+
+    if (search_EmpId) {
+        return {
+            status: 'success',
+            atuVisitData: atuVisitQueries.map(query => query.data as atuVisitData).filter(data => data.EmpId === search_EmpId)
+        }
+    }
+
     return {
         status: 'success',
         atuVisitData: atuVisitQueries.map(query => query.data as atuVisitData)

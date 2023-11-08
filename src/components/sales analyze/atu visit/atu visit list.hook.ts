@@ -57,7 +57,7 @@ export function useAtuVisit(): atuVisitReturn {
                     Sqty: payNumber_sum,
                     vqty: visitNumber_sum,
                 };
-            });
+            }).filter(data => data.vqty !== 0);
             const onlyId = [...new Set(allData.map((data) => data.Custid))];
 
             const array = onlyId.map((id) => allData.find((data) => data.Custid === id)) as typeof dataSet
@@ -96,6 +96,7 @@ export function useAtuVisit(): atuVisitReturn {
     if (atuVisitQuery.isError) {
         return {
             status: 'error',
+            message: atuVisitQuery.error.message,
             visitData: [],
             indexArray: []
         }

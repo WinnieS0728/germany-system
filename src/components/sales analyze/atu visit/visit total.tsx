@@ -2,6 +2,7 @@ import { Table } from "@/components/table/table";
 import { Section } from "@/layouts/section";
 import { atuVisitTableData, useAtuVisitTotal } from "./visit total.hook";
 import { Loading } from "@/components/UI/loading";
+import { Error } from "@/components/UI/error";
 
 function TableHeader() {
   return (
@@ -23,7 +24,13 @@ function TableTd({ dataNumber }: { dataNumber: atuVisitTableData }) {
 }
 
 export function VisitTotalTable() {
-  const { status, atuVisitData } = useAtuVisitTotal();
+  const { status, atuVisitData, message } = useAtuVisitTotal();
+
+  if (status === "error") {
+    return <Section>
+      <Error.block className="h-48" message={message} />
+    </Section>;
+  }
 
   if (status === "pending") {
     return (
