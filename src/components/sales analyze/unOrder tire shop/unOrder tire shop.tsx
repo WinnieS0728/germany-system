@@ -1,9 +1,30 @@
 import { Table } from "@/components/table/table";
 import { Section } from "@/layouts/section";
 import { useUnOrderTireShop } from "./unOrder tire shop.hook";
+import { Loading } from "@/components/UI/loading";
+import { Error } from "@/components/UI/error";
 
 export function UnOrderTireShopTable() {
-  const unVisitData = useUnOrderTireShop();
+  const { status, unOrderList, message } = useUnOrderTireShop();
+
+  if (status === "pending") {
+    return (
+      <Section>
+        <>
+          <Loading.block />
+          <Loading.block height={16 * 30} />
+        </>
+      </Section>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <Section>
+        <Error.block message={message} />
+      </Section>
+    );
+  }
 
   return (
     <>
@@ -21,7 +42,7 @@ export function UnOrderTireShopTable() {
               </tr>
             </thead>
             <tbody>
-              {unVisitData.map((data) => (
+              {unOrderList.map((data) => (
                 <tr key={data.custid}>
                   <td>{data.Empname}</td>
                   <td>{data.Custname}</td>
@@ -31,11 +52,18 @@ export function UnOrderTireShopTable() {
                       target='_blank'
                       rel='noopener noreferrer'
                     >
-                      <address>{data.Address}</address>
+                      <address className='text-blue-500'>
+                        {data.Address}
+                      </address>
                     </a>
                   </td>
                   <td className='whitespace-nowrap'>
-                    <a href={`tel:${data.Phone}`}>{data.Phone}</a>
+                    <a
+                      href={`tel:${data.Phone}`}
+                      className='text-blue-500'
+                    >
+                      {data.Phone}
+                    </a>
                   </td>
                   <td>{data.Sqty}</td>
                   <td>{data.LastDate}</td>

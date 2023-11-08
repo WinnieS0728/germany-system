@@ -1,10 +1,31 @@
 import { Table } from "@/components/table/table";
 import { Section } from "@/layouts/section";
 import { useUnVisitTireShop } from "./unvisit tire shop.hook";
+import { Loading } from "@/components/UI/loading";
+import { Error } from "@/components/UI/error";
 
 export function UnVisitTireShopTable() {
-  const unVisitData = useUnVisitTireShop();
-  
+  const { status, unVisitData, message } = useUnVisitTireShop();
+
+  if (status === "pending") {
+    return (
+      <Section>
+        <>
+          <Loading.block />
+          <Loading.block height={16 * 30} />
+        </>
+      </Section>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <Section>
+        <Error.block message={message} />
+      </Section>
+    );
+  }
+
   return (
     <>
       <Section>
@@ -31,11 +52,18 @@ export function UnVisitTireShopTable() {
                       target='_blank'
                       rel='noopener noreferrer'
                     >
-                      <address>{data.Address}</address>
+                      <address className='text-blue-500'>
+                        {data.Address}
+                      </address>
                     </a>
                   </td>
-                  <td className="whitespace-nowrap">
-                    <a href={`tel:${data.Phone}`}>{data.Phone}</a>
+                  <td className='whitespace-nowrap'>
+                    <a
+                      href={`tel:${data.Phone}`}
+                      className='text-blue-500'
+                    >
+                      {data.Phone}
+                    </a>
                   </td>
                   <td>{data.Vqty}</td>
                   <td>{data.LastDate}</td>

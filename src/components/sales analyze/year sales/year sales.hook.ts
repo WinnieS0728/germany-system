@@ -29,7 +29,7 @@ export function useYearSales(): yearSalesReturn {
     const search_EmpId = search.get("EmpId")
 
     const { data, isPending, isError } = useQuery({
-        queryKey: ['overview', 'yearSales'],
+        queryKey: ['overview', 'yearSales', search_year],
         queryFn: () => {
             const data = Promise.all(salesList.map(async (member) => {
                 const txNumber = await Promise.all(Month_MM.map(async (month) => {
@@ -71,7 +71,8 @@ export function useYearSales(): yearSalesReturn {
             status: 'pending',
             yearSalesData: []
         }
-    } else if (isError) {
+    }
+    if (isError) {
         return {
             status: 'error',
             yearSalesData: []

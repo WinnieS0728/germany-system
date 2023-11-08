@@ -2,17 +2,22 @@ import api from "@/api";
 import { unOrderTS_res } from "@/api/sales analyze/get unOrder trie shop";
 import { useAppSelector } from "@/data/store";
 import { useId2name } from "@/hooks/id2name";
+import { queryStatus } from "@/types";
 import { dateFormatter } from "@/utils/dateFormatter";
-import { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 
-export function useUnOrderTireShop() {
+interface unOrderTSListReturn extends queryStatus {
+  unOrderList: unOrderTS_res;
+}
+
+export function useUnOrderTireShop(): unOrderTSListReturn {
   const { thisYear } = useAppSelector((state) => state.time);
   const { id2name } = useId2name();
   const search = useSearchParams()[0];
   const search_month = search.get("month");
   const search_EmpId = search.get("EmpId");
-  const [unOrderList, setUnOrderList] = useState<unOrderTS_res>([]);
 
   const getRequestDate = useCallback(() => {
     if (search_month) {
@@ -42,28 +47,47 @@ export function useUnOrderTireShop() {
     };
   }, [search_month, thisYear]);
 
-  useEffect(() => {
-    (async function () {
-      const res = (
-        await api.getUnOrderTireShop({
-          startDate: getRequestDate().startDate,
-          endDate: getRequestDate().endDate,
-        })
-      )
-        .filter((data) => data.Empname !== "Marcus.Rosenzweig")
-        .map((data) => ({
-          ...data,
-          LastDate: dateFormatter(data.LastDate),
-        }));
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ["unOrderTS"],
+    queryFn: () => getUnOrderTS(),
+  });
 
-      if (search_EmpId) {
-        const EmpName = await id2name(search_EmpId);
-        setUnOrderList(res.filter((data) => data.Empname === EmpName));
-      } else {
-        setUnOrderList(res);
-      }
-    })();
-  }, [getRequestDate, id2name, search_EmpId]);
+  if (isPending) {
+    return {
+      status: "pending",
+      unOrderList: [],
+    };
+  }
+  if (isError) {
+    return {
+      status: "error",
+      unOrderList: [],
+      message: error.message,
+    };
+  }
+  return {
+    status: "success",
+    unOrderList: data,
+  };
 
-  return unOrderList;
+  async function getUnOrderTS() {
+    const res = (
+      await api.getUnOrderTireShop({
+        startDate: getRequestDate().startDate,
+        endDate: getRequestDate().endDate,
+      })
+    )
+      .filter((data) => data.Empname !== "Marcus.Rosenzweig")
+      .map((data) => ({
+        ...data,
+        LastDate: dateFormatter(data.LastDate),
+      }));
+
+    if (search_EmpId) {
+      const EmpName = await id2name(search_EmpId);
+      return res.filter((data) => data.Empname === EmpName);
+    } else {
+      return res;
+    }
+  }
 }

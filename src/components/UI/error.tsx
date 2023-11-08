@@ -8,7 +8,7 @@ interface circleErrorProps {
   className?: string;
 }
 
-function BlockError({ className, message }: blockErrorProps) {
+function BlockError({ className, message = '壞東西' }: blockErrorProps) {
   return (
     <div
       className={cn(
