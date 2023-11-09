@@ -4,7 +4,6 @@ import { Route, Routes } from "react-router-dom";
 import { SalesAnalyzeNav } from "./nav";
 import { MySuspense } from "@/layouts/suspense";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
 const SalesAnalyze_overviewPage = lazy(() => import("./overview"));
 const YearSalesPage = lazy(() => import("./year sales"));
 const tireShopVisitPage = lazy(() => import("./tire shop visit"));

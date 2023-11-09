@@ -125,35 +125,4 @@ export function useAtuVisitTotal(): atuVisitReturn {
             txNumber
         }
     }
-
-    // useEffect(() => {
-    //     (async function () {
-    //         const salesVisitData = await Promise.all(salesList.map(async (sales) => {
-    //             const thisSalesVisitData = await getSalesVisitData(sales.EmpName)
-    //             const totalData = await getTableData(thisSalesVisitData)
-
-    //             const hasVisitData = await getTableData(thisSalesVisitData.filter(data => data.vqty !== 0))
-
-    //             const firstVisitData = await getTableData(thisSalesVisitData.filter(data => data.vqty === 1))
-
-    //             const multiVisitData = await getTableData(thisSalesVisitData.filter(data => data.vqty > 1))
-
-    //             return {
-    //                 EmpId: sales.EmpId,
-    //                 EmpName: sales.EmpName,
-    //                 totalData,
-    //                 hasVisitData,
-    //                 firstVisitData,
-    //                 multiVisitData
-    //             }
-    //         }))
-
-    //         if (search_EmpId) {
-    //             setAtuVisitData(salesVisitData.filter(data => data.EmpId === search_EmpId))
-    //         } else {
-    //             setAtuVisitData(salesVisitData)
-    //         }
-    //     })()
-    // }, [getSalesVisitData, getTableData, salesList, search_EmpId])
-
 }
