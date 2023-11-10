@@ -1,9 +1,10 @@
 import api from "@/api";
 import { tireShopVisit } from "@/api/sales analyze/tire shop visit";
 import { useAppSelector } from "@/data/store";
+import { useId2name } from "@/hooks/id2name";
 import { queryStatus } from "@/types";
 import { getMonthArray } from "@/utils/get month_MM array";
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
 type dataSet = {
@@ -14,7 +15,7 @@ type dataSet = {
 }
 
 interface tireShopVisitReturn extends queryStatus {
-    tsVisitData: dataSet
+    tsVisitData: dataSet[]
 }
 
 export function useTSVisit(): tireShopVisitReturn {
@@ -22,8 +23,16 @@ export function useTSVisit(): tireShopVisitReturn {
     const { thisYear } = useAppSelector(state => state.time)
     const search = useSearchParams()[0]
 
+    const { id2name } = useId2name()
+
     const search_month = search.get('month')
     const search_EmpId = search.get('EmpId')
+
+    const EmpQuery = useQuery({
+        queryKey: ['id2name', search_EmpId],
+        enabled: !search_EmpId,
+        queryFn: () => id2name(search_EmpId as string),
+    })
 
     const monthList = getMonthArray(search_month)
 
@@ -36,8 +45,8 @@ export function useTSVisit(): tireShopVisitReturn {
                 const dataSet = {
                     EmpName: visitData[0].Empname,
                     allData: getTableValue(visitData),
-                    firstVisit: getTableValue(visitData.filter(data => data.vqty === 1)),
-                    multiVisit: getTableValue(visitData.filter(data => data.vqty > 1)),
+                    firstVisit: getTableValue(visitData.filter(data => !data.ErpNo)),
+                    multiVisit: getTableValue(visitData.filter(data => data.ErpNo)),
                 }
 
                 return dataSet
@@ -45,19 +54,39 @@ export function useTSVisit(): tireShopVisitReturn {
         }))
     })
 
-    if (tireShopQueries.some(query => query.isPending)) {
+    if (tireShopQueries.some(query => query.isPending) || EmpQuery.isPending) {
         return {
             status: 'pending',
             tsVisitData: []
         }
     }
+    if (tireShopQueries.some(query => query.isError) || EmpQuery.isError) {
+        return {
+            status: 'error',
+            tsVisitData: [],
+            message: tireShopQueries.find(query => query.isError)?.error?.message
+        }
+    }
+
+    if (EmpQuery.data) {
+        return {
+            status: 'success',
+            tsVisitData: tireShopQueries.map(query => query.data as dataSet).filter(data => data.EmpName === EmpQuery.data),
+        }
+    }
+
+    return {
+        status: 'success',
+        tsVisitData: tireShopQueries.map(query => query.data as dataSet),
+    }
+
 
     function getTableValue(dataArray: tireShopVisit): number[] {
         const storeNumber = dataArray.length
-        const orderNumber = dataArray.map(data => data.SumQty).reduce((a, b) => a + b, 0)
+        const txNumber = dataArray.map(data => data.SumQty).reduce((a, b) => a + b, 0)
         const visitNumber = dataArray.map(data => data.vqty).reduce((a, b) => a + b, 0)
 
-        return [storeNumber, orderNumber, visitNumber]
+        return [storeNumber, visitNumber, txNumber]
     }
 
 
