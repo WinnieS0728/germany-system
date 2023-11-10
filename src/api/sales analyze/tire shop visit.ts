@@ -18,7 +18,8 @@ const tireShopVisit_schema = z.array(z.object({
     "State": z.string(),
     "SumQty": z.coerce.number(),
     "Empname": z.string(),
-    "vqty": z.coerce.number()
+    "vqty": z.coerce.number(),
+    "Oqty": z.coerce.number()
 }))
 
 export type tireShopVisit = z.infer<typeof tireShopVisit_schema>

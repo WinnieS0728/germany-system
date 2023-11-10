@@ -45,8 +45,8 @@ export function useTSVisit(): tireShopVisitReturn {
                 const dataSet = {
                     EmpName: visitData[0].Empname,
                     allData: getTableValue(visitData),
-                    firstVisit: getTableValue(visitData.filter(data => !data.ErpNo)),
-                    multiVisit: getTableValue(visitData.filter(data => data.ErpNo)),
+                    firstVisit: getTableValue(visitData.filter(data => data.Oqty <= 1)),
+                    multiVisit: getTableValue(visitData.filter(data => data.Oqty > 1)),
                 }
 
                 return dataSet
