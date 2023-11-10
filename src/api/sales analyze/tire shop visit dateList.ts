@@ -1,9 +1,9 @@
 import axios from "axios"
 import { z } from "zod"
 
-const tireShopVisitList_schema = z.array(z.object({
-    cusid: z.string()
-}).catchall(z.record(z.string(), z.string())))
+const tireShopVisitList_schema = z.array(z.intersection(z.object({
+    custid: z.string()
+}),(z.record(z.string(), z.string()))))
 
 type tireShopVisitList = z.infer<typeof tireShopVisitList_schema>
 
@@ -12,7 +12,7 @@ export function getTireShopVisitList() {
         const res = await axios<tireShopVisitList>({
             url: 'https://orangeosomapi.orange-electronic.com/api/VisitRecord',
             method: "POST",
-            data: { "cusid": cusId }
+            data: { "custid": cusId }
         })
 
         const validData = tireShopVisitList_schema.safeParse(res.data)
