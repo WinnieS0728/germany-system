@@ -12,6 +12,7 @@ dist-ssr
 dist
 *.local
 zip
+Icon
 
 # Editor directories and files
 !.vscode/extensions.json
