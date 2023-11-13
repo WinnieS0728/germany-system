@@ -32,8 +32,8 @@ export function useAtuVisit(): atuVisitReturn {
 
     const month = getMonthArray(search_month);
 
-    const atuVisitQuery = useQuery({
-        queryKey: ['overview', 'atuVisit',{type: "list"}],
+    const { data, isPending, isError, error } = useQuery({
+        queryKey: ['atuVisit', { type: "list" }, search_month, search_EmpId],
         queryFn: async () => {
             const res = month ? await Promise.all(month.map(async (month) => await api.getAtuVisit({
                 year: thisYear,
@@ -63,7 +63,14 @@ export function useAtuVisit(): atuVisitReturn {
             const array = onlyId.map((id) => allData.find((data) => data.Custid === id)) as typeof dataSet
 
             const atuVisit: visitData[] = await Promise.all(array.map(async (data, index) => {
-                const visitList = (await api.getCusVisitList(data.Custid)).sort((a, b) => new Date(b.StartDT).getTime() - new Date(a.StartDT).getTime())
+                const visitList = (await api.getCusVisitList(data.Custid)).sort((a, b) => new Date(b.StartDT).getTime() - new Date(a.StartDT).getTime()).filter(date => {
+                    const dataYear = date.StartDT.split('-')[0]
+                    const dataMonth = date.StartDT.split('-')[1]
+                    if (month) {
+                        return dataYear === thisYear && month.some(month => dataMonth === month)
+                    }
+                    return dataYear === thisYear
+                })
 
                 return {
                     id: index + 1,
@@ -76,52 +83,47 @@ export function useAtuVisit(): atuVisitReturn {
                 }
             }))
 
-            return atuVisit
+            const maxLength = atuVisit.sort((a, b) => b.visitList.length - a.visitList.length)[0].visitList.length
+
+            const atuVisit_withEmptyData = atuVisit.map(data => ({
+                ...data,
+                visitList: addEmptyData(data.visitList, maxLength)
+            }))
+
+            const indexArray = getIndexArray(maxLength)
+
+            if (search_EmpId) {
+                const EmpName = await id2name(search_EmpId)
+                return {
+                    atuVisit: atuVisit_withEmptyData.filter(data => data.EmpName === EmpName),
+                    indexArray
+                }
+            }
+
+            return { atuVisit: atuVisit_withEmptyData, indexArray }
         }
     })
 
-    const { data: EmpName } = useQuery({
-        queryKey: ["overview", 'atuVisit', search_EmpId],
-        enabled: !!search_EmpId,
-        queryFn: () => id2name(search_EmpId as string),
-    })
-
-    if (atuVisitQuery.isPending) {
+    if (isPending) {
         return {
             status: 'pending',
             visitData: [],
             indexArray: []
         }
     }
-    if (atuVisitQuery.isError) {
+    if (isError) {
         return {
             status: 'error',
-            message: atuVisitQuery.error.message,
+            message: error.message,
             visitData: [],
             indexArray: []
         }
     }
 
-    const maxLength = atuVisitQuery.data.sort(
-        (a, b) => b.visitList.length - a.visitList.length
-    )[0]?.visitList.length;
-
-    const visitData_fullData = atuVisitQuery.data.map((data) => ({
-        ...data,
-        visitList: addEmptyData(data.visitList, maxLength),
-    })).sort((a, b) => new Date(b.visitList[0].StartDT).getTime() - new Date(a.visitList[0].StartDT).getTime())
-
-    if (EmpName) {
-        return {
-            status: 'success',
-            visitData: visitData_fullData.filter(data => data.EmpName === EmpName),
-            indexArray: getIndexArray(maxLength)
-        }
-    }
     return {
         status: 'success',
-        visitData: visitData_fullData,
-        indexArray: getIndexArray(maxLength)
+        visitData: data.atuVisit,
+        indexArray: data.indexArray
     }
 
     function addEmptyData(array: cusVisitList_res, maxNumber: number) {

@@ -46,7 +46,7 @@ export function useAtuPaymentList(): atuPaymentReturn {
 
 
             if (search_EmpId) {
-                const EmpName = id2name(search_EmpId)
+                const EmpName = await id2name(search_EmpId)
                 return dataSet.filter(data => data.EmpName === EmpName)
             }
 

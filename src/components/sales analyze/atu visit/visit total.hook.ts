@@ -36,7 +36,7 @@ export function useAtuVisitTotal(): atuVisitReturn {
 
     const atuVisitQueries = useQueries({
         queries: salesList.map((sales) => ({
-            queryKey: ["overview", 'atuVisit', { type: 'list' }, sales.EmpId],
+            queryKey: ['atuVisit', { type: 'all' }, sales.EmpId, search_month, search_EmpId],
             queryFn: async () => {
                 const thisSalesVisitData = await getSalesVisitData(sales.EmpName)
                 const totalData = await getTableData(thisSalesVisitData)
@@ -57,7 +57,7 @@ export function useAtuVisitTotal(): atuVisitReturn {
                 }
             }
         }))
-    })    
+    })
 
 
     if (atuVisitQueries.some(query => query.isPending)) {

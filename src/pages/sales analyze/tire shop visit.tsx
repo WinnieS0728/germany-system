@@ -9,7 +9,7 @@ export default function TireShopVisitPage() {
       <Main>
         <>
           <OverviewHeader />
-          {/* <TireShopVisitTotal /> */}
+          <TireShopVisitTotal />
           <TireShopVisitList />
         </>
       </Main>

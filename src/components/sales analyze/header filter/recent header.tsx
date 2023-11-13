@@ -22,7 +22,7 @@ interface props {
 export function RecentHeader({ as }: props) {
   const salesList = useAppSelector((state) => state.salesList).body;
   const [type, setType] = useState<filterZoneType>("recent");
-  const setSearch = useSearchParams()[1];
+  const [search, setSearch] = useSearchParams();
   const methods = useForm<filterForm>({
     shouldUnregister: false,
     defaultValues: {
@@ -50,6 +50,15 @@ export function RecentHeader({ as }: props) {
     }));
     return [emptyOption].concat(restOption);
   }, [salesList]);
+
+  useEffect(() => {
+    const search_month = search.get("month");
+    if (!search_month) {
+      setType("recent");
+    } else {
+      setType('cusTime');
+    }
+  }, [search, setType]);
 
   useEffect(() => {
     switch (type) {

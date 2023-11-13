@@ -19,7 +19,7 @@ export function OverviewHeader() {
   const salesList = useAppSelector((state) => state.salesList).body;
   const { thisMonth } = useAppSelector((state) => state.time);
   const [type, setType] = useState<filterTimeType>("thisYear");
-  const setSearch = useSearchParams()[1];
+  const [search, setSearch] = useSearchParams();
   const methods = useForm<filterForm>({
     shouldUnregister: false,
     defaultValues: {
@@ -47,6 +47,17 @@ export function OverviewHeader() {
     }));
     return [emptyOption].concat(restOption);
   }, [salesList]);
+
+  useEffect(() => {
+    const search_month = search.get("month");
+    if (!search_month) {
+      setType("thisYear");
+    } else if (search_month.includes("_")) {
+      setType("cusTime");
+    } else {
+      setType("thisMonth");
+    }
+  }, [search, setType]);
 
   useEffect(() => {
     switch (type) {

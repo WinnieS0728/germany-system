@@ -1,4 +1,5 @@
 import api from "@/api";
+import { cusVisitList_res } from "@/api/sales analyze/custom visit list";
 import { tireShopVisit } from "@/api/sales analyze/tire shop visit";
 import { useAppSelector } from "@/data/store";
 import { useId2name } from "@/hooks/id2name";
@@ -9,11 +10,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
 type tsVisitList = tireShopVisit[number] & {
-    visitDateList: string[]
+    visitDateList: cusVisitList_res,
 }
 
 interface useTSVisitList extends queryStatus {
-    tsVisitList: tsVisitList[]
+    tsVisitList: tsVisitList[],
+    indexArray: number[]
 }
 
 export function useTSVisitList(): useTSVisitList {
@@ -30,7 +32,10 @@ export function useTSVisitList(): useTSVisitList {
         queryKey: ['tireShopVisit', { type: 'list' }, monthList, search_EmpId],
         queryFn: async () => {
             const visitData = await Promise.all((await getTSVisit()).filter(data => data.vqty !== 0).map(async (data) => {
-                const visitDateList = Object.values((await api.getTireShopVisitList(data.CustId))[0]).slice(1).map(date => dateFormatter(date))
+                const visitDateList = (await getVisitDateList(data.CustId)).map(date => ({
+                    ...date,
+                    date: dateFormatter(date.StartDT),
+                }))
 
                 return {
                     ...data,
@@ -38,21 +43,32 @@ export function useTSVisitList(): useTSVisitList {
                 }
             }))
 
+            const maxLength = [...visitData].sort((a, b) => b.visitDateList.length - a.visitDateList.length)[0].visitDateList.length;
 
+            const dataSet = visitData.map(data => ({
+                ...data,
+                visitDateList: pushEmptyData(data.visitDateList, maxLength)
+            }))
 
+            const indexArray: number[] = []
+
+            for (let i = 0; i < maxLength; i++) {
+                indexArray.push(i + 1)
+            }
 
             if (search_EmpId) {
                 const EmpName = await id2name(search_EmpId)
-                return (visitData).filter(data => data.Empname === EmpName)
+                return { dataSet: (dataSet).filter(data => data.Empname === EmpName), indexArray }
             }
-            return visitData
+            return { dataSet, indexArray }
         }
     })
 
     if (isPending) {
         return {
             status: 'pending',
-            tsVisitList: []
+            tsVisitList: [],
+            indexArray: []
         }
     }
 
@@ -60,15 +76,55 @@ export function useTSVisitList(): useTSVisitList {
         return {
             status: 'error',
             tsVisitList: [],
+            indexArray: [],
             message: error.message
         }
-    }    
+    }
 
     return {
         status: 'success',
-        tsVisitList: data
+        tsVisitList: data.dataSet,
+        indexArray: data.indexArray
     }
 
+    function pushEmptyData(array: cusVisitList_res, maxLength: number) {
+        const newArray = [...array];
+
+        for (let i = 0; i < maxLength - array.length; i++) {
+            newArray.push({
+                custname: '',
+                StartDT: '',
+                BTRId: ''
+            })
+        }
+
+        return newArray
+    }
+
+    async function getVisitDateList(cusId: string) {
+        const visitDateList = await api.getCusVisitList(cusId)
+
+        if (visitDateList.length === 0) {
+            return []
+        }
+
+        const thisYearDateList = visitDateList.filter(data => {
+            const dataYear = data.StartDT.split('-')[0]
+            return dataYear === thisYear ? true : false
+        })
+
+        if (monthList) {
+            const inTheseMonthData = thisYearDateList.filter(data => {
+                const dataMonth = data.StartDT.split('-')[1]
+                return monthList.some(month => month === dataMonth)
+            })
+            
+
+            return inTheseMonthData
+        }
+
+        return thisYearDateList
+    }
 
     async function getTSVisit() {
         if (monthList) {
@@ -77,12 +133,9 @@ export function useTSVisitList(): useTSVisitList {
                 month
             })))).reduce((a, b) => a.concat(b), [])
 
-            console.log(visitData);
-
-
             const tsVisit_all = visitData.map(data => {
-                const tx_sum = visitData.map(data => data.SumQty).reduce((a, b) => a + b, 0)
-                const visit_sum = visitData.map(data => data.vqty).reduce((a, b) => a + b, 0)
+                const tx_sum = visitData.filter(data2 => data2.CustId === data.CustId).map(data => data.SumQty).reduce((a, b) => a + b, 0)
+                const visit_sum = visitData.filter(data2 => data2.CustId === data.CustId).map(data => data.vqty).reduce((a, b) => a + b, 0)
 
                 return {
                     ...data,

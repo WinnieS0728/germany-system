@@ -30,7 +30,6 @@ export function useTSVisit(): tireShopVisitReturn {
 
     const EmpQuery = useQuery({
         queryKey: ['id2name', search_EmpId],
-        enabled: !search_EmpId,
         queryFn: () => id2name(search_EmpId as string),
     })
 
@@ -97,9 +96,11 @@ export function useTSVisit(): tireShopVisitReturn {
                 month
             })))).reduce((a, b) => a.concat(b), [])
 
+
             const tsVisit_all = visitData.map(data => {
-                const tx_sum = visitData.map(data => data.SumQty).reduce((a, b) => a + b, 0)
-                const visit_sum = visitData.map(data => data.vqty).reduce((a, b) => a + b, 0)
+                const tx_sum = visitData.filter(data2 => data2.CustId === data.CustId).map(data => data.SumQty).reduce((a, b) => a + b, 0)
+
+                const visit_sum = visitData.filter(data2 => data2.CustId === data.CustId).map(data => data.vqty).reduce((a, b) => a + b, 0)
 
                 return {
                     ...data,

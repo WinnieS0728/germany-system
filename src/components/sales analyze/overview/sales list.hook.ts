@@ -1,21 +1,19 @@
 import api from "@/api";
-import { orderDateList_res } from "@/api/sales analyze/order date list";
 import { salesDetailQty_res } from "@/api/sales analyze/sales detail qty";
 import { queryStatus } from "@/types";
 import { dateFormatter } from "@/utils/dateFormatter";
 import { getMonthArray } from "@/utils/get month_MM array";
 import { useAppSelector } from "@data/store";
-import { useQueries } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
 type salesListData = {
-    id: number,
-    EmpId: string
+    id: string,
+    EmpId: string,
     sa_name: string,
     cu_name: string,
     tx: number,
     isFirstOrder: boolean,
-    lastDate: string,
     orderTime: number,
     salesArray: string[]
 }
@@ -28,7 +26,7 @@ interface salesListReturn extends queryStatus {
 
 
 
-export function useSalesList(): salesListReturn {    
+export function useSalesList(): salesListReturn {
     const { thisYear } = useAppSelector(state => state.time)
     const [search] = useSearchParams()
     const searchMonth = search.get('month')
@@ -36,111 +34,115 @@ export function useSalesList(): salesListReturn {
 
     const monthList = getMonthArray(searchMonth);
 
-    const salesListQueries = useQueries({
-        queries: monthList ? (
-            monthList.map((month) => ({
-                queryKey: ['overview', 'salesList', `month-${month}`],
-                queryFn: () => api.getSalesDetailQty({ year: thisYear, month: month })
+    const { data, isPending, isError, error } = useQuery({
+        queryKey: ['overview', 'salesList', monthList, searchEmpId],
+        queryFn: async () => {
+            const orderList = await getOrderList(monthList)
+            const dataSet: salesListData[] = await Promise.all(orderList.map(async (data) => {
+                const orderDateList = await getOrderDateList(data.cu_no)
+                const orderTime = orderDateList.orderDateList.length
+
+                return {
+                    id: data.cu_no,
+                    EmpId: data.cu_sale,
+                    sa_name: data.pa_ena,
+                    cu_name: data.cu_na,
+                    tx: data.sqty,
+                    isFirstOrder: orderDateList.isFirstOrder,
+                    orderTime,
+                    salesArray: orderDateList.orderDateList
+                }
             }))
-        ) : [{
-            queryKey: ['overview', 'salesList', 'fullYear'],
-            queryFn: () => api.getSalesDetailQty({ year: thisYear })
-        }]
-    })
 
-    const salesData = salesListQueries.filter(query => query.isSuccess).map(query => query.data as salesDetailQty_res).reduce((a, b) => a.concat(b), []).filter((data) => data.cu_sale !== "ER221001")
+            const maxLength = [...dataSet].sort((a, b) => b.salesArray.length - a.salesArray.length)[0].salesArray.length
 
+            const dataSet_withEmptyData = dataSet.map(data => ({
+                ...data,
+                salesArray: addEmptyData(data.salesArray, maxLength)
+            }))
 
-    const allData: typeof salesData = salesData.map((res) => {
-        const sameCus = salesData.filter((data) => data.cu_no === res.cu_no);
-        const tx_sum = sameCus
-            .map((data) => data.sqty)
-            .reduce((a, b) => a + b, 0);
-        const o_sum = sameCus
-            .map((data) => data.oqty)
-            .reduce((a, b) => a + b, 0);
-        return {
-            ...res,
-            sqty: tx_sum,
-            oqty: o_sum,
-        };
-    });
-    const onlyId = [...new Set(allData.map((data) => data.cu_no))];
+            const indexArray = getIndexArray(maxLength)
 
-    const salesListDataArray = onlyId.map((id) => allData.find((data) => data.cu_no === id)) as typeof salesData;
-
-    const orderDateQueries = useQueries({
-        queries: salesListDataArray.map(data => ({
-            queryKey: ["overview", 'salesList', 'orderDate', data.cu_no],
-            queryFn: () => api.getOrderDateList({ ErpNo: data.cu_no }),
-            enabled: !!data.cu_no
-        }))
-    })
-
-    const salesListData = orderDateQueries
-        .filter((query) => query.isSuccess)
-        .map((query, index) => {
-            const orderDateList = query.data as orderDateList_res
-            const target = salesListDataArray.find(data => data.cu_no === orderDateList?.cu_no) as salesDetailQty_res[number]
-
-            return {
-                id: index,
-                EmpId: target.cu_sale,
-                sa_name: target.pa_ena,
-                cu_name: target.cu_na,
-                tx: Number(target.sqty),
-                isFirstOrder: getLastDate(orderDateList).isFirstOrder,
-                lastDate: dateFormatter(getLastDate(orderDateList).lastDate as string),
-                orderTime: Object.values(orderDateList).length - 1,
-                salesArray: Object.values(orderDateList).slice(1).map(date => date.replace(/\//gi, '-')).sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
+            if (searchEmpId) {
+                return {
+                    dataSet: dataSet_withEmptyData.filter(data => data.EmpId === searchEmpId),
+                    indexArray
+                }
             }
 
-        });
+            return { dataSet: dataSet_withEmptyData, indexArray }
+        }
+    })
 
-    const maxLength = salesListData.sort(
-        (a, b) => b.salesArray.length - a.salesArray.length
-    )[0]?.salesArray.length || 0;
-
-    const salesListData_fullData = salesListData.map((data) => ({
-        ...data,
-        salesArray: addEmptyData(data.salesArray, maxLength),
-    })).sort((a, b) => new Date(b.lastDate).getTime() - new Date(a.lastDate).getTime())
-
-
-    if (salesListQueries.some(query => query.isPending) || orderDateQueries.some(query => query.isPending)) {
+    if (isPending) {
         return {
             status: 'pending',
             salesListData: [],
             indexArray: []
         }
-    } else if (salesListQueries.some(query => query.isError) || orderDateQueries.some(query => query.isError)) {
+    }
+    if (isError) {
         return {
             status: 'error',
             salesListData: [],
-            indexArray: []
+            indexArray: [],
+            message: error.message
         }
     }
 
-    if (searchEmpId) {
-        return {
-            status: 'success',
-            salesListData: salesListData_fullData.filter(data => data.EmpId === searchEmpId),
-            indexArray: getIndexArray(maxLength)
-        }
-    } else {
-        return {
-            status: 'success',
-            salesListData: salesListData_fullData,
-            indexArray: getIndexArray(maxLength)
-        }
+    return {
+        status: 'success',
+        salesListData: data.dataSet,
+        indexArray: data.indexArray
     }
 
+    async function getOrderList(monthList: string[] | undefined) {
+        if (monthList) {
+            const orderList_res = (await Promise.all(monthList.map(async (month) => {
+                const orderList_res = await api.getSalesDetailQty({
+                    year: thisYear,
+                    month
+                })
+                return orderList_res
+            }))).reduce((a, b) => a.concat(b), []).filter(data => data.cu_sale !== 'ER221001')
 
+            const sumData = orderList_res.map(res => {
+                const tx_sum = orderList_res.filter(data => data.cu_no === res.cu_no).map(data => data.sqty).reduce((a, b) => a + b, 0)
+                const order_sum = orderList_res.filter(data => data.cu_no === res.cu_no).map(data => data.oqty).reduce((a, b) => a + b, 0)
 
-    function getLastDate(dateObj: orderDateList_res) {
-        const lastDate = Object.values(dateObj).at(-1)
-        const isFirstOrder = Object.values(dateObj).length <= 2 ? true : false
-        return { isFirstOrder, lastDate }
+                return {
+                    ...res,
+                    sqty: tx_sum,
+                    oqty: order_sum
+                }
+            })
+
+            const onlyId = [...new Set(sumData.map(data => data.cu_no))]
+
+            const dataSet = onlyId.map(id => sumData.find(data => data.cu_no === id) as salesDetailQty_res[number])
+            return dataSet
+        }
+        const dataSet = await api.getSalesDetailQty({
+            year: thisYear
+        })
+
+        return dataSet.filter(data => data.cu_sale !== 'ER221001')
+    }
+
+    async function getOrderDateList(cu_no: string) {
+        const orderDateList = Object.values(await api.getOrderDateList({ ErpNo: cu_no })).slice(1).map(date => dateFormatter(date)).sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
+        const isFirstOrder = orderDateList.length === 1 ? true : false
+
+        if (monthList) {
+            return {
+                orderDateList: orderDateList.filter(date => {
+                    const dataMonth = date.split('-')[1]
+                    return monthList.some(month => dataMonth === month)
+                }),
+                isFirstOrder
+            }
+        }
+        return { orderDateList, isFirstOrder }
     }
 
     function addEmptyData(array: string[], maxNumber: number) {
