@@ -24,10 +24,10 @@ const tireShopVisit_schema = z.array(z.object({
 
 export type tireShopVisit = z.infer<typeof tireShopVisit_schema>
 
-export function getTireShopVisit() {
+export function getTireShopVisit(apiPath: string) {
     return async function ({ year, month }: getTireShopVisit_req) {
         const res = await axios<tireShopVisit>({
-            url: "https://orangeosomapi.orange-electronic.com/api/GetTireStroeQty",
+            url: `${apiPath}GetTireStroeQty`,
             method: "POST",
             data: {
                 "YYYY": year,

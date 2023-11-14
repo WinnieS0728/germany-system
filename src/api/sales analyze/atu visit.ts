@@ -23,10 +23,10 @@ const atuVisit_res_schema = z.array(z.object({
 
 export type atuVisit_res = z.infer<typeof atuVisit_res_schema>
 
-export function getAtuVisit() {
+export function getAtuVisit(apiPath: string) {
     return async function ({ year, month }: atuVisit_req) {
         const res = await axios<atuVisit_res>({
-            url: 'https://orangeosomapi.orange-electronic.com/api/GetAtuSV',
+            url: `${apiPath}/GetAtuSV`,
             method: "POST",
             data: {
                 "YYYY": year,

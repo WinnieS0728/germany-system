@@ -17,7 +17,7 @@ function App() {
   const { i18n } = useTranslation();
   const [search, setSearch] = useSearchParams();
   const usingLanguage = Language?.split("-")[0];
-  const nowUser_id = EmpId;
+  const nowUser_id = EmpId;  
 
   useLayoutEffect(() => {
     let EmpId: string;

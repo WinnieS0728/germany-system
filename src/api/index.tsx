@@ -38,6 +38,7 @@ import { getTireShopVisit } from "./sales analyze/tire shop visit";
 import { getTireShopVisitList } from "./sales analyze/tire shop visit dateList";
 
 const apiPath = import.meta.env.VITE_API_PATH;
+const osom_apiPath = import.meta.env.VITE_OSOM_API_PATH
 
 const api = {
   // common
@@ -81,13 +82,13 @@ const api = {
   getSalesQty: getSalesQty(apiPath),
   getSalesDetailQty: getSalesDetailQty(apiPath),
   getOrderDateList: getOrderDateList(apiPath),
-  getAtuVisit: getAtuVisit(),
+  getAtuVisit: getAtuVisit(osom_apiPath),
   getCusVisitList: getCusVisitList(apiPath),
   getUnVisitTireShop: getUnVisitTireShop(apiPath),
   getUnOrderTireShop: getUnOrderTireShop(apiPath),
   getAtuPayment: getAtuPayment(apiPath),
-  getTireShopVisit: getTireShopVisit(),
-  getTireShopVisitList: getTireShopVisitList(),
+  getTireShopVisit: getTireShopVisit(osom_apiPath),
+  getTireShopVisitList: getTireShopVisitList(osom_apiPath),
 };
 
 export default api;
