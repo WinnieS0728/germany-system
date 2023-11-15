@@ -36,6 +36,7 @@ import { getUnOrderTireShop } from "./sales analyze/get unOrder trie shop";
 import { getAtuPayment } from "./sales analyze/atuPayment";
 import { getTireShopVisit } from "./sales analyze/tire shop visit";
 import { getTireShopVisitList } from "./sales analyze/tire shop visit dateList";
+import { getKpiNumber } from "./sales analyze/getKpiNumber";
 
 const apiPath = import.meta.env.VITE_API_PATH;
 const osom_apiPath = import.meta.env.VITE_OSOM_API_PATH
@@ -54,7 +55,7 @@ const api = {
     set: setBasicSetting(apiPath),
     update: updateBasicSetting(apiPath),
   },
-  //files
+  // files
   uploadFileSign: uploadFileSign(apiPath),
   downloadFile: downloadFile(apiPath),
   // event
@@ -89,6 +90,7 @@ const api = {
   getAtuPayment: getAtuPayment(apiPath),
   getTireShopVisit: getTireShopVisit(osom_apiPath),
   getTireShopVisitList: getTireShopVisitList(osom_apiPath),
+  getKpiNumber: getKpiNumber() // * 獨立url
 };
 
 export default api;

@@ -24,15 +24,19 @@ function thisYear(apiPath: string) {
   };
 }
 
+interface weekReq {
+  startDate: string,
+  endDate?: string
+}
 function week(apiPath: string) {
-  return async function (date: string) {
-    const endDate = dateFormatter(timeDay.offset(new Date(date), 8));
+  return async function ({ startDate, endDate}:weekReq) {
     const res: AxiosResponse<visit_otherResType[]> = await axios({
       method: "POST",
-      url: `${apiPath}/GetSalesVisit`,
-      data: { EmpId: "", Startdt: date, Enddt: endDate, type: "Week" },
+      // url: `${apiPath}/GetSalesVisit`,
+      url: `https://orangeapi.orange-electronic.com/api/GetSalesVisit`,
+      data: { EmpId: "", Startdt: startDate, Enddt: endDate, type: "Week" },
     });
-    
+
     return res.data;
   };
 }

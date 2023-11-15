@@ -13,7 +13,13 @@ const UnOrderTireShop = lazy(() => import("./unOrder tire shop"));
 const KpiAchievementPage = lazy(() => import("./kpi achievement"));
 const SalesCharts = lazy(() => import("./chart"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions:{
+    queries: {
+      refetchOnWindowFocus: false
+    }
+  }
+});
 
 export default function SalesAnalyze() {
   return (

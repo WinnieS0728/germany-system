@@ -93,5 +93,4 @@ export function useSalesRank(): returnType {
     } else {
         return { status: 'success', salesRankData: data }
     }
-
 }
