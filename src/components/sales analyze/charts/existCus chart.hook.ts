@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { monthList } from "./monthList";
 import api from "@/api";
+import { tireShopVisit } from "@/api/sales analyze/tire shop visit";
 
 export function useExistCusVisit() {
     const { thisYear } = useAppSelector(state => state.time)
@@ -13,28 +14,34 @@ export function useExistCusVisit() {
     return useQuery({
         queryKey: ['visitData', 'existCus', search_EmpId],
         queryFn: async () => {
+            const fullYearData = (await getTSVisitData(thisYear))
+
             const visitNumber = await Promise.all(monthList.map(async (month) => {
-                const { existCus } = await getTSVisitData(thisYear, month)
+                return (await getTSVisitData(thisYear, month)).map(data => {
+                    return fullYearData.find(yearData => yearData.CustId === data.CustId)
+                }) as tireShopVisit
+            }))
+
+            const dataSet = visitNumber.map((monthData, index) => {
+                const visit_sum = monthData.length
+                const order_sum = monthData.filter(data => data.Oqty >= 1).length
 
                 return {
-                    month: `${Number(month)}月`,
-                    visitNumber: existCus.length,
-                    orderNumber: existCus.filter(data => data.Oqty).length
+                    month: `${index+1}月`,
+                    visit_sum,
+                    order_sum
                 }
-            }))
-            return visitNumber
+            })
+            
+            return dataSet
         }
     })
 }
 
-async function getTSVisitData(year: string, month: string) {
+async function getTSVisitData(year: string, month?: string) {
     const res = (await api.getTireShopVisit({
         year: year,
         month: month
-    })).filter(data => data.vqty > 0)
-
-    const existCus = res.filter(data => data.Oqty > 1)
-    const newCus = res.filter(data => data.Oqty <= 1)
-
-    return { existCus, newCus }
+    })).filter(data => data.vqty)
+    return res
 }

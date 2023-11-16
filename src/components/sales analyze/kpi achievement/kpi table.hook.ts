@@ -57,17 +57,17 @@ async function getVisitStore(year: string, month: string, EmpName?: string): Pro
         endDate: getRequestDate(year, month).endDate
     })).filter(data => data.empname === EmpName)
 
-    const { atu, existCus, newCus } = visitData.reduce<Record<'atu' | 'existCus' | 'newCus', visit_otherResType[]>>((acc, data) => {
-        if (data.ResourcesName === '拜訪A.T.U.') {
-            acc.atu.push(data)
+    const { atu, existCus, newCus } = visitData.reduce<Record<'atu' | 'existCus' | 'newCus', visit_otherResType[]>>((a, b) => {
+        if (b.ResourcesName === '拜訪A.T.U.') {
+            a.atu.push(b)
         }
-        if (data.ResourcesName === '拜訪現有客戶') {
-            acc.existCus.push(data)
+        if (b.ResourcesName === '拜訪現有客戶') {
+            a.existCus.push(b)
         }
-        if (data.ResourcesName === '拜訪新客戶') {
-            acc.newCus.push(data)
+        if (b.ResourcesName === '拜訪新客戶') {
+            a.newCus.push(b)
         }
-        return acc
+        return a
     }, {
         atu: [],
         existCus: [],
