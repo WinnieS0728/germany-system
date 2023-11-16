@@ -2,11 +2,11 @@ import api from "@/api";
 import { useAppSelector } from "@/data/store";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
+import { monthList } from "./monthList";
 
 export function useSalesChart() {
     const { thisYear } = useAppSelector(state => state.time)
     const salesList = useAppSelector(state => state.salesList).body
-    const monthList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
 
     const search = useSearchParams()[0]
     const search_EmpId = search.get('EmpId')

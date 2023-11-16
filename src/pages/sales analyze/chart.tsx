@@ -1,6 +1,7 @@
-import { SalesChart } from "@/components/sales analyze/charts/sales chart";
-import { ChartHeader } from "@/components/sales analyze/header filter/chart header";
 import { Main } from "@/layouts/main";
+import { ChartHeader } from "@/components/sales analyze/header filter/chart header";
+import { SalesChart } from "@/components/sales analyze/charts/sales chart";
+import { ExistCusVisitChart } from "@/components/sales analyze/charts/existCus chart";
 
 export default function SalesCharts() {
   return (
@@ -8,7 +9,8 @@ export default function SalesCharts() {
       <Main>
         <>
           <ChartHeader />
-          <SalesChart />
+          {/* <SalesChart /> */}
+          <ExistCusVisitChart />
         </>
       </Main>
     </>
