@@ -2,7 +2,7 @@ import api from "@/api";
 import { queryStatus } from "@/types";
 import { getMonthArray } from "@/utils/get month_MM array";
 import { useAppSelector } from "@data/store";
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
 type salesRankType = {
@@ -33,17 +33,17 @@ export function useSalesRank(): returnType {
     const salesRankQueries = useQueries({
         queries: month ? month.map((month) => ({
             queryKey: ["salesRank", `month-${month}`],
-            queryFn: () => Promise.all(salesList.map(async (member) => api.getSalesQty({
+            queryFn: () => Promise.all(salesList.map(async (member) => (await api.getSalesQty({
                 EmpId: member.EmpId,
                 year: thisYear,
                 month: month
-            })))
+            }))[0]))
         })) : [{
             queryKey: ["salesRank", 'fullYear'],
-            queryFn: () => Promise.all(salesList.map(async (member) => await api.getSalesQty({
+            queryFn: () => Promise.all(salesList.map(async (member) => (await api.getSalesQty({
                 EmpId: member.EmpId,
                 year: thisYear,
-            })))
+            }))[0]))
         }]
     })
 

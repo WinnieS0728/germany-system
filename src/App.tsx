@@ -36,13 +36,14 @@ function App() {
     dispatch(setSalesList());
     dispatch(setUser(EmpId as string));
     i18n.changeLanguage(usingLanguage);
-  }, [dispatch, i18n, nowUser_id, search, setSearch, usingLanguage]);
+  }, [dispatch, i18n, nowUser_id, search, setSearch, usingLanguage]);  
 
   return (
     <MySuspense>
       <Routes>
         <Route
           index
+          path="/"
           element={
             <h1 className='h-screen grid place-items-center'>德國業務系統</h1>
           }
