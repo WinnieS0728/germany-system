@@ -108,6 +108,7 @@ export function SalesChart() {
                         <LabelList
                           position={"top"}
                           dataKey={"order_sum"}
+                          fill='#397DFC'
                         />
                       </Line>
                     </ComposedChart>
