@@ -1,6 +1,4 @@
-import { dateFormatter } from "@/utils/dateFormatter";
 import axios, { AxiosResponse } from "axios";
-import { timeDay } from "d3-time";
 
 export type visit_YearResType = {
   Vqty: string;
@@ -33,7 +31,7 @@ function week(apiPath: string) {
     const res: AxiosResponse<visit_otherResType[]> = await axios({
       method: "POST",
       // url: `${apiPath}/GetSalesVisit`,
-      url: `https://orangeapi.orange-electronic.com/api/GetSalesVisit`,
+      url: `${apiPath}/GetSalesVisit`,
       data: { EmpId: "", Startdt: startDate, Enddt: endDate, type: "Week" },
     });
 

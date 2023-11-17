@@ -2,7 +2,7 @@ import api from "@/api";
 import { queryStatus } from "@/types";
 import { getMonthArray } from "@/utils/get month_MM array";
 import { useAppSelector } from "@data/store";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
 type salesRankType = {

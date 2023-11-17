@@ -48,7 +48,7 @@ export function useUnOrderTireShop(): unOrderTSListReturn {
   }, [search_month, thisYear]);
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["unOrderTS"],
+    queryKey: ["unOrderTS", search_month, search_EmpId],
     queryFn: () => getUnOrderTS(),
   });
 

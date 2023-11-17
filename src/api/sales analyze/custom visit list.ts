@@ -12,7 +12,7 @@ export type cusVisitList_res = z.infer<typeof cusVisitList_res_schema>
 export function getCusVisitList(apiPath: string) {
     return async function (cusId: string) {
         const res = await axios<cusVisitList_res>({
-            url: `https://orangeapi.orange-electronic.com/api/GetCUSTVISITData`,
+            url: `${apiPath}/GetCUSTVISITData`,
             method: "POST",
             data: {
                 "Custid": cusId,

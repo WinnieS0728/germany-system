@@ -1,11 +1,15 @@
 import { useTheme } from "styled-components";
 import { WeekTable } from "./week tabel";
-import { PerCentTable } from "./percent table";
+import { PerCentTable, getVisitPercent } from "./percent table";
 import * as Btns from "@components/UI/buttons";
 import { useModalControl } from "@/hooks/modal control";
 import { useAppSelector } from "@data/store";
 import { useTripDataProcessing } from "./data";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import api from "@/api";
+import { month_shortName } from "@/types";
+import { getPercent } from "@/utils/get percent";
 
 const Confirm = () => {
   const { t } = useTranslation("confirm modal");
@@ -19,6 +23,25 @@ const Confirm = () => {
     timeData.today
   );
   const tablaData = { nextWeekDays, rows, spreadData };
+  const { thisYear } = useAppSelector((state) => state.time);
+  const [disable, setDisable] = useState<boolean>(false);
+
+  useEffect(() => {
+    const { newCus, allCus } = getVisitPercent([spreadData]);
+
+    (async function () {
+      const res = await api.threshold.fetch(thisYear, nowUser.body.EmpId);
+      const thisMonth = month_shortName[new Date().getMonth()];
+
+      const newCus_threshold = res[0][`${thisMonth}`];
+
+      if (getPercent(newCus.length, allCus) >= Number(newCus_threshold)) {
+        setDisable(true);
+      } else {
+        setDisable(false);
+      }
+    })();
+  }, [nowUser.body.EmpId, spreadData, thisYear]);
 
   return (
     <article
@@ -33,11 +56,14 @@ const Confirm = () => {
         EmpId={nowUser.body.EmpId}
         time={{ year: timeData.thisYear, month: timeData.thisMonth }}
       />
+      {disable && <p className='text-center'>百分比不符合</p>}
       <div className='submit-btns'>
         <Btns.LongBtn
           type='submit'
           style='confirm'
           form='business apply'
+          disabled={disable}
+          className='cursor-not-allowed'
         />
         <Btns.LongBtn
           type='button'

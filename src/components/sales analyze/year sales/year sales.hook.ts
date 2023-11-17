@@ -91,11 +91,11 @@ export function useYearSales(): yearSalesReturn {
     }
 
     async function getTxNumber(EmpId: string, month: string) {
-        const res = await api.getSalesQty({
+        const res = (await api.getSalesQty({
             EmpId,
             year: search_year || thisYear,
             month
-        })
+        }))[0]
 
         return res?.sqty || 0
     }

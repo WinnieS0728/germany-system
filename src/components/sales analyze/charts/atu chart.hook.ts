@@ -51,10 +51,4 @@ export function useAtuChart() {
 
         return res
     }
-    async function getAtuPaymentData(year: string, month: string, EmpId: string) {
-        const EmpName = await id2name(EmpId)
-        const res = (await api.getAtuPayment(year)).filter(data => data.MM === Number(month) && data.Empname === EmpName)
-
-        return res
-    }
 }

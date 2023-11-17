@@ -50,7 +50,7 @@ export function useUnVisitTireShop(): unVisitTSReturn {
   }, [search_month, thisYear]);
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["unVisit"],
+    queryKey: ["unVisit",search_month, search_EmpId],
     queryFn: () => getUnVisitTS(),
   });
 
