@@ -1,8 +1,7 @@
 import { Loading } from "@/components/UI/loading";
 import { Section } from "@/layouts/section";
-import { useOsomChart } from "./osom chart.hook";
-import { Table } from "@/components/table/table";
 import { Error } from "@/components/UI/error";
+import { Table } from "@/components/table/table";
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -14,9 +13,10 @@ import {
   Line,
   LabelList,
 } from "recharts";
+import { useNewCusVisit } from "./newCus chart.hook";
 
-export function OsomChart() {
-  const { data, isPending, isError, error } = useOsomChart();
+export function NewCusVisitChart() {
+  const { data, isPending, isError, error } = useNewCusVisit();
 
   if (isPending) {
     return (
@@ -39,7 +39,7 @@ export function OsomChart() {
 
   return (
     <>
-      <Section title='OSOM登入帳號數成長趨勢圖'>
+      <Section title='新客戶 - 拜訪店家趨勢圖'>
         <Table>
           <table>
             <thead>
@@ -52,15 +52,15 @@ export function OsomChart() {
             </thead>
             <tbody>
               <tr>
-                <td>註冊數</td>
-                {data.map((data) => (
-                  <td key={data.month}>{data.signUp_sum}</td>
+                <td>拜訪店數</td>
+                {data.map((data, index) => (
+                  <td key={index}>{data.visit_sum}</td>
                 ))}
               </tr>
               <tr>
-                <td>登入數</td>
-                {data.map((data) => (
-                  <td key={data.month}>{data.login_sum}</td>
+                <td>首購店數</td>
+                {data.map((data, index) => (
+                  <td key={index}>{data.order_sum}</td>
                 ))}
               </tr>
               <tr>
@@ -73,38 +73,38 @@ export function OsomChart() {
                       <CartesianGrid vertical={false} />
                       <Legend
                         verticalAlign='top'
-                        height={30}
+                        height={40}
                       />
-                      <XAxis dataKey={"month"} />
-                      <YAxis
-                        yAxisId={"sign-up"}
+                      <XAxis
+                        dataKey={"month"}
                         tickMargin={10}
                       />
+                      <YAxis yAxisId={"visit"} />
                       <YAxis
-                        yAxisId={"log-in"}
+                        yAxisId={"order"}
                         orientation='right'
                       />
                       <Bar
-                        name='註冊數'
-                        dataKey={"signUp_sum"}
-                        yAxisId={"sign-up"}
-                        fill='#BBBBBB'
+                        name='拜訪店數'
+                        dataKey={"visit_sum"}
+                        yAxisId={"visit"}
+                        fill='#CED0D3'
                       >
                         <LabelList
-                          dataKey={"signUp_sum"}
+                          dataKey={"visit_sum"}
                           position={"center"}
                         />
                       </Bar>
                       <Line
-                        name='登入數'
-                        dataKey={"login_sum"}
-                        yAxisId={"log-in"}
-                        stroke='#E88656'
+                        name='首購店數'
+                        dataKey={"order_sum"}
+                        yAxisId={"order"}
+                        stroke='#FF4A00'
                       >
                         <LabelList
-                          dataKey={"login_sum"}
+                          dataKey={"order_sum"}
                           position={"top"}
-                          fill='#E88656'
+                          fill='#FF4A00'
                         />
                       </Line>
                     </ComposedChart>

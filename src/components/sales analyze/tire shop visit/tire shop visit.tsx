@@ -57,8 +57,8 @@ export function TireShopVisitTotal() {
                 <tr key={data.EmpName}>
                   <td>{data.EmpName}</td>
                   {data.allData.map((number,index) => <td key={index}>{number}</td>)}
-                  {data.multiVisit.map((number,index) => <td key={index}>{number}</td>)}
-                  {data.firstVisit.map((number,index) => <td key={index}>{number}</td>)}
+                  {data.existCus.map((number,index) => <td key={index}>{number}</td>)}
+                  {data.newCus.map((number,index) => <td key={index}>{number}</td>)}
                 </tr>
               ))}
             </tbody>

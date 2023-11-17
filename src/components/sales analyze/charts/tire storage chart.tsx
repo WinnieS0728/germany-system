@@ -1,22 +1,13 @@
 import { Loading } from "@/components/UI/loading";
-import { Section } from "@/layouts/section";
-import { useOsomChart } from "./osom chart.hook";
 import { Table } from "@/components/table/table";
+import { Month_MM } from "@/const";
+import { Section } from "@/layouts/section";
+import { ResponsiveContainer, ComposedChart, CartesianGrid, Legend, XAxis, YAxis, Bar, LabelList, Line } from "recharts";
+import { useTireStorageChart } from "./tire storage chart.hook";
 import { Error } from "@/components/UI/error";
-import {
-  ResponsiveContainer,
-  ComposedChart,
-  CartesianGrid,
-  Legend,
-  XAxis,
-  YAxis,
-  Bar,
-  Line,
-  LabelList,
-} from "recharts";
 
-export function OsomChart() {
-  const { data, isPending, isError, error } = useOsomChart();
+export function TireStorageChart() {
+  const { data, isPending, isError, error } = useTireStorageChart();
 
   if (isPending) {
     return (
@@ -39,28 +30,28 @@ export function OsomChart() {
 
   return (
     <>
-      <Section title='OSOM登入帳號數成長趨勢圖'>
+      <Section title='業績趨勢圖'>
         <Table>
           <table>
             <thead>
               <tr>
                 <th></th>
-                {data.map((data) => (
-                  <th key={data.month}>{data.month}</th>
+                {Month_MM.map((month) => (
+                  <th key={month}>{`${Number(month)}月`}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>註冊數</td>
+                <td>資料筆數</td>
                 {data.map((data) => (
-                  <td key={data.month}>{data.signUp_sum}</td>
+                  <td key={data.month}>{data.tireStorage_sum}</td>
                 ))}
               </tr>
               <tr>
-                <td>登入數</td>
+                <td>新增筆數</td>
                 {data.map((data) => (
-                  <td key={data.month}>{data.login_sum}</td>
+                  <td key={data.month}>{data.diff}</td>
                 ))}
               </tr>
               <tr>
@@ -73,38 +64,38 @@ export function OsomChart() {
                       <CartesianGrid vertical={false} />
                       <Legend
                         verticalAlign='top'
-                        height={30}
+                        height={40}
                       />
-                      <XAxis dataKey={"month"} />
-                      <YAxis
-                        yAxisId={"sign-up"}
+                      <XAxis
+                        dataKey={"month"}
                         tickMargin={10}
                       />
+                      <YAxis yAxisId={"number"} />
                       <YAxis
-                        yAxisId={"log-in"}
+                        yAxisId={"diff"}
                         orientation='right'
                       />
                       <Bar
-                        name='註冊數'
-                        dataKey={"signUp_sum"}
-                        yAxisId={"sign-up"}
-                        fill='#BBBBBB'
+                        dataKey={"tireStorage_sum"}
+                        yAxisId={"number"}
+                        name='資料筆數'
+                        fill='#CED0D3'
                       >
                         <LabelList
-                          dataKey={"signUp_sum"}
                           position={"center"}
+                          dataKey={"tireStorage_sum"}
                         />
                       </Bar>
                       <Line
-                        name='登入數'
-                        dataKey={"login_sum"}
-                        yAxisId={"log-in"}
-                        stroke='#E88656'
+                        dataKey={"diff"}
+                        yAxisId={"diff"}
+                        name='新增筆數'
+                        stroke='#0A9945'
                       >
                         <LabelList
-                          dataKey={"login_sum"}
                           position={"top"}
-                          fill='#E88656'
+                          dataKey={"diff"}
+                          fill='#0A9945'
                         />
                       </Line>
                     </ComposedChart>

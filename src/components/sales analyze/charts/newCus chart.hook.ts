@@ -6,7 +6,13 @@ import api from "@/api";
 import { tireShopVisit } from "@/api/sales analyze/tire shop visit";
 import { useId2name } from "@/hooks/id2name";
 
-export function useExistCusVisit() {
+type getTSVisitData_req = {
+    year: string,
+    month?: string,
+    EmpId: string | null
+}
+
+export function useNewCusVisit() {
     const { thisYear } = useAppSelector(state => state.time)
     const { id2name } = useId2name()
 
@@ -14,12 +20,19 @@ export function useExistCusVisit() {
     const search_EmpId = search.get('EmpId')
 
     return useQuery({
-        queryKey: ['visitData', 'existCus', search_EmpId],
+        queryKey: ['visitData', 'newCus', search_EmpId],
         queryFn: async () => {
-            const fullYearData = (await getTSVisitData(search_EmpId, thisYear)).filter(data => data.Oqty > 1)
+            const fullYearData = (await getTSVisitData({
+                year: thisYear,
+                EmpId: search_EmpId
+            })).filter(data => data.Oqty === 1)
 
             const visitData = await Promise.all(monthList.map(async (month) => {
-                return (await getTSVisitData(search_EmpId, thisYear, month)).filter(data => {
+                return (await getTSVisitData({
+                    year: thisYear,
+                    month,
+                    EmpId: search_EmpId
+                })).filter(data => {
                     return fullYearData.find(yearData => yearData.CustId === data.CustId)
                 }) as tireShopVisit
             }))
@@ -38,7 +51,9 @@ export function useExistCusVisit() {
             return dataSet
         }
     })
-    async function getTSVisitData(EmpId: string | null, year: string, month?: string) {
+    async function getTSVisitData({
+        year, month, EmpId
+    }: getTSVisitData_req) {
         const res = (await api.getTireShopVisit({
             year: year,
             month: month
@@ -48,6 +63,7 @@ export function useExistCusVisit() {
             const EmpName = await id2name(EmpId)
             return res.filter(data => data.Empname === EmpName)
         }
+
         return res
     }
 }

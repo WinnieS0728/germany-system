@@ -3,11 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { monthList } from "./monthList";
 import api from "@/api";
+import { useId2name } from "@/hooks/id2name";
 
 export function useOsomChart() {
     const { thisYear } = useAppSelector(state => state.time)
     const salesList = useAppSelector(state => state.salesList).body
-
+    const { id2name } = useId2name()
     const search = useSearchParams()[0]
     const search_EmpId = search.get('EmpId')
 
@@ -20,18 +21,13 @@ export function useOsomChart() {
                     return data
                 }))
 
+                if (search_EmpId) {
+                    const EmpName = await id2name(search_EmpId)
+                    return salesOsomData.filter(data => data.empname === EmpName)
+                }
+
                 return salesOsomData
-            }))            
-
-            // const QQMonth = await Promise.all(monthList.map(async(month) => {
-            //     return await Promise.all(salesList.map(async (member) => {
-            //         return await getOsomData(thisYear, month, member.EmpName)
-            //     }))
-            // }))
-
-            // const 業務的資料 = await Promise.all(salesList.map(async (member) => {
-            //     return '該業務的資料物件'
-            // }))
+            }))
 
             const dataSet = osomData.map((data, index) => {
                 const login_sum = data.map(data => data.LogQty).reduce((a, b) => a + b, 0)

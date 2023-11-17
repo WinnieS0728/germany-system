@@ -56,7 +56,7 @@ export function SalesChart() {
             </thead>
             <tbody>
               <tr>
-                <td>TX 銷售術</td>
+                <td>TX 銷售數</td>
                 {txArray.map((number, index) => (
                   <td key={index}>{number}</td>
                 ))}
@@ -103,7 +103,7 @@ export function SalesChart() {
                         dataKey={"order_sum"}
                         yAxisId={"order"}
                         name='訂單數'
-                        fill='#397DFC'
+                        stroke='#397DFC'
                       >
                         <LabelList
                           position={"top"}

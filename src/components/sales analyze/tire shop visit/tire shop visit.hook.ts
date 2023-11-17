@@ -4,14 +4,14 @@ import { useAppSelector } from "@/data/store";
 import { useId2name } from "@/hooks/id2name";
 import { queryStatus } from "@/types";
 import { getMonthArray } from "@/utils/get month_MM array";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
 type dataSet = {
     EmpName: string,
     allData: number[],
-    firstVisit: number[],
-    multiVisit: number[]
+    newCus: number[],
+    existCus: number[]
 }
 
 interface tireShopVisitReturn extends queryStatus {
@@ -28,64 +28,58 @@ export function useTSVisit(): tireShopVisitReturn {
     const search_month = search.get('month')
     const search_EmpId = search.get('EmpId')
 
-    const EmpQuery = useQuery({
-        queryKey: ['id2name', search_EmpId],
-        queryFn: () => id2name(search_EmpId as string),
-    })
-
     const monthList = getMonthArray(search_month)
 
-    const tireShopQueries = useQueries({
-        queries: salesList.map(member => ({
-            queryKey: ["tireShopVisit", { type: 'all' }, search_month, member.EmpId],
-            queryFn: async () => {
-                const visitData = (await getTSVisit()).filter(data => data.Empname === member.EmpName)
+    const { data, isPending, isError, error } = useQuery({
+        queryKey: ["tireShopVisit", { type: 'all' }, search_month],
+        queryFn: async () => {
+            const tireShopVisitData = await Promise.all(salesList.map(async (member) => {
+                const visitData = (await getTSVisit()).filter(data => data.vqty > 0).filter(data => data.Empname === member.EmpName)
 
                 const dataSet = {
                     EmpName: visitData[0].Empname,
                     allData: getTableValue(visitData),
-                    firstVisit: getTableValue(visitData.filter(data => data.Oqty <= 1)),
-                    multiVisit: getTableValue(visitData.filter(data => data.Oqty > 1)),
+                    newCus: getTableValue(visitData.filter(data => data.Oqty <= 1)),
+                    existCus: getTableValue(visitData.filter(data => data.Oqty > 1)),
                 }
 
                 return dataSet
+            }))
+
+            if (search_EmpId) {
+                const EmpName = await id2name(search_EmpId)
+                return tireShopVisitData.filter(data => data.EmpName === EmpName)
             }
-        }))
+            return tireShopVisitData
+        }
     })
 
-    if (tireShopQueries.some(query => query.isPending) || EmpQuery.isPending) {
+    if (isPending) {
         return {
             status: 'pending',
             tsVisitData: []
         }
     }
-    if (tireShopQueries.some(query => query.isError) || EmpQuery.isError) {
+    if (isError) {
         return {
             status: 'error',
             tsVisitData: [],
-            message: tireShopQueries.find(query => query.isError)?.error?.message
-        }
-    }
-
-    if (EmpQuery.data) {
-        return {
-            status: 'success',
-            tsVisitData: tireShopQueries.map(query => query.data as dataSet).filter(data => data.EmpName === EmpQuery.data),
+            message: error.message
         }
     }
 
     return {
         status: 'success',
-        tsVisitData: tireShopQueries.map(query => query.data as dataSet),
+        tsVisitData: data,
     }
 
 
     function getTableValue(dataArray: tireShopVisit): number[] {
         const storeNumber = dataArray.length
+        const orderNumber = dataArray.map(data => data.Oqty).reduce((a, b) => a + b, 0)
         const txNumber = dataArray.map(data => data.SumQty).reduce((a, b) => a + b, 0)
-        const visitNumber = dataArray.map(data => data.vqty).reduce((a, b) => a + b, 0)
 
-        return [storeNumber, visitNumber, txNumber]
+        return [storeNumber, orderNumber, txNumber]
     }
 
 
@@ -102,10 +96,13 @@ export function useTSVisit(): tireShopVisitReturn {
 
                 const visit_sum = visitData.filter(data2 => data2.CustId === data.CustId).map(data => data.vqty).reduce((a, b) => a + b, 0)
 
+                const order_sum = visitData.filter(data2 => data2.CustId === data.CustId).map(data => data.Oqty).reduce((a, b) => a + b, 0)
+
                 return {
                     ...data,
                     SumQty: tx_sum,
-                    vqty: visit_sum
+                    vqty: visit_sum,
+                    Oqty: order_sum
                 }
             })
 

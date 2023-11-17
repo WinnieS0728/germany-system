@@ -75,7 +75,10 @@ export function ExistCusVisitChart() {
                         verticalAlign='top'
                         height={40}
                       />
-                      <XAxis dataKey={"month"} />
+                      <XAxis
+                        dataKey={"month"}
+                        tickMargin={10}
+                      />
                       <YAxis yAxisId={"visit"} />
                       <YAxis
                         yAxisId={"order"}
