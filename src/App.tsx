@@ -5,7 +5,6 @@ import { setSalesList } from "@actions/member/setSalesList";
 import { setUser } from "@actions/member/setUser";
 import { useTranslation } from "react-i18next";
 import { MySuspense } from "./layouts/suspense";
-import { useGetLocation } from "./hooks/use get location";
 
 const CustomRatePage = lazy(() => import("@/pages/kpi"));
 const SettingPage = lazy(() => import("@/pages/kpi/setting"));

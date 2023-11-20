@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import { SalesAnalyzeNav } from "./nav";
 import { MySuspense } from "@/layouts/suspense";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 const SalesAnalyze_overviewPage = lazy(() => import("./overview"));
 const YearSalesPage = lazy(() => import("./year sales"));
 const tireShopVisitPage = lazy(() => import("./tire shop visit"));
@@ -14,17 +15,18 @@ const KpiAchievementPage = lazy(() => import("./kpi achievement"));
 const SalesCharts = lazy(() => import("./chart"));
 
 const queryClient = new QueryClient({
-  defaultOptions:{
+  defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false
-    }
-  }
+      refetchOnWindowFocus: false,
+    },
+  },
 });
 
 export default function SalesAnalyze() {
+  const { t } = useTranslation(["salesAnalyze"]);
   return (
     <QueryClientProvider client={queryClient}>
-      <Header title='國外業務銷售報表' />
+      <Header title={t("title")} />
       <SalesAnalyzeNav />
       <MySuspense>
         <Routes>

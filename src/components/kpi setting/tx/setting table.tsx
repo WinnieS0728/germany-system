@@ -11,6 +11,7 @@ import { cn } from "@/utils/cn";
 import { useAppSelector } from "@data/store";
 import api from "@/api";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 interface inputProps {
   index: number;
@@ -54,6 +55,7 @@ function InputOnlyNumber({ index, value, className }: inputProps) {
 }
 
 export function TxSettingTable() {
+  const { t } = useTranslation(['settingPage','toast'])
   const { thisYear } = useAppSelector((state) => state.time);
   const { EmpId } = useAppSelector((state) => state.nowUser).body;
   const { data } = useTxData();
@@ -100,14 +102,14 @@ export function TxSettingTable() {
       })();
     });
     toast.promise(request, {
-      pending: "loading...",
-      success: "設定完成",
-      error: "設定失敗",
+      pending: t('settingRequest.pending',{ns:'toast'}),
+      success: t('settingRequest.success',{ns:'toast'}),
+      error: t('settingRequest.fail',{ns:'toast'}),
     });
   }
 
   return (
-    <Table title='業務TX目標銷售數量設定'>
+    <Table title={t('tx.title')}>
       <FormProvider {...methods}>
         <form
           id='tx'
@@ -117,11 +119,11 @@ export function TxSettingTable() {
             <thead>
               <tr>
                 <th>No.</th>
-                <th>業務</th>
-                <th>第1季</th>
-                <th>第2季</th>
-                <th>第3季</th>
-                <th>第4季</th>
+                <th>{t('tx.thead.sales')}</th>
+                <th>{t('tx.thead.s1')}</th>
+                <th>{t('tx.thead.s2')}</th>
+                <th>{t('tx.thead.s3')}</th>
+                <th>{t('tx.thead.s4')}</th>
               </tr>
             </thead>
             <tbody>

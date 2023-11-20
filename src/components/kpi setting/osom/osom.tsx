@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import api from "@/api";
 import { useAppSelector } from "@/data/store";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 interface inputProps {
   name: keyof formData;
@@ -57,6 +58,7 @@ const formSchema = z.object({
 type formData = z.infer<typeof formSchema>;
 
 export function OsomSettingTable() {
+  const { t } = useTranslation(["settingPage", "toast"]);
   const { EmpId } = useAppSelector((state) => state.nowUser).body;
   const methods = useForm<formData>({
     resolver: zodResolver(formSchema),
@@ -116,9 +118,9 @@ export function OsomSettingTable() {
     });
 
     toast.promise(request, {
-      pending: "loading...",
-      success: "設定成功",
-      error: "設定失敗",
+      pending: t("settingRequest.pending", { ns: "toast" }),
+      success: t("settingRequest.success", { ns: "toast" }),
+      error: t("settingRequest.fail", { ns: "toast" }),
     });
   }
 
@@ -136,7 +138,7 @@ export function OsomSettingTable() {
 
   return (
     <>
-      <Table title='OSOM 項目目標設定'>
+      <Table title={t("osom.title")}>
         <>
           <FormProvider {...methods}>
             <form
@@ -147,37 +149,37 @@ export function OsomSettingTable() {
                 <thead>
                   <tr>
                     <th>NO.</th>
-                    <th>目標項目</th>
-                    <th>目標值</th>
+                    <th>{t("osom.thead.label")}</th>
+                    <th>{t("osom.thead.value")}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>1</td>
-                    <td>推薦成功店家數</td>
+                    <td>{t("osom.recommend")}</td>
                     <td>
                       <InputOnlyNumber name='recommend_store' />
                     </td>
                   </tr>
                   <tr>
                     <td>2</td>
-                    <td>OSOM 登入數</td>
+                    <td>{t("osom.login.label")}</td>
                     <td>
-                      <p className="flex justify-center items-center gap-4">
-                        <span>增加</span>
+                      <p className='flex justify-center items-center gap-4'>
+                        <span>{t("osom.add")}</span>
                         <InputOnlyNumber name='osom_login' />
-                        <span>帳號登入</span>
+                        <span>{t("osom.login.unit")}</span>
                       </p>
                     </td>
                   </tr>
                   <tr>
                     <td>3</td>
-                    <td>Tire storage 資料數</td>
+                    <td>{t("osom.tsData.label")}</td>
                     <td>
-                      <p className="flex justify-center items-center gap-4">
-                        <span>增加</span>
+                      <p className='flex justify-center items-center gap-4'>
+                        <span>{t("osom.add")}</span>
                         <InputOnlyNumber name='tireStorage_data' />
-                        <span>筆預約資料</span>
+                        <span>{t("osom.tsData.unit")}</span>
                       </p>
                     </td>
                   </tr>

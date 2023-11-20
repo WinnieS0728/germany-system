@@ -4,8 +4,14 @@ import { Section } from "@/layouts/section";
 import { useAtuPaymentList } from "./atu payment list.hook";
 import { Loading } from "@/components/UI/loading";
 import { Error } from "@/components/UI/error";
+import { useTranslation } from "react-i18next";
+import { month_shortName } from "@/types";
 
 export function AtuPaymentList() {
+  const {
+    t,
+    i18n: { language: nowLang },
+  } = useTranslation(["salesAnalyze"]);
   const { status, atuPaymentList, message } = useAtuPaymentList();
   if (status === "pending") {
     return (
@@ -26,21 +32,35 @@ export function AtuPaymentList() {
   }
   return (
     <>
-      <Section title='ATU 各店 TX 對帳列表'>
+      <Section title={t("overview.atuPaymentList.title")}>
         <Table>
           <table>
             <thead>
               <tr>
-                <th className="text-start bg-sectionHeader text-myWhite" colSpan={4}>店家列表</th>
-                <th className="text-start bg-sectionHeader text-myWhite" colSpan={12}>每月對帳數</th>
+                <th
+                  className='text-start bg-sectionHeader text-myWhite'
+                  colSpan={4}
+                >
+                  {t("overview.atuPaymentList.thead.storeList")}
+                </th>
+                <th
+                  className='text-start bg-sectionHeader text-myWhite'
+                  colSpan={12}
+                >
+                  {t("overview.atuPaymentList.thead.payList")}
+                </th>
               </tr>
               <tr>
-                <th>負責業務</th>
-                <th>行政區</th>
-                <th>店家名稱</th>
-                <th>對帳總數量</th>
+                <th>{t("overview.atuPaymentList.thead.sales")}</th>
+                <th>{t("overview.atuPaymentList.thead.country")}</th>
+                <th>{t("overview.atuPaymentList.thead.cusName")}</th>
+                <th>{t("overview.atuPaymentList.thead.payQty")}</th>
                 {Month_MM.map((month) => (
-                  <th key={month}>{`${Number(month)}月`}</th>
+                  <th key={month}>
+                    {nowLang === "en"
+                      ? month_shortName.at(Number(month) - 1)
+                      : `${Number(month)}月`}
+                  </th>
                 ))}
               </tr>
             </thead>

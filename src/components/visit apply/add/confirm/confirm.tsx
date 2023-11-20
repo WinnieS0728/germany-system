@@ -33,9 +33,9 @@ const Confirm = () => {
       const res = await api.threshold.fetch(thisYear, nowUser.body.EmpId);
       const thisMonth = month_shortName[new Date().getMonth()];
 
-      const newCus_threshold = res[0][`${thisMonth}`];
+      const newCus_threshold = res[0][`${thisMonth}`];      
 
-      if (getPercent(newCus.length, allCus) >= Number(newCus_threshold)) {
+      if (getPercent(newCus.length, allCus) > Number(newCus_threshold)) {
         setDisable(true);
       } else {
         setDisable(false);
@@ -56,23 +56,32 @@ const Confirm = () => {
         EmpId={nowUser.body.EmpId}
         time={{ year: timeData.thisYear, month: timeData.thisMonth }}
       />
-      {disable && <p className='text-center'>百分比不符合</p>}
-      <div className='submit-btns'>
-        <Btns.LongBtn
-          type='submit'
-          style='confirm'
-          form='business apply'
-          disabled={disable}
-          className='cursor-not-allowed'
-        />
+      {disable ? (
         <Btns.LongBtn
           type='button'
           style='cancel'
           onClick={() => {
             toggleModal("off");
           }}
-        />
-      </div>
+        >
+          {t("kpiError")}
+        </Btns.LongBtn>
+      ) : (
+        <div className='submit-btns'>
+          <Btns.LongBtn
+            type='submit'
+            style='confirm'
+            form='business apply'
+          />
+          <Btns.LongBtn
+            type='button'
+            style='cancel'
+            onClick={() => {
+              toggleModal("off");
+            }}
+          />
+        </div>
+      )}
     </article>
   );
 };

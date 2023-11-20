@@ -4,8 +4,11 @@ import { Section } from "@/layouts/section";
 import { cn } from "@/utils/cn";
 import { getLocaleString } from "@/utils/get localeString";
 import { Loading } from "@/components/UI/loading";
+import { useTranslation } from "react-i18next";
+
 
 export function SalesList() {
+const { t } = useTranslation(["salesAnalyze"]);
   const { status, salesListData, indexArray } = useSalesList();
 
   if (status === "pending") {
@@ -21,7 +24,7 @@ export function SalesList() {
 
   return (
     <>
-      <Section title='輪胎店銷售列表'>
+      <Section title={t('overview.salesList.title')}>
         <Table>
           <table>
             <thead>
@@ -30,20 +33,20 @@ export function SalesList() {
                   className='text-start bg-sectionHeader text-myWhite'
                   colSpan={4}
                 >
-                  店家列表
+                  {t('overview.salesList.thead.storeList')}
                 </th>
                 <th
                   className='text-start bg-sectionHeader text-myWhite'
                   colSpan={indexArray.length}
                 >
-                  訂單記錄
+                  {t('overview.salesList.thead.orderList')}
                 </th>
               </tr>
               <tr>
-                <th>業務人員</th>
-                <th>店家名稱</th>
-                <th>TX數量</th>
-                <th>下單次數</th>
+                <th>{t('overview.salesList.thead.sales')}</th>
+                <th>{t('overview.salesList.thead.cusName')}</th>
+                <th>{t('overview.salesList.thead.tx')}</th>
+                <th>{t('overview.salesList.thead.order')}</th>
                 {indexArray.map((index) => (
                   <th key={index}>{index}</th>
                 ))}

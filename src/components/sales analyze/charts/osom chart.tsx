@@ -88,7 +88,7 @@ export function OsomChart() {
                         name='註冊數'
                         dataKey={"signUp_sum"}
                         yAxisId={"sign-up"}
-                        fill='#BBBBBB'
+                        fill='#CED0D3'
                       >
                         <LabelList
                           dataKey={"signUp_sum"}

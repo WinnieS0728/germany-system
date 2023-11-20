@@ -1,6 +1,7 @@
 import { month_shortName } from "@/types";
 import { FieldArrayWithId, UseFormRegister } from "react-hook-form";
 import { thresholdList_emp, threshold_data } from "./data";
+import { useTranslation } from "react-i18next";
 
 interface propsType {
   field: FieldArrayWithId<
@@ -22,6 +23,7 @@ export const TrList = ({
   setSelected,
   setSelectNumber,
 }: propsType) => {
+  const {t} = useTranslation(['settingPage'])
   function inputFormat(e: React.ChangeEvent<HTMLInputElement>) {
     const e_value = e.target.value;
     const value = e_value.replace(/[^\d]/g, "");
@@ -49,7 +51,7 @@ export const TrList = ({
       <tr>
         <td rowSpan={2}>{index + 1}</td>
         <td rowSpan={2}>{field.EmpName}</td>
-        <td>ATU & 既有客戶</td>
+        <td>{t('threshold.type.atu')}</td>
         {month_shortName.map((m) => (
           <td
             key={m}
@@ -77,7 +79,7 @@ export const TrList = ({
         ))}
       </tr>
       <tr>
-        <td>新客戶</td>
+        <td>{t('threshold.type.newCus')}</td>
         {month_shortName.map((m) => (
           <td
             key={m}

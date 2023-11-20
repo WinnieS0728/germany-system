@@ -5,10 +5,16 @@ import { Section } from "@/layouts/section";
 import { cn } from "@/utils/cn";
 import { getLocaleString } from "@/utils/get localeString";
 import { Fragment } from "react";
+import { useTranslation } from "react-i18next";
 import { Loading } from "@/components/UI/loading";
+import { month_shortName } from "@/types";
 
 export function YearSalesTable() {
   const { status, yearSalesData } = useYearSales();
+  const {
+    t,
+    i18n: { language: nowLang },
+  } = useTranslation(["salesAnalyze"]);
 
   if (status === "pending") {
     return (
@@ -23,28 +29,32 @@ export function YearSalesTable() {
 
   return (
     <>
-      <Section title='年度業績列表'>
+      <Section title={t("yearSales.title")}>
         <Table>
           <table>
             <thead>
               <tr>
-                <th rowSpan={2}>業務人員</th>
-                <th rowSpan={2}>項目</th>
-                <th colSpan={4}>總計</th>
-                <th colSpan={13}>每月銷售數</th>
+                <th rowSpan={2}>{t("yearSales.thead.sales")}</th>
+                <th rowSpan={2}>{t("yearSales.thead.item")}</th>
+                <th colSpan={4}>{t("yearSales.thead.total")}</th>
+                <th colSpan={13}>{t("yearSales.thead.monthSales")}</th>
               </tr>
               <tr>
-                <th>第一季</th>
-                <th>第二季</th>
-                <th>第三季</th>
-                <th>第四季</th>
+                <th>{t("yearSales.thead.s1")}</th>
+                <th>{t("yearSales.thead.s2")}</th>
+                <th>{t("yearSales.thead.s3")}</th>
+                <th>{t("yearSales.thead.s4")}</th>
                 {Month_MM.map((month) => (
                   <th
                     key={month}
                     className='whitespace-nowrap'
-                  >{`${Number(month)} 月`}</th>
+                  >
+                    {nowLang === "en"
+                      ? month_shortName.at(Number(month) - 1)
+                      : `${Number(month)} 月`}
+                  </th>
                 ))}
-                <th>總計</th>
+                <th>{t("yearSales.thead.total")}</th>
               </tr>
             </thead>
             <tbody>
@@ -52,7 +62,9 @@ export function YearSalesTable() {
                 <Fragment key={data.id}>
                   <tr>
                     <td rowSpan={3}>{data.name}</td>
-                    <td className='whitespace-nowrap'>TX 銷售量</td>
+                    <td className='whitespace-nowrap'>
+                      {t("yearSales.data.tx.qty")}
+                    </td>
                     {data.txNumber_season.map((number, index) => (
                       <td key={index}>{getLocaleString(number)}</td>
                     ))}
@@ -67,13 +79,17 @@ export function YearSalesTable() {
                     <td rowSpan={3}>{getLocaleString(data.total)}</td>
                   </tr>
                   <tr>
-                    <td className='whitespace-nowrap'>TX 銷售目標</td>
+                    <td className='whitespace-nowrap'>
+                      {t("yearSales.data.tx.threshold")}
+                    </td>
                     {data.txThreshold.map((number, index) => (
                       <td key={index}>{getLocaleString(number)}</td>
                     ))}
                   </tr>
                   <tr>
-                    <td className='whitespace-nowrap'>銷售達成率</td>
+                    <td className='whitespace-nowrap'>
+                      {t("yearSales.data.tx.percent")}
+                    </td>
                     {data.salesRate.map((number, index) => (
                       <td
                         key={index}

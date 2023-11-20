@@ -48,7 +48,6 @@ export function AtuVisitList() {
                 <th>店家名稱</th>
                 <th>累計對帳數量</th>
                 <th>拜訪次數</th>
-                <th>近期拜訪日期</th>
                 {indexArray.map((index) => (
                   <th key={index}>{index}</th>
                 ))}
@@ -61,7 +60,6 @@ export function AtuVisitList() {
                   <td>{data.cusName}</td>
                   <td>{data.payNumber}</td>
                   <td>{data.visitNumber}</td>
-                  <td>{data.visitList[0].StartDT}</td>
                   {data.visitList.map((date, index) => (
                     <td
                       key={index}

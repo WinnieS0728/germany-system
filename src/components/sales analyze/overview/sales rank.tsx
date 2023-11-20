@@ -3,8 +3,11 @@ import { useSalesRank } from "@/components/sales analyze/overview/sales rank.hoo
 import { Section } from "@/layouts/section";
 import { getLocaleString } from "@/utils/get localeString";
 import { Loading } from "@/components/UI/loading";
+import { useTranslation } from "react-i18next";
 
 export function SalesRank() {
+  const { t } = useTranslation(["salesAnalyze"]);
+
   const { status, salesRankData } = useSalesRank();
 
   if (status === "pending") {
@@ -20,20 +23,20 @@ export function SalesRank() {
 
   return (
     <>
-      <Section title='業務銷售排名 (不含ATU)'>
+      <Section title={t("overview.salesRank.title")}>
         <Table>
           <table>
             <thead>
               <tr>
-                <td>排名</td>
-                <td>業務人員</td>
-                <td>TX銷售數量</td>
-                <td>OG銷售數量</td>
-                <td>訂單總數量</td>
-                <td>首購客戶訂單數量</td>
-                <td>首購客戶訂單占比</td>
-                <td>既有客戶訂單數量</td>
-                <td>既有客戶訂單占比</td>
+                <td>{t("overview.salesRank.thead.rank")}</td>
+                <td>{t("overview.salesRank.thead.sales")}</td>
+                <td>{t("overview.salesRank.thead.tx")}</td>
+                <td>{t("overview.salesRank.thead.og")}</td>
+                <td>{t("overview.salesRank.thead.order")}</td>
+                <td>{t("overview.salesRank.thead.newCus.qty")}</td>
+                <td>{t("overview.salesRank.thead.newCus.percent")}</td>
+                <td>{t("overview.salesRank.thead.existCus.qty")}</td>
+                <td>{t("overview.salesRank.thead.existCus.percent")}</td>
               </tr>
             </thead>
             <tbody>

@@ -1,4 +1,5 @@
 {
+  "kpiError": "不符合kpi百分比設定 請重新安排拜訪客戶以符合比例",
   "percentTable": {
     "atu": "ATU",
     "newCus": "新客戶",

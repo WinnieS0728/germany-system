@@ -1,15 +1,21 @@
 import { useAppSelector } from "@/data/store";
+import { month_shortName } from "@/types";
 import { cn } from "@/utils/cn";
 import { timeFormat } from "d3";
 import { useState, useEffect } from "react";
 import { DateRange, DayPicker } from "react-day-picker";
 import { useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 interface timePickerProps {
   active: boolean;
 }
 
 export function TimePicker({ active }: timePickerProps) {
+  const {
+    t,
+    i18n: { language: nowLang },
+  } = useTranslation(["salesAnalyze"]);
   const { setValue } = useFormContext();
   const { thisYear } = useAppSelector((state) => state.time);
   const [range, setRange] = useState<DateRange>();
@@ -40,9 +46,13 @@ export function TimePicker({ active }: timePickerProps) {
 
   function getInputValue(obj: DateRange | undefined): string {
     if (obj && obj.from && obj.to) {
-      const fromMonth = obj.from.getMonth() + 1;
-      const toMonth = obj.to.getMonth() + 1;
-      return `2023 - ${fromMonth}月 ~ 2023 - ${toMonth}月`;
+      const fromMonth = obj.from.getMonth();
+      const toMonth = obj.to.getMonth();
+      if (nowLang === 'zh') { 
+        return `2023 - ${fromMonth+1}月 ~ 2023 - ${toMonth+1}月`;
+      }else {
+        return `2023 - ${month_shortName.at(fromMonth)} ~ 2023 - ${month_shortName.at(toMonth)}`
+      }
     }
     return "";
   }
@@ -76,7 +86,7 @@ export function TimePicker({ active }: timePickerProps) {
         onClick={() => {
           setShow((prev) => !prev);
         }}
-        placeholder={active ? "請選擇時間..." : ""}
+        placeholder={active ? t('headerFilter.dayPicker.placeholder') : ""}
         disabled={!active}
         value={getInputValue(range)}
         autoComplete='off'

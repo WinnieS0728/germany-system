@@ -1,4 +1,5 @@
 {
+  "kpiError": "Does not meet the KPI percentage setting. Please reschedule the visit to the customer to meet the ratio.",
   "percentTable": {
     "atu": "ATU",
     "newCus": "new customer",

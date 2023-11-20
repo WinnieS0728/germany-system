@@ -1,0 +1,103 @@
+{
+  "headerFilter": {
+    "dayPicker": {
+      "placeholder": "Please select dates..."
+    },
+    "radio": {
+      "recent": {
+        "6": "last 6 months",
+        "12": "last 12 months"
+      },
+      "selectMonth": "Select month"
+    },
+    "sales": "sales",
+    "time": {
+      "label": "time",
+      "radio": {
+        "cus": "Select interval",
+        "thisMonth": "thisMonth",
+        "thisYear": "thisYear"
+      }
+    },
+    "year": "year"
+  },
+  "nav": {
+    "atuVisit": "ATU visit record",
+    "charts": "Trend charts of various indicators",
+    "kpiAchievement": "KPI execution progress query",
+    "overview": "Business Performance Report Overview",
+    "tsVisit": "Tire shop visit record",
+    "unOrderTS": "Inquiry at tire store that has not placed an order",
+    "unVisitTS": "Did not visit the tire shop to inquire",
+    "yearSales": "Annual performance list"
+  },
+  "overview": {
+    "atuPayment": {
+      "rank": "Ranking",
+      "sales": "Business people",
+      "title": "Business Responsible Area ATU Reconciliation Number Ranking",
+      "tx": "TX total reconciliation number"
+    },
+    "atuPaymentList": {
+      "thead": {
+        "country": "administrative district",
+        "cusName": "Store name",
+        "payList": "Number of reconciliations per month",
+        "payQty": "Total reconciliation quantity",
+        "sales": "Responsible for business",
+        "storeList": "Store list"
+      },
+      "title": "ATU store TX reconciliation list"
+    },
+    "salesList": {
+      "thead": {
+        "cusName": "Store name",
+        "order": "Number of orders placed",
+        "orderList": "Order record",
+        "sales": "Business people",
+        "storeList": "Store list",
+        "tx": "TX quantity"
+      },
+      "title": "Tire shop sales list"
+    },
+    "salesRank": {
+      "thead": {
+        "existCus": {
+          "percent": "Proportion of orders from existing customers",
+          "qty": "Existing customer order quantity"
+        },
+        "newCus": {
+          "percent": "Proportion of orders from first-time purchasers",
+          "qty": "First-time customer order quantity"
+        },
+        "og": "OG sales quantity",
+        "order": "Total order quantity",
+        "rank": "Ranking",
+        "sales": "Business people",
+        "tx": "TX sales quantity"
+      },
+      "title": "Business sales ranking (excluding ATU)"
+    }
+  },
+  "title": "Foreign business sales report",
+  "yearSales": {
+    "data": {
+      "tx": {
+        "percent": "Sales achievement rate",
+        "qty": "TX sales",
+        "threshold": "TX sales target"
+      }
+    },
+    "thead": {
+      "item": "project",
+      "monthSales": "monthly sales",
+      "s1": "Season 1",
+      "s2": "Season 2",
+      "s3": "Season 3",
+      "s4": "Season 4",
+      "sales": "Business people",
+      "total": "total"
+    },
+    "title": "Annual performance list"
+  }
+}

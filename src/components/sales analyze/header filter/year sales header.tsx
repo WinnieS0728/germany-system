@@ -2,6 +2,7 @@ import { MySelect } from "@/components/form/select";
 import { useAppSelector } from "@/data/store";
 import { useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import z from "zod";
 
@@ -18,6 +19,7 @@ const yearSalesFilter_schema = z.object({
 type yearFilter = z.infer<typeof yearSalesFilter_schema>;
 
 export function YearSalesHeader() {
+  const { t } = useTranslation(["salesAnalyze"]);
   const salesList = useAppSelector((state) => state.salesList).body;
   const { thisYear } = useAppSelector((state) => state.time);
   const setSearch = useSearchParams()[1];
@@ -47,7 +49,11 @@ export function YearSalesHeader() {
     return options;
   }, [salesList]);
 
-  const { handleSubmit, control, formState:{isSubmitting} } = useForm<yearFilter>({
+  const {
+    handleSubmit,
+    control,
+    formState: { isSubmitting },
+  } = useForm<yearFilter>({
     mode: "onSubmit",
     defaultValues: {
       year: thisYear,
@@ -82,7 +88,7 @@ export function YearSalesHeader() {
           name='year'
           render={({ field: { onChange } }) => (
             <label className='label-input'>
-              <p>年份</p>
+              <p>{t('headerFilter.year')}</p>
               <MySelect.Normal
                 options={yearOption}
                 onChange={onChange}
@@ -95,7 +101,7 @@ export function YearSalesHeader() {
           name='EmpId'
           render={({ field: { onChange } }) => (
             <label className='label-input'>
-              <p>業務</p>
+              <p>{t('headerFilter.sales')}</p>
               <MySelect.Normal
                 options={SalesListOptions}
                 onChange={onChange}

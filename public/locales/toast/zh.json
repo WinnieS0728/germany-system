@@ -19,6 +19,11 @@
     "pending": "處理中...",
     "success": "會簽完成"
   },
+  "settingRequest": {
+    "fail": "設定失敗",
+    "pending": "處理中...",
+    "success": "設定成功"
+  },
   "sign": {
     "fail": "簽核失敗",
     "pending": "處理中...",

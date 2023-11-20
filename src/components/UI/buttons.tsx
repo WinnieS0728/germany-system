@@ -66,12 +66,14 @@ type longBtn = { style: "cancel" | "confirm" } & (
       onClick?: () => void;
       disabled?: boolean,
       className?: string
+      children?: string
     }
   | {
       type: "button";
       onClick: () => void;
       disabled?: boolean,
       className?: string
+      children?: string
     }
 );
 
@@ -112,7 +114,7 @@ export const LongBtn = (props: longBtn) => {
       }}
       disabled={props.disabled}
     >
-      {content}
+      {props.children || content}
     </button>
   );
 };

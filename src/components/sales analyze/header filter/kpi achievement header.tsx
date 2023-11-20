@@ -6,6 +6,8 @@ import { useSearchParams } from "react-router-dom";
 import z from "zod";
 import { filterTimeType, RadioBtn } from "./radio";
 import { FilterSubmit } from "./filter submit";
+import { useTranslation } from "react-i18next";
+import { month_shortName } from "@/types";
 
 const filterForm_schema = z.object({
   EmpId: z.string().optional(),
@@ -15,6 +17,10 @@ const filterForm_schema = z.object({
 type filterForm = z.infer<typeof filterForm_schema>;
 
 export function KpiAchievementHeader() {
+  const {
+    t,
+    i18n: { language: nowLang },
+  } = useTranslation(["salesAnalyze"]);
   const salesList = useAppSelector((state) => state.salesList).body;
   const { thisMonth } = useAppSelector((state) => state.time);
   const [type, setType] = useState<filterTimeType>("thisMonth");
@@ -54,12 +60,15 @@ export function KpiAchievementHeader() {
     }
 
     const options = monthArray.map((month) => ({
-      label: `${Number(month)}月`,
+      label:
+        nowLang === "en"
+          ? month_shortName.at(Number(month) - 1)
+          : `${Number(month)}月`,
       value: month,
     }));
 
     return options;
-  }, [thisMonth]);
+  }, [nowLang, thisMonth]);
 
   useEffect(() => {
     const search_month = search.get("month");
@@ -112,7 +121,7 @@ export function KpiAchievementHeader() {
             name='EmpId'
             render={({ field: { onChange } }) => (
               <label className='label-input w-full'>
-                <p>業務</p>
+                <p>{t("headerFilter.sales")}</p>
                 <MySelect.Normal
                   options={options}
                   onChange={onChange}
@@ -121,34 +130,36 @@ export function KpiAchievementHeader() {
             )}
           />
           <label className='label-input w-full'>
-            <p>時間</p>
+            <p>{t("headerFilter.time.label")}</p>
             <div className='w-full grid grid-cols-1 sm:grid-cols-2 lg:flex gap-2'>
               <RadioBtn
                 as='time'
-                text='本月'
+                text={t("headerFilter.time.radio.thisMonth")}
                 active={type === "thisMonth"}
                 setType={setType}
                 value='thisMonth'
               />
               <RadioBtn
                 as='time'
-                text='選擇月份'
+                text={t("headerFilter.radio.selectMonth")}
                 active={type === "cusTime"}
                 setType={setType}
                 value='cusTime'
               />
-              {type === 'cusTime' && <Controller
-                control={control}
-                name='month'
-                render={({ field: { onChange } }) => (
-                  <label className='label-input'>
-                    <MySelect.Normal
-                      options={monthOption}
-                      onChange={onChange}
-                    />
-                  </label>
-                )}
-              />}
+              {type === "cusTime" && (
+                <Controller
+                  control={control}
+                  name='month'
+                  render={({ field: { onChange } }) => (
+                    <label className='label-input'>
+                      <MySelect.Normal
+                        options={monthOption}
+                        onChange={onChange}
+                      />
+                    </label>
+                  )}
+                />
+              )}
             </div>
           </label>
           <FilterSubmit disable={isSubmitting} />

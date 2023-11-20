@@ -23,7 +23,7 @@ export type thresholdData = Record<
 >;
 
 export const ThresholdSettingTable = () => {
-  const { t } = useTranslation(["common"]);
+  const { t } = useTranslation(["common",'settingPage','toast']);
   const timeData = useAppSelector((state) => state.time);
   const nowUser = useAppSelector((state) => state.nowUser);
   const nowUser_id = nowUser.body.EmpId;
@@ -150,14 +150,14 @@ export const ThresholdSettingTable = () => {
     const p = await postStatus;
 
     if (p.map((i) => i.status).every((i) => i === "設定新增完成")) {
-      toast.success("設定成功");
+      toast.success(t('settingRequest.success',{ns:'toast'}));
     } else {
-      toast.error(`設定失敗`);
+      toast.error(t('settingRequest.fail',{ns:'toast'}));
     }
   }
 
   return (
-    <Table title='客戶拜訪佔比警示值'>
+    <Table title={t('threshold.title',{ns:'settingPage'})}>
       <>
         <form
           id='threshold'
@@ -167,8 +167,8 @@ export const ThresholdSettingTable = () => {
             <thead>
               <tr>
                 <td>NO.</td>
-                <td>業務</td>
-                <td>類別</td>
+                <td>{t('threshold.thead.sales',{ns: "settingPage"})}</td>
+                <td>{t('threshold.thead.type',{ns: "settingPage"})}</td>
                 <td>{t("month.1")}</td>
                 <td>{t("month.2")}</td>
                 <td>{t("month.3")}</td>

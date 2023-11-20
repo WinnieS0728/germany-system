@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 
 type navBtn = {
@@ -5,24 +7,22 @@ type navBtn = {
   path: string;
 };
 
-export const salesAnalyzeNavRoutes: navBtn[] = [
-  {
-    label: "業務業績報表總覽",
-    path: "",
-  },
-  {
-    label: "年度業績列表",
-    path: "yearSales",
-  },
-  { label: "輪胎店拜訪紀錄", path: "tireShopVisit" },
-  { label: "ATU 拜訪紀錄", path: "atuVisit" },
-  { label: "未拜訪輪胎店查詢", path: "unVisitTireShop" },
-  { label: "未下單輪胎店查詢", path: "unOrderTireShop" },
-  { label: "KPI 執行進度查詢", path: "kpiAchievement" },
-  { label: "各項指標趨勢圖", path: "salesCharts" },
-];
-
 export function SalesAnalyzeNav() {
+  const { t } = useTranslation(["salesAnalyze"]);
+  const salesAnalyzeNavRoutes: navBtn[] = useMemo(
+    () => [
+      { label: t("nav.overview"), path: "" },
+      { label: t("nav.yearSales"), path: "yearSales" },
+      { label: t("nav.tsVisit"), path: "tireShopVisit" },
+      { label: t("nav.atuVisit"), path: "atuVisit" },
+      { label: t("nav.unVisitTS"), path: "unVisitTireShop" },
+      { label: t("nav.unOrderTS"), path: "unOrderTireShop" },
+      { label: t("nav.kpiAchievement"), path: "kpiAchievement" },
+      { label: t("nav.charts"), path: "salesCharts" },
+    ],
+    [t]
+  );
+
   return (
     <>
       <nav className='bg-navBgc'>

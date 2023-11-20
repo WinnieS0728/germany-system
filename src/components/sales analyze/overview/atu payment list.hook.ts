@@ -20,6 +20,7 @@ interface atuPaymentReturn extends queryStatus {
 
 export function useAtuPaymentList(): atuPaymentReturn {
     const { thisYear } = useAppSelector(state => state.time)
+    const salesList = useAppSelector(state => state.salesList).body
     const search = useSearchParams()[0]
     const search_EmpId = search.get('EmpId')
     const { id2name } = useId2name()
@@ -27,7 +28,7 @@ export function useAtuPaymentList(): atuPaymentReturn {
     const { data, isPending, isError, error } = useQuery({
         queryKey: ['overview', 'atuPayment', search_EmpId],
         queryFn: async () => {
-            const atuPayment_allData = await api.getAtuPayment(thisYear)
+            const atuPayment_allData = (await api.getAtuPayment(thisYear)).filter(data => salesList.some(member => member.EmpName === data.Empname))
 
             const cusList = [...new Set(atuPayment_allData.map(data => data.Custname))]
 

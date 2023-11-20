@@ -7,6 +7,7 @@ import z from "zod";
 import { filterZoneType, RadioBtn } from "./radio";
 import { TimePicker } from "./time picker";
 import { FilterSubmit } from "./filter submit";
+import { useTranslation } from "react-i18next";
 
 const filterForm_schema = z.object({
   EmpId: z.string().optional(),
@@ -20,6 +21,7 @@ interface props {
 }
 
 export function RecentHeader({ as }: props) {
+  const { t } = useTranslation(["salesAnalyze"]);
   const salesList = useAppSelector((state) => state.salesList).body;
   const [type, setType] = useState<filterZoneType>("recent");
   const [search, setSearch] = useSearchParams();
@@ -56,7 +58,7 @@ export function RecentHeader({ as }: props) {
     if (!search_month) {
       setType("recent");
     } else {
-      setType('cusTime');
+      setType("cusTime");
     }
   }, [search, setType]);
 
@@ -103,7 +105,7 @@ export function RecentHeader({ as }: props) {
             name='EmpId'
             render={({ field: { onChange } }) => (
               <label className='label-input w-full'>
-                <p>業務</p>
+                <p>{t("headerFilter.sales")}</p>
                 <MySelect.Normal
                   options={options}
                   onChange={onChange}
@@ -112,18 +114,22 @@ export function RecentHeader({ as }: props) {
             )}
           />
           <label className='label-input w-full'>
-            <p>時間</p>
+            <p>{t("headerFilter.time.label")}</p>
             <div className='w-full grid grid-cols-1 justify-start items-center sm:grid-cols-2 lg:flex gap-2'>
               <RadioBtn
                 as='recent'
-                text={as === "visit" ? "最近 6 個月" : "最近 12 個月"}
+                text={
+                  as === "visit"
+                    ? t("headerFilter.radio.recent.6")
+                    : t("headerFilter.radio.recent.12")
+                }
                 active={type === "recent"}
                 setType={setType}
                 value='recent'
               />
               <RadioBtn
                 as='recent'
-                text='選擇區間'
+                text={t('headerFilter.time.radio.cus')}
                 active={type === "cusTime"}
                 setType={setType}
                 value='cusTime'

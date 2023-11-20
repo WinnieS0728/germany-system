@@ -28,6 +28,7 @@ interface salesListReturn extends queryStatus {
 
 export function useSalesList(): salesListReturn {
     const { thisYear } = useAppSelector(state => state.time)
+    const salesList = useAppSelector(state => state.salesList).body
     const [search] = useSearchParams()
     const searchMonth = search.get('month')
     const searchEmpId = search.get('EmpId')
@@ -37,7 +38,7 @@ export function useSalesList(): salesListReturn {
     const { data, isPending, isError, error } = useQuery({
         queryKey: ['overview', 'salesList', monthList, searchEmpId],
         queryFn: async () => {
-            const orderList = await getOrderList(monthList)
+            const orderList = (await Promise.all(salesList.map(async (member) => getOrderList(monthList, member.EmpId)))).reduce((a, b) => a.concat(b), [])
             const dataSet: salesListData[] = await Promise.all(orderList.map(async (data) => {
                 const orderDateList = await getOrderDateList(data.cu_no)
                 const orderTime = orderDateList.orderDateList.length
@@ -96,7 +97,7 @@ export function useSalesList(): salesListReturn {
         indexArray: data.indexArray
     }
 
-    async function getOrderList(monthList: string[] | undefined) {
+    async function getOrderList(monthList: string[] | undefined, EmpId: string) {
         if (monthList) {
             const orderList_res = (await Promise.all(monthList.map(async (month) => {
                 const orderList_res = await api.getSalesDetailQty({
@@ -104,7 +105,7 @@ export function useSalesList(): salesListReturn {
                     month
                 })
                 return orderList_res
-            }))).reduce((a, b) => a.concat(b), []).filter(data => data.cu_sale !== 'ER221001')
+            }))).reduce((a, b) => a.concat(b), []).filter(data => data.cu_sale === EmpId)
 
             const sumData = orderList_res.map(res => {
                 const tx_sum = orderList_res.filter(data => data.cu_no === res.cu_no).map(data => data.sqty).reduce((a, b) => a + b, 0)
@@ -126,7 +127,7 @@ export function useSalesList(): salesListReturn {
             year: thisYear
         })
 
-        return dataSet.filter(data => data.cu_sale !== 'ER221001')
+        return dataSet.filter(data => data.cu_sale === EmpId)
     }
 
     async function getOrderDateList(cu_no: string) {
