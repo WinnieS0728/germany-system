@@ -3,8 +3,10 @@ import { Section } from "@/layouts/section";
 import { useUnVisitTireShop } from "./unvisit tire shop.hook";
 import { Loading } from "@/components/UI/loading";
 import { Error } from "@/components/UI/error";
+import { useTranslation } from "react-i18next";
 
 export function UnVisitTireShopTable() {
+  const { t } = useTranslation(["salesAnalyze"]);
   const { status, unVisitData, message } = useUnVisitTireShop();
 
   if (status === "pending") {
@@ -33,12 +35,12 @@ export function UnVisitTireShopTable() {
           <table>
             <thead>
               <tr>
-                <th>業務</th>
-                <th>客戶名稱</th>
-                <th>客戶地址</th>
-                <th>客戶電話</th>
-                <th>拜訪次數</th>
-                <th>最近拜訪紀錄</th>
+                <th>{t("unVisitTS.thead.sales")}</th>
+                <th>{t("unVisitTS.thead.cusName")}</th>
+                <th>{t("unVisitTS.thead.addr")}</th>
+                <th>{t("unVisitTS.thead.tel")}</th>
+                <th>{t("unVisitTS.thead.visit")}</th>
+                <th>{t("unVisitTS.thead.recent")}</th>
               </tr>
             </thead>
             <tbody>

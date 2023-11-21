@@ -2,20 +2,13 @@ import { Loading } from "@/components/UI/loading";
 import { Section } from "@/layouts/section";
 import { useExistCusVisit } from "./existCus chart.hook";
 import { Error } from "@/components/UI/error";
-import { Table } from "@/components/table/table";
-import {
-  ResponsiveContainer,
-  ComposedChart,
-  CartesianGrid,
-  Legend,
-  XAxis,
-  YAxis,
-  Bar,
-  Line,
-  LabelList,
-} from "recharts";
+import { TableChartLayout } from "./table chart layout";
+import { useTranslation } from "react-i18next";
+
 
 export function ExistCusVisitChart() {
+const { t } = useTranslation(["salesAnalyze"]);
+
   const { data, isPending, isError, error } = useExistCusVisit();
 
   if (isPending) {
@@ -37,83 +30,23 @@ export function ExistCusVisitChart() {
     );
   }
 
+  const chartData = data.map((data) => ({
+    month: data.month,
+    data1: data.visit_sum,
+    data2: data.order_sum,
+  }));
+
   return (
     <>
-      <Section title='既有客戶 - 拜訪店家趨勢圖'>
-        <Table>
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                {data.map((data) => (
-                  <th key={data.month}>{data.month}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>拜訪店數</td>
-                {data.map((data, index) => (
-                  <td key={index}>{data.visit_sum}</td>
-                ))}
-              </tr>
-              <tr>
-                <td>有訂單店數</td>
-                {data.map((data, index) => (
-                  <td key={index}>{data.order_sum}</td>
-                ))}
-              </tr>
-              <tr>
-                <td colSpan={13}>
-                  <ResponsiveContainer
-                    width={"100%"}
-                    height={300}
-                  >
-                    <ComposedChart data={data}>
-                      <CartesianGrid vertical={false} />
-                      <Legend
-                        verticalAlign='top'
-                        height={40}
-                      />
-                      <XAxis
-                        dataKey={"month"}
-                        tickMargin={10}
-                      />
-                      <YAxis yAxisId={"visit"} />
-                      <YAxis
-                        yAxisId={"order"}
-                        orientation='right'
-                      />
-                      <Bar
-                        name='拜訪店數'
-                        dataKey={"visit_sum"}
-                        yAxisId={"visit"}
-                        fill='#CED0D3'
-                      >
-                        <LabelList
-                          dataKey={"visit_sum"}
-                          position={"center"}
-                        />
-                      </Bar>
-                      <Line
-                        name='有訂單店數'
-                        dataKey={"order_sum"}
-                        yAxisId={"order"}
-                        stroke='#4BA555'
-                      >
-                        <LabelList
-                          dataKey={"order_sum"}
-                          position={"top"}
-                          fill='#4BA555'
-                        />
-                      </Line>
-                    </ComposedChart>
-                  </ResponsiveContainer>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Table>
+      <Section title={t('charts.existCus.title')}>
+        <TableChartLayout
+          chartData={chartData}
+          name={{
+            data1: t('charts.existCus.visit'),
+            data2: t('charts.existCus.order'),
+          }}
+          color='#4BA555'
+        />
       </Section>
     </>
   );

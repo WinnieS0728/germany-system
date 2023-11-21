@@ -3,18 +3,22 @@ import { useTSVisit } from "./tire shop visit.hook";
 import { Loading } from "@/components/UI/loading";
 import { Error } from "@/components/UI/error";
 import { Table } from "@/components/table/table";
+import { useTranslation } from "react-i18next";
 
 function Th() {
+  const { t } = useTranslation(["salesAnalyze"]);
+
   return (
     <>
-      <th>店家數</th>
-      <th>訂單數</th>
-      <th>TX 數量</th>
+      <th>{t("TSVisit.thead.qty.store")}</th>
+      <th>{t("TSVisit.thead.qty.order")}</th>
+      <th>{t("TSVisit.thead.qty.tx")}</th>
     </>
   );
 }
 
 export function TireShopVisitTotal() {
+  const { t } = useTranslation(["salesAnalyze"]);
   const { status, tsVisitData, message } = useTSVisit();
 
   if (status === "pending") {
@@ -38,27 +42,35 @@ export function TireShopVisitTotal() {
 
   return (
     <>
-      <Section title="輪胎店拜訪統計">
+      <Section title={t("TSVisit.title")}>
         <Table>
           <table>
             <thead>
               <tr>
-                <th rowSpan={2}>業務</th>
-                <th colSpan={3}>拜訪輪胎店總數</th>
-                <th colSpan={3}>拜訪輪胎店 - 既有客戶店數</th>
-                <th colSpan={3}>拜訪輪胎店 - 新客戶店數</th>
+                <th rowSpan={2}>{t("TSVisit.thead.sales")}</th>
+                <th colSpan={3}>{t("TSVisit.thead.total.all")}</th>
+                <th colSpan={3}>{t("TSVisit.thead.total.existCus")}</th>
+                <th colSpan={3}>{t("TSVisit.thead.total.newCus")}</th>
               </tr>
               <tr>
-                {new Array(3).fill(0).map((_,index) => <Th key={index} />)}
+                {new Array(3).fill(0).map((_, index) => (
+                  <Th key={index} />
+                ))}
               </tr>
             </thead>
             <tbody>
               {tsVisitData.map((data) => (
                 <tr key={data.EmpName}>
                   <td>{data.EmpName}</td>
-                  {data.allData.map((number,index) => <td key={index}>{number}</td>)}
-                  {data.existCus.map((number,index) => <td key={index}>{number}</td>)}
-                  {data.newCus.map((number,index) => <td key={index}>{number}</td>)}
+                  {data.allData.map((number, index) => (
+                    <td key={index}>{number}</td>
+                  ))}
+                  {data.existCus.map((number, index) => (
+                    <td key={index}>{number}</td>
+                  ))}
+                  {data.newCus.map((number, index) => (
+                    <td key={index}>{number}</td>
+                  ))}
                 </tr>
               ))}
             </tbody>

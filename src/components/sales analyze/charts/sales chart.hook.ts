@@ -3,8 +3,12 @@ import { useAppSelector } from "@/data/store";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { monthList } from "./monthList";
+import { month_shortName } from "@/types";
+import { useTranslation } from "react-i18next";
 
 export function useSalesChart() {
+    const { i18n: { language } } = useTranslation()
+
     const { thisYear } = useAppSelector(state => state.time)
     const salesList = useAppSelector(state => state.salesList).body
 
@@ -25,19 +29,19 @@ export function useSalesChart() {
                 }
                 return allSales_salesRank
             }))
-            
 
-            const dataSet = salesRank.map((dataArray,index) => {
+
+            const dataSet = salesRank.map((dataArray, index) => {
                 const tx_sum = dataArray.map(data => data.sqty).reduce((a, b) => a + b, 0)
                 const order_sum = dataArray.map(data => data.oqty).reduce((a, b) => a + b, 0)
 
                 return {
-                    month: `${index+1}月`,
+                    month: language === 'en' ? month_shortName[index] : `${Number(index + 1)}月`,
                     tx_sum,
                     order_sum
                 }
             })
-            
+
             return dataSet
         }
     })

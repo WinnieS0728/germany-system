@@ -4,8 +4,12 @@ import { useSearchParams } from "react-router-dom";
 import { monthList } from "./monthList";
 import api from "@/api";
 import { useId2name } from "@/hooks/id2name";
+import { month_shortName } from "@/types";
+import { useTranslation } from "react-i18next";
 
 export function useOsomChart() {
+    const { i18n: { language } } = useTranslation()
+
     const { thisYear } = useAppSelector(state => state.time)
     const salesList = useAppSelector(state => state.salesList).body
     const { id2name } = useId2name()
@@ -34,7 +38,7 @@ export function useOsomChart() {
                 const signUp_sum = data.map(data => data.CoQty).reduce((a, b) => a + b, 0)
 
                 return {
-                    month: `${index + 1}月`,
+                    month: language === 'en' ? month_shortName[index] : `${Number(index + 1)}月`,
                     login_sum,
                     signUp_sum
                 }

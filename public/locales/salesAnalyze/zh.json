@@ -1,4 +1,89 @@
 {
+  "TSVisit": {
+    "thead": {
+      "qty": {
+        "order": "訂單數",
+        "store": "店家數\t",
+        "tx": "TX 數量"
+      },
+      "sales": "業務",
+      "total": {
+        "all": "拜訪輪胎店總數",
+        "existCus": "拜訪輪胎店 - 既有客戶店數\t",
+        "newCus": "拜訪輪胎店 - 新客戶店數"
+      }
+    },
+    "title": "輪胎店拜訪統計"
+  },
+  "TSVisitList": {
+    "thead": {
+      "cusName": "店家名稱",
+      "dateList": "拜訪日期明細",
+      "list": "拜訪紀錄列表",
+      "sales": "負責業務",
+      "tx": "TX 購買總數量",
+      "visit": "拜訪次數"
+    }
+  },
+  "atuVisit": {
+    "thead": {
+      "qty": {
+        "pay": "對帳店數",
+        "store": "店家數",
+        "tx": "TX 對帳數"
+      },
+      "sales": "業務",
+      "total": {
+        "all": "拜訪總店數\t",
+        "existCus": "再次拜訪店數",
+        "myArea": "負責區域的店數",
+        "newCus": "首次拜訪店數"
+      }
+    },
+    "title": "ATU 拜訪統計"
+  },
+  "atuVisitList": {
+    "thead": {
+      "cusName": "店家名稱\t",
+      "dateList": "拜訪日期明細",
+      "pay": "累計對帳數量",
+      "sales": "負責業務",
+      "visit": "拜訪次數",
+      "visitList": "拜訪紀錄列表"
+    }
+  },
+  "charts": {
+    "atu": {
+      "order": "有對帳店數",
+      "title": "ATU - 拜訪店家趨勢圖",
+      "visit": "拜訪店數"
+    },
+    "existCus": {
+      "order": "有訂單店數",
+      "title": "既有客戶 - 拜訪店家趨勢圖",
+      "visit": "拜訪店數"
+    },
+    "newCus": {
+      "order": "首購店數",
+      "title": "新客戶 - 拜訪店家趨勢圖",
+      "visit": "拜訪店數"
+    },
+    "osom": {
+      "login": "登入數",
+      "signUp": "註冊數",
+      "title": "OSOM登入帳號數成長趨勢圖"
+    },
+    "sales": {
+      "order": "訂單數",
+      "title": "業績趨勢圖",
+      "tx": "TX 銷售數"
+    },
+    "ts": {
+      "diff": "新增筆數",
+      "qty": "資料筆數",
+      "title": "Tire storage 資料筆數成長趨勢圖"
+    }
+  },
   "headerFilter": {
     "dayPicker": {
       "placeholder": "請選擇時間..."
@@ -20,6 +105,38 @@
       }
     },
     "year": "年份"
+  },
+  "kpi": {
+    "data": {
+      "add": "增加",
+      "unit": "筆"
+    },
+    "thead": {
+      "achieve": "實際\t",
+      "osomLogin": "OSOM 登入數",
+      "photo": "上傳店家照片",
+      "recommend": "推薦成功店家",
+      "sales": "業務",
+      "target": "目標\t",
+      "tsData": "Tire Storage 資料數",
+      "visit": {
+        "all": "總數",
+        "atu": {
+          "percent": "拜訪比例",
+          "qty": "ATU"
+        },
+        "existCus": {
+          "percent": "拜訪比例",
+          "qty": "既有輪胎店客戶\t"
+        },
+        "newCus": {
+          "percent": "拜訪比例",
+          "qty": "新客戶\t"
+        },
+        "total": "拜訪店家數執行進度"
+      }
+    },
+    "title": "KPI 執行進度"
   },
   "nav": {
     "atuVisit": "ATU 拜訪紀錄",
@@ -80,6 +197,26 @@
     }
   },
   "title": "國外業務銷售報表",
+  "unOrderTS": {
+    "thead": {
+      "addr": "客戶地址",
+      "cusName": "客戶名稱",
+      "recent": "最近下單記錄",
+      "sales": "業務",
+      "tel": "客戶電話",
+      "tx": "TX 購買數量"
+    }
+  },
+  "unVisitTS": {
+    "thead": {
+      "addr": "客戶地址",
+      "cusName": "客戶名稱",
+      "recent": "最近拜訪紀錄",
+      "sales": "業務",
+      "tel": "客戶電話",
+      "visit": "拜訪次數"
+    }
+  },
   "yearSales": {
     "data": {
       "tx": {

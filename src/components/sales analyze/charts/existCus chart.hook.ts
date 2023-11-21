@@ -5,8 +5,11 @@ import { monthList } from "./monthList";
 import api from "@/api";
 import { tireShopVisit } from "@/api/sales analyze/tire shop visit";
 import { useId2name } from "@/hooks/id2name";
+import { useTranslation } from "react-i18next";
+import { month_shortName } from "@/types";
 
 export function useExistCusVisit() {
+    const { i18n: { language } } = useTranslation()
     const { thisYear } = useAppSelector(state => state.time)
     const { id2name } = useId2name()
 
@@ -29,7 +32,7 @@ export function useExistCusVisit() {
                 const order_sum = monthData.filter(data => data.Oqty > 0).length
 
                 return {
-                    month: `${index + 1}月`,
+                    month: language === 'en' ? month_shortName[index] : `${Number(index + 1)}月`,
                     visit_sum,
                     order_sum
                 }

@@ -4,7 +4,9 @@ import { Route, Routes } from "react-router-dom";
 import { SalesAnalyzeNav } from "./nav";
 import { MySuspense } from "@/layouts/suspense";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useTranslation } from "react-i18next";
+
 const SalesAnalyze_overviewPage = lazy(() => import("./overview"));
 const YearSalesPage = lazy(() => import("./year sales"));
 const tireShopVisitPage = lazy(() => import("./tire shop visit"));
@@ -65,6 +67,7 @@ export default function SalesAnalyze() {
         </Routes>
       </MySuspense>
       <scroll-to-top />
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }

@@ -3,7 +3,11 @@ import { useAtuVisit } from "@/components/sales analyze/atu visit/atu visit list
 import { Section } from "@/layouts/section";
 import { Loading } from "@/components/UI/loading";
 import { Error } from "@/components/UI/error";
+import { useTranslation } from "react-i18next";
+
 export function AtuVisitList() {
+const { t } = useTranslation(["salesAnalyze"]);
+
   const { status, visitData, indexArray, message } = useAtuVisit();
 
   if (status === "pending") {
@@ -34,20 +38,20 @@ export function AtuVisitList() {
                   colSpan={5}
                   className='text-start bg-sectionHeader text-myWhite'
                 >
-                  拜訪紀錄列表
+                  {t('atuVisitList.thead.visitList')}
                 </th>
                 <th
                   colSpan={indexArray.length}
                   className='text-start bg-sectionHeader text-myWhite'
                 >
-                  拜訪日期明細
+                  {t('atuVisitList.thead.dateList')}
                 </th>
               </tr>
               <tr>
-                <th>負責業務</th>
-                <th>店家名稱</th>
-                <th>累計對帳數量</th>
-                <th>拜訪次數</th>
+                <th>{t('atuVisitList.thead.sales')}</th>
+                <th>{t('atuVisitList.thead.cusName')}</th>
+                <th>{t('atuVisitList.thead.pay')}</th>
+                <th>{t('atuVisitList.thead.visit')}</th>
                 {indexArray.map((index) => (
                   <th key={index}>{index}</th>
                 ))}

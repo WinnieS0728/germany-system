@@ -4,8 +4,11 @@ import { Section } from "@/layouts/section";
 import { Error } from "@/components/UI/error";
 import { Table } from "@/components/table/table";
 import { getPercent } from "@/utils/get percent";
+import { useTranslation } from "react-i18next";
 
 export function KpiTable() {
+  const { t } = useTranslation(["salesAnalyze"]);
+
   const { data, isPending, isError, error } = useKpiTable();
 
   if (isPending) {
@@ -29,26 +32,26 @@ export function KpiTable() {
 
   return (
     <>
-      <Section title='KPI 執行進度'>
+      <Section title={t("kpi.title")}>
         <Table>
           <table>
             <thead>
               <tr>
-                <th rowSpan={2}>業務</th>
-                <th colSpan={7}>拜訪店家數執行進度</th>
-                <th colSpan={2}>上傳店家照片</th>
-                <th colSpan={2}>推薦成功店家</th>
-                <th colSpan={2}>OSOM 登入數</th>
-                <th colSpan={2}>Tire Storage 資料數</th>
+                <th rowSpan={2}>{t("kpi.thead.sales")}</th>
+                <th colSpan={7}>{t("kpi.thead.visit.total")}</th>
+                <th colSpan={2}>{t("kpi.thead.photo")}</th>
+                <th colSpan={2}>{t("kpi.thead.recommend")}</th>
+                <th colSpan={2}>{t("kpi.thead.osomLogin")}</th>
+                <th colSpan={2}>{t("kpi.thead.tsData")}</th>
               </tr>
               <tr>
-                <th>總數</th>
-                <th>ATU</th>
-                <th>拜訪比例</th>
-                <th>既有輪胎店客戶</th>
-                <th>拜訪比例</th>
-                <th>新客戶</th>
-                <th>拜訪比例</th>
+                <th>{t("kpi.thead.visit.all")}</th>
+                <th>{t("kpi.thead.visit.atu.qty")}</th>
+                <th>{t("kpi.thead.visit.atu.percent")}</th>
+                <th>{t("kpi.thead.visit.existCus.qty")}</th>
+                <th>{t("kpi.thead.visit.existCus.percent")}</th>
+                <th>{t("kpi.thead.visit.newCus.qty")}</th>
+                <th>{t("kpi.thead.visit.newCus.percent")}</th>
                 <KpiTh />
                 <KpiTh />
                 <KpiTh />
@@ -64,9 +67,21 @@ export function KpiTable() {
                   <td>{data.kpiNumber.photo}</td>
                   <td>{data.kpiAchievement.introduce}</td>
                   <td>{data.kpiNumber.introduce}</td>
-                  <td>{'增加'+data.kpiAchievement.login+'筆'}</td>
+                  <td>
+                    {t("kpi.data.add") +
+                      " " +
+                      data.kpiAchievement.login +
+                      " " +
+                      t("kpi.data.unit")}
+                  </td>
                   <td>{data.kpiNumber.login}</td>
-                  <td>{'增加'+data.kpiAchievement.tireStorageData+'筆'}</td>
+                  <td>
+                    {t("kpi.data.add") +
+                      " " +
+                      data.kpiAchievement.tireStorageData +
+                      " " +
+                      t("kpi.data.unit")}
+                  </td>
                   <td>{data.kpiNumber.tireStorageData}</td>
                 </tr>
               ))}
@@ -79,10 +94,12 @@ export function KpiTable() {
 }
 
 function KpiTh() {
+  const { t } = useTranslation(["salesAnalyze"]);
+
   return (
     <>
-      <th>目標</th>
-      <th>實際</th>
+      <th>{t("kpi.thead.target")}</th>
+      <th>{t("kpi.thead.achieve")}</th>
     </>
   );
 }

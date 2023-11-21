@@ -4,8 +4,11 @@ import { Section } from "@/layouts/section";
 import { Error } from "@/components/UI/error";
 import { Table } from "@/components/table/table";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export function TireShopVisitList() {
+  const { t } = useTranslation(["salesAnalyze"]);
+
   const { status, tsVisitList, indexArray, message } = useTSVisitList();
 
   if (status === "pending") {
@@ -38,20 +41,20 @@ export function TireShopVisitList() {
                   className='text-start bg-sectionHeader text-myWhite'
                   colSpan={4}
                 >
-                  拜訪紀錄列表
+                  {t("TSVisitList.thead.list")}
                 </th>
                 <th
                   className='text-start bg-sectionHeader text-myWhite'
                   colSpan={indexArray.length}
                 >
-                  拜訪日期明細
+                  {t("TSVisitList.thead.dateList")}
                 </th>
               </tr>
               <tr>
-                <th>負責業務</th>
-                <th>店家名稱</th>
-                <th>TX 購買總數量</th>
-                <th>拜訪次數</th>
+                <th>{t("TSVisitList.thead.sales")}</th>
+                <th>{t("TSVisitList.thead.cusName")}</th>
+                <th>{t("TSVisitList.thead.tx")}</th>
+                <th>{t("TSVisitList.thead.visit")}</th>
                 {indexArray.map((number) => (
                   <th key={number}>{number}</th>
                 ))}
@@ -72,7 +75,7 @@ export function TireShopVisitList() {
                       <Link
                         target='_blank'
                         to={`https://esys.orange-electronic.com/TravelRep/Edit/${date.BTRId}`}
-                        className="text-blue-500"
+                        className='text-blue-500'
                       >
                         {date.StartDT}
                       </Link>

@@ -3,13 +3,17 @@ import { Section } from "@/layouts/section";
 import { atuVisitTableData, useAtuVisitTotal } from "./visit total.hook";
 import { Loading } from "@/components/UI/loading";
 import { Error } from "@/components/UI/error";
+import { useTranslation } from "react-i18next";
+
 
 function TableHeader() {
+const { t } = useTranslation(["salesAnalyze"]);
+
   return (
     <>
-      <th>店家數</th>
-      <th>對帳店數</th>
-      <th>TX 對帳數</th>
+      <th>{t('atuVisit.thead.qty.store')}</th>
+      <th>{t('atuVisit.thead.qty.pay')}</th>
+      <th>{t('atuVisit.thead.qty.tx')}</th>
     </>
   );
 }
@@ -24,6 +28,8 @@ function TableTd({ dataNumber }: { dataNumber: atuVisitTableData }) {
 }
 
 export function VisitTotalTable() {
+const { t } = useTranslation(["salesAnalyze"]);
+
   const { status, atuVisitData, message } = useAtuVisitTotal();
 
   if (status === "error") {
@@ -45,16 +51,16 @@ export function VisitTotalTable() {
 
   return (
     <>
-      <Section title='ATU 拜訪統計'>
+      <Section title={t('atuVisit.title')}>
         <Table>
           <table>
             <thead>
               <tr>
-                <td rowSpan={2}>業務</td>
-                <td colSpan={3}>負責區域的店數</td>
-                <td colSpan={3}>拜訪總店數</td>
-                <td colSpan={3}>首次拜訪店數</td>
-                <td colSpan={3}>再次拜訪店數</td>
+                <td rowSpan={2}>{t('atuVisit.thead.sales')}</td>
+                <td colSpan={3}>{t('atuVisit.thead.total.myArea')}</td>
+                <td colSpan={3}>{t('atuVisit.thead.total.all')}</td>
+                <td colSpan={3}>{t('atuVisit.thead.total.newCus')}</td>
+                <td colSpan={3}>{t('atuVisit.thead.total.existCus')}</td>
               </tr>
               <tr>
                 <TableHeader />

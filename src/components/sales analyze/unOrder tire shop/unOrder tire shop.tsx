@@ -2,9 +2,11 @@ import { Table } from "@/components/table/table";
 import { Section } from "@/layouts/section";
 import { useUnOrderTireShop } from "./unOrder tire shop.hook";
 import { Loading } from "@/components/UI/loading";
+import { useTranslation } from "react-i18next";
 import { Error } from "@/components/UI/error";
 
 export function UnOrderTireShopTable() {
+  const { t } = useTranslation(["salesAnalyze"]);
   const { status, unOrderList, message } = useUnOrderTireShop();
 
   if (status === "pending") {
@@ -33,12 +35,12 @@ export function UnOrderTireShopTable() {
           <table>
             <thead>
               <tr>
-                <th>業務</th>
-                <th>客戶名稱</th>
-                <th>客戶地址</th>
-                <th>客戶電話</th>
-                <th>TX 購買數量</th>
-                <th>最近下單記錄</th>
+                <th>{t("unOrderTS.thead.sales")}</th>
+                <th>{t("unOrderTS.thead.cusName")}</th>
+                <th>{t("unOrderTS.thead.addr")}</th>
+                <th>{t("unOrderTS.thead.tel")}</th>
+                <th>{t("unOrderTS.thead.tx")}</th>
+                <th>{t("unOrderTS.thead.recent")}</th>
               </tr>
             </thead>
             <tbody>

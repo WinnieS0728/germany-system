@@ -4,6 +4,8 @@ import { useId2name } from "@/hooks/id2name";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { monthList } from "./monthList";
+import { month_shortName } from "@/types";
+import { useTranslation } from "react-i18next";
 
 type getTireStorageData_req = {
     year: string,
@@ -12,6 +14,8 @@ type getTireStorageData_req = {
 }
 
 export function useTireStorageChart() {
+    const { i18n: { language } } = useTranslation()
+
     const { thisYear } = useAppSelector(state => state.time)
     const salesList = useAppSelector(state => state.salesList).body
     const { id2name } = useId2name()
@@ -43,7 +47,7 @@ export function useTireStorageChart() {
                 const tireStorage_sum = dataList.map(data => data.LpQty).reduce((a, b) => a + b, 0)
 
                 return {
-                    month: `${index + 1}月`,
+                    month: language === 'en' ? month_shortName[index] : `${Number(index + 1)}月`,
                     tireStorage_sum,
                 }
             })

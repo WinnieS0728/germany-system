@@ -1,4 +1,89 @@
 {
+  "TSVisit": {
+    "thead": {
+      "qty": {
+        "order": "number of order",
+        "store": "Number of stores",
+        "tx": "TX quantity"
+      },
+      "sales": "sales",
+      "total": {
+        "all": "Total number of tire shops visited",
+        "existCus": "Visited tire stores - Number of existing customer stores",
+        "newCus": "Visits to tire stores - Number of new customer stores"
+      }
+    },
+    "title": "Tire store visit statistics"
+  },
+  "TSVisitList": {
+    "thead": {
+      "cusName": "Store name",
+      "dateList": "Visit date details",
+      "list": "Visit record list",
+      "sales": "Responsible for business",
+      "tx": "TX total purchase quantity",
+      "visit": "Number of visits"
+    }
+  },
+  "atuVisit": {
+    "thead": {
+      "qty": {
+        "pay": "Number of reconciliation stores",
+        "store": "Number of stores",
+        "tx": "TX reconciliation number"
+      },
+      "sales": "sales",
+      "total": {
+        "all": "Total number of stores visited",
+        "existCus": "Number of store visits again",
+        "myArea": "Number of stores in responsible area",
+        "newCus": "Number of first store visits"
+      }
+    },
+    "title": "ATU visit statistics"
+  },
+  "atuVisitList": {
+    "thead": {
+      "cusName": "Store name",
+      "dateList": "Visit date details",
+      "pay": "Cumulative reconciliation quantity",
+      "sales": "sales",
+      "visit": "Number of visits",
+      "visitList": "Visit record list"
+    }
+  },
+  "charts": {
+    "atu": {
+      "order": "Number of stores with reconciliation",
+      "title": "ATU - Store Visit Trend Chart",
+      "visit": "Number of stores visited"
+    },
+    "existCus": {
+      "order": "Number of stores with orders",
+      "title": "Existing customers - store visit trend chart",
+      "visit": "Number of stores visited"
+    },
+    "newCus": {
+      "order": "Number of first purchase stores",
+      "title": "New Customers - Store Visit Trend Chart",
+      "visit": "Number of stores visited"
+    },
+    "osom": {
+      "login": "Number of logins",
+      "signUp": "Number of registrations",
+      "title": "Growth trend chart of the number of OSOM login accounts"
+    },
+    "sales": {
+      "order": "number of order",
+      "title": "Performance trend chart",
+      "tx": "TX sales"
+    },
+    "ts": {
+      "diff": "Number of new transactions",
+      "qty": "Number of data items",
+      "title": "Tire storage data growth trend chart"
+    }
+  },
   "headerFilter": {
     "dayPicker": {
       "placeholder": "Please select dates..."
@@ -20,6 +105,38 @@
       }
     },
     "year": "year"
+  },
+  "kpi": {
+    "data": {
+      "add": "Increase",
+      "unit": "data"
+    },
+    "thead": {
+      "achieve": "actual",
+      "osomLogin": "OSOM login number",
+      "photo": "Upload store photos",
+      "recommend": "Recommend successful stores",
+      "sales": "sales",
+      "target": "Target",
+      "tsData": "Tire Storage data count",
+      "visit": {
+        "all": "total",
+        "atu": {
+          "percent": "Visit ratio",
+          "qty": "ATU"
+        },
+        "existCus": {
+          "percent": "Visit ratio",
+          "qty": "Existing tire shop customers"
+        },
+        "newCus": {
+          "percent": "Visit ratio",
+          "qty": "new customer"
+        },
+        "total": "Execution progress of number of stores visited"
+      }
+    },
+    "title": "KPI execution progress"
   },
   "nav": {
     "atuVisit": "ATU visit record",
@@ -80,6 +197,26 @@
     }
   },
   "title": "Foreign business sales report",
+  "unOrderTS": {
+    "thead": {
+      "addr": "customer address",
+      "cusName": "client's name",
+      "recent": "Recent order records",
+      "sales": "sales",
+      "tel": "Customer phone number",
+      "tx": "TX purchase quantity"
+    }
+  },
+  "unVisitTS": {
+    "thead": {
+      "addr": "customer address",
+      "cusName": "client's name",
+      "recent": "recent visit history",
+      "sales": "sales",
+      "tel": "Customer phone number",
+      "visit": "Number of visits"
+    }
+  },
   "yearSales": {
     "data": {
       "tx": {
