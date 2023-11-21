@@ -35,7 +35,7 @@ const { t } = useTranslation(["salesAnalyze"]);
             <thead>
               <tr>
                 <th
-                  colSpan={5}
+                  colSpan={4}
                   className='text-start bg-sectionHeader text-myWhite'
                 >
                   {t('atuVisitList.thead.visitList')}

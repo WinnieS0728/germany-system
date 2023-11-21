@@ -68,7 +68,7 @@ export function UnOrderTireShopTable() {
                     </a>
                   </td>
                   <td>{data.Sqty}</td>
-                  <td>{data.LastDate}</td>
+                  <td className='whitespace-nowrap'>{data.LastDate}</td>
                 </tr>
               ))}
             </tbody>

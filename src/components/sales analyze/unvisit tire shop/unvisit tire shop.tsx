@@ -68,7 +68,7 @@ export function UnVisitTireShopTable() {
                     </a>
                   </td>
                   <td>{data.Vqty}</td>
-                  <td>{data.LastDate}</td>
+                  <td className="whitespace-nowrap">{data.LastDate}</td>
                 </tr>
               ))}
             </tbody>
