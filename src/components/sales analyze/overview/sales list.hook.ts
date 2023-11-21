@@ -1,13 +1,12 @@
 import api from "@/api";
 import { salesDetailQty_res } from "@/api/sales analyze/sales detail qty";
-import { queryStatus } from "@/types";
 import { dateFormatter } from "@/utils/dateFormatter";
 import { getMonthArray } from "@/utils/get month_MM array";
 import { useAppSelector } from "@data/store";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
-type salesListData = {
+export type salesListData = {
     id: string,
     EmpId: string,
     sa_name: string,
@@ -18,15 +17,8 @@ type salesListData = {
     salesArray: string[]
 }
 
-interface salesListReturn extends queryStatus {
-    status: 'idle' | 'pending' | 'error' | 'success',
-    salesListData: salesListData[],
-    indexArray: number[]
-}
 
-
-
-export function useSalesList(): salesListReturn {
+export function useSalesList() {
     const { thisYear } = useAppSelector(state => state.time)
     const salesList = useAppSelector(state => state.salesList).body
     const [search] = useSearchParams()
@@ -35,7 +27,7 @@ export function useSalesList(): salesListReturn {
 
     const monthList = getMonthArray(searchMonth);
 
-    const { data, isPending, isError, error } = useQuery({
+    return useQuery({
         queryKey: ['overview', 'salesList', monthList, searchEmpId],
         queryFn: async () => {
             const orderList = (await Promise.all(salesList.map(async (member) => getOrderList(monthList, member.EmpId)))).reduce((a, b) => a.concat(b), [])
@@ -74,28 +66,6 @@ export function useSalesList(): salesListReturn {
             return { dataSet: dataSet_withEmptyData, indexArray }
         }
     })
-
-    if (isPending) {
-        return {
-            status: 'pending',
-            salesListData: [],
-            indexArray: []
-        }
-    }
-    if (isError) {
-        return {
-            status: 'error',
-            salesListData: [],
-            indexArray: [],
-            message: error.message
-        }
-    }
-
-    return {
-        status: 'success',
-        salesListData: data.dataSet,
-        indexArray: data.indexArray
-    }
 
     async function getOrderList(monthList: string[] | undefined, EmpId: string) {
         if (monthList) {

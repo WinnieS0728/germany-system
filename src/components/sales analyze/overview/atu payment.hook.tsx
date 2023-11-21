@@ -86,6 +86,8 @@ export function useAtuPayment(): atuPaymentReturn {
 
   return {
     status: "success",
-    atuPayment: atuPaymentQuires.map((query) => query.data as atuPaymentType),
+    atuPayment: atuPaymentQuires
+      .map((query) => query.data as atuPaymentType)
+      .sort((a, b) => b.txNumber - a.txNumber),
   };
 }
