@@ -1,6 +1,4 @@
-import { dateFormatter } from "@/utils/dateFormatter";
 import axios, { AxiosResponse } from "axios";
-import { timeDay } from "d3-time";
 
 export type visit_YearResType = {
   Vqty: string;
@@ -24,15 +22,19 @@ function thisYear(apiPath: string) {
   };
 }
 
+interface weekReq {
+  startDate: string,
+  endDate?: string
+}
 function week(apiPath: string) {
-  return async function (date: string) {
-    const endDate = dateFormatter(timeDay.offset(new Date(date), 8));
+  return async function ({ startDate, endDate}:weekReq) {
     const res: AxiosResponse<visit_otherResType[]> = await axios({
       method: "POST",
+      // url: `${apiPath}/GetSalesVisit`,
       url: `${apiPath}/GetSalesVisit`,
-      data: { EmpId: "", Startdt: date, Enddt: endDate, type: "Week" },
+      data: { EmpId: "", Startdt: startDate, Enddt: endDate, type: "Week" },
     });
-    
+
     return res.data;
   };
 }

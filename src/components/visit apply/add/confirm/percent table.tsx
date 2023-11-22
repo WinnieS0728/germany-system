@@ -6,6 +6,7 @@ import { tripEvent } from "@/types";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "styled-components";
+import { getPercent } from "@/utils/get percent";
 
 export const PerCentTable = ({
   data,
@@ -23,18 +24,9 @@ export const PerCentTable = ({
 
   const { t } = useTranslation("confirm modal");
   const color = useTheme()?.color;
-  const totalData = data.reduce((a, b) => a.concat(b), []);
-  const atuCus = totalData.filter((i) => i.data?.eventId === tripEvent.atu);
-  const oldCus = totalData.filter((i) => i.data?.eventId === tripEvent.oldCus);
-  const newCus = totalData.filter((i) => i.data?.eventId === tripEvent.newCus);
-  const allCus = atuCus.length + oldCus.length + newCus.length;
 
-  function getPercent(n: number): string {
-    if (allCus === 0) {
-      return "0";
-    }
-    return ((n / allCus) * 100).toFixed(1);
-  }
+  const { atuCus, oldCus, newCus, allCus } = getVisitPercent(data);
+
   const monthArray = useMemo(
     () => [
       "Jan",
@@ -89,9 +81,9 @@ export const PerCentTable = ({
             </tr>
             <tr>
               <td>{t("percentTable.percent")}</td>
-              <td>{getPercent(atuCus.length) + "%"}</td>
-              <td>{getPercent(oldCus.length) + "%"}</td>
-              <td>{getPercent(newCus.length) + "%"}</td>
+              <td>{getPercent(atuCus.length, allCus) + "%"}</td>
+              <td>{getPercent(oldCus.length, allCus) + "%"}</td>
+              <td>{getPercent(newCus.length, allCus) + "%"}</td>
             </tr>
           </tbody>
         </table>
@@ -99,3 +91,13 @@ export const PerCentTable = ({
     </>
   );
 };
+
+export function getVisitPercent(data: detailDataWithSingleData[][]) {
+  const totalData = data.reduce((a, b) => a.concat(b), []);
+  const atuCus = totalData.filter((i) => i.data?.eventId === tripEvent.atu);
+  const oldCus = totalData.filter((i) => i.data?.eventId === tripEvent.oldCus);
+  const newCus = totalData.filter((i) => i.data?.eventId === tripEvent.newCus);
+  const allCus = atuCus.length + oldCus.length + newCus.length;
+
+  return { atuCus, oldCus, newCus, allCus };
+}

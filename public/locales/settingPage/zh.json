@@ -5,5 +5,53 @@
     "threshold": "客戶拜訪佔比警示值",
     "tx": "業務TX目標銷售數量"
   },
-  "title": "德國業務KPI設定"
+  "osom": {
+    "add": "增加",
+    "login": {
+      "label": "OSOM 登入數",
+      "unit": "帳號登入"
+    },
+    "recommend": "推薦成功店家數",
+    "thead": {
+      "label": "目標項目",
+      "value": "目標值"
+    },
+    "title": "OSOM 項目目標設定",
+    "tsData": {
+      "label": "Tire storage 資料數",
+      "unit": "筆預約資料"
+    }
+  },
+  "threshold": {
+    "thead": {
+      "sales": "業務",
+      "type": "類別"
+    },
+    "title": "客戶拜訪佔比警示值",
+    "type": {
+      "atu": "ATU & 既有客戶",
+      "newCus": "新客戶"
+    }
+  },
+  "title": "德國業務KPI設定",
+  "tx": {
+    "thead": {
+      "s1": "第1季",
+      "s2": "第2季",
+      "s3": "第3季",
+      "s4": "第4季",
+      "sales": "業務"
+    },
+    "title": "業務TX目標銷售數量設定"
+  },
+  "visitStore": {
+    "atu_monthVisit": "A.T.U 每月拜訪店家數",
+    "atu_yearVisit": " A.T.U 每間店家拜訪次數 (年)",
+    "thead": {
+      "label": "目標項目",
+      "value": "目標值"
+    },
+    "title": "拜訪店家目標設定",
+    "upload_photo": "上傳店家照片 (貼貼紙)"
+  }
 }

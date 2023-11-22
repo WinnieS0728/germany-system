@@ -7,6 +7,7 @@ import z from "zod";
 import { TimePicker } from "./time picker";
 import { filterTimeType, RadioBtn } from "./radio";
 import { FilterSubmit } from "./filter submit";
+import { useTranslation } from "react-i18next";
 
 const filterForm_schema = z.object({
   EmpId: z.string().optional(),
@@ -16,10 +17,11 @@ const filterForm_schema = z.object({
 type filterForm = z.infer<typeof filterForm_schema>;
 
 export function OverviewHeader() {
+  const { t } = useTranslation(["salesAnalyze"]);
   const salesList = useAppSelector((state) => state.salesList).body;
   const { thisMonth } = useAppSelector((state) => state.time);
   const [type, setType] = useState<filterTimeType>("thisYear");
-  const setSearch = useSearchParams()[1];
+  const [search, setSearch] = useSearchParams();
   const methods = useForm<filterForm>({
     shouldUnregister: false,
     defaultValues: {
@@ -47,6 +49,17 @@ export function OverviewHeader() {
     }));
     return [emptyOption].concat(restOption);
   }, [salesList]);
+
+  useEffect(() => {
+    const search_month = search.get("month");
+    if (!search_month) {
+      setType("thisYear");
+    } else if (search_month.includes("_")) {
+      setType("cusTime");
+    } else {
+      setType("thisMonth");
+    }
+  }, [search, setType]);
 
   useEffect(() => {
     switch (type) {
@@ -93,7 +106,7 @@ export function OverviewHeader() {
             name='EmpId'
             render={({ field: { onChange } }) => (
               <label className='label-input w-full'>
-                <p>業務</p>
+                <p>{t('headerFilter.sales')}</p>
                 <MySelect.Normal
                   options={options}
                   onChange={onChange}
@@ -102,25 +115,25 @@ export function OverviewHeader() {
             )}
           />
           <label className='label-input w-full'>
-            <p>時間</p>
+            <p>{t('headerFilter.time.label')}</p>
             <div className='w-full grid grid-cols-1 sm:grid-cols-2 lg:flex gap-2'>
               <RadioBtn
                 as='time'
-                text='本年度'
+                text={t('headerFilter.time.radio.thisYear')}
                 active={type === "thisYear"}
                 setType={setType}
                 value='thisYear'
               />
               <RadioBtn
                 as='time'
-                text='本月'
+                text={t('headerFilter.time.radio.thisMonth')}
                 active={type === "thisMonth"}
                 setType={setType}
                 value='thisMonth'
               />
               <RadioBtn
                 as='time'
-                text='選擇區間'
+                text={t('headerFilter.time.radio.cus')}
                 active={type === "cusTime"}
                 setType={setType}
                 value='cusTime'

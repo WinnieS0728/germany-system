@@ -47,7 +47,7 @@ export interface transportation {
 }
 export interface money {
   Advance_Amount: string;
-  Curr: typeof moneyType[number] | "";
+  Curr: (typeof moneyType)[number] | "";
 }
 export interface deputy {
   Deputy: string;
@@ -63,7 +63,7 @@ export type NewFormDefaultValue = infoForm &
   deputy &
   Record<"tripData", tripData>;
 
-export default function NewForm () {
+export default function NewForm() {
   const color = useTheme()?.color;
   const { t } = useTranslation(["common", "new form", "errors", "toast"]);
   const timeData = useAppSelector((state) => state.time);
@@ -155,7 +155,10 @@ export default function NewForm () {
   }
 
   async function getCusId(name: string) {
-    const res = await api.getCus(name, "DEU");
+    const res = await api.getCus({
+      name,
+      country: "DEU",
+    });
 
     return res?.[0].CustId;
   }

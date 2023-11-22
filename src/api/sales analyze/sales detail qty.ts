@@ -16,7 +16,7 @@ const salesDetailQty_schema = z.array(z.object({
     oqty: z.coerce.number()
 }))
 
-type salesDetailQty_res = z.infer<typeof salesDetailQty_schema>
+export type salesDetailQty_res = z.infer<typeof salesDetailQty_schema>
 
 export function getSalesDetailQty(apiPath: string) {
     return async function ({ EmpId, year, month }: props) {

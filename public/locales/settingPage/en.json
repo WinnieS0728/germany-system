@@ -1,9 +1,57 @@
 {
   "nav": {
-    "osom achieve": "OSOM項目目標設定",
-    "store achieve": "拜訪店家目標設定",
-    "threshold": "客戶拜訪佔比警示值",
-    "tx": "業務TX目標銷售數量"
+    "osom achieve": "OSOM project KPI setting",
+    "store achieve": "Target setting for store visits",
+    "threshold": "Customer visit percentage",
+    "tx": "Sensor quantity target by salesman"
   },
-  "title": "KPI setting"
+  "osom": {
+    "add": "Increase",
+    "login": {
+      "label": "OSOM login number",
+      "unit": "Account login"
+    },
+    "recommend": "Number of successfully recommended stores",
+    "thead": {
+      "label": "target project",
+      "value": "target value"
+    },
+    "title": "OSOM project goal setting",
+    "tsData": {
+      "label": "Tire storage data number",
+      "unit": " Reservation information"
+    }
+  },
+  "threshold": {
+    "thead": {
+      "sales": "sales",
+      "type": "type"
+    },
+    "title": "Customer visit proportion warning value",
+    "type": {
+      "atu": "ATU & existing customers",
+      "newCus": "new customer"
+    }
+  },
+  "title": "KPI setting",
+  "tx": {
+    "thead": {
+      "s1": "Season 1",
+      "s2": "Season 2",
+      "s3": "Season 3",
+      "s4": "Season 4",
+      "sales": "sales"
+    },
+    "title": " Business TX target sales quantity setting"
+  },
+  "visitStore": {
+    "atu_monthVisit": "Number of stores visited by A.T.U per month",
+    "atu_yearVisit": "A.T.U Number of visits per store (years)",
+    "thead": {
+      "label": "target project",
+      "value": "target value"
+    },
+    "title": "Visit store goal setting",
+    "upload_photo": "Upload store photos (stickers)"
+  }
 }

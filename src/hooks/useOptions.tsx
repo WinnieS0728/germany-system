@@ -90,7 +90,9 @@ export const useOptions = () => {
   }, []);
 
   const getCusOptions = useCallback(async (input: string) => {
-    const res = await api.getCus("", "DEU");
+    const res = await api.getCus({
+      country: "DEU"
+    });
 
     return res.filter(
       (cus) =>

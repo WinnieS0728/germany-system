@@ -64,10 +64,16 @@ type longBtn = { style: "cancel" | "confirm" } & (
       type: "reset" | "submit";
       form: string;
       onClick?: () => void;
+      disabled?: boolean,
+      className?: string
+      children?: string
     }
   | {
       type: "button";
       onClick: () => void;
+      disabled?: boolean,
+      className?: string
+      children?: string
     }
 );
 
@@ -98,7 +104,7 @@ export const LongBtn = (props: longBtn) => {
     <button
       type={props.type}
       form={props.type !== "button" ? props.form : ""}
-      className={"rounded-md px-16 py-2"}
+      className={cn("rounded-md px-16 py-2",props.className)}
       style={css}
       onClick={() => {
         if (!props.onClick) {
@@ -106,8 +112,9 @@ export const LongBtn = (props: longBtn) => {
         }
         props.onClick();
       }}
+      disabled={props.disabled}
     >
-      {content}
+      {props.children || content}
     </button>
   );
 };

@@ -1,4 +1,5 @@
 import { cn } from "@/utils/cn";
+import { useShouldTranslation } from "@/utils/kpi setting should translation";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 
@@ -7,10 +8,12 @@ interface propsType {
 }
 
 export const Nav = ({ className }: propsType) => {
-  const { t } = useTranslation(["settingPage"]);
+  const { t } = useTranslation(["settingPage"], {
+    lng: useShouldTranslation() ? 'en' : 'zh'
+  });
   return (
     <>
-      <nav className={cn("bg-navBgc",className)}>
+      <nav className={cn("bg-navBgc", className)}>
         <ul className='flex gap-2 overflow-x-auto p-2 no-scrollBar'>
           <NavLink
             end

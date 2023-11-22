@@ -11,6 +11,7 @@ import { cn } from "@/utils/cn";
 import { useAppSelector } from "@data/store";
 import api from "@/api";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 interface inputProps {
   index: number;
@@ -41,7 +42,7 @@ function InputOnlyNumber({ index, value, className }: inputProps) {
   return (
     <input
       type='text'
-      className={cn("", className)}
+      className={cn("text-end max-w-[10rem]", className)}
       onChangeCapture={onlyNumber}
       {...register(`tx.${index}.${value}`, {
         setValueAs: (value: string) => value.replace(/,/gi, ""),
@@ -54,6 +55,7 @@ function InputOnlyNumber({ index, value, className }: inputProps) {
 }
 
 export function TxSettingTable() {
+  const { t } = useTranslation(["settingPage", "toast"]);
   const { thisYear } = useAppSelector((state) => state.time);
   const { EmpId } = useAppSelector((state) => state.nowUser).body;
   const { data } = useTxData();
@@ -100,14 +102,14 @@ export function TxSettingTable() {
       })();
     });
     toast.promise(request, {
-      pending: "loading...",
-      success: "設定完成",
-      error: "設定失敗",
+      pending: t("settingRequest.pending", { ns: "toast", lng: "zh" }),
+      success: t("settingRequest.success", { ns: "toast", lng: "zh" }),
+      error: t("settingRequest.fail", { ns: "toast", lng: "zh" }),
     });
   }
 
   return (
-    <Table title='業務TX目標銷售數量設定'>
+    <Table title={t("tx.title", { lng: "zh" })}>
       <FormProvider {...methods}>
         <form
           id='tx'
@@ -117,11 +119,31 @@ export function TxSettingTable() {
             <thead>
               <tr>
                 <th>No.</th>
-                <th>業務</th>
-                <th>第1季</th>
-                <th>第2季</th>
-                <th>第3季</th>
-                <th>第4季</th>
+                <th>
+                  {t("tx.thead.sales", {
+                    lng: "zh",
+                  })}
+                </th>
+                <th>
+                  {t("tx.thead.s1", {
+                    lng: "zh",
+                  })}
+                </th>
+                <th>
+                  {t("tx.thead.s2", {
+                    lng: "zh",
+                  })}
+                </th>
+                <th>
+                  {t("tx.thead.s3", {
+                    lng: "zh",
+                  })}
+                </th>
+                <th>
+                  {t("tx.thead.s4", {
+                    lng: "zh",
+                  })}
+                </th>
               </tr>
             </thead>
             <tbody>

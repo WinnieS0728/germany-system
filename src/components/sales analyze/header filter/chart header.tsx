@@ -5,6 +5,7 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import z from "zod";
 import { FilterSubmit } from "./filter submit";
+import { useTranslation } from "react-i18next";
 
 const filterForm_schema = z.object({
   EmpId: z.string().optional(),
@@ -13,6 +14,7 @@ const filterForm_schema = z.object({
 type filterForm = z.infer<typeof filterForm_schema>;
 
 export function ChartHeader() {
+  const { t } = useTranslation(["salesAnalyze"]);
   const salesList = useAppSelector((state) => state.salesList).body;
   const setSearch = useSearchParams()[1];
   const methods = useForm<filterForm>({
@@ -76,7 +78,7 @@ export function ChartHeader() {
             name='EmpId'
             render={({ field: { onChange } }) => (
               <label className='label-input'>
-                <p>業務</p>
+                <p>{t("headerFilter.sales")}</p>
                 <MySelect.Normal
                   options={options}
                   onChange={onChange}

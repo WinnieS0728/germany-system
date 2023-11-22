@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import api from "@/api";
 import { useAppSelector } from "@/data/store";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 interface inputProps {
   name: keyof formData;
@@ -36,7 +37,7 @@ function InputOnlyNumber({ name, className }: inputProps) {
   return (
     <input
       type='text'
-      className={cn("", className)}
+      className={cn("text-center", className)}
       onChangeCapture={onlyNumber}
       {...register(name, {
         setValueAs: (value: string) => value.replace(/,/gi, ""),
@@ -57,6 +58,7 @@ const formSchema = z.object({
 type formData = z.infer<typeof formSchema>;
 
 export function VisitStoreSettingTable() {
+  const {t} = useTranslation(['settingPage','toast'])
   const { EmpId } = useAppSelector((state) => state.nowUser).body;
   const methods = useForm<formData>({
     resolver: zodResolver(formSchema),
@@ -116,9 +118,9 @@ export function VisitStoreSettingTable() {
     });
 
     toast.promise(request, {
-        pending: 'loading...',
-        success: '設定成功',
-        error: '設定失敗'
+        pending: t('settingRequest.pending',{ns:'toast', lng: 'zh'}),
+        success: t('settingRequest.success',{ns:'toast', lng: 'zh'}),
+        error: t('settingRequest.fail',{ns:'toast', lng: 'zh'})
     })
   }
 
@@ -136,7 +138,7 @@ export function VisitStoreSettingTable() {
 
   return (
     <>
-      <Table title='拜訪店家目標設定'>
+      <Table title={t('visitStore.title',{lng:'zh'})}>
         <>
           <FormProvider {...methods}>
             <form
@@ -147,28 +149,28 @@ export function VisitStoreSettingTable() {
                 <thead>
                   <tr>
                     <th>NO.</th>
-                    <th>目標項目</th>
-                    <th>目標值</th>
+                    <th>{t('visitStore.thead.label',{lng:'zh'})}</th>
+                    <th>{t('visitStore.thead.value',{lng:'zh'})}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>1</td>
-                    <td>A.T.U 每月拜訪店家數</td>
+                    <td>{t('visitStore.atu_monthVisit',{lng:'zh'})}</td>
                     <td>
                       <InputOnlyNumber name='atuVisit_month' />
                     </td>
                   </tr>
                   <tr>
                     <td>2</td>
-                    <td>A.T.U 每間店家拜訪次數 (年)</td>
+                    <td>{t('visitStore.atu_yearVisit',{lng:'zh'})}</td>
                     <td>
                       <InputOnlyNumber name='atuVisit_year' />
                     </td>
                   </tr>
                   <tr>
                     <td>3</td>
-                    <td>上傳店家照片 (貼貼紙)</td>
+                    <td>{t('visitStore.upload_photo',{lng:'zh'})}</td>
                     <td>
                       <InputOnlyNumber name='upload_photo' />
                     </td>

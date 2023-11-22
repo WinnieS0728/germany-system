@@ -39,36 +39,39 @@ function App() {
   }, [dispatch, i18n, nowUser_id, search, setSearch, usingLanguage]);
 
   return (
-    <MySuspense>
-      <Routes>
-        <Route
-          index
-          element={
-            <h1 className='h-screen grid place-items-center'>德國業務系統</h1>
-          }
-        />
-        <Route
-          path='kpi'
-          element={<CustomRatePage />}
-        />
-        <Route
-          path='kpiSetting/*'
-          element={<SettingPage />}
-        />
-        <Route
-          path='visitApply/*'
-          element={<ApplyPage />}
-        />
-        <Route
-          path='salesAnalyze/*'
-          Component={SalesAnalyze}
-        />
-        <Route
-          path='*'
-          element={<h1>欸不是啊怎麼沒有這頁R</h1>}
-        />
-      </Routes>
-    </MySuspense>
+    <>
+      <MySuspense>
+        <Routes>
+          <Route
+            index
+            path='/'
+            element={
+              <h1 className='h-screen grid place-items-center'>德國業務系統</h1>
+            }
+          />
+          <Route
+            path='kpi'
+            element={<CustomRatePage />}
+          />
+          <Route
+            path='kpiSetting/*'
+            element={<SettingPage />}
+          />
+          <Route
+            path='visitApply/*'
+            element={<ApplyPage />}
+          />
+          <Route
+            path='salesAnalyze/*'
+            Component={SalesAnalyze}
+          />
+          <Route
+            path='*'
+            element={<h1>欸不是啊怎麼沒有這頁R</h1>}
+          />
+        </Routes>
+      </MySuspense>
+    </>
   );
 }
 

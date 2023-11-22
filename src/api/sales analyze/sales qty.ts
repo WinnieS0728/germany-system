@@ -2,7 +2,7 @@ import axios from "axios"
 import { z } from 'zod'
 
 interface props {
-    EmpId: string,
+    EmpId?: string,
     year: string,
     month?: string
 }
@@ -24,9 +24,9 @@ export function getSalesQty(apiPath: string) {
             url: `${apiPath}/GetSaleQty`,
             method: "POST",
             data: {
-                "Empid": EmpId,
+                "Empid": EmpId || "",
                 "YYYY": year,
-                "MM": month
+                "MM": month || ""
             }
         })
 
@@ -36,6 +36,6 @@ export function getSalesQty(apiPath: string) {
             throw new Error(validData.error.message)
         }
 
-        return validData.data[0]
+        return validData.data
     }
 }
