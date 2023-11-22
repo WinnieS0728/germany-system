@@ -105,19 +105,19 @@ async function getKpiAchievement(): Promise<getKpiAchievement> {
     const photo = (await api.basicSetting.get({
         webName: "GER_kpiSetting_store",
         key: "upload_photo"
-    }))[0].SetValue
+    }))[0]?.SetValue || '0'
     const introduce = (await api.basicSetting.get({
         webName: "GER_kpiSetting_osom",
         key: "recommend_store"
-    }))[0].SetValue
+    }))[0]?.SetValue || '0'
     const login = (await api.basicSetting.get({
         webName: "GER_kpiSetting_osom",
         key: "osom_login"
-    }))[0].SetValue
+    }))[0]?.SetValue || '0'
     const tireStorageData = (await api.basicSetting.get({
         webName: "GER_kpiSetting_osom",
         key: "tireStorage_data"
-    }))[0].SetValue
+    }))[0]?.SetValue || '0'
 
     return {
         photo,

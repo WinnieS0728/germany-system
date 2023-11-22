@@ -118,9 +118,9 @@ export function OsomSettingTable() {
     });
 
     toast.promise(request, {
-      pending: t("settingRequest.pending", { ns: "toast" }),
-      success: t("settingRequest.success", { ns: "toast" }),
-      error: t("settingRequest.fail", { ns: "toast" }),
+      pending: t("settingRequest.pending", { ns: "toast", lng: 'zh' }),
+      success: t("settingRequest.success", { ns: "toast", lng: 'zh' }),
+      error: t("settingRequest.fail", { ns: "toast", lng: 'zh' }),
     });
   }
 
@@ -138,7 +138,7 @@ export function OsomSettingTable() {
 
   return (
     <>
-      <Table title={t("osom.title")}>
+      <Table title={t("osom.title",{lng:'zh'})}>
         <>
           <FormProvider {...methods}>
             <form
@@ -149,37 +149,37 @@ export function OsomSettingTable() {
                 <thead>
                   <tr>
                     <th>NO.</th>
-                    <th>{t("osom.thead.label")}</th>
-                    <th>{t("osom.thead.value")}</th>
+                    <th>{t("osom.thead.label",{lng:'zh'})}</th>
+                    <th>{t("osom.thead.value",{lng:'zh'})}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>1</td>
-                    <td>{t("osom.recommend")}</td>
+                    <td>{t("osom.recommend",{lng:'zh'})}</td>
                     <td>
                       <InputOnlyNumber name='recommend_store' />
                     </td>
                   </tr>
                   <tr>
                     <td>2</td>
-                    <td>{t("osom.login.label")}</td>
+                    <td>{t("osom.login.label",{lng:'zh'})}</td>
                     <td>
                       <p className='flex justify-center items-center gap-4'>
-                        <span>{t("osom.add")}</span>
+                        <span>{t("osom.add",{lng:'zh'})}</span>
                         <InputOnlyNumber name='osom_login' />
-                        <span>{t("osom.login.unit")}</span>
+                        <span>{t("osom.login.unit",{lng:'zh'})}</span>
                       </p>
                     </td>
                   </tr>
                   <tr>
                     <td>3</td>
-                    <td>{t("osom.tsData.label")}</td>
+                    <td>{t("osom.tsData.label",{lng:'zh'})}</td>
                     <td>
                       <p className='flex justify-center items-center gap-4'>
-                        <span>{t("osom.add")}</span>
+                        <span>{t("osom.add",{lng:'zh'})}</span>
                         <InputOnlyNumber name='tireStorage_data' />
-                        <span>{t("osom.tsData.unit")}</span>
+                        <span>{t("osom.tsData.unit",{lng:'zh'})}</span>
                       </p>
                     </td>
                   </tr>

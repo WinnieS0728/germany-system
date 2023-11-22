@@ -4,6 +4,7 @@ import { Nav } from "@/pages/kpi/setting/setting nav";
 import { useTranslation } from "react-i18next";
 import { lazy } from "react";
 import { MySuspense } from "@/layouts/suspense";
+import { useShouldTranslation } from "@/utils/kpi setting should translation";
 
 const TxPage = lazy(() => import("./tx"));
 const ThresholdPage = lazy(() => import("./threshold"));
@@ -11,12 +12,14 @@ const VisitStorePage = lazy(() => import("./visit store"));
 const OsomPage = lazy(() => import("./osom"));
 
 const EditPage = () => {
-  const { t } = useTranslation(["settingPage"]);
+  const { t } = useTranslation(["settingPage"], {
+    lng: useShouldTranslation() ? "en" : "zh",
+  });
   return (
     <>
       <Header title={t("title")} />
       <Nav />
-      <MySuspense >
+      <MySuspense>
         <Routes>
           <Route
             index

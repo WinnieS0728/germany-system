@@ -55,7 +55,7 @@ function InputOnlyNumber({ index, value, className }: inputProps) {
 }
 
 export function TxSettingTable() {
-  const { t } = useTranslation(['settingPage','toast'])
+  const { t } = useTranslation(["settingPage", "toast"]);
   const { thisYear } = useAppSelector((state) => state.time);
   const { EmpId } = useAppSelector((state) => state.nowUser).body;
   const { data } = useTxData();
@@ -102,14 +102,14 @@ export function TxSettingTable() {
       })();
     });
     toast.promise(request, {
-      pending: t('settingRequest.pending',{ns:'toast'}),
-      success: t('settingRequest.success',{ns:'toast'}),
-      error: t('settingRequest.fail',{ns:'toast'}),
+      pending: t("settingRequest.pending", { ns: "toast", lng: "zh" }),
+      success: t("settingRequest.success", { ns: "toast", lng: "zh" }),
+      error: t("settingRequest.fail", { ns: "toast", lng: "zh" }),
     });
   }
 
   return (
-    <Table title={t('tx.title')}>
+    <Table title={t("tx.title", { lng: "zh" })}>
       <FormProvider {...methods}>
         <form
           id='tx'
@@ -119,11 +119,31 @@ export function TxSettingTable() {
             <thead>
               <tr>
                 <th>No.</th>
-                <th>{t('tx.thead.sales')}</th>
-                <th>{t('tx.thead.s1')}</th>
-                <th>{t('tx.thead.s2')}</th>
-                <th>{t('tx.thead.s3')}</th>
-                <th>{t('tx.thead.s4')}</th>
+                <th>
+                  {t("tx.thead.sales", {
+                    lng: "zh",
+                  })}
+                </th>
+                <th>
+                  {t("tx.thead.s1", {
+                    lng: "zh",
+                  })}
+                </th>
+                <th>
+                  {t("tx.thead.s2", {
+                    lng: "zh",
+                  })}
+                </th>
+                <th>
+                  {t("tx.thead.s3", {
+                    lng: "zh",
+                  })}
+                </th>
+                <th>
+                  {t("tx.thead.s4", {
+                    lng: "zh",
+                  })}
+                </th>
               </tr>
             </thead>
             <tbody>

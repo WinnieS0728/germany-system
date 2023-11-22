@@ -5,9 +5,8 @@ import { getMonthArray } from "@/utils/get month_MM array"
 import { useSearchParams } from "react-router-dom"
 import { useId2name } from "../../../hooks/id2name"
 import { useQuery } from "@tanstack/react-query"
-import { queryStatus } from "@/types"
 
-type visitData = {
+export type visitData = {
     id: number
     EmpName: string
     cusName: string
@@ -17,12 +16,7 @@ type visitData = {
     visitList: cusVisitList_res,
 }
 
-interface atuVisitReturn extends queryStatus {
-    visitData: visitData[],
-    indexArray: number[]
-}
-
-export function useAtuVisit(): atuVisitReturn {
+export function useAtuVisit() {
     const { thisYear } = useAppSelector(state => state.time)
     const { id2name } = useId2name()
     const search = useSearchParams()[0]
@@ -32,7 +26,7 @@ export function useAtuVisit(): atuVisitReturn {
 
     const month = getMonthArray(search_month);
 
-    const { data, isPending, isError, error } = useQuery({
+    return useQuery({
         queryKey: ['atuVisit', { type: "list" }, search_month, search_EmpId],
         queryFn: async () => {
             const res = month ? await Promise.all(month.map(async (month) => await api.getAtuVisit({
@@ -103,28 +97,6 @@ export function useAtuVisit(): atuVisitReturn {
             return { atuVisit: atuVisit_withEmptyData, indexArray }
         }
     })
-
-    if (isPending) {
-        return {
-            status: 'pending',
-            visitData: [],
-            indexArray: []
-        }
-    }
-    if (isError) {
-        return {
-            status: 'error',
-            message: error.message,
-            visitData: [],
-            indexArray: []
-        }
-    }
-
-    return {
-        status: 'success',
-        visitData: data.atuVisit,
-        indexArray: data.indexArray
-    }
 
     function addEmptyData(array: cusVisitList_res, maxNumber: number) {
         const newArray = [...array];

@@ -49,7 +49,15 @@
     @apply p-4 bg-tableBgc rounded-lg border-2 border-slate-300 flex flex-col lg:flex-row gap-4 justify-center;
 
     .submitBtn {
-      @apply bg-sectionHeader text-myWhite px-6 py-2 rounded-md
+      @apply bg-sectionHeader text-myWhite px-6 py-2 rounded-md;
+    }
+  }
+
+  .sortingTh {
+    @apply cursor-pointer;
+
+    p {
+      @apply flex justify-center items-center gap-2;
     }
   }
 }

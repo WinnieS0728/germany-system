@@ -16,8 +16,9 @@ import {
   SortingState,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Error } from "@/components/UI/error";
+import { SortIcon } from "@/components/UI/icons";
 
 export function SalesList() {
   const { t } = useTranslation(["salesAnalyze"]);
@@ -28,32 +29,48 @@ export function SalesList() {
   const columns: ColumnDef<salesListData>[] = [
     {
       accessorKey: "sa_name",
-      header: t("overview.salesList.thead.sales"),
+      header: () => <th>{t("overview.salesList.thead.sales")}</th>,
     },
     {
       accessorKey: "cu_name",
-      header: t("overview.salesList.thead.cusName"),
+      header: () => <th>{t("overview.salesList.thead.cusName")}</th>,
       cell: ({ row, getValue }) => (
-        <p className={cn("", {
-          'text-green-600': row.original.isFirstOrder
-        })}>{getValue() as string}</p>
+        <p
+          className={cn("", {
+            "text-green-600": row.original.isFirstOrder,
+          })}
+        >
+          {getValue<string>()}
+        </p>
       ),
     },
     {
       accessorKey: "tx",
       header: ({ column }) => (
-        <p onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          {t("overview.salesList.thead.tx")}
-        </p>
+        <th
+          onClick={column.getToggleSortingHandler()}
+          className='sortingTh'
+        >
+          <p>
+            {t("overview.salesList.thead.tx")}
+            <SortIcon />
+          </p>
+        </th>
       ),
-      cell: ({ getValue }) => getLocaleString(getValue() as number),
+      cell: ({ getValue }) => getLocaleString(getValue<number>()),
     },
     {
       accessorKey: "orderTime",
       header: ({ column }) => (
-        <p onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          {t("overview.salesList.thead.order")}
-        </p>
+        <th
+          className='sortingTh'
+          onClick={column.getToggleSortingHandler()}
+        >
+          <p>
+            {t("overview.salesList.thead.order")}
+            <SortIcon />
+          </p>
+        </th>
       ),
     },
   ];
@@ -112,12 +129,12 @@ export function SalesList() {
               {getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
+                    <Fragment key={header.id}>
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
                       )}
-                    </th>
+                    </Fragment>
                   ))}
                   {data.indexArray.map((number) => (
                     <th key={number}>{number}</th>

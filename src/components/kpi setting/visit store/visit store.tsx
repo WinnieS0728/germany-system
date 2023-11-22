@@ -118,9 +118,9 @@ export function VisitStoreSettingTable() {
     });
 
     toast.promise(request, {
-        pending: t('settingRequest.pending',{ns:'toast'}),
-        success: t('settingRequest.success',{ns:'toast'}),
-        error: t('settingRequest.fail',{ns:'toast'})
+        pending: t('settingRequest.pending',{ns:'toast', lng: 'zh'}),
+        success: t('settingRequest.success',{ns:'toast', lng: 'zh'}),
+        error: t('settingRequest.fail',{ns:'toast', lng: 'zh'})
     })
   }
 
@@ -138,7 +138,7 @@ export function VisitStoreSettingTable() {
 
   return (
     <>
-      <Table title={t('visitStore.title')}>
+      <Table title={t('visitStore.title',{lng:'zh'})}>
         <>
           <FormProvider {...methods}>
             <form
@@ -149,28 +149,28 @@ export function VisitStoreSettingTable() {
                 <thead>
                   <tr>
                     <th>NO.</th>
-                    <th>{t('visitStore.thead.label')}</th>
-                    <th>{t('visitStore.thead.value')}</th>
+                    <th>{t('visitStore.thead.label',{lng:'zh'})}</th>
+                    <th>{t('visitStore.thead.value',{lng:'zh'})}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>1</td>
-                    <td>{t('visitStore.atu_monthVisit')}</td>
+                    <td>{t('visitStore.atu_monthVisit',{lng:'zh'})}</td>
                     <td>
                       <InputOnlyNumber name='atuVisit_month' />
                     </td>
                   </tr>
                   <tr>
                     <td>2</td>
-                    <td>{t('visitStore.atu_yearVisit')}</td>
+                    <td>{t('visitStore.atu_yearVisit',{lng:'zh'})}</td>
                     <td>
                       <InputOnlyNumber name='atuVisit_year' />
                     </td>
                   </tr>
                   <tr>
                     <td>3</td>
-                    <td>{t('visitStore.upload_ppoto')}</td>
+                    <td>{t('visitStore.upload_photo',{lng:'zh'})}</td>
                     <td>
                       <InputOnlyNumber name='upload_photo' />
                     </td>

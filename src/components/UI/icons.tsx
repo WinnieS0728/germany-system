@@ -2,6 +2,7 @@ import { BiErrorAlt } from "react-icons/bi";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { IoCloudDownloadOutline, IoMenu } from "react-icons/io5";
+import { TiArrowUnsorted } from "react-icons/ti";
 
 type icon = {
   size?: string;
@@ -677,3 +678,7 @@ export const Hamburger = ({ size, color }: icon) => (
     }}
   />
 );
+
+export function SortIcon() {
+  return <TiArrowUnsorted className="min-w-[16px]"/>;
+}

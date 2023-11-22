@@ -1,8 +1,9 @@
 import { SettingSubmitBtn } from "@/components/UI/buttons";
 import { Main } from "../../../layouts/main";
 import { useTranslation } from "react-i18next";
+import { useShouldTranslation } from "@/utils/kpi setting should translation";
 
-export type formId = "tx" | "threshold" | "store" | 'osom';
+export type formId = "tx" | "threshold" | "store" | "osom";
 
 interface props {
   formId: formId;
@@ -17,7 +18,9 @@ export function SettingLayout({ formId, children }: props) {
         <>
           <SettingSubmitBtn
             formId={formId}
-            text={t("buttons.save")}
+            text={t("buttons.save", {
+              lng: useShouldTranslation() ? "en" : "zh"
+            })}
           />
           {children}
         </>

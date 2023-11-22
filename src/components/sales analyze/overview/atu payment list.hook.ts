@@ -2,17 +2,18 @@ import api from "@/api";
 import { Month_MM } from "@/const";
 import { useAppSelector } from "@/data/store";
 import { useId2name } from "@/hooks/id2name";
-import { queryStatus } from "@/types";
+import { month_shortName, queryStatus } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
-type atuPaymentList = {
+export type atuPaymentList = {
     EmpName: string,
     area: string,
     cusName: string,
     payNumber: number,
-    monthData: number[]
-}
+} & {
+        [K in typeof month_shortName[number]]: number
+    }
 
 interface atuPaymentReturn extends queryStatus {
     atuPaymentList: atuPaymentList[]
@@ -41,7 +42,18 @@ export function useAtuPaymentList(): atuPaymentReturn {
                     area: data[0].State,
                     cusName: data[0].Custname,
                     payNumber: monthData.reduce((a, b) => a + b, 0),
-                    monthData: monthData
+                    [month_shortName[0]]: monthData[0],
+                    [month_shortName[1]]: monthData[1],
+                    [month_shortName[2]]: monthData[2],
+                    [month_shortName[3]]: monthData[3],
+                    [month_shortName[4]]: monthData[4],
+                    [month_shortName[5]]: monthData[5],
+                    [month_shortName[6]]: monthData[6],
+                    [month_shortName[7]]: monthData[7],
+                    [month_shortName[8]]: monthData[8],
+                    [month_shortName[9]]: monthData[9],
+                    [month_shortName[10]]: monthData[10],
+                    [month_shortName[11]]: monthData[11],
                 }
             })
 
