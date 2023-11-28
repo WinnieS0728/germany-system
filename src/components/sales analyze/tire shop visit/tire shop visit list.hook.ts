@@ -28,7 +28,7 @@ export function useTSVisitList() {
             const visitData = await Promise.all((await getTSVisit()).filter(data => data.vqty !== 0).map(async (data) => {
                 const visitDateList = (await getVisitDateList(data.CustId)).map(date => ({
                     ...date,
-                    date: dateFormatter(date.StartDT),
+                    StartDT: dateFormatter(date.StartDT, { type: '%d/%m/%Y' }),
                 }))
 
                 return {
@@ -89,11 +89,11 @@ export function useTSVisitList() {
                 const dataMonth = data.StartDT.split('-')[1]
                 return monthList.some(month => month === dataMonth)
             })
-            
+
 
             return inTheseMonthData
         }
-        
+
         return thisYearDateList
     }
 

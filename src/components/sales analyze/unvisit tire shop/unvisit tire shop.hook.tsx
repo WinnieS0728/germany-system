@@ -64,7 +64,7 @@ export function useUnVisitTireShop(): unVisitTSReturn {
       .filter((data) => data.Empname !== "Marcus.Rosenzweig")
       .map((data) => ({
         ...data,
-        LastDate: dateFormatter(data.LastDate.split(" ")[0]),
+        LastDate: dateFormatter(data.LastDate.split(" ")[0],{type: "%d/%m/%Y"}),
       }));
 
     if (search_EmpId) {

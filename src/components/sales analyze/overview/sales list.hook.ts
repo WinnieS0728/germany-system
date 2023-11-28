@@ -43,7 +43,7 @@ export function useSalesList() {
                     tx: data.sqty,
                     isFirstOrder: orderDateList.isFirstOrder,
                     orderTime,
-                    salesArray: orderDateList.orderDateList
+                    salesArray: orderDateList.orderDateList.map(date => dateFormatter(date, {type: '%d/%m/%Y'}))
                 }
             }))
 

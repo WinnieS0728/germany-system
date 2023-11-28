@@ -1,12 +1,17 @@
 import { timeFormat } from "d3";
 
-export function dateFormatter(d: Date | string): string {
+type options = {
+  type?: "%Y-%m-%d" | "%d/%m/%Y";
+};
+
+export function dateFormatter(d: Date | string, options?: options): string {
   if (!d) {
     return "";
   }
+  const formatType = options?.type || "%Y-%m-%d";
   if (typeof d === "string") {
-    return timeFormat("%Y-%m-%d")(new Date(d));
+    return timeFormat(formatType)(new Date(d));
   } else {
-    return timeFormat("%Y-%m-%d")(d as Date);
+    return timeFormat(formatType)(d as Date);
   }
 }

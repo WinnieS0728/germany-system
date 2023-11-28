@@ -80,7 +80,7 @@ export function useUnOrderTireShop(): unOrderTSListReturn {
       .filter((data) => data.Empname !== "Marcus.Rosenzweig")
       .map((data) => ({
         ...data,
-        LastDate: dateFormatter(data.LastDate),
+        LastDate: dateFormatter(data.LastDate, { type: "%d/%m/%Y" }),
       }));
 
     if (search_EmpId) {
