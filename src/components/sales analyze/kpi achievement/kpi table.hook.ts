@@ -147,7 +147,7 @@ function getRequestMonth({ year, month }: { year: string, month: string }) {
 function getRequestDate(year: string, month: string) {
     const startDate = dateFormatter(`${year}-${month}-1`)
 
-    const lastDayOfThisMonth = new Date(new Date(new Date(`${year}-${(month)}-1`).setDate(35)).setDate(0))
+    const lastDayOfThisMonth = new Date(Number(year), Number(month) + 1, 0)
 
     const endDate = dateFormatter(lastDayOfThisMonth)
 
