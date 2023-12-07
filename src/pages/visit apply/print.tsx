@@ -79,7 +79,7 @@ function PrintPage ({ className }: props) {
       </table>
     </section>
   );
-};
+}
 
 const styled_page = styled(PrintPage)`
     body {
