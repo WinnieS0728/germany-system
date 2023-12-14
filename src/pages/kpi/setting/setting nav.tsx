@@ -1,5 +1,4 @@
 import { cn } from "@/utils/cn";
-import { useShouldTranslation } from "@/utils/kpi setting should translation";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 
@@ -8,9 +7,7 @@ interface propsType {
 }
 
 export const Nav = ({ className }: propsType) => {
-  const { t } = useTranslation(["settingPage"], {
-    lng: useShouldTranslation() ? 'en' : 'zh'
-  });
+  const { t } = useTranslation(["settingPage"]);
   return (
     <>
       <nav className={cn("bg-navBgc", className)}>
