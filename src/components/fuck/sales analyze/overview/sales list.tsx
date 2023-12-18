@@ -1,61 +1,73 @@
 import { Table } from "@/components/table/table";
 import {
-  useAtuVisit,
-  visitData,
-} from "@/components/sales analyze/atu visit/atu visit list.hook";
+  salesListData,
+  useSalesList,
+} from "@/components/fuck/sales analyze/overview/sales list.hook";
 import { Section } from "@/layouts/section";
+import { cn } from "@/utils/cn";
+import { getLocaleString } from "@/utils/get localeString";
 import { Loading } from "@/components/UI/loading";
-import { Error } from "@/components/UI/error";
 import { useTranslation } from "react-i18next";
 import {
   ColumnDef,
-  SortingState,
   flexRender,
   getCoreRowModel,
-  getSortedRowModel,
   useReactTable,
+  SortingState,
+  getSortedRowModel,
 } from "@tanstack/react-table";
 import { Fragment, useState } from "react";
+import { Error } from "@/components/UI/error";
 import { SortIcon } from "@/components/UI/icons";
 
-export function AtuVisitList() {
+export function SalesList() {
   const { t } = useTranslation(["salesAnalyze"]);
+  const { data, isPending, isError, error } = useSalesList();
+
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const { data, isPending, isError, error } = useAtuVisit();
-
-  const columns: ColumnDef<visitData>[] = [
+  const columns: ColumnDef<salesListData>[] = [
     {
-      accessorKey: "EmpName",
-      header: () => <th>{t("atuVisitList.thead.sales")}</th>,
+      accessorKey: "sa_name",
+      header: () => <th>{t("overview.salesList.thead.sales")}</th>,
     },
     {
-      accessorKey: "cusName",
-      header: () => <th>{t("atuVisitList.thead.cusName")}</th>,
+      accessorKey: "cu_name",
+      header: () => <th>{t("overview.salesList.thead.cusName")}</th>,
+      cell: ({ row, getValue }) => (
+        <p
+          className={cn("", {
+            "text-green-600": row.original.isFirstOrder,
+          })}
+        >
+          {getValue<string>()}
+        </p>
+      ),
     },
     {
-      accessorKey: "payNumber",
+      accessorKey: "tx",
       header: ({ column }) => (
         <th
           onClick={column.getToggleSortingHandler()}
           className='sortingTh'
         >
           <p>
-            {t("atuVisitList.thead.pay")}
+            {t("overview.salesList.thead.tx")}
             <SortIcon />
           </p>
         </th>
       ),
+      cell: ({ getValue }) => getLocaleString(getValue<number>()),
     },
     {
-      accessorKey: "visitNumber",
+      accessorKey: "orderTime",
       header: ({ column }) => (
         <th
-          onClick={column.getToggleSortingHandler()}
           className='sortingTh'
+          onClick={column.getToggleSortingHandler()}
         >
           <p>
-            {t("atuVisitList.thead.visit")}
+            {t("overview.salesList.thead.order")}
             <SortIcon />
           </p>
         </th>
@@ -64,11 +76,11 @@ export function AtuVisitList() {
   ];
 
   const { getHeaderGroups, getRowModel } = useReactTable({
-    data: data?.atuVisit || [],
+    data: data?.dataSet || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
     },
@@ -79,41 +91,39 @@ export function AtuVisitList() {
       <Section>
         <>
           <Loading.block />
-          <Loading.block height={16 * 30} />
+          <Loading.block height={16 * 20} />
         </>
       </Section>
     );
   }
-
   if (isError) {
     return (
       <Section>
-        <Error.block
-          message={error.message}
-          className='h-96'
-        />
+        <>
+          <Error.block message={error.message} />
+        </>
       </Section>
     );
   }
 
   return (
     <>
-      <Section>
+      <Section title={t("overview.salesList.title")}>
         <Table>
           <table>
             <thead>
               <tr>
                 <th
-                  colSpan={4}
                   className='text-start bg-sectionHeader text-myWhite'
+                  colSpan={4}
                 >
-                  {t("atuVisitList.thead.visitList")}
+                  {t("overview.salesList.thead.storeList")}
                 </th>
                 <th
-                  colSpan={data.indexArray.length}
                   className='text-start bg-sectionHeader text-myWhite'
+                  colSpan={data.indexArray.length}
                 >
-                  {t("atuVisitList.thead.dateList")}
+                  {t("overview.salesList.thead.orderList")}
                 </th>
               </tr>
               {getHeaderGroups().map((headerGroup) => (
@@ -126,8 +136,8 @@ export function AtuVisitList() {
                       )}
                     </Fragment>
                   ))}
-                  {data.indexArray.map((index) => (
-                    <th key={index}>{index}</th>
+                  {data.indexArray.map((number) => (
+                    <th key={number}>{number}</th>
                   ))}
                 </tr>
               ))}
@@ -143,18 +153,12 @@ export function AtuVisitList() {
                       )}
                     </td>
                   ))}
-                  {row.original.visitList.map((data, index) => (
+                  {row.original.salesArray.map((date, index) => (
                     <td
                       key={index}
                       className='whitespace-nowrap'
                     >
-                      <a
-                        href={`https://esys.orange-electronic.com/TravelRep/Edit/${data.BTRId}`}
-                        target='_blank'
-                        className='text-blue-500'
-                      >
-                        {data.StartDT}
-                      </a>
+                      {date}
                     </td>
                   ))}
                 </tr>

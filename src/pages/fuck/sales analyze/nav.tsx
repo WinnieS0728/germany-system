@@ -11,15 +11,16 @@ export function SalesAnalyzeNav() {
   const { t } = useTranslation(["salesAnalyze"]);
   const salesAnalyzeNavRoutes: navBtn[] = useMemo(
     () => [
-      { label: "德國業績總覽", path: "" },
-      { label: "業務績效KPI", path: "kpi" },
-      { label: "輪胎店銷售＆拜訪分析", path: "tireShop" },
-      { label: "A.T.U銷售＆拜訪分析", path: "atu" },
-      { label: "Wholesaler銷售＆拜訪分析", path: "wholesaler" },
-      { label: "非 Orange 客戶", path: "notOrange" },
-      { label: "業務出差拜訪佔比查詢", path: "visit" },
+      { label: t("nav.overview"), path: "" },
+      { label: t("nav.yearSales"), path: "yearSales" },
+      { label: t("nav.tsVisit"), path: "tireShopVisit" },
+      { label: t("nav.atuVisit"), path: "atuVisit" },
+      { label: t("nav.unVisitTS"), path: "unVisitTireShop" },
+      { label: t("nav.unOrderTS"), path: "unOrderTireShop" },
+      { label: t("nav.kpiAchievement"), path: "kpiAchievement" },
+      { label: t("nav.charts"), path: "salesCharts" },
     ],
-    []
+    [t]
   );
 
   return (

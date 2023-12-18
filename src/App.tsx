@@ -9,7 +9,7 @@ import { MySuspense } from "./layouts/suspense";
 const CustomRatePage = lazy(() => import("@/pages/kpi"));
 const SettingPage = lazy(() => import("@/pages/kpi/setting"));
 const ApplyPage = lazy(() => import("@/pages/visit apply"));
-const SalesAnalyze = lazy(() => import("@pages/sales analyze"));
+const SalesAnalyze = lazy(() => import("@/pages/sales analyze"));
 
 function App() {
   const dispatch = useAppDispatch();

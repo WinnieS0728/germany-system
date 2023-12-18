@@ -48,6 +48,14 @@
   .headerFilter {
     @apply p-4 bg-tableBgc rounded-lg border-2 border-slate-300 flex flex-col lg:flex-row gap-4 justify-center;
 
+    .filterButton {
+      @apply px-6 py-2 bg-tableBgc_darker rounded-md cursor-pointer text-center;
+
+      &.active {
+        @apply text-white bg-navActive;
+      }
+    }
+
     .submitBtn {
       @apply bg-sectionHeader text-myWhite px-6 py-2 rounded-md;
     }

@@ -6,7 +6,6 @@ export type emailData = {
 };
 export function sendEmail(apiPath: string) {
   return async function (EmpId: string, data: emailData) {
-    // TODO 打開api
     const res = await axios<string>({
       method: "POST",
       url: `${apiPath}/MailSend`,

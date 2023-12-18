@@ -1,5 +1,5 @@
-import { RecentHeader } from "@/components/sales analyze/header filter/recent header";
-import { UnOrderTireShopTable } from "@/components/sales analyze/unOrder tire shop/unOrder tire shop";
+import { RecentHeader } from "@/components/fuck/sales analyze/header filter/recent header";
+import { UnOrderTireShopTable } from "@/components/fuck/sales analyze/unOrder tire shop/unOrder tire shop";
 import { Main } from "@/layouts/main";
 
 export default function UnOrderTireShop() {

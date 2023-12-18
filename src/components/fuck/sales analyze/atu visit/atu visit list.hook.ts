@@ -3,7 +3,7 @@ import { cusVisitList_res } from "@/api/sales analyze/custom visit list"
 import { useAppSelector } from "@/data/store"
 import { getMonthArray } from "@/utils/get month_MM array"
 import { useSearchParams } from "react-router-dom"
-import { useId2name } from "../../../hooks/id2name"
+import { useId2name } from "../../../../hooks/id2name"
 import { useQuery } from "@tanstack/react-query"
 import { dateFormatter } from "@/utils/dateFormatter"
 

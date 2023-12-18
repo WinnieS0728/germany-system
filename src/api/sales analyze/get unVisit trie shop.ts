@@ -27,7 +27,6 @@ export function getUnVisitTireShop(apiPath: string) {
     return async function ({
         startDate, endDate
     }: unVisitTS_req) {
-        // TODO apiPath
         const res = await axios<unVisitTS_res>({
             url: `${apiPath}/GetSalesVisitDe`,
             method: "POST",

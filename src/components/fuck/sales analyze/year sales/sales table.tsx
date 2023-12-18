@@ -1,6 +1,6 @@
 import { Table } from "@/components/table/table";
 import { Month_MM } from "@/const";
-import { useYearSales } from "@/components/sales analyze/year sales/year sales.hook";
+import { useYearSales } from "@/components/fuck/sales analyze/year sales/year sales.hook";
 import { Section } from "@/layouts/section";
 import { cn } from "@/utils/cn";
 import { getLocaleString } from "@/utils/get localeString";
