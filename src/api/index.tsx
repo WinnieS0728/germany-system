@@ -37,9 +37,10 @@ import { getAtuPayment } from "./sales analyze/atuPayment";
 import { getTireShopVisit } from "./sales analyze/tire shop visit";
 import { getTireShopVisitList } from "./sales analyze/tire shop visit dateList";
 import { getKpiNumber } from "./sales analyze/getKpiNumber";
+import { getKpi, postKpi } from "./kpi setting";
 
 const apiPath = import.meta.env.VITE_API_PATH;
-const osom_apiPath = import.meta.env.VITE_OSOM_API_PATH
+const osom_apiPath = import.meta.env.VITE_OSOM_API_PATH;
 
 const api = {
   // common
@@ -90,7 +91,11 @@ const api = {
   getAtuPayment: getAtuPayment(apiPath),
   getTireShopVisit: getTireShopVisit(osom_apiPath),
   getTireShopVisitList: getTireShopVisitList(osom_apiPath),
-  getKpiNumber: getKpiNumber() // * 獨立url
+  getKpiNumber: getKpiNumber(), // * 獨立url,
+
+  // kpiSetting
+  getKpi: getKpi(apiPath),
+  postKpi: postKpi(apiPath),
 };
 
 export default api;

@@ -1,11 +1,13 @@
-import { TxSettingTable } from "@/components/kpi setting/tx/setting table";
+import TxTable from "@/components/kpi setting/tx";
 import { SettingLayout } from "@/pages/kpi/setting/setting layout";
 
 function TxPage() {
   return (
     <>
       <SettingLayout formId='tx'>
-        <TxSettingTable />
+        <>
+          <TxTable />
+        </>
       </SettingLayout>
     </>
   );

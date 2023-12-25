@@ -15,11 +15,21 @@ import { Provider } from "react-redux";
 import store from "@/data/store";
 import { ToastContainer } from "react-toastify";
 import "@winnies0728/orange-component";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
         <HashRouter>
           <App />
           <ToastContainer
@@ -35,7 +45,8 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             theme='colored'
           />
         </HashRouter>
-      </ThemeProvider>
-    </Provider>
+      </QueryClientProvider>
+    </ThemeProvider>
+  </Provider>
   // </React.StrictMode>
 );
