@@ -8,19 +8,21 @@ import { useEffect } from "react";
 import api from "@/api";
 import { useTime } from "@/hooks/useTime";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 type kpiInput = {
   EmpId: string; //員工
   EmpName: string;
   Jan: number;
   Feb: number;
+  Mar: number;
 };
 
 type defaultValue = { store: kpiInput[] };
 
 interface InputProps {
   index: number;
-  month: Extract<(typeof month_shortName)[number], "Jan" | "Feb">;
+  month: Extract<(typeof month_shortName)[number], "Jan" | "Feb" | "Mar">;
 }
 
 interface totalProps {
@@ -29,6 +31,7 @@ interface totalProps {
 }
 
 export default function StoreTable() {
+  const { t } = useTranslation(["kpiSetting"]);
   const salesList = useAppSelector((state) => state.salesList).body;
   const { thisYear } = useTime();
   const { GetThreshold, PostThreshold } = useKpiSetting("store");
@@ -45,6 +48,7 @@ export default function StoreTable() {
           EmpName: sales.EmpName,
           Jan: 0,
           Feb: 0,
+          Mar: 0,
         };
       }),
     }),
@@ -59,6 +63,7 @@ export default function StoreTable() {
           EmpName: sales.EmpName,
           Jan: target?.monthData[0] ?? 0,
           Feb: target?.monthData[1] ?? 0,
+          Mar: target?.monthData[2] ?? 0,
         };
       }),
     });
@@ -88,14 +93,15 @@ export default function StoreTable() {
             data: {
               Jan: data.Jan,
               Feb: data.Feb,
+              Mar: data.Mar
             },
           },
           {
             onSuccess: () => {
-              toast.success("設定成功");
+              toast.success(t("setting.success"));
             },
             onError: () => {
-              toast.error("設定失敗");
+              toast.error(t("setting.error"));
             },
           }
         );
@@ -160,7 +166,7 @@ export default function StoreTable() {
 
   return (
     <>
-      <Section title='拜訪店家目標設定'>
+      <Section title={t("store.title")}>
         <Table>
           <form
             id='store'
@@ -170,15 +176,16 @@ export default function StoreTable() {
               <thead>
                 <tr>
                   <th rowSpan={2}>NO.</th>
-                  <th rowSpan={2}>業務</th>
-                  <th colSpan={2}>A.T.U 每月拜訪店家數</th>
-                  <th colSpan={2}>上傳店家貼 orange 貼紙的照片目標數量</th>
+                  <th rowSpan={2}>{t("sales")}</th>
+                  <th colSpan={2}>{t("store.atu")}</th>
+                  <th rowSpan={2}>{t("store.visit_perStore")}</th>
+                  <th colSpan={2}>{t("store.sticker")}</th>
                 </tr>
                 <tr>
-                  <th>月目標</th>
-                  <th>年目標</th>
-                  <th>月目標</th>
-                  <th>年目標</th>
+                  <th>{t("achievement.month")}</th>
+                  <th>{t("achievement.year")}</th>
+                  <th>{t("achievement.month")}</th>
+                  <th>{t("achievement.year")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -202,6 +209,12 @@ export default function StoreTable() {
                       <InputOnlyNumber
                         index={index}
                         month='Feb'
+                      />
+                    </td>
+                    <td>
+                      <InputOnlyNumber
+                        index={index}
+                        month='Mar'
                       />
                     </td>
                     <td>

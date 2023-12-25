@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import api from "@/api";
 import { useTime } from "@/hooks/useTime";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 type kpiInput = {
   EmpId: string; //員工
@@ -27,6 +28,7 @@ interface totalProps {
 }
 
 export default function OsomTable() {
+  const { t } = useTranslation(["kpiSetting"]);
   const salesList = useAppSelector((state) => state.salesList).body;
   const { thisYear } = useTime();
   const { GetThreshold, PostThreshold } = useKpiSetting("osom");
@@ -87,10 +89,10 @@ export default function OsomTable() {
           },
           {
             onSuccess: () => {
-              toast.success("設定成功");
+              toast.success(t("setting.success"));
             },
             onError: () => {
-              toast.error("設定失敗");
+              toast.error(t("setting.error"));
             },
           }
         );
@@ -150,7 +152,7 @@ export default function OsomTable() {
 
   return (
     <>
-      <Section title='拜訪店家目標設定'>
+      <Section title={t("osom.title")}>
         <Table>
           <form
             id='osom'
@@ -160,12 +162,12 @@ export default function OsomTable() {
               <thead>
                 <tr>
                   <th rowSpan={2}>NO.</th>
-                  <th rowSpan={2}>業務</th>
-                  <th colSpan={2}>推薦成功店家數</th>
+                  <th rowSpan={2}>{t("sales")}</th>
+                  <th colSpan={2}>{t("osom.recommend")}</th>
                 </tr>
                 <tr>
-                  <th>月目標</th>
-                  <th>年目標</th>
+                  <th>{t("achievement.month")}</th>
+                  <th>{t("achievement.year")}</th>
                 </tr>
               </thead>
               <tbody>

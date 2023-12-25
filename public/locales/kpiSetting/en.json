@@ -1,0 +1,28 @@
+{
+  "achievement": {
+    "month": "Monthly Target",
+    "year": "Yearly Target"
+  },
+  "osom": {
+    "recommend": "Number of successful recommendation",
+    "title": "OSOM KPI Setting"
+  },
+  "sales": "Salesman",
+  "setting": {
+    "error": "setting failed",
+    "success": "setting success"
+  },
+  "store": {
+    "atu": "ATU stores visits",
+    "sticker": "Upload Photos of Orange Stickers",
+    "title": "Visiting KPI Setting",
+    "visit_perStore": "A.T.U annual average visits per store"
+  },
+  "tx": {
+    "title": "Sensor Sales Quantity Target",
+    "total": {
+      "season": "Q{{season}}",
+      "year": "Total"
+    }
+  }
+}

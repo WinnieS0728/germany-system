@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import api from "@/api";
 import { useTime } from "@/hooks/useTime";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 type kpiInput = {
   EmpId: string; //員工
@@ -39,6 +40,7 @@ interface totalProps {
 }
 
 export default function TxTable() {
+  const { t } = useTranslation(["kpiSetting"]);
   const salesList = useAppSelector((state) => state.salesList).body;
   const { thisYear } = useTime();
   const { GetThreshold, PostThreshold } = useKpiSetting("tx");
@@ -132,10 +134,10 @@ export default function TxTable() {
           },
           {
             onSuccess: () => {
-              toast.success("設定成功");
+              toast.success(t("setting.success"));
             },
             onError: () => {
-              toast.error("設定失敗");
+              toast.error(t("setting.error"));
             },
           }
         );
@@ -205,7 +207,7 @@ export default function TxTable() {
 
   return (
     <>
-      <Section title='業務TX目標銷售數量設定'>
+      <Section title={t("tx.title")}>
         <Table>
           <form
             id='tx'
@@ -215,7 +217,7 @@ export default function TxTable() {
               <thead>
                 <tr>
                   <th>NO.</th>
-                  <th>業務</th>
+                  <th>{t("sales")}</th>
                   {[1, 4, 7, 10].map((month, index) => (
                     <Thead
                       key={index}
@@ -223,7 +225,7 @@ export default function TxTable() {
                       month={month}
                     />
                   ))}
-                  <th className='bg-[#D2EEFF]'>年度</th>
+                  <th className='bg-[#D2EEFF]'>{t("tx.total.year")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -345,12 +347,37 @@ export default function TxTable() {
 }
 
 function Thead({ season, month }: { season: number; month: number }) {
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(["kpiSetting"]);
+  const chineseMonth = [
+    "1月",
+    "2月",
+    "3月",
+    "4月",
+    "5月",
+    "6月",
+    "7月",
+    "8月",
+    "9月",
+    "10月",
+    "11月",
+    "12月",
+  ];
+  const englishMonth = month_shortName;
+
+  const mm =
+    language === "en"
+      ? englishMonth.slice(month-1, month + 3)
+      : chineseMonth.slice(month-1, month + 3);
+
   return (
     <>
-      <th>{month}月</th>
-      <th>{month + 1}月</th>
-      <th>{month + 2}月</th>
-      <th className='bg-[#FFE6DA]'>第{season}季</th>
+      <th>{mm[0]}</th>
+      <th>{mm[1]}</th>
+      <th>{mm[2]}</th>
+      <th className='bg-[#FFE6DA]'>{t("tx.total.season", { season })}</th>
     </>
   );
 }

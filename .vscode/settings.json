@@ -17,5 +17,6 @@
     { "name": "print", "path": "./public/locales/print" },
     { "name": "email", "path": "./public/locales/email" },
     { "name": "salesAnalyze", "path": "./public/locales/salesAnalyze" },
+    { "name": "kpiSetting", "path": "./public/locales/kpiSetting" },
   ]
 }
