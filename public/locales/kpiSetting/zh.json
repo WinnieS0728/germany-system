@@ -16,7 +16,7 @@
     "atu": "A.T.U 每月拜訪店家數",
     "sticker": "上傳店家貼 orange 貼紙的照片目標數量",
     "title": "拜訪店家目標設定",
-    "visit_perStore": "沒中文"
+    "visit_perStore": "A.T.U 每間店家年平均拜訪次數"
   },
   "tx": {
     "title": "業務TX目標銷售數量設定",
