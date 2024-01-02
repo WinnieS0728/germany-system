@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 
 type navBtn = {
@@ -8,7 +7,6 @@ type navBtn = {
 };
 
 export function SalesAnalyzeNav() {
-  const { t } = useTranslation(["salesAnalyze"]);
   const salesAnalyzeNavRoutes: navBtn[] = useMemo(
     () => [
       { label: "德國業績總覽", path: "" },

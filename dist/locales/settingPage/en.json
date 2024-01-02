@@ -1,9 +1,9 @@
 {
   "nav": {
-    "osom achieve": "OSOM project KPI setting",
-    "store achieve": "Target setting for store visits",
-    "threshold": "Customer visit percentage",
-    "tx": "Sensor quantity target by salesman"
+    "osom achieve": "OSOM KPI Setting",
+    "store achieve": "Customer Visit Percentage Setting",
+    "threshold": "Visiting KPI Setting",
+    "tx": "Sensor Sales Quantity Target"
   },
   "osom": {
     "add": "Increase",
@@ -33,7 +33,7 @@
       "newCus": "new customer"
     }
   },
-  "title": "KPI setting",
+  "title": "Sales KPI Setting",
   "tx": {
     "thead": {
       "s1": "Season 1",

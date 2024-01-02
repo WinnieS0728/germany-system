@@ -1,7 +1,7 @@
 import api from '@/api'
 import { dateInfo } from '@/const'
 import { useQuery } from '@tanstack/react-query'
-import _ from 'lodash'
+// import _ from 'lodash'
 export function useKpiData() {
     const { thisYear } = dateInfo
     return useQuery({
@@ -10,6 +10,8 @@ export function useKpiData() {
             const txData = await getTx({ year: thisYear })
             const atuVisit = await getATUVisit({ year: thisYear })
             const kpiNumber = await getKpiNumber({ year: thisYear })
+
+            console.log(txData, atuVisit, kpiNumber);
 
             return 0
         }
