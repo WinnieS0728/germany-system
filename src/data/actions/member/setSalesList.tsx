@@ -7,6 +7,9 @@ const salesMemberList = [
   // "ER221003",
   "ER222003",
   "ER219003",
+
+  "ER224001",
+  "ER224003",
 ];
 
 export const setSalesList = createAsyncThunk(
