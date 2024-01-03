@@ -4,6 +4,7 @@ import { Nav } from "@/pages/kpi/setting/setting nav";
 import { useTranslation } from "react-i18next";
 import { lazy } from "react";
 import { MySuspense } from "@/layouts/suspense";
+import AtuPage from "./atu";
 const TxPage = lazy(() => import("./tx"));
 const ThresholdPage = lazy(() => import("./threshold"));
 const VisitStorePage = lazy(() => import("./visit store"));
@@ -20,6 +21,10 @@ const EditPage = () => {
           <Route
             index
             Component={TxPage}
+          />
+          <Route
+            path='atu'
+            Component={AtuPage}
           />
           <Route
             path='threshold'

@@ -21,6 +21,13 @@ export const Nav = ({ className }: propsType) => {
           </NavLink>
           <NavLink
             end
+            to={"atu"}
+            className={"navBtn"}
+          >
+            {t("nav.atu")}
+          </NavLink>
+          <NavLink
+            end
             to={"threshold"}
             className={"navBtn"}
           >

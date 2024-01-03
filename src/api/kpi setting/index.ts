@@ -1,7 +1,7 @@
 import axios from "axios";
 import { z } from "zod";
 
-export type kpiType = 'tx' | 'store' | 'osom'
+export type kpiType = 'tx' | 'store' | 'osom' | 'atu'
 export interface getKpiRequest {
     year: string,
     EmpId: string,
@@ -12,7 +12,7 @@ export const getKpiSetting_res_Schema = z.array(z.object({
     YYYY: z.string(),
     Empid: z.string(),
     EmpName: z.string(),
-    STYPE: z.enum(['TripEvent-7', 'tx', 'store', 'osom']),
+    STYPE: z.enum(['TripEvent-7', 'tx', 'store', 'osom', 'atu']),
     Sname: z.string(),
     Jan: z.coerce.number().optional(),
     Feb: z.coerce.number().optional(),

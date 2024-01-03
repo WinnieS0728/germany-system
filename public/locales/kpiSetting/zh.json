@@ -3,6 +3,9 @@
     "month": "月目標",
     "year": "年目標"
   },
+  "atu": {
+    "title": "ATU 對帳數量目標"
+  },
   "osom": {
     "recommend": "推薦成功店家數",
     "title": "OSOM項目目標設定"

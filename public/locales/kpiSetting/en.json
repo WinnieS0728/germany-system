@@ -3,6 +3,9 @@
     "month": "Monthly Target",
     "year": "Yearly Target"
   },
+  "atu": {
+    "title": "ATU Sensor Sales Quantity Target"
+  },
   "osom": {
     "recommend": "Number of successful recommendation",
     "title": "OSOM KPI Setting"
