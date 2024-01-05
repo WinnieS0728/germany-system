@@ -3,14 +3,15 @@ import api from "@/api/index";
 
 const salesMemberList = [
   // "223001",
-  "ER221001", // ? Marcus
-  "ER221002", // ? Ismail
-  // "ER221003",
-  "ER222003", // ? Cemal
-  // "ER219003", 
-  // 2024 新進員工
-  "ER224001", // ? Seyfi
-  "ER224003", // ? Andres
+  // "ER221001", // ? Marcus.Rosenzweig
+  "ER221002", // ? Ismail.Kemcen
+  "ER222003", // ? Cemal.Altunkaya
+  "ER224001", // ? Seyfi.Cetinkaya
+  "ER224003", // ? Andres.CostaVega
+
+  // ! 離職員工
+  // "ER221003", // ? Michael.Boé
+  // "ER219003", // ? Mohamed.Akabbal
 ];
 
 export const setSalesList = createAsyncThunk(

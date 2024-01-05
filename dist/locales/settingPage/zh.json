@@ -1,5 +1,6 @@
 {
   "nav": {
+    "atu": "ATU 對帳數量目標",
     "osom achieve": "OSOM項目目標設定",
     "store achieve": "拜訪店家目標設定",
     "threshold": "客戶拜訪佔比警示值",
