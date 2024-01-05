@@ -55,7 +55,7 @@ export function useSalesRank(): returnType {
     const salesRankRes = salesRankQueries.map(query => query.data as NonNullable<typeof query.data>).reduce((a, b) => a.concat(b), [])
 
     const allData = salesRankRes.map(res => {
-        const sameCus = salesRankRes.filter(data => data.cu_sale === res.cu_sale)
+        const sameCus = salesRankRes.filter(data => data?.cu_sale === res?.cu_sale)
         const tx_sum = sameCus.map(data => data.sqty).reduce((a, b) => a + b, 0)
         const og_sum = sameCus.map(data => data.ogqty).reduce((a, b) => a + b, 0)
         const total_sum = sameCus.map(data => data.oqty).reduce((a, b) => a + b, 0)

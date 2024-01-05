@@ -3,14 +3,14 @@ import api from "@/api/index";
 
 const salesMemberList = [
   // "223001",
-  "ER221001",
-  "ER221002",
+  "ER221001", // ? Marcus
+  "ER221002", // ? Ismail
   // "ER221003",
-  "ER222003",
-  "ER219003",
+  "ER222003", // ? Cemal
+  // "ER219003", 
   // 2024 新進員工
-  "ER224001",
-  "ER224003",
+  "ER224001", // ? Seyfi
+  "ER224003", // ? Andres
 ];
 
 export const setSalesList = createAsyncThunk(
